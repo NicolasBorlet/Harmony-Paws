@@ -36,7 +36,7 @@ export default function DogListing() {
       renderItem={({ item }) => <DogItemListing dogCardData={item} />}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 80 }}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 80, paddingTop: 24 }}
       showsVerticalScrollIndicator={false}
     />
   );
