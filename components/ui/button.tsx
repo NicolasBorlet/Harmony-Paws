@@ -1,6 +1,5 @@
 import styled from 'styled-components/native';
 
-
 const StyledButton = styled.Button`
   paddingTop: 14px;
   flex: 1;
