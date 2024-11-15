@@ -1,5 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 import DogItemListing from "./dog-item-listing";
 
 const dogData = [
@@ -33,7 +34,11 @@ export default function DogListing() {
   return (
     <FlashList
       data={dogData}
-      renderItem={({ item }) => <DogItemListing dogCardData={item} />}
+      renderItem={({ item, index }) => (
+        <Animated.View entering={FadeIn.delay(index * 200)}>
+          <DogItemListing dogCardData={item} />
+        </Animated.View>
+      )}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 80, paddingTop: 24 }}

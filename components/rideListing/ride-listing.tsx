@@ -1,5 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 import RideItemListing from "./ride-item-listing";
 
 const rideData = [
@@ -27,7 +28,11 @@ export default function RideListing() {
   return (
     <FlashList
       data={rideData}
-      renderItem={({ item }) => <RideItemListing rideCardData={item} />}
+      renderItem={({ item, index }) => (
+        <Animated.View entering={FadeIn.delay(index * 200)}>
+          <RideItemListing rideCardData={item} />
+        </Animated.View>
+      )}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 80, paddingTop: 24 }}
