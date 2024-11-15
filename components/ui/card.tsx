@@ -12,4 +12,16 @@ const DogCard = styled.View`
   gap: 8px;
 `;
 
-export { DogCard };
+const RideCard = styled.View`
+  border-radius: 20px;
+  flex: 1;
+  height: 139px;
+  padding: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  overflow: hidden;
+  gap: 8px;
+`;
+
+export { DogCard, RideCard };

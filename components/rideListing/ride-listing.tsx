@@ -2,43 +2,37 @@ import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
-import DogItemListing from "./dog-item-listing";
+import RideItemListing from "./ride-item-listing";
 
-const dogData = [
+const rideData = [
   {
     id: 1,
-    name: 'Dog 1',
-    image: 'https://picsum.photos/300',
-    age: 10,
-    sex: 1,
-    caracteristics: [0, 3, 8, 10],
+    name: 'Ride 1',
+    date: '14/11/2024',
+    time: '10:00',
   },
   {
     id: 2,
-    name: 'Dog 2',
-    image: 'https://picsum.photos/300',
-    age: 7,
-    sex: 1,
-    caracteristics: [0, 3, 8, 10],
+    name: 'Ride 2',
+    date: '14/11/2024',
+    time: '10:00',
   },
   {
     id: 3,
-    name: 'Dog 3',
-    image: 'https://picsum.photos/300',
-    age: 4,
-    sex: 0,
-    caracteristics: [0, 3, 8, 10],
+    name: 'Ride 3',
+    date: '14/11/2024',
+    time: '10:00',
   },
 ];
 
-export default function DogListing() {
+export default function RideListing() {
   return (
     <FlashList
-      data={dogData}
+      data={rideData}
       renderItem={({ item, index }) => (
-        <Pressable onPress={() => router.push(`/dog/${item.id}`)}>
+        <Pressable onPress={() => router.push(`/ride/${item.id}`)}>
           <Animated.View entering={FadeIn.delay(index * 200)}>
-            <DogItemListing dogCardData={item} />
+            <RideItemListing rideCardData={item} />
           </Animated.View>
         </Pressable>
       )}
