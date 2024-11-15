@@ -1,5 +1,6 @@
 import { FlashList } from "@shopify/flash-list";
-import { View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import RideItemListing from "./ride-item-listing";
 
@@ -29,9 +30,11 @@ export default function RideListing() {
     <FlashList
       data={rideData}
       renderItem={({ item, index }) => (
-        <Animated.View entering={FadeIn.delay(index * 200)}>
-          <RideItemListing rideCardData={item} />
-        </Animated.View>
+        <Pressable onPress={() => router.push(`/ride/${item.id}`)}>
+          <Animated.View entering={FadeIn.delay(index * 200)}>
+            <RideItemListing rideCardData={item} />
+          </Animated.View>
+        </Pressable>
       )}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
