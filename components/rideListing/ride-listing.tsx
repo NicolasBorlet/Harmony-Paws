@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import OpacityFadeIn from "../animate/opacity-fadeIn";
 import RideItemListing from "./ride-item-listing";
 
 const rideData = [
@@ -31,9 +31,9 @@ export default function RideListing() {
       data={rideData}
       renderItem={({ item, index }) => (
         <Pressable onPress={() => router.push(`/ride/${item.id}`)}>
-          <Animated.View entering={FadeIn.delay(index * 200)}>
+          <OpacityFadeIn delay={index * 200}>
             <RideItemListing rideCardData={item} />
-          </Animated.View>
+          </OpacityFadeIn>
         </Pressable>
       )}
       estimatedItemSize={10}

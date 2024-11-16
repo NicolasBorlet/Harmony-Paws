@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
-import Animated, { FadeIn } from "react-native-reanimated";
+import OpacityFadeIn from "../animate/opacity-fadeIn";
 import DogItemListing from "./dog-item-listing";
 
 const dogData = [
@@ -37,9 +37,9 @@ export default function DogListing() {
       data={dogData}
       renderItem={({ item, index }) => (
         <Pressable onPress={() => router.push(`/dog/${item.id}`)}>
-          <Animated.View entering={FadeIn.delay(index * 200)}>
+          <OpacityFadeIn delay={index * 200}>
             <DogItemListing dogCardData={item} />
-          </Animated.View>
+          </OpacityFadeIn>
         </Pressable>
       )}
       estimatedItemSize={10}
