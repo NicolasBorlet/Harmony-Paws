@@ -5,6 +5,7 @@ import { Text } from "react-native";
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
+
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {
     return <Text>Loading...</Text>;
