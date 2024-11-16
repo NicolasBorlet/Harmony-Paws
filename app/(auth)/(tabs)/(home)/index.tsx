@@ -1,15 +1,18 @@
+import { useSession } from '@/app/ctx';
 import DogListing from '@/components/dogListing/dog-listing';
 import RideListing from '@/components/rideListing/ride-listing';
 import TabSwitcher from '@/components/ui/TabSwitcher';
 import { Body, SpecialTitle } from '@/components/ui/text';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const { signOut } = useSession();
   const [selectedTab, setSelectedTab] = useState<'dog' | 'ride'>('dog');
 
   const gesture = Gesture.Pan()
@@ -23,8 +26,17 @@ export default function HomeScreen() {
       }
     });
 
+  const handleSignOut = () => {
+    signOut();
+    router.replace("/login");
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <Button
+        title="Sign Out"
+        onPress={handleSignOut}
+      />
       <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
         <View style={{ height: 48, width: 48, backgroundColor: '#663399' }} />
         <View style={{ height: 48, width: 48, backgroundColor: '#663399' }} />
