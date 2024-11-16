@@ -1,11 +1,11 @@
 import DogListing from '@/components/dogListing/dog-listing';
 import RideListing from '@/components/rideListing/ride-listing';
+import RoundedIconLink from '@/components/rounded-icon-link';
 import TabSwitcher from '@/components/ui/TabSwitcher';
 import { Body, SpecialTitle } from '@/components/ui/text';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,10 +27,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
-        <View style={{ height: 48, width: 48, backgroundColor: '#663399' }} />
-        <Pressable onPress={() => router.push('/messages')}>
-          <View style={{ height: 48, width: 48, backgroundColor: '#663399' }} />
-        </Pressable>
+        <RoundedIconLink icon={<Ionicons name="chatbubble" size={20} color="white" />} href="/messages" />
       </View>
       <View style={{ paddingBottom: 48, paddingHorizontal: 20 }}>
         <SpecialTitle>Salut Taico</SpecialTitle>

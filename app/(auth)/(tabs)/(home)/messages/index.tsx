@@ -1,3 +1,4 @@
+import Back from '@/components/back-button';
 import { Link, usePathname } from 'expo-router';
 import { useEffect } from 'react';
 import { Text, View } from 'react-native';
@@ -12,6 +13,7 @@ export default function Messages() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <Back />
       <View style={{ flex: 1, padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
         <Link href="../">
           Back
