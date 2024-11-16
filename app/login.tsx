@@ -1,5 +1,6 @@
-import { router } from 'expo-router';
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { SpecialTitle } from '@/components/ui/text';
+import { Link, router } from 'expo-router';
+import { Button, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { useSession } from "./ctx";
 
 export default function Login() {
@@ -10,53 +11,61 @@ export default function Login() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome! 🌈 </Text>
-      <Text style={styles.paragraph}>
-        This is a simple repo that emulates a login authentication workflow
-        using Expo Router, focused on the navigation aspect.
-      </Text>
-      <View
-        style={styles.separator}
-      />
-      <TextInput placeholder="Username(not required)" style={styles.input} />
-      <TextInput
-        placeholder="Password(not required)"
-        secureTextEntry
-        style={styles.input}
-      />
-      <Button title="Login" onPress={handleLogin} />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <View style={styles.container}>
+        <View style={styles.topSection} />
+        <View style={styles.bottomSection}>
+          <View style={styles.formContainer}>
+            <SpecialTitle>Connexion</SpecialTitle>
+            <View style={styles.inputContainer}>
+              <TextInput placeholder="Email" />
+              <TextInput placeholder="Password" />
+              <Text>Mot de passe oublié ?</Text>
+            </View>
+            <Button title="Se connecter" onPress={handleLogin} />
+          </View>
+          <Link href="/signup" style={styles.signupLink}>Sign up</Link>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  topSection: {
+    flex: 1,
+    backgroundColor: '#F49819',
   },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    textAlign: "center",
+  bottomSection: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    marginTop: -20,
   },
-
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  formContainer: {
+    display: 'flex',
+    gap: 40,
+    paddingHorizontal: 48,
+    paddingTop: 48,
+    alignItems: 'center',
   },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    borderColor: "#000",
-    padding: 10,
-    margin: 10,
-    borderRadius: 4,
+  inputContainer: {
+    display: 'flex',
+    gap: 20,
+    alignItems: 'center',
+  },
+  signupLink: {
+    position: 'absolute',
+    bottom: 40,
+    margin: 'auto',
+    width: '100%',
+    textAlign: 'center',
   },
 });

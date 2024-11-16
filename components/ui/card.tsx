@@ -24,4 +24,21 @@ const RideCard = styled.View`
   gap: 8px;
 `;
 
-export { DogCard, RideCard };
+const MasterDogCard = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding-vertical: 16px;
+  padding-horizontal: 12px;
+  border-radius: 10px;
+  background-color: white;
+  shadow-color: #000;
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.1;
+  shadow-radius: 29.3px;
+  elevation: 4;
+`;
+
+export { DogCard, MasterDogCard, RideCard };
+
