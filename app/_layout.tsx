@@ -16,7 +16,6 @@ import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { SessionProvider } from './ctx';
 
 export {
@@ -33,7 +32,6 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     RoundsBlack: require('../assets/fonts/RoundsBlack.ttf'),
     Montserrat_100Thin,
