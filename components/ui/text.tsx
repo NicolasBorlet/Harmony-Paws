@@ -7,9 +7,9 @@ const SpecialTitle = styled.Text`
   font-family: RoundsBlack;
 `;
 
-const CardTitle = styled.Text`
+const CardTitle = styled.Text<{ color?: string }>`
   font-size: 28px;
-  color: #fff;
+  color: ${props => props.color || '#fff'};
   font-family: Montserrat_700Bold;
 `;
 
