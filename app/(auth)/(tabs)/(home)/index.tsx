@@ -46,7 +46,7 @@ export default function HomeScreen() {
   }));
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View>
         <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
           <RoundedIconLink

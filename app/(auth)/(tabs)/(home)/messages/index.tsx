@@ -8,10 +8,9 @@ import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, TextInput, View } from "react-native";
 import Animated, {
-  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
+  withTiming
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -94,21 +93,16 @@ export default function Messages() {
   const searchHeight = useSharedValue(50); // Hauteur initiale
   const searchOpacity = useSharedValue(1); // Opacité initiale
 
-  // Handler pour capturer le défilement
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      const scrollY = event.contentOffset.y;
-      if (scrollY > 10) {
-        // Réduire la hauteur et l'opacité
-        searchHeight.value = withTiming(0, { duration: 300 });
-        searchOpacity.value = withTiming(0, { duration: 300 });
-      } else {
-        // Restaurer la hauteur et l'opacité
-        searchHeight.value = withTiming(50, { duration: 300 });
-        searchOpacity.value = withTiming(1, { duration: 300 });
-      }
-    },
-  });
+  const handleScroll = (event: any) => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    if (scrollY > 10) {
+      searchHeight.value = withTiming(0, { duration: 300 });
+      searchOpacity.value = withTiming(0, { duration: 300 });
+    } else {
+      searchHeight.value = withTiming(50, { duration: 300 });
+      searchOpacity.value = withTiming(1, { duration: 300 });
+    }
+  };
 
   // Style animé pour la barre de recherche
   const animatedStyle = useAnimatedStyle(() => ({
@@ -118,7 +112,7 @@ export default function Messages() {
   }));
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View
         style={{
           display: "flex",
@@ -190,8 +184,8 @@ export default function Messages() {
           paddingTop: 24,
         }}
         showsVerticalScrollIndicator={false}
-        onScroll={scrollHandler} // Connecte le gestionnaire
-        scrollEventThrottle={16} // Assure une fluidité
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
       />
     </View>
   );
