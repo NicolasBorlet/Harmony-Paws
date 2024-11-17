@@ -47,7 +47,10 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1 }}>
       <Animated.View style={animatedHeaderStyle}>
         <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
-          <RoundedIconLink icon={<Ionicons name="chatbubble" size={20} color="white" />} href="/messages" />
+          <RoundedIconLink
+            icon={<Ionicons name="chatbubble" size={20} color="white" />}
+            onPress={() => router.push('/messages')}
+          />
         </View>
         <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
           <SpecialTitle>Salut Taico</SpecialTitle>

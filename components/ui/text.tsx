@@ -43,11 +43,29 @@ const Small = styled.Text<{ color?: string }>`
   font-family: Montserrat_400Regular;
 `;
 
+const SmallSemiBold = styled.Text<{ color?: string }>`
+  font-size: 14px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_600SemiBold;
+`;
+
 const ExtraSmall = styled.Text<{ color?: string }>`
   font-size: 12px;
   color: ${props => props.color || '#fff'};
   font-family: Montserrat_400Regular;
 `;
 
-export { Body, CardTitle, ExtraSmall, Large, MessageListingAuthor, NavigationTitle, Small, SpecialTitle };
+const ExtraSmallSemiBold = styled.Text<{ color?: string }>`
+  font-size: 12px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_600SemiBold;
+`;
+
+const ExtraSmallMedium = styled.Text<{ color?: string }>`
+  font-size: 12px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_500Medium;
+`;
+
+export { Body, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallSemiBold, SpecialTitle };
 
