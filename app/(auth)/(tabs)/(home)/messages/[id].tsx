@@ -4,7 +4,7 @@ import { AntDesign, Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 import { Composer, GiftedChat, InputToolbar, Send } from 'react-native-gifted-chat';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const userData = {
   avatar: "https://picsum.photos/300",
@@ -250,7 +250,7 @@ export default function MessageDetail() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingTop: insets.top }}>
       <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
         <View
           style={{
@@ -293,7 +293,7 @@ export default function MessageDetail() {
           showsVerticalScrollIndicator: false
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -7,7 +7,7 @@ export default function MessagesLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="index" />
+      <Stack.Screen name="index"/>
       <Stack.Screen name="new" options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen
         name="[id]"

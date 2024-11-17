@@ -44,7 +44,7 @@ export default function DogListing() {
       )}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 80, paddingTop: 24 }}
+      contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 24 }}
       showsVerticalScrollIndicator={false}
     />
   );

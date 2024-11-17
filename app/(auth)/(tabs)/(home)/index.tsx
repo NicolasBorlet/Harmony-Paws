@@ -9,10 +9,12 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
+
   const [selectedTab, setSelectedTab] = useState<'dog' | 'ride'>('dog');
   const headerHeight = useSharedValue(200);
   const startY = useSharedValue(0);
@@ -44,8 +46,8 @@ export default function HomeScreen() {
   }));
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Animated.View style={animatedHeaderStyle}>
+    <View style={{ flex: 1, paddingTop: insets.top }}>
+      <View>
         <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
           <RoundedIconLink
             icon={<Ionicons name="chatbubble" size={20} color="white" />}
@@ -63,7 +65,7 @@ export default function HomeScreen() {
           />
           <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
         </View>
-      </Animated.View>
+      </View>
       <GestureDetector gesture={gesture}>
         <View style={{ flex: 1 }}>
           {selectedTab === 'dog' ? <DogListing /> : <RideListing />}
@@ -73,6 +75,6 @@ export default function HomeScreen() {
         <Small>Carte</Small>
         <Ionicons name="map" size={18} color="white" />
       </MapButton>
-    </SafeAreaView>
+    </View>
   );
 }
