@@ -21,7 +21,7 @@ const RideCard = styled.View`
   justify-content: flex-end;
   align-items: flex-start;
   overflow: hidden;
-  gap: 8px;
+  gap: 2px;
 `;
 
 const MasterDogCard = styled.View`

@@ -2,8 +2,9 @@ import Back from '@/components/back-button';
 import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
-import { Composer, GiftedChat, InputToolbar, Send } from 'react-native-gifted-chat';
+import { useCallback, useState } from 'react';
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { Composer, GiftedChat, IMessage, InputToolbar, Send } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const userData = {
@@ -51,7 +52,7 @@ const messageData = [
   },
   {
     _id: 4,
-    text: "Oui, il y en a un dans le 11ème qui est pas mal du tout. Bien placé, lumineux, dans mon budget",
+    text: "Oui, il y en a un dans le 11ème qui est pas mal du tout. Bien plac, lumineux, dans mon budget",
     createdAt: new Date(Date.now() - 3600000 * 22),
     user: {
       _id: 1,
@@ -200,10 +201,20 @@ const messageData = [
 export default function MessageDetail() {
   const insets = useSafeAreaInsets();
 
+  const [messages, setMessages] = useState<IMessage[]>(messageData);
+  const [inputText, setInputText] = useState('');
+
+  const onSend = useCallback((newMessages: IMessage[]) => {
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, newMessages)
+    );
+    setInputText('');
+  }, []);
+
   const renderInputToolbar = (props: any) => (
     <InputToolbar
       {...props}
-      containerStyle={styles.inputContainer}
+      containerStyle={{ ...styles.inputContainer, paddingBottom: insets.bottom }}
       primaryStyle={styles.inputPrimary}
     />
   );
@@ -218,15 +229,14 @@ export default function MessageDetail() {
         textInputStyle={styles.composer}
         placeholder="Message"
       />
+      {props.text.trim() ? (
+        <Send {...props} containerStyle={styles.sendContainer}>
+          <View style={styles.sendButton}>
+            <Feather name="send" size={24} color="white" />
+          </View>
+        </Send>
+      ) : null}
     </View>
-  );
-
-  const renderSend = (props: any) => (
-    <Send {...props} containerStyle={styles.sendContainer}>
-      <View style={styles.sendButton}>
-        <Feather name="send" size={24} color="white" />
-      </View>
-    </Send>
   );
 
   const renderBubble = (props: any) => {
@@ -250,9 +260,13 @@ export default function MessageDetail() {
   };
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
-      <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
-        <View
+    <KeyboardAvoidingView
+        style={styles.container}
+        behavior="padding"
+    >
+      <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
+        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
+          <View
           style={{
             display: "flex",
             flexDirection: "row",
@@ -272,32 +286,39 @@ export default function MessageDetail() {
         </View>
       </View>
       <GiftedChat
-        messages={messageData}
-        onSend={() => { }}
-        user={{
-          _id: 1,
-        }}
+        inverted={false}
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{ _id: 1 }}
         scrollToBottom={true}
         bottomOffset={insets.bottom}
         timeFormat='HH:mm'
         dateFormat='DD/MM/YYYY'
         renderInputToolbar={renderInputToolbar}
         renderComposer={renderComposer}
-        renderSend={renderSend}
         renderBubble={renderBubble}
         messagesContainerStyle={{
           paddingHorizontal: 12
         }}
         minInputToolbarHeight={70}
         listViewProps={{
-          showsVerticalScrollIndicator: false
+          showsVerticalScrollIndicator: false,
+          keyboardDismissMode: 'on-drag',
+          keyboardShouldPersistTaps: 'handled'
         }}
+        text={inputText}
+        onInputTextChanged={text => setInputText(text)}
+        alwaysShowSend={false}
       />
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 2,
+  },
   inputContainer: {
     backgroundColor: 'white',
     paddingVertical: 10,

@@ -25,6 +25,12 @@ const Body = styled.Text<{ color?: string }>`
   font-family: Montserrat_400Regular;
 `;
 
+const BodyMedium = styled.Text<{ color?: string }>`
+  font-size: 16px;
+  color: ${props => props.color || '#000'};
+  font-family: Montserrat_500Medium;
+`;
+
 const NavigationTitle = styled.Text<{ color?: string }>`
   font-size: 20px;
   color: ${props => props.color || '#fff'};
@@ -67,5 +73,5 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
   font-family: Montserrat_500Medium;
 `;
 
-export { Body, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallSemiBold, SpecialTitle };
+export { Body, BodyMedium, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallSemiBold, SpecialTitle };
 

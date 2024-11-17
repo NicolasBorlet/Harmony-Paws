@@ -31,7 +31,7 @@ export default function TabLayout() {
   const handleTabPress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
     await new Promise(resolve => setTimeout(resolve, 150));
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   return (
