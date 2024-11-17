@@ -5,6 +5,7 @@ import RoundedIconLink from "@/components/rounded-icon-link";
 import { NavigationTitle } from "@/components/ui/text";
 import { AntDesign } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import { router } from "expo-router";
 import { Pressable, TextInput, View } from "react-native";
 import Animated, {
   useAnimatedScrollHandler,
@@ -145,7 +146,7 @@ export default function Messages() {
             <Back position="relative" left="0" />
             <NavigationTitle color="#000">Messages</NavigationTitle>
           </View>
-          <RoundedIconLink icon={<AntDesign name="plus" size={20} color="white" />} href="/messages" />
+          <RoundedIconLink icon={<AntDesign name="plus" size={20} color="white" />} onPress={() => router.push('/messages/new')} />
         </View>
         <Animated.View style={[animatedStyle]}>
           <TextInput
@@ -164,8 +165,10 @@ export default function Messages() {
       </View>
       <AnimatedFlashList
         data={messagesData}
-        renderItem={({ item, index }) => (
-          <Pressable onPress={() => {}}>
+        renderItem={({ item, index }: { item: any, index: number }) => (
+          <Pressable onPress={() => {
+            router.push(`/messages/${item.id}`);
+          }}>
             <OpacityFadeIn delay={index * 200}>
               <MessageItemListing messageData={item} />
             </OpacityFadeIn>
