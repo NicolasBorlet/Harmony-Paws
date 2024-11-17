@@ -1,9 +1,11 @@
 import DogListing from '@/components/dogListing/dog-listing';
 import RideListing from '@/components/rideListing/ride-listing';
 import RoundedIconLink from '@/components/rounded-icon-link';
+import { MapButton } from '@/components/ui/button';
 import TabSwitcher from '@/components/ui/TabSwitcher';
-import { Body, SpecialTitle } from '@/components/ui/text';
+import { Body, Small, SpecialTitle } from '@/components/ui/text';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -29,7 +31,7 @@ export default function HomeScreen() {
       <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
         <RoundedIconLink icon={<Ionicons name="chatbubble" size={20} color="white" />} href="/messages" />
       </View>
-      <View style={{ paddingBottom: 48, paddingHorizontal: 20 }}>
+      <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
         <SpecialTitle>Salut Taico</SpecialTitle>
         <Body>C’est le moment de se balader ?</Body>
       </View>
@@ -41,8 +43,14 @@ export default function HomeScreen() {
         <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
       </View>
       <GestureDetector gesture={gesture}>
-        {selectedTab === 'dog' ? <DogListing /> : <RideListing />}
+        <View style={{ flex: 1 }}>
+          {selectedTab === 'dog' ? <DogListing /> : <RideListing />}
+        </View>
       </GestureDetector>
+      <MapButton onPress={() => router.push('/map')}>
+        <Small>Carte</Small>
+        <Ionicons name="map" size={18} color="white" />
+      </MapButton>
     </SafeAreaView>
   );
 }

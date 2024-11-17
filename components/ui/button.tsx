@@ -10,8 +10,6 @@ const StyledButton = styled.Pressable`
 `;
 
 const BackButton = styled.Pressable`
-  paddingVertical: 10px;
-  paddingHorizontal: 12px;
   position: absolute;
   left: 25px;
   background-color: #F7A400;
@@ -24,4 +22,25 @@ const BackButton = styled.Pressable`
   z-index: 100;
 `;
 
-export { BackButton, StyledButton };
+const MapButton = styled.Pressable`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  paddingVertical: 10px;
+  paddingHorizontal: 16px;
+  background-color: #663399;
+  border-radius: 30px;
+  z-index: 100;
+  width: 100px;
+  height: 40px;
+  gap: 6px;
+  align-self: center;
+  position: absolute;
+  bottom: 100px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+export { BackButton, MapButton, StyledButton };
+
