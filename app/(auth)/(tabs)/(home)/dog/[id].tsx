@@ -1,8 +1,9 @@
 import Back from '@/components/back-button';
+import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
-import { CardTitle } from '@/components/ui/text';
+import { CardTitle, Small } from '@/components/ui/text';
 import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 const dogData = {
   name: 'Max',
@@ -33,18 +34,27 @@ export default function DogDetails() {
     <>
       <Back />
       <ParallaxScrollView headerImage={dogData.image}>
-        <CardTitle color='#000000'>Max, 4 ans</CardTitle>
+        <View style={styles.container}>
+          <View style={styles.infoContainer}>
+            <CardTitle color='#000000'>Max, 4 ans</CardTitle>
+            <Small color='#000000'>{dogData.description}</Small>
+          </View>
+          <MasterDogCardComponent />
+        </View>
       </ParallaxScrollView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 20,
   },
+  infoContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10
+  }
 });
