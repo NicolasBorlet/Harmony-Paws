@@ -9,9 +9,9 @@ const StyledButton = styled.Pressable`
   color: #fff;
 `;
 
-const BackButton = styled.Pressable`
-  position: absolute;
-  left: 25px;
+const BackButton = styled.Pressable<{ position?: string, left?: string }>`
+  position: ${props => props.position || 'absolute'};
+  left: ${props => props.left || '25px'};
   background-color: #F7A400;
   border-radius: 1000px;
   width: 32px;
