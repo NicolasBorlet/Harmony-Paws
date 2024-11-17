@@ -118,7 +118,7 @@ export default function Messages() {
   }));
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View
         style={{
           display: "flex",

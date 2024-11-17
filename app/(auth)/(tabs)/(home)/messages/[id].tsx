@@ -250,7 +250,7 @@ export default function MessageDetail() {
   };
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
         <View
           style={{

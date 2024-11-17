@@ -28,6 +28,12 @@ export default function TabLayout() {
     return <Redirect href="/login" />;
   }
 
+  const handleTabPress = async () => {
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+    await new Promise(resolve => setTimeout(resolve, 150));
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+  };
+
   return (
     <Tabs
       screenOptions={{
@@ -40,11 +46,11 @@ export default function TabLayout() {
               {...otherProps}
               style={style}
               onPress={(e: GestureResponderEvent) => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
                 props.onPress?.(e);
               }}
               onLongPress={(e: GestureResponderEvent) => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                handleTabPress();
                 props.onLongPress?.(e);
               }}
             />
