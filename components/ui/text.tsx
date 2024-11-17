@@ -13,17 +13,22 @@ const CardTitle = styled.Text<{ color?: string }>`
   font-family: Montserrat_700Bold;
 `;
 
-const StyledText = styled.Text<{ color?: string }>`
-  font-size: 16px;
-  font-weight: 600;
-  color: ${props => props.color || '#fff'};
-  font-family: Montserrat_400Regular;
+const MessageListingAuthor = styled.Text<{ color?: string }>`
+  font-size: 14px;
+  color: ${props => props.color || '#F7A400'};
+  font-family: Montserrat_700Bold;
 `;
 
 const Body = styled.Text<{ color?: string }>`
   font-size: 16px;
   color: ${props => props.color || '#000'};
   font-family: Montserrat_400Regular;
+`;
+
+const NavigationTitle = styled.Text<{ color?: string }>`
+  font-size: 20px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_700Bold;
 `;
 
 const Large = styled.Text<{ color?: string }>`
@@ -44,5 +49,5 @@ const ExtraSmall = styled.Text<{ color?: string }>`
   font-family: Montserrat_400Regular;
 `;
 
-export { Body, CardTitle, ExtraSmall, Large, Small, SpecialTitle, StyledText };
+export { Body, CardTitle, ExtraSmall, Large, MessageListingAuthor, NavigationTitle, Small, SpecialTitle };
 
