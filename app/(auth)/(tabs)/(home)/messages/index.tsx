@@ -13,9 +13,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
-
-const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const messagesData = [
   {
@@ -91,6 +89,8 @@ const messagesData = [
 ]
 
 export default function Messages() {
+  const insets = useSafeAreaInsets();
+
   const searchHeight = useSharedValue(50); // Hauteur initiale
   const searchOpacity = useSharedValue(1); // Opacité initiale
 
@@ -118,7 +118,7 @@ export default function Messages() {
   }));
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1, paddingTop: insets.top }}>
       <View
         style={{
           display: "flex",
@@ -163,7 +163,7 @@ export default function Messages() {
           />
         </Animated.View>
       </View>
-      <AnimatedFlashList
+      <FlashList
         data={messagesData}
         renderItem={({ item, index }: { item: any, index: number }) => (
           <Pressable onPress={() => {
@@ -187,13 +187,12 @@ export default function Messages() {
         )}
         contentContainerStyle={{
           paddingHorizontal: 20,
-          paddingBottom: 80,
           paddingTop: 24,
         }}
         showsVerticalScrollIndicator={false}
         onScroll={scrollHandler} // Connecte le gestionnaire
         scrollEventThrottle={16} // Assure une fluidité
       />
-    </SafeAreaView>
+    </View>
   );
 }

@@ -37,7 +37,7 @@ const MapButton = styled.Pressable`
   gap: 6px;
   align-self: center;
   position: absolute;
-  bottom: 100px;
+  bottom: 20px;
   margin-left: auto;
   margin-right: auto;
 `;

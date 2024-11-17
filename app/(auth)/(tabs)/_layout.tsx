@@ -1,8 +1,15 @@
 import { useSession } from "@/app/ctx";
-import { Tabs } from "@/components/bottom-tabs";
-import { Redirect, usePathname } from "expo-router";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import * as Haptics from 'expo-haptics';
+import { Redirect, Tabs, usePathname } from "expo-router";
 import { useEffect } from "react";
-import { Text } from "react-native";
+import { GestureResponderEvent, Pressable, Text } from "react-native";
+
+type TabBarIconProps = {
+  focused: boolean;
+  color: string;
+  size: number;
+};
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
@@ -22,21 +29,46 @@ export default function TabLayout() {
   }
 
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: { display: isMessages ? 'none' : 'flex' },
+        tabBarLabelStyle: { fontSize: 12, fontFamily: 'Montserrat_400Regular', color: '#663399' },
+        tabBarButton: (props: any) => {
+          const { style, ...otherProps } = props;
+          return (
+            <Pressable
+              {...otherProps}
+              style={style}
+              onPress={(e: GestureResponderEvent) => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                props.onPress?.(e);
+              }}
+              onLongPress={(e: GestureResponderEvent) => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+                props.onLongPress?.(e);
+              }}
+            />
+          );
+        },
+      }}
+    >
       <Tabs.Screen
         name="(home)"
         options={{
-          tabBarIcon: () => ({ sfSymbol: "house" }),
+          tabBarIcon: ({ focused }: TabBarIconProps) => (
+            focused ? <Ionicons name="paw" size={24} color="#663399" /> : <Ionicons name="paw-outline" size={24} color="#663399" />
+          ),
           title: "Accueil",
           headerShown: false,
-          tabBarStyle: { display: isMessages ? 'none' : 'flex' }
         }}
       />
       <Tabs.Screen
         name="explore"
         options={{
           title: "Explore",
-          tabBarIcon: () => ({ sfSymbol: "person" }),
+          tabBarIcon: ({ focused }: TabBarIconProps) => (
+            <FontAwesome5 name="internet-explorer" size={24} color="black" />
+          ),
         }}
       />
     </Tabs>
