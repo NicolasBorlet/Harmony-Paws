@@ -8,7 +8,7 @@ export default function Back() {
 
   return (
     <BackButton onPress={() => router.back()} style={{ marginTop: top }}>
-      <Entypo name="chevron-left" size={13} color="white" />
+      <Entypo name="chevron-left" size={18} color="white" />
     </BackButton>
   )
 }
