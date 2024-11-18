@@ -1,8 +1,14 @@
 import Back from "@/components/back-button";
+import DogItem from "@/components/invitation/dogItem";
 import { StandardButton, UnderlinedButton } from "@/components/ui/button";
-import { BodyMedium, NavigationTitle } from "@/components/ui/text";
-import { Text, View } from "react-native";
+import { BodyMedium, NavigationTitle, SmallMedium, SpecialTitle } from "@/components/ui/text";
+import { TextInput, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+
+const dogs = [
+  { name: 'Taico', image: 'https://picsum.photos/300' },
+  { name: 'Rex', image: 'https://picsum.photos/300' },
+];
 
 export default function DogInvitation() {
   const insets = useSafeAreaInsets();
@@ -23,9 +29,36 @@ export default function DogInvitation() {
         </View>
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
-        <View>
-          <View>
-            <Text>Hello</Text>
+        <View style={{ display: 'flex', flexDirection: 'column', gap: 32, alignItems: 'center' }}>
+          <View style={{ display: 'flex', flexDirection: 'row', gap: 24, alignItems: 'center' }}>
+            {dogs.map((dog, index) => (
+              <>
+                <DogItem key={index} dogData={dog} />
+                {index === 0 && <SpecialTitle color="#F7A400">&</SpecialTitle>}
+              </>
+            ))}
+          </View>
+          <View style={{ width: 'auto', height: 1, backgroundColor: '#DFDFDF' }} />
+          <View style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <SmallMedium color="#000">
+              Contactez la propriétaire pour organiser une rencontre entre Max et Taico.
+            </SmallMedium>
+            <View style={{ padding: 10, backgroundColor: 'rgba(102, 51, 153, 0.1)', borderRadius: 10 }}>
+              <TextInput
+                placeholder="Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?"
+                placeholderTextColor="#663399"
+                style={{
+                  color: '#663399',
+                  minHeight: 100,
+                  maxWidth: '100%',
+                  textAlignVertical: 'top',
+                }}
+                multiline={true}
+                numberOfLines={4}
+                textAlignVertical="top"
+                textBreakStrategy="simple"
+              />
+            </View>
           </View>
         </View>
         <View style={{ width: '100%', alignItems: 'center', gap: 16 }}>
