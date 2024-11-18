@@ -51,5 +51,9 @@ const StandardButton = styled.Pressable`
   justify-content: center;
 `;
 
-export { BackButton, MapButton, StandardButton, StyledButton };
+const UnderlinedButton = styled.Pressable`
+  text-decoration: underline;
+`;
+
+export { BackButton, MapButton, StandardButton, StyledButton, UnderlinedButton };
 

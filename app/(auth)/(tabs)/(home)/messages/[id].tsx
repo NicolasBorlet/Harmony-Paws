@@ -286,7 +286,7 @@ export default function MessageDetail() {
         </View>
       </View>
       <GiftedChat
-        inverted={false}
+        // inverted={false}
         messages={messages}
         onSend={messages => onSend(messages)}
         user={{ _id: 1 }}
@@ -309,6 +309,7 @@ export default function MessageDetail() {
         text={inputText}
         onInputTextChanged={text => setInputText(text)}
         alwaysShowSend={false}
+
       />
       </View>
     </KeyboardAvoidingView>

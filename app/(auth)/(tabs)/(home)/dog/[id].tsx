@@ -45,7 +45,7 @@ export default function DogDetails() {
           <RideItemListing rideCardData={dogData.nextRide} />
         </View>
         <StandardButton onPress={() => router.push('/dog/invitation')}>
-          <BodyMedium color='#fff'>Inviter</BodyMedium>
+          <BodyMedium color='#fff'>On se balade ?</BodyMedium>
         </StandardButton>
       </ParallaxScrollView>
     </>
