@@ -42,5 +42,18 @@ const MapButton = styled.Pressable`
   margin-right: auto;
 `;
 
-export { BackButton, MapButton, StyledButton };
+const StandardButton = styled.Pressable`
+  background-color: #F49819;
+  border-radius: 10px;
+  padding: 14px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UnderlinedButton = styled.Pressable`
+  text-decoration: underline;
+`;
+
+export { BackButton, MapButton, StandardButton, StyledButton, UnderlinedButton };
 

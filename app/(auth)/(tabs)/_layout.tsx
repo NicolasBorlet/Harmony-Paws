@@ -1,8 +1,7 @@
 import { useSession } from "@/app/ctx";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
-import { Redirect, Tabs, usePathname } from "expo-router";
-import { useEffect } from "react";
+import { Redirect, Tabs } from "expo-router";
 import { GestureResponderEvent, Pressable, Text } from "react-native";
 
 type TabBarIconProps = {
@@ -13,12 +12,6 @@ type TabBarIconProps = {
 
 export default function TabLayout() {
   const { session, isLoading } = useSession();
-  const pathname = usePathname();
-  const isMessages = pathname.includes('messages');
-
-  useEffect(() => {
-    console.log(isMessages);
-  }, [isMessages]);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -31,13 +24,12 @@ export default function TabLayout() {
   const handleTabPress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
     await new Promise(resolve => setTimeout(resolve, 150));
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
   };
 
   return (
     <Tabs
       screenOptions={{
-        tabBarStyle: { display: isMessages ? 'none' : 'flex' },
         tabBarLabelStyle: { fontSize: 12, fontFamily: 'Montserrat_400Regular', color: '#663399' },
         tabBarButton: (props: any) => {
           const { style, ...otherProps } = props;

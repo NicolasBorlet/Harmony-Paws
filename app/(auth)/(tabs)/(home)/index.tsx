@@ -50,6 +50,10 @@ export default function HomeScreen() {
       <View>
         <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
           <RoundedIconLink
+            icon={<Ionicons name="notifications" size={20} color="white" />}
+            onPress={() => router.push('/notifications')}
+          />
+          <RoundedIconLink
             icon={<Ionicons name="chatbubble" size={20} color="white" />}
             onPress={() => router.push('/messages')}
           />

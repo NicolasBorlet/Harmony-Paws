@@ -1,9 +1,9 @@
 import { Purple } from '@/constants/Colors';
 import styled from 'styled-components/native';
 
-const SpecialTitle = styled.Text`
+const SpecialTitle = styled.Text<{ color?: string }>`
   font-size: 24px;
-  color: ${Purple};
+  color: ${props => props.color || Purple};
   font-family: RoundsBlack;
 `;
 
@@ -23,6 +23,12 @@ const Body = styled.Text<{ color?: string }>`
   font-size: 16px;
   color: ${props => props.color || '#000'};
   font-family: Montserrat_400Regular;
+`;
+
+const BodyMedium = styled.Text<{ color?: string }>`
+  font-size: 16px;
+  color: ${props => props.color || '#000'};
+  font-family: Montserrat_500Medium;
 `;
 
 const NavigationTitle = styled.Text<{ color?: string }>`
@@ -49,6 +55,12 @@ const SmallSemiBold = styled.Text<{ color?: string }>`
   font-family: Montserrat_600SemiBold;
 `;
 
+const SmallMedium = styled.Text<{ color?: string }>`
+  font-size: 14px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_500Medium;
+`;
+
 const ExtraSmall = styled.Text<{ color?: string }>`
   font-size: 12px;
   color: ${props => props.color || '#fff'};
@@ -67,5 +79,5 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
   font-family: Montserrat_500Medium;
 `;
 
-export { Body, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallSemiBold, SpecialTitle };
+export { Body, BodyMedium, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallMedium, SmallSemiBold, SpecialTitle };
 

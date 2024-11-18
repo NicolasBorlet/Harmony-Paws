@@ -1,8 +1,10 @@
 import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
-import { CardTitle, Small } from '@/components/ui/text';
-import { useLocalSearchParams } from 'expo-router';
+import RideItemListing from '@/components/rideListing/ride-item-listing';
+import { StandardButton } from '@/components/ui/button';
+import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 const dogData = {
@@ -20,10 +22,10 @@ const dogData = {
     profilePicture: 'https://picsum.photos/300',
   },
   nextRide : {
-    location: 'Champagnier',
-    date: new Date(),
-    hour: '17:30',
-    duration: 60,
+    id: 3,
+    name: 'Ride 3',
+    date: '14/11/2024',
+    time: '10:00',
   }
 };
 
@@ -40,7 +42,11 @@ export default function DogDetails() {
             <Small color='#000000'>{dogData.description}</Small>
           </View>
           <MasterDogCardComponent />
+          <RideItemListing rideCardData={dogData.nextRide} />
         </View>
+        <StandardButton onPress={() => router.push('/dog/invitation')}>
+          <BodyMedium color='#fff'>On se balade ?</BodyMedium>
+        </StandardButton>
       </ParallaxScrollView>
     </>
   );

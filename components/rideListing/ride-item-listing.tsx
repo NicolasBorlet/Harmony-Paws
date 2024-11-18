@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { RideCard } from "../ui/card";
 import { CardTitle, ExtraSmall } from "../ui/text";
 
@@ -19,12 +19,14 @@ export default function RideItemListing({ rideCardData }: { rideCardData: any })
       <CardTitle style={{ color: '#fff' }}>
         {rideCardData.name}
       </CardTitle>
-      <ExtraSmall>
-        {rideCardData.date}
+      <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+        <ExtraSmall>
+          {rideCardData.date}
+        </ExtraSmall>
         <ExtraSmall style={{ fontFamily: 'Montserrat_700Bold' }}>
           {rideCardData.time}
         </ExtraSmall>
-      </ExtraSmall>
+      </View>
     </RideCard>
   );
 }
