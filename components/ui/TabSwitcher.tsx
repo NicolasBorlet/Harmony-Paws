@@ -12,8 +12,8 @@ type Tab = {
 };
 
 const TABS: Tab[] = [
-  { id: 'dog', icon: 'paw', label: 'Dogs' },
-  { id: 'ride', icon: 'car-sport', label: 'Rides' }
+  { id: 'dog', icon: 'paw', label: 'Chiens' },
+  { id: 'ride', icon: 'car-sport', label: 'Balades' }
 ];
 
 type Props = {

@@ -48,24 +48,24 @@ export default function TabLayout() {
             />
           );
         },
+        headerShown: false,
       }}
     >
       <Tabs.Screen
         name="(home)"
         options={{
+          title: "Accueil",
           tabBarIcon: ({ focused }: TabBarIconProps) => (
             focused ? <Ionicons name="paw" size={24} color="#663399" /> : <Ionicons name="paw-outline" size={24} color="#663399" />
           ),
-          title: "Accueil",
-          headerShown: false,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="(account)"
         options={{
-          title: "Explore",
+          title: "Account",
           tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <FontAwesome5 name="internet-explorer" size={24} color="black" />
+            <FontAwesome5 name="user" size={24} color="black" />
           ),
         }}
       />
