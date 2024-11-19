@@ -2,7 +2,7 @@ import OpacityFadeIn from "@/components/animate/opacity-fadeIn";
 import Back from "@/components/back-button";
 import MessageItemListing from "@/components/messageListing/message-item-listing";
 import RoundedIconLink from "@/components/rounded-icon-link";
-import { NavigationTitle } from "@/components/ui/text";
+import { ExtraSmall, NavigationTitle, SmallMedium } from "@/components/ui/text";
 import { AntDesign } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
@@ -97,10 +97,10 @@ export default function Messages() {
     const scrollY = event.nativeEvent.contentOffset.y;
     if (scrollY > 10) {
       searchHeight.value = withTiming(0, { duration: 300 });
-      searchOpacity.value = withTiming(0, { duration: 300 });
+      searchOpacity.value = withTiming(0, { duration: 150 });
     } else {
       searchHeight.value = withTiming(50, { duration: 300 });
-      searchOpacity.value = withTiming(1, { duration: 300 });
+      searchOpacity.value = withTiming(1, { duration: 150 });
     }
   };
 
@@ -142,20 +142,28 @@ export default function Messages() {
           </View>
           <RoundedIconLink icon={<AntDesign name="plus" size={20} color="white" />} onPress={() => router.push('/messages/new')} />
         </View>
-        <Animated.View style={[animatedStyle]}>
-          <TextInput
-            placeholder="Search"
-            style={{
-              flex: 1,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              borderRadius: 30,
-              borderWidth: 1,
-              borderColor: "#B9B9B9",
-              color: "#696969",
-            }}
-          />
-        </Animated.View>
+        {/* Barre de recherche */}
+        {messagesData.length > 0 ? (
+          <Animated.View style={[animatedStyle]}>
+            <TextInput
+              placeholder="Search"
+              style={{
+                flex: 1,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                borderRadius: 30,
+                borderWidth: 1,
+                borderColor: "#B9B9B9",
+                color: "#696969",
+              }}
+            />
+          </Animated.View>
+        ) : (
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <SmallMedium color="#000">Aucun message</SmallMedium>
+            <ExtraSmall color="#979898">Envoyez un message pour commencer une conversation.</ExtraSmall>
+          </View>
+        )}
       </View>
       <FlashList
         data={messagesData}
@@ -163,9 +171,7 @@ export default function Messages() {
           <Pressable onPress={() => {
             router.push(`/messages/${item.id}`);
           }}>
-            <OpacityFadeIn delay={index * 200}>
-              <MessageItemListing messageData={item} />
-            </OpacityFadeIn>
+            <MessageItemListing messageData={item} />
           </Pressable>
         )}
         estimatedItemSize={10}
@@ -186,6 +192,7 @@ export default function Messages() {
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
+        ListFooterComponent={() => <View style={{ height: 32 }} />}
       />
     </View>
   );

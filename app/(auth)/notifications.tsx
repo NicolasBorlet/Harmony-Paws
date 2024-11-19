@@ -132,6 +132,7 @@ export default function Notifications() {
               <SmallMedium color="#000">Aucune notification</SmallMedium>
             </View>
           )}
+          ListFooterComponent={() => <View style={{ height: 32 }} />}
         />
       </View>
     </View>
