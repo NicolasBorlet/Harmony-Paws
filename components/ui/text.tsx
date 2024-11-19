@@ -61,6 +61,12 @@ const SmallMedium = styled.Text<{ color?: string }>`
   font-family: Montserrat_500Medium;
 `;
 
+const SmallBold = styled.Text<{ color?: string }>`
+  font-size: 14px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_700Bold;
+`;
+
 const ExtraSmall = styled.Text<{ color?: string }>`
   font-size: 12px;
   color: ${props => props.color || '#fff'};
@@ -79,5 +85,5 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
   font-family: Montserrat_500Medium;
 `;
 
-export { Body, BodyMedium, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallMedium, SmallSemiBold, SpecialTitle };
+export { Body, BodyMedium, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallMedium, SmallSemiBold, SpecialTitle, SmallBold };
 

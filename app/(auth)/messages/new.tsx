@@ -116,6 +116,7 @@ export default function NewMessage() {
               ItemSeparatorComponent={() => (
                 <View style={{ height: 20 }} />
               )}
+              ListFooterComponent={() => <View style={{ height: 32 }} />}
             />
           </View>
         </View>
