@@ -61,9 +61,19 @@ const SmallButton = styled.Pressable`
   justify-content: center;
 `;
 
+const SmallButtonOutlined = styled.Pressable`
+  background-color: none;
+  border: 1px solid #F49819;
+  border-radius: 5px;
+  padding-vertical: 8px;
+  padding-horizontal: 12px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
 const UnderlinedButton = styled.Pressable`
   text-decoration: underline;
 `;
 
-export { BackButton, MapButton, StandardButton, StyledButton, UnderlinedButton, SmallButton };
-
+export { BackButton, MapButton, StandardButton, StyledButton, UnderlinedButton, SmallButton, SmallButtonOutlined };

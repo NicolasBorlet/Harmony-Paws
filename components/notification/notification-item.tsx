@@ -1,7 +1,8 @@
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import { Image } from "expo-image";
 import { SmallMedium, SmallSemiBold, Small } from "../ui/text";
-import { SmallButton, StandardButton } from "../ui/button";
+import { SmallButton, SmallButtonOutlined } from "../ui/button";
+import React from "react";
 
 export default function NotificationItem({notificationData}: {notificationData: any}) {
     return (
@@ -21,19 +22,17 @@ export default function NotificationItem({notificationData}: {notificationData: 
                 </SmallMedium>
             </View>
             {notificationData.type === 'new_friend_request' && (
-                <View style={{ display: 'flex', width: 100, flexDirection: 'column', gap: 10 }}>
-                    <SmallButton 
+                <View style={{ display: 'flex', width: 100, flexDirection: 'column', gap: 5 }}>
+                    <SmallButton
                         onPress={() => console.log(`accept ${notificationData.id}`)}
-                        style={{ backgroundColor: '#F49819', borderRadius: 10, padding: 14, width: '100%', alignItems: 'center' }}
                     >
                         <Small color='#fff'>Accepter</Small>
                     </SmallButton>
-                    <SmallButton 
+                    <SmallButtonOutlined
                         onPress={() => console.log(`refuse ${notificationData.id}`)}
-                        style={{ backgroundColor: '#F49819', borderRadius: 10, padding: 14, width: '100%', alignItems: 'center' }}
                     >
-                        <Small color='#fff'>Refuser</Small>
-                    </SmallButton>
+                        <Small color='#F7A400'>Refuser</Small>
+                    </SmallButtonOutlined>
                 </View>
             )}
             {notificationData.type === 'new_ride_request' && (
