@@ -5,8 +5,6 @@ export default function HomeLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ title: 'Accueil', headerShown: false }} />
       <Stack.Screen name="map" options={{ headerShown: false, presentation: 'containedModal' }} />
-      <Stack.Screen name="dog" options={{ headerShown: false }} />
-      <Stack.Screen name="ride/[id]" options={{ title: 'Détails' }} />
     </Stack>
   );
 }
