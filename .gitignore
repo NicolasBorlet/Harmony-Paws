@@ -40,3 +40,5 @@ app-example
 ios/
 
 nativewind-env.d.ts
+
+supabase.ts

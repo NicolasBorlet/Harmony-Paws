@@ -26,6 +26,7 @@
     "@shopify/flash-list": "1.7.1",
     "@stripe/stripe-react-native": "0.38.6",
     "@supabase/supabase-js": "^2.46.1",
+    "@types/aes-js": "^3.1.4",
     "aes-js": "^3.1.2",
     "drizzle-orm": "^0.36.3",
     "expo": "~52.0.4",
