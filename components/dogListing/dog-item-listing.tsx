@@ -1,7 +1,7 @@
 import { getCaracteristicsIcons } from '@/constants/dog-caracteristics';
 import Foundation from '@expo/vector-icons/Foundation';
 import { Image } from 'expo-image';
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { DogCard } from "../ui/card";
 import { CardTitle } from "../ui/text";
 
