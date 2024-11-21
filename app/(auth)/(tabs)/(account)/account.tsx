@@ -1,64 +1,120 @@
-import RoundedIconLink from "@/components/rounded-icon-link";
-import { Body, SmallBold } from "@/components/ui/text";
-import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useSQLiteContext } from "expo-sqlite";
-import { useEffect, useState } from "react";
-import { View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-interface Todo {
-    value: string;
-    intValue: number;
-}
+import { useState, useEffect } from 'react'
+import { StyleSheet, View, Alert, TextInput, Button } from 'react-native'
+import { supabase } from '@/lib/supabase'
+import { useSession } from '@/app/ctx'
 
 export default function AccountScreen() {
-    const insets = useSafeAreaInsets();
-
-    const db = useSQLiteContext();
-    const [version, setVersion] = useState('');
-    const [todos, setTodos] = useState<Todo[]>([]);
-
-    useEffect(() => {
-        async function setup() {
-            const result = await db.getFirstAsync<{ 'sqlite_version()': string }>(
-                'SELECT sqlite_version()'
-            );
-            if (result && result['sqlite_version()']) {
-                setVersion(result['sqlite_version()']);
-            }
-        }
-
-        setup();
-    }, []);
+    const { session } = useSession()
+    const [loading, setLoading] = useState(true)
+    const [username, setUsername] = useState('')
+    const [website, setWebsite] = useState('')
+    const [avatarUrl, setAvatarUrl] = useState('')
 
     useEffect(() => {
-        async function setup() {
-          const result = await db.getAllAsync<Todo>('SELECT * FROM todos');
-          setTodos(result);
+        if (session) getProfile()
+    }, [session])
+
+    async function getProfile() {
+    try {
+        setLoading(true)
+        if (!session?.user) throw new Error('No user on the session!')
+
+        const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`username, website, avatar_url`)
+        .eq('id', session?.user.id)
+        .single()
+        if (error && status !== 406) {
+        throw error
         }
-        setup();
-      }, []);    
+
+        if (data) {
+        setUsername(data.username)
+        setWebsite(data.website)
+        setAvatarUrl(data.avatar_url)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+        Alert.alert(error.message)
+        }
+    } finally {
+        setLoading(false)
+    }
+    }
+
+    async function updateProfile({
+    username,
+    website,
+    avatar_url,
+    }: {
+    username: string
+    website: string
+    avatar_url: string
+    }) {
+    try {
+        setLoading(true)
+        if (!session?.user) throw new Error('No user on the session!')
+
+        const updates = {
+        id: session?.user.id,
+        username,
+        website,
+        avatar_url,
+        updated_at: new Date(),
+        }
+
+        const { error } = await supabase.from('profiles').upsert(updates)
+
+        if (error) {
+        throw error
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+        Alert.alert(error.message)
+        }
+    } finally {
+        setLoading(false)
+    }
+    }      
 
     return (
-        <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
-            <View>
-                <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
-                    <RoundedIconLink
-                        icon={<FontAwesome name="gear" size={20} color="white" />}
-                        onPress={() => router.push('/settings')}
-                    />
-                </View>
-            </View>
-            <View>
-                <Body>Account</Body>
-                <SmallBold color="#000">SQLite version: {version}</SmallBold>
-                {todos.map((todo, index) => (
-                    <View key={index}>
-                        <SmallBold color="#000">{`${todo.intValue} - ${todo.value}`}</SmallBold>
-                    </View>
-                ))}
-            </View>
+        <View style={styles.container}>
+          <View style={[styles.verticallySpaced, styles.mt20]}>
+            <TextInput value={session?.user?.email} />
+          </View>
+          <View style={styles.verticallySpaced}>
+            <TextInput value={username || ''} onChangeText={(text) => setUsername(text)} />
+          </View>
+          <View style={styles.verticallySpaced}>
+            <TextInput value={website || ''} onChangeText={(text) => setWebsite(text)} />
+          </View>
+    
+          <View style={[styles.verticallySpaced, styles.mt20]}>
+            <Button
+              title={loading ? 'Loading ...' : 'Update'}
+              onPress={() => updateProfile({ username, website, avatar_url: avatarUrl })}
+              disabled={loading}
+            />
+          </View>
+    
+          <View style={styles.verticallySpaced}>
+            <Button title="Sign Out" onPress={() => supabase.auth.signOut()} />
+          </View>
         </View>
-    );
-}
+      )
+    }
+    
+    const styles = StyleSheet.create({
+      container: {
+        marginTop: 40,
+        padding: 12,
+      },
+      verticallySpaced: {
+        paddingTop: 4,
+        paddingBottom: 4,
+        alignSelf: 'stretch',
+      },
+      mt20: {
+        marginTop: 20,
+      },
+    })

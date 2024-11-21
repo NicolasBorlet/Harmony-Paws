@@ -8,7 +8,6 @@ export default function AuthLayout() {
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="messages" />
       <Stack.Screen name="notifications" />
-      <Stack.Screen name="settings" />
     </Stack>
   )
 }
