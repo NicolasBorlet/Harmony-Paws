@@ -6,6 +6,8 @@ export default function AuthLayout() {
       headerShown: false
     }}>
       <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="dog" />
+      <Stack.Screen name="ride" />
       <Stack.Screen name="messages" />
       <Stack.Screen name="notifications" />
     </Stack>
