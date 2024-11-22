@@ -108,6 +108,77 @@ export const dogApi = {
 };
 
 export const dogLocalStorage = {
+  async syncAllDogs(db: SQLiteDatabase): Promise<void> {
+    try {
+      console.log('Starting sync for all dogs');
+      const dogs = await dogApi.getDogs();
+      console.log('Fetched all dogs from Supabase:', dogs.length);
+      
+      // Create the table if it doesn't exist (don't drop it)
+      await db.execAsync(`
+        CREATE TABLE IF NOT EXISTS dogs (
+          id INTEGER PRIMARY KEY,
+          owner_id INTEGER,
+          name TEXT,
+          breed_id INTEGER,
+          description TEXT,
+          dominance TEXT,
+          sex TEXT,
+          age INTEGER,
+          image TEXT,
+          created_at TEXT,
+          updated_at TEXT
+        )
+      `);
+      console.log('Ensured dogs table exists');
+
+      // Clear existing data
+      await db.execAsync('DELETE FROM dogs');
+
+      for (const dog of dogs) {
+        try {
+          await db.runAsync(
+            `INSERT INTO dogs (
+              id, owner_id, name, breed_id, description, dominance, sex, age, image, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              dog.id,
+              dog.owner_id,
+              dog.name,
+              dog.breed_id,
+              dog.description,
+              dog.dominance,
+              dog.sex,
+              dog.age,
+              dog.image,
+              dog.created_at.toISOString(),
+              dog.updated_at.toISOString()
+            ]
+          );
+        } catch (insertError) {
+          console.error('Error inserting dog:', {
+            dogId: dog.id,
+            error: insertError
+          });
+          throw insertError;
+        }
+      }
+      console.log('Successfully synced all dogs');
+    } catch (error) {
+      console.error('Error syncing all dogs:', error);
+      throw error;
+    }
+  },
+
+  async getAllLocalDogs(db: SQLiteDatabase): Promise<Dog[]> {
+    const result = await db.getAllAsync<any>('SELECT * FROM dogs');
+    return result.map(row => ({
+      ...row,
+      created_at: new Date(row.created_at),
+      updated_at: new Date(row.updated_at)
+    }));
+  },
+
   async syncDogs(db: SQLiteDatabase, ownerId: string): Promise<void> {
     try {
       console.log('Starting dog sync for owner:', ownerId);

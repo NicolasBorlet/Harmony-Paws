@@ -20,8 +20,10 @@ export default function DogListing() {
 
     try {
       if (!session?.user) return;
-      const localDogs = await dogLocalStorage.getLocalDogs(db, session.user.id);
+      const localDogs = await dogLocalStorage.getAllLocalDogs(db);
       if (localDogs && localDogs.length > 0) {
+        console.log('Loaded local dogs:', localDogs);
+
         setDogs(localDogs);
         return true;
       }
@@ -39,7 +41,7 @@ export default function DogListing() {
       if (!session?.user) return;
       setIsLoading(true);
       const supabaseDogs = await dogApi.getDogs();
-      await dogLocalStorage.syncDogs(db, session.user.id);
+      await dogLocalStorage.syncAllDogs(db);
 
       console.log('Fetched dogs from Supabase:', supabaseDogs);
 
@@ -53,15 +55,24 @@ export default function DogListing() {
 
   const loadInitialData = async () => {
     console.log('Loading initial data...');
-
-    const hasLocalData = await loadDogsFromLocal();
-    if (!hasLocalData) {
-      await fetchDogsFromSupabase();
+    
+    if (!session?.user) return;
+    
+    setIsLoading(true);
+    try {
+      const hasLocalData = await loadDogsFromLocal();
+      if (!hasLocalData) {
+        await fetchDogsFromSupabase();
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRefresh = async () => {
     console.log('Refreshing...');
+
+    if (!session?.user) return;
 
     setIsRefreshing(true);
     await fetchDogsFromSupabase();
@@ -69,8 +80,10 @@ export default function DogListing() {
   };
 
   useEffect(() => {
-    loadInitialData();
-  }, [session]);
+    if (session?.user) {
+      loadInitialData();
+    }
+  }, [session?.user?.id]);
 
   if (isLoading) {
     return (
