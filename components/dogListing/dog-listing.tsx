@@ -4,8 +4,7 @@ import { Pressable, View, RefreshControl, Text } from "react-native";
 import OpacityFadeIn from "../animate/opacity-fadeIn";
 import DogItemListing from "./dog-item-listing";
 import { useEffect, useState } from "react";
-import { Dog } from "../../lib/api/types";
-import { dogApi, dogLocalStorage } from "../../lib/api/dog";
+import { Dog, dogApi, dogLocalStorage } from "../../lib/api/dog";
 import { useSession } from "../../app/ctx";
 import * as SQLite from 'expo-sqlite';
 
@@ -39,8 +38,11 @@ export default function DogListing() {
     try {
       if (!session?.user) return;
       setIsLoading(true);
-      const supabaseDogs = await dogApi.getDogsByOwner(session.user.id);
+      const supabaseDogs = await dogApi.getDogs();
       await dogLocalStorage.syncDogs(db, session.user.id);
+
+      console.log('Fetched dogs from Supabase:', supabaseDogs);
+
       setDogs(supabaseDogs);
     } catch (error) {
       console.error('Error fetching dogs:', error);
@@ -66,9 +68,9 @@ export default function DogListing() {
     setIsRefreshing(false);
   };
 
-  // useEffect(() => {
-  //   loadInitialData();
-  // }, [session]);
+  useEffect(() => {
+    loadInitialData();
+  }, [session]);
 
   if (isLoading) {
     return (

@@ -10,14 +10,12 @@ import {
   Montserrat_900Black,
   useFonts,
 } from '@expo-google-fonts/montserrat';
-import { router, Slot } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
-import { useSession } from './ctx';
-import { useSegments, useRootNavigationState } from 'expo-router';
 import { SessionProvider } from './ctx';
 
 export {
@@ -35,6 +33,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
+    RoundsBlack: require('../assets/fonts/RoundsBlack.ttf'),
     Montserrat_100Thin,
     Montserrat_200ExtraLight,
     Montserrat_300Light,
@@ -167,8 +166,8 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
       );
 
       CREATE TABLE IF NOT EXISTS dogs (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        owner_id INTEGER,
+        id TEXT PRIMARY KEY,
+        owner_id TEXT,
         name TEXT,
         breed TEXT,
         description TEXT,

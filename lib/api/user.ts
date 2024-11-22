@@ -11,6 +11,17 @@ export interface Profile {
 }
 
 export const userApi = {
+  async getUserIdByUid(uid: string): Promise<number> {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id')
+      .eq('uid', uid)
+      .single();
+    
+    if (error) throw error;
+    return data.id;
+  },
+
   async getProfile(userId: string): Promise<User> {
     const { data, error } = await supabase
       .from('users')
