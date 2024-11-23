@@ -22,8 +22,8 @@ export default function DogDetails() {
   const [fullDogData, setFullDogData] = useState<Dog | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const screenHeight = Dimensions.get('window').height;
-  const bottomPosition = useSharedValue(screenHeight);
+  const bottomPosition = useSharedValue(-100);
+  const opacity = useSharedValue(0);
 
   useEffect(() => {
     const fetchDogLocalDetails = async () => {
@@ -73,11 +73,18 @@ export default function DogDetails() {
       damping: 20,
       stiffness: 90,
     });
+
+    // Animate the button opacity
+    opacity.value = withSpring(1, {
+      damping: 20,
+      stiffness: 90,
+    });
   };
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       bottom: bottomPosition.value,
+      opacity: opacity.value,
     };
   });
 
