@@ -75,10 +75,10 @@ export const dogApi = {
     }
   },
 
-  async getAllDogsForSync(): Promise<Dog[]> {
+  async getAllDogsForSync(): Promise<DogCardInterface[]> {
     const { data, error } = await supabase
       .from('dogs')
-      .select('*');
+      .select('id, name, age, sex, image, created_at, updated_at', { count: 'exact' })
     
     if (error) throw error;
     if (!data) return [];
@@ -182,16 +182,16 @@ export const dogLocalStorage = {
       for (const dog of dogs) {
         try {
           await db.runAsync(
-            `INSERT INTO dogs (
+            `INSERT OR REPLACE INTO dogs (
               id, owner_id, name, breed_id, description, dominance, sex, age, image, created_at, updated_at
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
               dog.id,
-              dog.owner_id,
+              null, // owner_id will be updated later with full data
               dog.name,
-              dog.breed_id,
-              dog.description,
-              dog.dominance,
+              null, // breed_id will be updated later with full data
+              null, // description will be updated later with full data
+              null, // dominance will be updated later with full data
               dog.sex,
               dog.age,
               dog.image,
@@ -204,12 +204,38 @@ export const dogLocalStorage = {
             dogId: dog.id,
             error: insertError
           });
-          throw insertError;
         }
       }
-      console.log('Successfully synced all dogs');
     } catch (error) {
-      console.error('Error syncing all dogs:', error);
+      console.error('Error in syncAllDogs:', error);
+      throw error;
+    }
+  },
+
+  async syncLocalDog(db: SQLiteDatabase, dog: Dog): Promise<void> {
+    try {
+      console.log('Syncing local dog:', dog);
+      await db.runAsync(
+        `INSERT OR REPLACE INTO dogs (
+          id, owner_id, name, breed_id, description, dominance, sex, age, image, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          dog.id,
+          dog.owner_id,
+          dog.name,
+          dog.breed_id,
+          dog.description,
+          dog.dominance,
+          dog.sex,
+          dog.age,
+          dog.image,
+          dog.created_at.toISOString(),
+          dog.updated_at.toISOString()
+        ]
+      );
+      console.log('Successfully synced local dog:', dog.id);
+    } catch (error) {
+      console.error('Error syncing local dog:', error);
       throw error;
     }
   },
@@ -223,7 +249,48 @@ export const dogLocalStorage = {
     }));
   },
 
-  async syncDogs(db: SQLiteDatabase, ownerId: string): Promise<void> {
+  async getLocalDog(db: SQLiteDatabase, dogId: string): Promise<Dog | null> {
+    const result = await db.getFirstAsync<any>(
+      'SELECT * FROM dogs WHERE id = ?',
+      [dogId]
+    );
+    if (!result) return null;
+    return {
+      ...result,
+      created_at: new Date(result.created_at),
+      updated_at: new Date(result.updated_at)
+    };
+  },
+
+  async syncDog(db: SQLiteDatabase, dogId: string): Promise<void> {
+    try {
+      const dog = await dogApi.getDog(dogId);
+      
+      await db.runAsync(
+        `INSERT OR REPLACE INTO dogs (
+          id, owner_id, name, breed_id, description, dominance, sex, age, image, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          dog.id,
+          dog.owner_id,
+          dog.name,
+          dog.breed_id,
+          dog.description,
+          dog.dominance,
+          dog.sex,
+          dog.age,
+          dog.image,
+          dog.created_at.toISOString(),
+          dog.updated_at.toISOString()
+        ]
+      );
+    } catch (error) {
+      console.error('Error syncing dog:', error);
+      throw error;
+    }
+  },
+
+  async syncOwnerDogs(db: SQLiteDatabase, ownerId: string): Promise<void> {
     try {
       console.log('Starting dog sync for owner:', ownerId);
       const dogs = await dogApi.getDogsByOwner(ownerId);
@@ -286,7 +353,7 @@ export const dogLocalStorage = {
     }
   },
 
-  async getLocalDogs(db: SQLiteDatabase, ownerId: string): Promise<Dog[]> {
+  async getLocalOwnerDogs(db: SQLiteDatabase, ownerId: string): Promise<Dog[]> {
     try {
       const results = await db.getAllAsync<any>(
         'SELECT * FROM dogs WHERE owner_id = ? ORDER BY updated_at DESC',
