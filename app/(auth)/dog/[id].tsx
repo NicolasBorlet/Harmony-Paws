@@ -4,45 +4,30 @@ import ParallaxScrollView from '@/components/parallax-scrollview';
 import RideItemListing from '@/components/rideListing/ride-item-listing';
 import { StandardButton } from '@/components/ui/button';
 import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
+import { DogCardInterface } from '@/lib/api/dog';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-const dogData = {
-  name: 'Max',
-  age: 4,
-  description:
-    'Max est un chien très actif et curieux. Il aime explorer de nouvelles choses et est toujours prêt à une nouvelle aventure.',
-  image: 'https://picsum.photos/300',
-  breed: 'Labrador',
-  sex: 'Male',
-  size: 'Huge',
-  master: {
-    name: 'Lucie',
-    age: 30,
-    profilePicture: 'https://picsum.photos/300',
-  },
-  nextRide : {
-    id: 3,
-    name: 'Ride 3',
-    date: '14/11/2024',
-    time: '10:00',
-  }
-};
-
 export default function DogDetails() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, dogData } = useLocalSearchParams<{ id: string, dogData: string }>();
+  const dog: DogCardInterface = dogData ? JSON.parse(dogData) : null;
+
+  if (!dog) {
+    return null; // Or a loading state / error message
+  }
 
   return (
     <>
       <Back />
-      <ParallaxScrollView headerImage={dogData.image}>
+      <ParallaxScrollView headerImage={dog.image}>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
-            <CardTitle color='#000000'>Max, 4 ans</CardTitle>
-            <Small color='#000000'>{dogData.description}</Small>
+            <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
           </View>
           <MasterDogCardComponent />
-          <RideItemListing rideCardData={dogData.nextRide} />
+          {/* Uncomment when you have ride data
+          <RideItemListing rideCardData={dogData.nextRide} /> 
+          */}
         </View>
         <StandardButton onPress={() => router.push('/dog/invitation')}>
           <BodyMedium color='#fff'>On se balade ?</BodyMedium>
@@ -56,11 +41,12 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 20,
+    gap: 16,
+    padding: 20,
   },
   infoContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 10
-  }
+    gap: 8,
+  },
 });

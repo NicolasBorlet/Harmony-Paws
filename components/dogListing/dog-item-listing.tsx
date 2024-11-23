@@ -3,12 +3,12 @@ import { Image } from 'expo-image';
 import { StyleSheet, View } from "react-native";
 import { DogCard } from "../ui/card";
 import { CardTitle } from "../ui/text";
-import { Dog } from '../../lib/api/dog';
+import { DogCardInterface } from '../../lib/api/dog';
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-export default function DogItemListing({ dogCardData }: { dogCardData: Dog }) {
+export default function DogItemListing({ dogCardData }: { dogCardData: DogCardInterface }) {
   return (
     <DogCard>
       <Image

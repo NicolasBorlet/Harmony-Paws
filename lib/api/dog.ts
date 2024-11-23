@@ -16,6 +16,16 @@ export interface Dog {
   updated_at: Date;
 }
 
+export interface DogCardInterface {
+  id: number;
+  name: string;
+  age: number;
+  sex: string;
+  image: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export const dogApi = {
   async getDog(dogId: string): Promise<Dog> {
     const { data, error } = await supabase
@@ -32,13 +42,48 @@ export const dogApi = {
     };
   },
 
-  async getDogs(): Promise<Dog[]> {
+  async getDogs(page: number = 0, limit: number = 5): Promise<{ dogs: DogCardInterface[], hasMore: boolean }> {
+    const offset = page * limit;
+    
+    try {
+      const { data, error, count } = await supabase
+        .from('dogs')
+        .select('id, name, age, sex, image, created_at, updated_at', { count: 'exact' })
+        .range(offset, offset + limit - 1);
+      
+      if (error) {
+        if (error.code === 'PGRST103') {
+          return { dogs: [], hasMore: false };
+        }
+        throw error;
+      }
+      
+      if (!data) return { dogs: [], hasMore: false };
+      
+      const dogs = data.map(dog => ({
+        ...dog,
+        created_at: new Date(dog.created_at),
+        updated_at: new Date(dog.updated_at)
+      }));
+
+      const hasMore = count ? offset + limit < count : false;
+      
+      return { dogs, hasMore };
+    } catch (error) {
+      console.error('Error in getDogs:', error);
+      return { dogs: [], hasMore: false };
+    }
+  },
+
+  async getAllDogsForSync(): Promise<Dog[]> {
     const { data, error } = await supabase
       .from('dogs')
       .select('*');
     
     if (error) throw error;
     if (!data) return [];
+
+    console.log('All dogs for sync:', data);
     
     return data.map(dog => ({
       ...dog,
@@ -111,8 +156,7 @@ export const dogLocalStorage = {
   async syncAllDogs(db: SQLiteDatabase): Promise<void> {
     try {
       console.log('Starting sync for all dogs');
-      const dogs = await dogApi.getDogs();
-      console.log('Fetched all dogs from Supabase:', dogs.length);
+      const dogs = await dogApi.getAllDogsForSync();
       
       // Create the table if it doesn't exist (don't drop it)
       await db.execAsync(`
