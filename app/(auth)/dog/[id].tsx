@@ -8,16 +8,22 @@ import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
 import { Dog, DogCardInterface, dogApi, dogLocalStorage } from '@/lib/api/dog';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import * as SQLite from 'expo-sqlite';
+import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function DogDetails() {
+  const insets = useSafeAreaInsets();
   const db = SQLite.openDatabaseSync('harmonypaws.db');
   
   const { id, dogData } = useLocalSearchParams<{ id: string, dogData: string }>();
   const dog: DogCardInterface = dogData ? JSON.parse(dogData) : null;
   const [fullDogData, setFullDogData] = useState<Dog | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const screenHeight = Dimensions.get('window').height;
+  const bottomPosition = useSharedValue(screenHeight);
 
   useEffect(() => {
     const fetchDogLocalDetails = async () => {
@@ -37,6 +43,7 @@ export default function DogDetails() {
         await fetchDogDetails();
       } finally {
         setIsLoading(false);
+        buttonAnimation();
       }
     };
 
@@ -59,6 +66,21 @@ export default function DogDetails() {
     fetchDogLocalDetails();
   }, [id]);
 
+
+  const buttonAnimation = () => {
+  // Animate the button to slide up
+    bottomPosition.value = withSpring(insets.bottom + 16, {
+      damping: 20,
+      stiffness: 90,
+    });
+  };
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      bottom: bottomPosition.value,
+    };
+  });
+
   if (!dog) {
     return null;
   }
@@ -75,7 +97,7 @@ export default function DogDetails() {
             ) : fullDogData ? (
               <>
                 <Small color='#000000'>{fullDogData.description}</Small>
-                <View style={styles.detailsContainer}>
+                <View>
                   <Small color='#000000'>Race: {fullDogData.breed_id}</Small>
                   <Small color='#000000'>Dominance: {fullDogData.dominance}</Small>
                 </View>
@@ -87,10 +109,12 @@ export default function DogDetails() {
           <RideItemListing rideCardData={dogData.nextRide} /> 
           */}
         </View>
+      </ParallaxScrollView>
+      <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={() => router.push('/dog/invitation')}>
           <BodyMedium color='#fff'>On se balade ?</BodyMedium>
         </StandardButton>
-      </ParallaxScrollView>
+      </Animated.View>
     </>
   );
 }
@@ -100,17 +124,16 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 16,
-    padding: 20,
   },
   infoContainer: {
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
   },
-  detailsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 4,
-    marginTop: 8,
+  buttonContainer: {
+    position: 'absolute',
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
   },
 });
