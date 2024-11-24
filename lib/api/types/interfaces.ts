@@ -7,9 +7,12 @@ export interface BaseEntity {
 }
 
 export interface User extends BaseEntity {
+  place: null;
+  description: null;
+  age: null;
   // Add user properties based on your needs
   email: string;
-  name: string;
+  first_name: string;
 }
 
 export interface UserFormation extends BaseEntity {
@@ -60,11 +63,14 @@ export interface MedicalForm extends BaseEntity {
 
 export interface Dog extends BaseEntity {
   owner_id: number;
+  breed_id: string;
   name: string;
-  breed: string;
   description: string;
   dominance: DogDominance;
   sex: DogSex;
   age: number;
   image: string;
+  created_at: Date;
+  updated_at: Date;
+  owner?: User;
 }

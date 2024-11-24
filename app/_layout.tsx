@@ -98,6 +98,20 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
     // Create main tables
     await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        uid TEXT,
+        role_id INTEGER,
+        age INTEGER,
+        place TEXT,
+        description TEXT,
+        first_name TEXT,
+        last_name TEXT,
+        onBoarding INTEGER,
+        created_at TEXT,
+        updated_at TEXT
+      );
+
       CREATE TABLE IF NOT EXISTS user_formations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,

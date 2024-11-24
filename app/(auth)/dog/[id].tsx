@@ -1,70 +1,38 @@
 import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
-import RideItemListing from '@/components/rideListing/ride-item-listing';
 import { StandardButton } from '@/components/ui/button';
-import Loader from '@/components/ui/loader';
 import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
-import { Dog, DogCardInterface, dogApi, dogLocalStorage } from '@/lib/api/dog';
-import { router, useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import * as SQLite from 'expo-sqlite';
+import { router} from 'expo-router';
+import { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+const dog = {
+  name: 'Taico',
+  age: 30,
+  image: 'https://picsum.photos/300',
+  description: 'Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l\'écoute de ses amis.',
+  owner: {
+    name: 'Emma Swane',
+    image: 'https://picsum.photos/300',
+  },
+  breed: {
+    name: 'Golden Retriever',
+  }
+};
+
+
 export default function DogDetails() {
   const insets = useSafeAreaInsets();
-  const db = SQLite.openDatabaseSync('harmonypaws.db');
-  
-  const { id, dogData } = useLocalSearchParams<{ id: string, dogData: string }>();
-  const dog: DogCardInterface = dogData ? JSON.parse(dogData) : null;
-  const [fullDogData, setFullDogData] = useState<Dog | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const bottomPosition = useSharedValue(-100);
   const opacity = useSharedValue(0);
 
   useEffect(() => {
-    const fetchDogLocalDetails = async () => {
-      try {
-        const data = await dogLocalStorage.getLocalDog(db, id);
-
-        if (!data || !data.breed_id || !data.description) {
-          console.log('Dog needs update from Supabase, fetching...');
-          await fetchDogDetails();
-          return;
-        }
-
-        console.log('Using local dog data:', data);
-        setFullDogData(data);
-      } catch (error) {
-        console.error('Error fetching dog details:', error);
-        await fetchDogDetails();
-      } finally {
-        setIsLoading(false);
-        buttonAnimation();
-      }
-    };
-
-    const fetchDogDetails = async () => {
-      try {
-        const data = await dogApi.getDog(id);
-        console.log('Fetched dog details from Supabase:', data);
-
-        await dogLocalStorage.syncLocalDog(db, data);
-        console.log('Updated local storage with new data');
-
-        setFullDogData(data);
-      } catch (error) {
-        console.error('Error fetching dog details:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDogLocalDetails();
-  }, [id]);
+    buttonAnimation();
+  }, []);
 
 
   const buttonAnimation = () => {
@@ -88,10 +56,6 @@ export default function DogDetails() {
     };
   });
 
-  if (!dog) {
-    return null;
-  }
-
   return (
     <>
       <Back />
@@ -99,17 +63,11 @@ export default function DogDetails() {
         <View style={styles.container}>
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
-            {isLoading ? (
-              <Loader />
-            ) : fullDogData ? (
-              <>
-                <Small color='#000000'>{fullDogData.description}</Small>
-                <View>
-                  <Small color='#000000'>Race: {fullDogData.breed_id}</Small>
-                  <Small color='#000000'>Dominance: {fullDogData.dominance}</Small>
-                </View>
-              </>
-            ) : null}
+            <BodyMedium>{dog.description || ''}</BodyMedium>
+            <View>
+              <Small color='#000000'>Race: {dog.breed.name}</Small>
+              {/* <Small color='#000000'>Dominance: {dog.dominance}</Small> */}
+            </View>
           </View>
           <MasterDogCardComponent />
           {/* Uncomment when you have ride data
@@ -136,6 +94,31 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+  },
+  ownerContainer: {
+    marginTop: 24,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  ownerInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  ownerImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 16,
+  },
+  ownerDetails: {
+    flex: 1,
   },
   buttonContainer: {
     position: 'absolute',
