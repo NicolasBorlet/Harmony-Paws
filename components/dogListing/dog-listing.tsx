@@ -17,8 +17,8 @@ const dogs = [
 export default function DogListing() {
   const renderDogItem = ({ item }: { item: any }) => (
     <OpacityFadeIn>
-      <Pressable onPress={() => router.push(`/dog/${item.id}?dogData=${encodeURIComponent(JSON.stringify(item))}`)}>
-        <DogItemListing dog={item} />
+      <Pressable onPress={() => router.push(`/dog/${item.id}`)}>
+        <DogItemListing />
       </Pressable>
     </OpacityFadeIn>
   );

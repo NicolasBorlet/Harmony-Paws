@@ -70,7 +70,5 @@ export interface Dog extends BaseEntity {
   sex: DogSex;
   age: number;
   image: string;
-  created_at: Date;
-  updated_at: Date;
   owner?: User;
 }

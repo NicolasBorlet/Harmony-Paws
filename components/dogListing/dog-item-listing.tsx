@@ -7,19 +7,28 @@ import { CardTitle } from "../ui/text";
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
-export default function DogItemListing({ dogCardData }: { dogCardData: any }) {
+const dog = {
+    id: 1,
+    name: "Taico",
+    age: 30,
+    sex: 'male',
+    image: "https://picsum.photos/300",
+    description: "Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l'écoute de ses amis.",
+  };
+
+export default function DogItemListing() {
   return (
     <DogCard>
       <Image
         style={styles.image}
-        source={dogCardData.image}
+        source={dog.image}
         placeholder={{ blurhash }}
         contentFit="cover"
         transition={1000}
       />
       <CardTitle style={{ color: '#fff' }}>
-        {dogCardData.name}, {dogCardData.age} ans
-        {dogCardData.sex === 'male' ? (
+        {dog.name}, {dog.age} ans
+        {dog.sex === 'male' ? (
           <View style={{ paddingLeft: 10 }}>
             <Foundation name="male-symbol" size={24} color="white" />
           </View>
