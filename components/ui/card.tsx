@@ -4,6 +4,7 @@ const DogCard = styled.View`
   border-radius: 20px;
   flex: 1;
   height: 331px;
+  width: 100%;
   padding: 30px;
   display: flex;
   justify-content: flex-end;

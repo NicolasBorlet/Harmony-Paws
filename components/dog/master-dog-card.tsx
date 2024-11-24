@@ -10,7 +10,7 @@ const masterData = {
   image: 'https://picsum.photos/300'
 }
 
-export default function MasterDogCardComponent() {
+export default function MasterDogCardComponent({}) {
   return (
     <MasterDogCard>
       <Image source={{ uri: masterData.image }} style={{

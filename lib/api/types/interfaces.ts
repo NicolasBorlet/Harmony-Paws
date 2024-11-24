@@ -7,9 +7,15 @@ export interface BaseEntity {
 }
 
 export interface User extends BaseEntity {
-  // Add user properties based on your needs
-  email: string;
-  name: string;
+  uid: string;
+  role_id: number;
+  age: number;
+  place: string;
+  description: string;
+  first_name: string;
+  last_name: string;
+  on_boarding: boolean;
+  role?: Role;
 }
 
 export interface UserFormation extends BaseEntity {
@@ -60,11 +66,36 @@ export interface MedicalForm extends BaseEntity {
 
 export interface Dog extends BaseEntity {
   owner_id: number;
+  breed_id: string;
   name: string;
-  breed: string;
   description: string;
   dominance: DogDominance;
   sex: DogSex;
   age: number;
   image: string;
+  breed?: Breed;
+  owner?: Owner;
+}
+
+export interface Owner {
+  id: number;
+  name: string;
+}
+
+export interface Breed {
+  id: number;
+  name: string;
+}
+
+export interface Role extends BaseEntity {
+  name: string;
+}
+
+export interface Behavor extends BaseEntity {
+  name: string;
+}
+
+export interface DogBehavor extends BaseEntity {
+  dog_id: number;
+  behavor_id: number;
 }
