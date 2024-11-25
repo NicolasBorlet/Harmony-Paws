@@ -66,7 +66,7 @@ export interface MedicalForm extends BaseEntity {
 
 export interface Dog extends BaseEntity {
   owner_id: number;
-  breed_id: string;
+  breed_id: number;
   name: string;
   description: string;
   dominance: DogDominance;
