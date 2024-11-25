@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout';
 import DogListing from '@/components/dogListing/dog-listing';
 import FilterComponent from '@/components/filter/filter-component';
 import RideListing from '@/components/rideListing/ride-listing';
@@ -62,7 +63,7 @@ export default function HomeScreen() {
           />
         </View>
         <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
-          <SpecialTitle>Salut Taico</SpecialTitle>
+          <SpecialTitle>{i18n.t('welcome')} Taico</SpecialTitle>
           <Body>C’est le moment de se balader ?</Body>
         </View>
         <View style={{ paddingTop: 20, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
