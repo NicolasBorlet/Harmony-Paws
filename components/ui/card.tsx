@@ -36,7 +36,7 @@ const MasterDogCard = styled.View`
   background-color: white;
   shadow-color: #000;
   shadow-offset: 0px 4px;
-  shadow-opacity: 0.1;
+  shadow-opacity: 0.15;
   shadow-radius: 29.3px;
   elevation: 4;
 `;

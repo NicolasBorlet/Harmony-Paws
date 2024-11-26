@@ -17,6 +17,9 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
 import { SessionProvider } from './ctx';
+import { getLocales } from 'expo-localization';
+import { I18n } from 'i18n-js';
+import { translations } from '@/lib/utils/translations';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -31,6 +34,8 @@ export const unstable_settings = {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+export const i18n = new I18n(translations);
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     RoundsBlack: require('../assets/fonts/RoundsBlack.ttf'),
@@ -44,6 +49,9 @@ export default function RootLayout() {
     Montserrat_800ExtraBold,
     Montserrat_900Black,
   });
+
+  i18n.locale = getLocales()[0].languageCode ?? 'en';
+  i18n.enableFallback = true;
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {

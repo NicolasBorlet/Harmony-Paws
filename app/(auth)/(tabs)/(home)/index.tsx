@@ -1,13 +1,16 @@
+import { i18n } from '@/app/_layout';
 import DogListing from '@/components/dogListing/dog-listing';
+import FilterComponent from '@/components/filter/filter-component';
 import RideListing from '@/components/rideListing/ride-listing';
 import RoundedIconLink from '@/components/rounded-icon-link';
 import { MapButton } from '@/components/ui/button';
 import TabSwitcher from '@/components/ui/TabSwitcher';
 import { Body, Small, SpecialTitle } from '@/components/ui/text';
 import { Ionicons } from '@expo/vector-icons';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { router } from 'expo-router';
-import { useState } from 'react';
-import { View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { Pressable, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,6 +19,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
 
   const [selectedTab, setSelectedTab] = useState<'dog' | 'ride'>('dog');
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const headerHeight = useSharedValue(200);
   const startY = useSharedValue(0);
 
@@ -41,9 +45,9 @@ export default function HomeScreen() {
       }
     });
 
-  const animatedHeaderStyle = useAnimatedStyle(() => ({
-    height: headerHeight.value,
-  }));
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);  
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
@@ -59,7 +63,7 @@ export default function HomeScreen() {
           />
         </View>
         <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
-          <SpecialTitle>Salut Taico</SpecialTitle>
+          <SpecialTitle>{i18n.t('welcome')} Taico</SpecialTitle>
           <Body>C’est le moment de se balader ?</Body>
         </View>
         <View style={{ paddingTop: 20, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
@@ -67,7 +71,7 @@ export default function HomeScreen() {
             selectedTab={selectedTab}
             onTabChange={setSelectedTab}
           />
-          <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
+            <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
         </View>
       </View>
       <GestureDetector gesture={gesture}>
