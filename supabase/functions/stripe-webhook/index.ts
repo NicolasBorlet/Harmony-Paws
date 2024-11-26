@@ -6,7 +6,9 @@ const endpointSecret = Deno.env.get('STRIPE_WEBHOOK_SECRET');
 
 serve(async (req: Request) => {
   try {
+    // Only allow POST requests
     if (req.method !== 'POST') {
+      console.error('Invalid method:', req.method);
       return new Response('Method not allowed', { status: 405 });
     }
 
@@ -14,6 +16,7 @@ serve(async (req: Request) => {
     const sig = req.headers.get('stripe-signature');
 
     if (!sig || !endpointSecret) {
+      console.error('Missing signature or endpoint secret');
       throw new Error('Missing stripe signature or webhook secret');
     }
 
@@ -28,13 +31,16 @@ serve(async (req: Request) => {
 
     // Create Supabase client
     const supabaseClient = createClient(
-      Deno.env.get('URL') ?? '',
+      Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
+
+    console.log('Received webhook event:', event.type);
 
     // Handle the event
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object;
+      console.log('Processing payment intent:', paymentIntent.id);
       
       // Update the purchase status to completed
       const { error: updateError } = await supabaseClient
@@ -46,6 +52,8 @@ serve(async (req: Request) => {
         console.error('Error updating purchase status:', updateError);
         return new Response('Error updating purchase status', { status: 500 });
       }
+
+      console.log('Successfully updated purchase status for payment:', paymentIntent.id);
     }
 
     return new Response(JSON.stringify({ received: true }), {
