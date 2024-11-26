@@ -2,7 +2,7 @@ import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
-import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
+import { BodyBold, BodyMedium, CardTitle, Small } from '@/components/ui/text';
 import { router} from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -70,9 +70,10 @@ export default function DogDetails() {
             </View>
           </View>
           <MasterDogCardComponent />
-          {/* Uncomment when you have ride data
-          <RideItemListing rideCardData={dogData.nextRide} /> 
-          */}
+          <View style={styles.section}>
+            <BodyBold color='#000000'>Description</BodyBold>
+            <View style={styles.underline} />
+          </View>
         </View>
       </ParallaxScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
@@ -85,6 +86,18 @@ export default function DogDetails() {
 }
 
 const styles = StyleSheet.create({
+  underline: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    height: 10,
+    backgroundColor: 'rgba(238, 116, 170, 0.3)',
+    bottom: 0,
+  },
+  section: {
+    alignSelf: 'flex-start',
+    position: 'relative',
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
