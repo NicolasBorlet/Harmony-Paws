@@ -41,6 +41,8 @@ ios/
 
 nativewind-env.d.ts
 
-supabase.ts
+/lib/supabase.ts
+
+config.toml
 
 Harmony Paws diagram-2.sql

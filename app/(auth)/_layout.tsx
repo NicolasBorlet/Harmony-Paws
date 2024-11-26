@@ -10,6 +10,7 @@ export default function AuthLayout() {
       <Stack.Screen name="ride" />
       <Stack.Screen name="messages" />
       <Stack.Screen name="notifications" />
+      <Stack.Screen name="completion" options={{ presentation: 'modal' }} />
     </Stack>
   )
 }
