@@ -5,7 +5,7 @@ import {
   PaymentSheet,
   PaymentSheetError,
 } from "@stripe/stripe-react-native";
-import { StyleSheet, View, Alert, Button } from "react-native";
+import { StyleSheet, View, Alert, Button, Text, TouchableOpacity } from "react-native";
 import { supabase } from "@/lib/supabase";
 
 interface FunctionResponse {
@@ -13,6 +13,15 @@ interface FunctionResponse {
   ephemeralKey: string;
   customer: string;
   stripe_pk: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  priceId: string;
+  price: number;
+  currency: string;
 }
 
 const videoSource =
@@ -23,20 +32,60 @@ export default function Formation() {
     const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
     const [loading, setLoading] = useState(true);
     const [clientSecret, setClientSecret] = useState<string>();
-  
+    const [products, setProducts] = useState<Product[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
     useEffect(() => {
       async function initialize() {
-        initialisePaymentSheet();
+        await fetchProducts();
       }
       initialize();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-  
+
+    useEffect(() => {
+      if (selectedProduct) {
+        initialisePaymentSheet();
+      }
+    }, [selectedProduct]);
+
+    const fetchProducts = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke<Product[]>(
+          "get-products"
+        );
+        
+        if (error) {
+          console.error("Error fetching products:", error);
+          Alert.alert("Error", "Failed to load products");
+          return;
+        }
+
+        if (data) {
+          setProducts(data);
+          setLoading(false); 
+        }
+      } catch (e) {
+        console.error("Error fetching products:", e);
+        Alert.alert("Error", "Failed to load products");
+        setLoading(false); 
+      }
+    };
+
     const fetchPaymentSheetParams = async () => {
+      if (!selectedProduct) {
+        Alert.alert("Error", "Please select a product first");
+        return {};
+      }
+
       try {
         // Create payment session for our customer
         const { data, error } = await supabase.functions.invoke<FunctionResponse>(
-          "payment-sheet"
+          "payment-sheet",
+          {
+            body: JSON.stringify({
+              priceId: selectedProduct.priceId
+            })
+          }
         );
         console.log("Function response:", data, error);
         
@@ -150,45 +199,71 @@ export default function Formation() {
     };
   
     return (
-      <View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <Button
-            // loading={loading}
-            disabled={!paymentSheetEnabled}
-            title="Checkout"
-            onPress={openPaymentSheet}
-          />
+      <View style={styles.container}>
+        <View style={styles.productList}>
+          {products.map((product) => (
+            <TouchableOpacity
+              key={product.id}
+              style={[
+                styles.productItem,
+                selectedProduct?.id === product.id && styles.selectedProduct
+              ]}
+              onPress={() => {
+                setSelectedProduct(product);
+                setLoading(true); 
+              }}
+            >
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productDescription}>{product.description}</Text>
+              <Text style={styles.productPrice}>
+                {(product.price / 100).toFixed(2)} {product.currency.toUpperCase()}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <Button
-            // loading={loading}
-            disabled={paymentSheetEnabled}
-            title="Restart Demo"
-            onPress={initialisePaymentSheet}
-          />
-        </View>
-        <View style={[styles.verticallySpaced]}>
-          <Button
-            // loading={loading}
-            title="Sign out"
-            onPress={() => supabase.auth.signOut()}
-          />
-        </View>
+
+        <Button
+          disabled={!paymentSheetEnabled || !selectedProduct}
+          title={loading ? "Loading..." : "Buy Now"}
+          onPress={openPaymentSheet}
+        />
       </View>
     );
   }
-  
+
   const styles = StyleSheet.create({
     container: {
-      marginTop: 40,
-      padding: 12,
+      flex: 1,
+      padding: 16,
     },
-    verticallySpaced: {
-      paddingTop: 4,
-      paddingBottom: 4,
-      alignSelf: "stretch",
+    productList: {
+      marginBottom: 20,
     },
-    mt20: {
-      marginTop: 100,
+    productItem: {
+      padding: 16,
+      marginBottom: 12,
+      borderRadius: 8,
+      backgroundColor: '#f0f0f0',
+      borderWidth: 1,
+      borderColor: '#ddd',
+    },
+    selectedProduct: {
+      backgroundColor: '#e0e0e0',
+      borderColor: '#007AFF',
+    },
+    productName: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 4,
+    },
+    productDescription: {
+      fontSize: 14,
+      color: '#666',
+      marginBottom: 8,
+    },
+    productPrice: {
+      fontSize: 16,
+      fontWeight: '500',
+      color: '#007AFF',
     },
   });

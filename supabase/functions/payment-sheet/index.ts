@@ -28,10 +28,19 @@ serve(async (req: any) => {
 
     // Create a PaymentIntent
     console.log("Creating payment intent...");
+    // Get the price ID from the request body or use a default one
+    const { priceId = 'YOUR_DEFAULT_PRICE_ID' } = await req.json().catch(() => ({}));
+    
+    // Retrieve the price from Stripe
+    const price = await stripe.prices.retrieve(priceId);
+    
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1099,
-      currency: "usd",
+      amount: price.unit_amount,
+      currency: price.currency,
       customer: customer,
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
     console.log("Payment intent created");
 
