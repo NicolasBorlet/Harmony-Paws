@@ -5,8 +5,10 @@ import {
   PaymentSheet,
   PaymentSheetError,
 } from "@stripe/stripe-react-native";
-import { StyleSheet, View, Alert, Button, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Alert, Button, Text, TouchableOpacity, ScrollView } from "react-native";
 import { supabase } from "@/lib/supabase";
+import { SafeAreaView } from "react-native-safe-area-context";
+import VideoProduct from "@/components/product/VideoProduct";
 
 interface FunctionResponse {
   paymentIntent: string;
@@ -22,10 +24,10 @@ interface Product {
   priceId: string;
   price: number;
   currency: string;
+  metadata?: {
+    videoUrl?: string;
+  };
 }
-
-const videoSource =
-  'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 export default function Formation() {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -34,9 +36,14 @@ export default function Formation() {
     const [clientSecret, setClientSecret] = useState<string>();
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
       async function initialize() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          setUserId(user.id);
+        }
         await fetchProducts();
       }
       initialize();
@@ -199,8 +206,14 @@ export default function Formation() {
     };
   
     return (
-      <View style={styles.container}>
-        <View style={styles.productList}>
+      <SafeAreaView style={styles.container}>
+        {selectedProduct && userId && (
+          <VideoProduct
+            productId={selectedProduct.id}
+            userId={userId}
+          />
+        )}
+        <ScrollView style={styles.productList}>
           {products.map((product) => (
             <TouchableOpacity
               key={product.id}
@@ -210,6 +223,7 @@ export default function Formation() {
               ]}
               onPress={() => {
                 setSelectedProduct(product);
+                console.log("Selected product:", product);
                 setLoading(true); 
               }}
             >
@@ -220,23 +234,31 @@ export default function Formation() {
               </Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
 
         <Button
           disabled={!paymentSheetEnabled || !selectedProduct}
           title={loading ? "Loading..." : "Buy Now"}
           onPress={openPaymentSheet}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 
   const styles = StyleSheet.create({
+    contentContainer: {
+        flex: 1,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 50,
+      },
     container: {
       flex: 1,
       padding: 16,
     },
     productList: {
+    flex: 1,
       marginBottom: 20,
     },
     productItem: {

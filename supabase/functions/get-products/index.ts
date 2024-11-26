@@ -27,6 +27,7 @@ serve(async (req: Request) => {
         priceId: price.id,
         price: price.unit_amount,
         currency: price.currency,
+        metadata: product.metadata || {}
       };
     });
 
