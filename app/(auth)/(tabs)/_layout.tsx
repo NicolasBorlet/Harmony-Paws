@@ -69,6 +69,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="(formation)"
+        options={{
+          title: "Formation",
+          tabBarIcon: ({ focused }: TabBarIconProps) => (
+            <Ionicons name="information-circle-outline" size={24} color="black" />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
