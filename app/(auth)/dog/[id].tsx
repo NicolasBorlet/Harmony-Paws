@@ -2,16 +2,20 @@ import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
-import { BodyBold, BodyMedium, CardTitle, Small } from '@/components/ui/text';
+import { BodyBold, BodyMedium, CardTitle, Small, Body, ExtraSmallMedium } from '@/components/ui/text';
 import { router} from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import RideItemListing from '@/components/rideListing/ride-item-listing';
+import BodyTitle from '@/components/body-title/body-title';
+import Block from '@/components/grid/Block';
+import { GridItem } from '@/components/ui/view';
 
 const dog = {
   name: 'Taico',
-  age: 30,
+  age: 3,
   image: 'https://picsum.photos/300',
   description: 'Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l\'écoute de ses amis.',
   owner: {
@@ -20,9 +24,44 @@ const dog = {
   },
   breed: {
     name: 'Golden Retriever',
+  },
+  behavors: [
+    {
+      id: 1,
+      name: 'Joueur',
+    },
+    {
+      id: 2,
+      name: 'Calme',
+    },
+    {
+      id: 3,
+      name: 'Intéressé',
+    },
+    {
+      id: 1,
+      name: 'Joueur',
+    },
+    {
+      id: 2,
+      name: 'Calme',
+    },
+    {
+      id: 3,
+      name: 'Intéressé',
+    },
+    {
+      id: 1,
+      name: 'Joueur',
+    }
+  ],
+  nextRide: {
+    image: 'https://picsum.photos/300',
+    name: 'Balade 1',
+    date: 'Lundi 1er avril',
+    time: '14h30',
   }
 };
-
 
 export default function DogDetails() {
   const insets = useSafeAreaInsets();
@@ -63,16 +102,30 @@ export default function DogDetails() {
         <View style={styles.container}>
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
-            <BodyMedium>{dog.description || ''}</BodyMedium>
-            <View>
-              <Small color='#000000'>Race: {dog.breed.name}</Small>
-              {/* <Small color='#000000'>Dominance: {dog.dominance}</Small> */}
-            </View>
           </View>
-          <MasterDogCardComponent />
-          <View style={styles.section}>
-            <BodyBold color='#000000'>Description</BodyBold>
-            <View style={styles.underline} />
+          <View style={styles.infoContainer}>
+            <BodyTitle title={`A propos de ${dog.name}`} />
+            <Body>
+              {dog.description || ''}
+            </Body>
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title='Comportement' />
+            <Block flex={0} row wrap="wrap" style={{ gap: 12 }} justifyContent='space-between'>
+              {dog.behavors.map((behavor) => (
+                <GridItem key={behavor.id}>
+                  <ExtraSmallMedium color='#F49819'>{behavor.name}</ExtraSmallMedium>
+                </GridItem>
+              ))}
+            </Block>
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title='Ma maitresse' />
+            <MasterDogCardComponent />
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title='Sa prochaine balade' />
+            <RideItemListing rideCardData={dog.nextRide} />
           </View>
         </View>
       </ParallaxScrollView>
@@ -86,27 +139,15 @@ export default function DogDetails() {
 }
 
 const styles = StyleSheet.create({
-  underline: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    height: 10,
-    backgroundColor: 'rgba(238, 116, 170, 0.3)',
-    bottom: 0,
-  },
-  section: {
-    alignSelf: 'flex-start',
-    position: 'relative',
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 16,
+    gap: 20,
   },
   infoContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 8,
+    gap: 12,
   },
   ownerContainer: {
     marginTop: 24,

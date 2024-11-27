@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 
 const StyledButton = styled.Pressable`
   paddingTop: 14px;
@@ -49,6 +50,17 @@ const StandardButton = styled.Pressable`
   width: 100%;
   align-items: center;
   justify-content: center;
+  ${Platform.select({
+    ios: `
+      shadow-color: #000;
+      shadow-offset: 0px 2px;
+      shadow-opacity: 0.25;
+      shadow-radius: 3.84px;
+    `,
+    android: `
+      elevation: 5;
+    `
+  })}
 `;
 
 const SmallButton = styled.Pressable`
