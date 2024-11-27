@@ -2,7 +2,7 @@ import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
-import { BodyMedium, CardTitle, Body, ExtraSmallMedium } from '@/components/ui/text';
+import { BodyMedium, CardTitle, Body, ExtraSmallMedium, BodyBold, ExtraSmallSemiBold } from '@/components/ui/text';
 import { router} from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -11,13 +11,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import RideItemListing from '@/components/rideListing/ride-item-listing';
 import BodyTitle from '@/components/body-title/body-title';
 import Block from '@/components/grid/Block';
-import { GridItem } from '@/components/ui/view';
+import { GridItem, GridItemBackground } from '@/components/ui/view';
+import { DogDominance } from '@/lib/api/types';
 
 const dog = {
   id: 1,
   name: 'Taico',
   age: 3,
   image: 'https://picsum.photos/300',
+  sex: 'Mâle',
+  dominance: DogDominance.DOMINANT,
   description: 'Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l\'écoute de ses amis.',
   owner: {
     name: 'Emma Swane',
@@ -103,6 +106,21 @@ export default function DogDetails() {
         <View style={styles.container}>
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
+          </View>
+          <View>
+            <Block row wrap='nowrap' style={{
+              gap: 8,
+            }}>
+              <GridItemBackground>
+                <BodyBold color='#663399'>{dog.breed.name}</BodyBold>
+              </GridItemBackground>
+              <GridItemBackground>
+                <BodyBold color='#663399'>{dog.sex}</BodyBold>
+              </GridItemBackground>
+              <GridItemBackground>
+                <BodyBold color='#663399'>{dog.dominance}</BodyBold>
+              </GridItemBackground>
+            </Block>
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={`A propos de ${dog.name}`} />
