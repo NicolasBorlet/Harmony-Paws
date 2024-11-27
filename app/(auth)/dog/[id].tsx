@@ -2,7 +2,7 @@ import Back from '@/components/back-button';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
-import { BodyBold, BodyMedium, CardTitle, Small, Body, ExtraSmallMedium } from '@/components/ui/text';
+import { BodyMedium, CardTitle, Body, ExtraSmallMedium } from '@/components/ui/text';
 import { router} from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -14,6 +14,7 @@ import Block from '@/components/grid/Block';
 import { GridItem } from '@/components/ui/view';
 
 const dog = {
+  id: 1,
   name: 'Taico',
   age: 3,
   image: 'https://picsum.photos/300',
