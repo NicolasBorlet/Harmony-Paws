@@ -9,8 +9,10 @@ const GridItem = styled.View`
 
 const GridItemBackground = styled.View`
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     padding-vertical: 20px;
     padding-horizontal: 24px;

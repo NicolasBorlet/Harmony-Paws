@@ -1,26 +1,61 @@
 import Back from '@/components/back-button';
+import BodyTitle from '@/components/body-title/body-title';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
+import Block from '@/components/grid/Block';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
-import { BodyMedium, CardTitle, Small } from '@/components/ui/text';
+import { BodyBold, BodyMedium, CardTitle, ExtraSmallSemiBold, Small } from '@/components/ui/text';
+import { GridItemBackground } from '@/components/ui/view';
 import { router} from 'expo-router';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const dog = {
-  name: 'Taico',
-  age: 30,
+const ride = {
+  place: 'Champagnier',
   image: 'https://picsum.photos/300',
-  description: 'Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l\'écoute de ses amis.',
-  owner: {
+  date: new Date(),
+  duration: '2h',
+  activityType: 'forest',
+  creator: {
     name: 'Emma Swane',
     image: 'https://picsum.photos/300',
   },
-  breed: {
-    name: 'Golden Retriever',
-  }
+  steps: [
+    {
+      activity_id: 1,
+      place: 'Place du Laca',
+      estimated_hour: new Date(),
+    },
+    {
+      activity_id: 2,
+      place: 'Tour Ertzienne',
+      estimated_hour: new Date(),
+    },
+    {
+      activity_id: 3,
+      place: 'Place du Laca',
+      estimated_hour: new Date(),
+    },
+  ],
+  participants: [
+    {
+      name: 'Max',
+      image: 'https://picsum.photos/300',
+      owerName: 'Lucie',
+    },
+    {
+      name: 'Taico',
+      image: 'https://picsum.photos/300',
+      owerName: 'Emma',
+    },
+    {
+      name: 'Astro',
+      image: 'https://picsum.photos/300',
+      owerName: 'Aymeric',
+    }
+  ],
 };
 
 export default function RideDetails() {
@@ -33,6 +68,11 @@ export default function RideDetails() {
     buttonAnimation();
   }, []);
 
+  // Avoir une variable pour estimer l'heure de départ en se bsant sur la ride.date et en récupérant uniquement l'heure
+  const estimatedStartHour = new Date(ride.date).toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   const buttonAnimation = () => {
   // Animate the button to slide up
@@ -58,25 +98,38 @@ export default function RideDetails() {
   return (
     <>
       <Back />
-      <ParallaxScrollView headerImage={dog.image}>
+      <ParallaxScrollView headerImage={ride.image}>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
-            <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
-            <BodyMedium>{dog.description || ''}</BodyMedium>
-            <View>
-              <Small color='#000000'>Race: {dog.breed.name}</Small>
-              {/* <Small color='#000000'>Dominance: {dog.dominance}</Small> */}
-            </View>
+            <CardTitle color='#000000'>{ride.place}</CardTitle>
           </View>
-          <MasterDogCardComponent />
-          {/* Uncomment when you have ride data
-          <RideItemListing rideCardData={dogData.nextRide} /> 
-          */}
+          <View>
+            <Block row wrap='nowrap' style={{
+              gap: 8,
+            }}>
+              <GridItemBackground>
+                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Départ</ExtraSmallSemiBold>
+                <BodyBold color='#663399'>{estimatedStartHour}</BodyBold>
+              </GridItemBackground>
+              <GridItemBackground>
+              <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Durée</ExtraSmallSemiBold>
+                <BodyBold color='#663399'>{ride.duration}</BodyBold>
+              </GridItemBackground>
+              <GridItemBackground>
+                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Activités</ExtraSmallSemiBold>
+                <BodyBold color='#663399'>{ride.activityType}</BodyBold>
+              </GridItemBackground>
+            </Block>
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title='Créateur de la balade' />
+            <MasterDogCardComponent />
+          </View>
         </View>
       </ParallaxScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-        <StandardButton onPress={() => router.push('/dog/invitation')}>
-          <BodyMedium color='#fff'>Participer à la balade</BodyMedium>
+        <StandardButton onPress={() => router.push('/ride/join')}>
+          <BodyMedium color='#fff'>Rejoindre la balade</BodyMedium>
         </StandardButton>
       </Animated.View>
     </>
