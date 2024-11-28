@@ -1,3 +1,4 @@
+import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
@@ -54,7 +55,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="(home)"
         options={{
-          title: "Accueil",
+          title: `${i18n.t('home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) => (
             focused ? <Ionicons name="paw" size={24} color="#663399" /> : <Ionicons name="paw-outline" size={24} color="#663399" />
           ),

@@ -1,5 +1,6 @@
 export const translations = {
     en: {
+        home: "Home",
         welcome: "Hi",
         timeToRide: "Is it time to ride?",
         dogs: "Dogs",
@@ -39,6 +40,7 @@ export const translations = {
         sendMessageToStart: "Send a message to start a conversation.",
     },
     fr: {
+        home: "Accueil",
         welcome: "Salut",
         timeToRide: "C'est le moment de se balader ?",
         dogs: "Chiens",
