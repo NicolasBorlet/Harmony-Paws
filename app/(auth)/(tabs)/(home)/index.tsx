@@ -64,7 +64,7 @@ export default function HomeScreen() {
         </View>
         <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
           <SpecialTitle>{i18n.t('welcome')} Taico</SpecialTitle>
-          <Body>C’est le moment de se balader ?</Body>
+          <Body>{i18n.t('timeToRide')}</Body>
         </View>
         <View style={{ paddingTop: 20, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'row' }}>
           <TabSwitcher

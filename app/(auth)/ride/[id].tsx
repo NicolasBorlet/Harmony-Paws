@@ -1,17 +1,28 @@
-import Back from '@/components/back-button';
-import BodyTitle from '@/components/body-title/body-title';
-import MasterDogCardComponent from '@/components/dog/master-dog-card';
-import Block from '@/components/grid/Block';
-import ParallaxScrollView from '@/components/parallax-scrollview';
-import { StandardButton } from '@/components/ui/button';
-import Divider from '@/components/ui/divider';
-import { BodyBold, BodyMedium, CardTitle, ExtraSmallSemiBold, Small } from '@/components/ui/text';
-import { GridItemBackground } from '@/components/ui/view';
-import { router} from 'expo-router';
-import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { i18n } from '@/app/_layout'
+import Back from '@/components/back-button'
+import BodyTitle from '@/components/body-title/body-title'
+import MasterDogCardComponent from '@/components/dog/master-dog-card'
+import Block from '@/components/grid/Block'
+import ParallaxScrollView from '@/components/parallax-scrollview'
+import { StandardButton } from '@/components/ui/button'
+import Divider from '@/components/ui/divider'
+import {
+  BodyBold,
+  BodyMedium,
+  CardTitle,
+  ExtraSmallSemiBold,
+  Small,
+} from '@/components/ui/text'
+import { GridItemBackground } from '@/components/ui/view'
+import { router } from 'expo-router'
+import { useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+  useSharedValue,
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const ride = {
   place: 'Champagnier',
@@ -55,46 +66,46 @@ const ride = {
       name: 'Astro',
       image: 'https://picsum.photos/300',
       owerName: 'Aymeric',
-    }
+    },
   ],
-};
+}
 
 export default function RideDetails() {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
-  const bottomPosition = useSharedValue(-100);
-  const opacity = useSharedValue(0);
+  const bottomPosition = useSharedValue(-100)
+  const opacity = useSharedValue(0)
 
   useEffect(() => {
-    buttonAnimation();
-  }, []);
+    buttonAnimation()
+  }, [])
 
   // Avoir une variable pour estimer l'heure de départ en se bsant sur la ride.date et en récupérant uniquement l'heure
   const estimatedStartHour = new Date(ride.date).toLocaleTimeString('fr-FR', {
     hour: '2-digit',
     minute: '2-digit',
-  });
+  })
 
   const buttonAnimation = () => {
-  // Animate the button to slide up
+    // Animate the button to slide up
     bottomPosition.value = withSpring(insets.bottom + 16, {
       damping: 20,
       stiffness: 90,
-    });
+    })
 
     // Animate the button opacity
     opacity.value = withSpring(1, {
       damping: 20,
       stiffness: 90,
-    });
-  };
+    })
+  }
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       bottom: bottomPosition.value,
       opacity: opacity.value,
-    };
-  });
+    }
+  })
 
   return (
     <>
@@ -105,19 +116,29 @@ export default function RideDetails() {
             <CardTitle color='#000000'>{ride.place}</CardTitle>
           </View>
           <View>
-            <Block row wrap='nowrap' style={{
-              gap: 8,
-            }}>
+            <Block
+              row
+              wrap='nowrap'
+              style={{
+                gap: 8,
+              }}
+            >
               <GridItemBackground>
-                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Départ</ExtraSmallSemiBold>
+                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
+                  {i18n.t('start')}
+                </ExtraSmallSemiBold>
                 <BodyBold color='#663399'>{estimatedStartHour}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-              <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Durée</ExtraSmallSemiBold>
+                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
+                  {i18n.t('duration')}
+                </ExtraSmallSemiBold>
                 <BodyBold color='#663399'>{ride.duration}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>Activités</ExtraSmallSemiBold>
+                <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
+                  {i18n.t('activities')}
+                </ExtraSmallSemiBold>
                 <BodyBold color='#663399'>{ride.activityType}</BodyBold>
               </GridItemBackground>
             </Block>
@@ -135,7 +156,7 @@ export default function RideDetails() {
         </StandardButton>
       </Animated.View>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -180,4 +201,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 20,
   },
-});
+})
