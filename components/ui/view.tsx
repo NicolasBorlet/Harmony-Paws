@@ -28,7 +28,7 @@ const RouteItemView = styled.View<{ even?: boolean }>`
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background-color: ${({ even }) => (even ? "rgba(102, 51, 153, 0.1)" : "#FDE6D7")};
+    background-color: ${({ even }) => (even ? "#FDE6D7" : "rgba(102, 51, 153, 0.1)")};
     border-radius: 10px;
     height: 100%;
     padding-horizontal: 20px;

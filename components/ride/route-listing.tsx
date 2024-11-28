@@ -27,12 +27,11 @@ export default function RouteListing () {
   return (
     <FlashList
       data={routes}
-      renderItem={({ item }) => (
-        <RouteItem step={item} />
+      renderItem={({ item, index }) => (
+        <RouteItem step={item} index={index} />
       )}
-      contentContainerStyle={{ paddingTop: 14 }}
       scrollEnabled={false}
-      ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+      ItemSeparatorComponent={() => <View style={{ height: 6 }} />}
     />
   )
 }

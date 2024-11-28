@@ -13,15 +13,17 @@ export interface RouteItemProps {
   endTime: Date,
 }
 
-export default function RouteItem ({ step }: { step: RouteItemProps }) {
+export default function RouteItem ({ step, index }: { step: RouteItemProps, index: number }) {
   const startTime = dateToHours(step.startTime)
   const endTime = dateToHours(step.endTime)
 
   return (
     <Block gap={8}>
-      <Block>
-        <SmallBold color="#000">{startTime}</SmallBold>
-      </Block>
+      {index === 0 && (
+        <Block>
+          <SmallBold color="#000">{startTime}</SmallBold>
+        </Block>
+      )}
       <Block row gap={16}>
         <Block 
           flex={0} 
@@ -33,7 +35,7 @@ export default function RouteItem ({ step }: { step: RouteItemProps }) {
           <View style={{ height: 89, backgroundColor: '#000', width: 1 }} />
         </Block>
         <Block>
-          <RouteItemView>
+          <RouteItemView even={index % 2 === 0}>
             <SmallSemiBold color="#000">{step.name}</SmallSemiBold>
             <Block row gap={6} flex={0}>
               <FontAwesome name="map-marker" size={14} color="#663399" />
