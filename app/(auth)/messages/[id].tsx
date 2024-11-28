@@ -266,7 +266,7 @@ export default function MessageDetail() {
         behavior="padding"
     >
       <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
-        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
+        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: "rgba(102, 51, 153, 0.1)" }}>
           <View
           style={{
             display: "flex",

@@ -71,7 +71,7 @@ export default function HomeScreen() {
             onTabChange={setSelectedTab}
             language={i18n.locale}
           />
-            <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
+          <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
         </View>
       </View>
       <GestureDetector gesture={gesture}>
