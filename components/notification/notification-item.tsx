@@ -1,8 +1,9 @@
-import { View } from "react-native";
+import { i18n } from "@/app/_layout";
 import { Image } from "expo-image";
-import { SmallMedium, SmallSemiBold, Small } from "../ui/text";
-import { SmallButton, SmallButtonOutlined } from "../ui/button";
 import React from "react";
+import { View } from "react-native";
+import { SmallButton, SmallButtonOutlined } from "../ui/button";
+import { Small, SmallMedium, SmallSemiBold } from "../ui/text";
 
 export default function NotificationItem({notificationData}: {notificationData: any}) {
     return (
@@ -16,9 +17,9 @@ export default function NotificationItem({notificationData}: {notificationData: 
             <View style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
                 <SmallSemiBold color="#000">{notificationData.user.name}</SmallSemiBold>
                 <SmallMedium color="#979898">
-                    {notificationData.type === 'new_friend_request' && 'souhaite être amie avec vous.'}
-                    {notificationData.type === 'new_friend_ride' && 'a créé une nouvelle balade.'}
-                    {notificationData.type === 'new_ride_request' && 'souhaite faire une balade avec vous.'}
+                    {notificationData.type === 'new_friend_request' && `${i18n.t('friendRequest')}`}
+                    {notificationData.type === 'new_friend_ride' && `${i18n.t('rideCreation')}`}
+                    {notificationData.type === 'new_ride_request' && `${i18n.t('rideRequest')}`}
                 </SmallMedium>
             </View>
             {notificationData.type === 'new_friend_request' && (
@@ -26,12 +27,12 @@ export default function NotificationItem({notificationData}: {notificationData: 
                     <SmallButton
                         onPress={() => console.log(`accept ${notificationData.id}`)}
                     >
-                        <Small color='#fff'>Accepter</Small>
+                        <Small color='#fff'>{i18n.t('accept')}</Small>
                     </SmallButton>
                     <SmallButtonOutlined
                         onPress={() => console.log(`refuse ${notificationData.id}`)}
                     >
-                        <Small color='#F7A400'>Refuser</Small>
+                        <Small color='#F7A400'>{i18n.t('refuse')}</Small>
                     </SmallButtonOutlined>
                 </View>
             )}
@@ -41,7 +42,7 @@ export default function NotificationItem({notificationData}: {notificationData: 
                         onPress={() => console.log(`accept ${notificationData.id}`)}
                         style={{ backgroundColor: '#F49819', borderRadius: 10, padding: 14, width: '100%', alignItems: 'center' }}
                     >
-                        <Small color='#fff'>Accepter</Small>
+                        <Small color='#fff'>{i18n.t('accept')}</Small>
                     </SmallButton>
                 </View>
             )}

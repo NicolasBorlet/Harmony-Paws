@@ -1,3 +1,4 @@
+import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import PropositionItemListing from "@/components/messageListing/proposition-item-listing";
 import RoundedIconLink from "@/components/rounded-icon-link";
@@ -83,11 +84,11 @@ export default function NewMessage() {
           }}
         >
           <Back position="relative" left="0" />
-          <NavigationTitle color="#000">Nouvelle conversation</NavigationTitle>
+          <NavigationTitle color="#000">{i18n.t('newMessage')}</NavigationTitle>
         </View>
         <View style={{ height: 48 }}>
           <TextInput
-            placeholder="Search"
+            placeholder={i18n.t('search')}
             style={{
               flex: 1,
               paddingHorizontal: 16,
@@ -101,7 +102,7 @@ export default function NewMessage() {
         </View>
         <View style={{ display: "flex", flexDirection: "row", gap: 16, alignItems: "center" }}>
           <RoundedIconLink color="#FDE6D7" icon={<AntDesign name="addusergroup" size={24} color="#F7A400" />} />
-          <ExtraSmallSemiBold color="#000">Créer une discussion de groupe</ExtraSmallSemiBold>
+          <ExtraSmallSemiBold color="#000">{i18n.t('createGroupDiscussion')}</ExtraSmallSemiBold>
         </View>
         <View style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
           <SmallSemiBold color="#000">Sugestion</SmallSemiBold>

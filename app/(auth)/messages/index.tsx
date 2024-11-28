@@ -1,4 +1,4 @@
-import OpacityFadeIn from "@/components/animate/opacity-fadeIn";
+import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import MessageItemListing from "@/components/messageListing/message-item-listing";
 import RoundedIconLink from "@/components/rounded-icon-link";
@@ -138,12 +138,12 @@ export default function Messages() {
             }}
           >
             <Back position="relative" left="0" />
-            <NavigationTitle color="#000">Messages</NavigationTitle>
+            <NavigationTitle color="#000">{i18n.t('messages')}</NavigationTitle>
           </View>
           <RoundedIconLink icon={<AntDesign name="plus" size={20} color="white" />} onPress={() => router.push('/messages/new')} />
         </View>
         {/* Barre de recherche */}
-        {messagesData.length > 0 ? (
+        {messagesData.length > 0 && (
           <Animated.View style={[animatedStyle]}>
             <TextInput
               placeholder="Search"
@@ -158,11 +158,6 @@ export default function Messages() {
               }}
             />
           </Animated.View>
-        ) : (
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <SmallMedium color="#000">Aucun message</SmallMedium>
-            <ExtraSmall color="#979898">Envoyez un message pour commencer une conversation.</ExtraSmall>
-          </View>
         )}
       </View>
       <FlashList
@@ -193,6 +188,12 @@ export default function Messages() {
         onScroll={handleScroll}
         scrollEventThrottle={16}
         ListFooterComponent={() => <View style={{ height: 32 }} />}
+        ListEmptyComponent={() => (
+          <View style={{ justifyContent: "center", alignItems: "center" }}>
+            <SmallMedium color="#000">{i18n.t('noMessages')}</SmallMedium>
+            <ExtraSmall color="#979898">{i18n.t('sendMessageToStart')}</ExtraSmall>
+          </View>
+        )}
       />
     </View>
   );

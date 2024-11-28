@@ -1,3 +1,4 @@
+import { translations } from '@/lib/utils/translations';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -5,23 +6,25 @@ import Animated, {
   withSpring
 } from 'react-native-reanimated';
 
+
 type Tab = {
   id: 'dog' | 'ride';
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
 };
 
-const TABS: Tab[] = [
-  { id: 'dog', icon: 'paw', label: 'Chiens' },
-  { id: 'ride', icon: 'car-sport', label: 'Balades' }
-];
-
 type Props = {
   selectedTab: 'dog' | 'ride';
   onTabChange: (tab: 'dog' | 'ride') => void;
+  language: 'en' | 'fr';
 };
 
-export default function TabSwitcher({ selectedTab, onTabChange }: Props) {
+export default function TabSwitcher({ selectedTab, onTabChange, language }: Props) {
+  const TABS: Tab[] = [
+    { id: 'dog', icon: 'paw', label: translations[language].dogs },
+    { id: 'ride', icon: 'car-sport', label: translations[language].ride }
+  ];
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{

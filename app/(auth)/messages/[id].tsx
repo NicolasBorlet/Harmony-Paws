@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout';
 import Back from '@/components/back-button';
 import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text';
 import { AntDesign, Feather } from '@expo/vector-icons';
@@ -10,7 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const userData = {
   avatar: "https://picsum.photos/300",
   name: "Emma Swane",
-  status: "En ligne",
+  status: 1,
 }
 
 const messageData = [
@@ -279,7 +280,7 @@ export default function MessageDetail() {
             <Back position="relative" left="0" />
             <View style={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <NavigationTitle color="#000">{userData.name}</NavigationTitle>
-              <ExtraSmallMedium color="#1ED325">{userData.status}</ExtraSmallMedium>
+              <ExtraSmallMedium color="#1ED325">{userData.status === 0 ? `${i18n.t('disconnect')}` : `${i18n.t('online')}` }</ExtraSmallMedium>
             </View>
           </View>
           <Image source={{ uri: userData.avatar }} style={{ width: 60, height: 60, borderRadius: 100 }} />
