@@ -1,37 +1,35 @@
-import { Ionicons } from '@expo/vector-icons';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { useCallback, useRef } from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetBackdrop, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { useCallback, useMemo } from 'react';
+import { Body } from '../ui/text';
 
-export default function FilterComponent() {
-    const bottomSheetRef = useRef<BottomSheet>(null);
+export default function FilterComponent({bottomSheetModalRef, handleSheetChanges}: {bottomSheetModalRef: React.RefObject<BottomSheetModal>, handleSheetChanges: (index: number) => void}) {
 
-    // callbacks
-    const handleSheetChanges = useCallback((index: number) => {
-      console.log('handleSheetChanges', index);
-    }, []);
+  const snapPoints = useMemo(() => ['40%'], []);
+
+  const renderBackdrop = useCallback(
+		(props) => (
+			<BottomSheetBackdrop
+				{...props}
+			/>
+		),
+		[]
+	);
   
     return (
-        <BottomSheet
-            ref={bottomSheetRef}
-            onChange={handleSheetChanges}
-        >
-            <BottomSheetView style={styles.contentContainer}>
-            <Text>Awesome 🎉</Text>
-            </BottomSheetView>
-        </BottomSheet>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        onChange={handleSheetChanges}
+        index={1}
+        backdropComponent={renderBackdrop}
+        enableDynamicSizing
+        snapPoints={snapPoints}
+      >
+        <BottomSheetView style={{
+          flex: 1,
+          alignItems: 'center',
+        }}>
+          <Body>Awesome 🎉</Body>
+        </BottomSheetView>
+    </BottomSheetModal>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'grey',
-    },
-    contentContainer: {
-      flex: 1,
-      padding: 36,
-      alignItems: 'center',
-    },
-});
