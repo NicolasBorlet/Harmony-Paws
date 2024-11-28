@@ -13,6 +13,7 @@ import BodyTitle from '@/components/body-title/body-title';
 import Block from '@/components/grid/Block';
 import { GridItem, GridItemBackground } from '@/components/ui/view';
 import { DogDominance } from '@/lib/api/types';
+import Divider from '@/components/ui/divider';
 
 const dog = {
   id: 1,
@@ -43,19 +44,19 @@ const dog = {
       name: 'Intéressé',
     },
     {
-      id: 1,
+      id: 4,
       name: 'Joueur',
     },
     {
-      id: 2,
+      id: 5,
       name: 'Calme',
     },
     {
-      id: 3,
+      id: 6,
       name: 'Intéressé',
     },
     {
-      id: 1,
+      id: 7,
       name: 'Joueur',
     }
   ],
@@ -122,12 +123,14 @@ export default function DogDetails() {
               </GridItemBackground>
             </Block>
           </View>
+          <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={`A propos de ${dog.name}`} />
             <Body>
               {dog.description || ''}
             </Body>
           </View>
+          <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title='Comportement' />
             <Block flex={0} row wrap="wrap" style={{ gap: 12 }} justifyContent='space-between'>
@@ -138,10 +141,12 @@ export default function DogDetails() {
               ))}
             </Block>
           </View>
+          <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title='Ma maitresse' />
             <MasterDogCardComponent />
           </View>
+          <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title='Sa prochaine balade' />
             <RideItemListing rideCardData={dog.nextRide} />

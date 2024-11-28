@@ -7,9 +7,7 @@ export default function AuthLayout() {
     }}>
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="dog" />
-      <Stack.Screen name="ride">
-        {/* This is a directory with nested routes */}
-      </Stack.Screen>
+      <Stack.Screen name="ride" />
       <Stack.Screen name="messages" />
       <Stack.Screen name="notifications" />
       <Stack.Screen name="completion" options={{ presentation: 'modal' }} />
