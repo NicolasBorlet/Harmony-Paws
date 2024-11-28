@@ -38,6 +38,9 @@ export const translations = {
         sugest: "Suggestions",
         noMessages: "No messages",
         sendMessageToStart: "Send a message to start a conversation.",
+        back: "Back",
+        route: "Route",
+        participants: "Participants",
     },
     fr: {
         home: "Accueil",
@@ -78,5 +81,8 @@ export const translations = {
         sugest: "Suggestions",
         noMessages: "Aucun message",
         sendMessageToStart: "Envoyez un message pour commencer une conversation.",
+        back: "Retour",
+        route: "Parcours",
+        participants: "Participants",
     },
 };
