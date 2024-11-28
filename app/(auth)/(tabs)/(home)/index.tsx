@@ -80,7 +80,7 @@ export default function HomeScreen() {
         </View>
       </GestureDetector>
       <MapButton onPress={() => router.push('/map')}>
-        <Small>Carte</Small>
+        <Small>{i18n.t('map')}</Small>
         <Ionicons name="map" size={18} color="white" />
       </MapButton>
     </View>

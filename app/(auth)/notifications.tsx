@@ -5,6 +5,7 @@ import { NavigationTitle, SmallBold, SmallMedium } from "@/components/ui/text";
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { i18n } from "../_layout";
 
 const notificationsData = [
   {
@@ -108,14 +109,14 @@ export default function Notifications() {
           }}
         >
           <Back position="relative" left="0" />
-          <NavigationTitle color="#000">Notifications</NavigationTitle>
+          <NavigationTitle color="#000">{i18n.t('notifications')}</NavigationTitle>
         </View>
         <Divider />
         <FlashList
           data={[
-            { type: 'header', title: '7 derniers jours' },
+            { type: 'header', title: `7 ${i18n.t('lastDays')}` },
             ...recentNotifications,
-            { type: 'header', title: '30 derniers jours' },
+            { type: 'header', title: `30 ${i18n.t('lastDays')}` },
             ...olderNotifications,
           ]}
           renderItem={({ item }) => {
@@ -129,7 +130,7 @@ export default function Notifications() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <SmallMedium color="#000">Aucune notification</SmallMedium>
+              <SmallMedium color="#000">{i18n.t('noNotifications')}</SmallMedium>
             </View>
           )}
           ListFooterComponent={() => <View style={{ height: 32 }} />}

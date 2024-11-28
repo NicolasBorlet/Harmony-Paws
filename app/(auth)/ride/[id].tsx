@@ -151,7 +151,7 @@ export default function RideDetails() {
       </ParallaxScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={() => router.push('/ride/join')}>
-          <BodyMedium color='#fff'>Rejoindre la balade</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('joinTheRide')}</BodyMedium>
         </StandardButton>
       </Animated.View>
     </>

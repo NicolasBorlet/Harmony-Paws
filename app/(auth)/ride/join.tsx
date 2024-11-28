@@ -1,3 +1,4 @@
+import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import DogItem from "@/components/invitation/dogItem";
 import { StandardButton, UnderlinedButton } from "@/components/ui/button";
@@ -25,7 +26,7 @@ export default function DogInvitation() {
         }}
         >
           <Back position="relative" left="0" />
-          <NavigationTitle color="#000">Rejoindre la balade</NavigationTitle>
+          <NavigationTitle color="#000">{i18n.t('joinTheRide')}</NavigationTitle>
         </View>
       </View>
       <View style={{ flex: 1, justifyContent: 'space-between', alignItems: 'center' }}>
@@ -41,11 +42,11 @@ export default function DogInvitation() {
           <View style={{ width: 'auto', height: 1, backgroundColor: '#DFDFDF' }} />
           <View style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <SmallMedium color="#000">
-              Contactez la propriétaire pour organiser une rencontre entre Max et Taico.
+              {i18n.t('joinDescription')}
             </SmallMedium>
             <View style={{ padding: 10, backgroundColor: 'rgba(102, 51, 153, 0.1)', borderRadius: 10 }}>
               <TextInput
-                placeholder="Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?"
+                placeholder={i18n.t('joinPlaceholder')}
                 placeholderTextColor="#663399"
                 style={{
                   color: '#663399',
