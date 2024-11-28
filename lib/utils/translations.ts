@@ -2,6 +2,8 @@ export const translations = {
     en: {
         welcome: "Hi",
         timeToRide: "Is it time to ride?",
+        dogs: "Dogs",
+        ride: "Rides",
         year: "Year",
         years: "Years",
         start: "Start",
@@ -18,6 +20,8 @@ export const translations = {
     fr: {
         welcome: "Salut",
         timeToRide: "C'est le moment de se balader ?",
+        dogs: "Chiens",
+        ride: "Balades",
         year: "An",
         years: "Ans",
         start: "Départ",

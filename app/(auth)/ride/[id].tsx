@@ -144,7 +144,7 @@ export default function RideDetails() {
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title='Créateur de la balade' />
+            <BodyTitle title={i18n.t('rideCreator')} />
             <MasterDogCardComponent />
           </View>
         </View>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 8,
+    gap: 12,
   },
   ownerContainer: {
     marginTop: 24,

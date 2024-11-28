@@ -1,6 +1,5 @@
 import { i18n } from '@/app/_layout';
 import DogListing from '@/components/dogListing/dog-listing';
-import FilterComponent from '@/components/filter/filter-component';
 import RideListing from '@/components/rideListing/ride-listing';
 import RoundedIconLink from '@/components/rounded-icon-link';
 import { MapButton } from '@/components/ui/button';
@@ -10,9 +9,9 @@ import { Ionicons } from '@expo/vector-icons';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { router } from 'expo-router';
 import { useCallback, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import { runOnJS, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
@@ -70,6 +69,7 @@ export default function HomeScreen() {
           <TabSwitcher
             selectedTab={selectedTab}
             onTabChange={setSelectedTab}
+            language={i18n.locale}
           />
             <Ionicons name="filter" size={21} color="black" style={{ height: 48, width: 48 }} />
         </View>
