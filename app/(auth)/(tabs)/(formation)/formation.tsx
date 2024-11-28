@@ -1,9 +1,9 @@
-import VideoProduct from "@/components/product/VideoProduct";
+import FormationListing from "@/components/formationListing/formation-listing";
 import {
   useStripe
 } from "@stripe/stripe-react-native";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 interface FunctionResponse {
@@ -203,34 +203,7 @@ export default function Formation() {
   
     return (
       <SafeAreaView style={styles.container}>
-        {selectedProduct && userId && (
-          <VideoProduct
-            productId={selectedProduct.id}
-            userId={userId}
-          />
-        )}
-        <ScrollView style={styles.productList}>
-          {products.map((product) => (
-            <TouchableOpacity
-              key={product.id}
-              style={[
-                styles.productItem,
-                selectedProduct?.id === product.id && styles.selectedProduct
-              ]}
-              onPress={() => {
-                setSelectedProduct(product);
-                console.log("Selected product:", product);
-                setLoading(true); 
-              }}
-            >
-              <Text style={styles.productName}>{product.name}</Text>
-              <Text style={styles.productDescription}>{product.description}</Text>
-              <Text style={styles.productPrice}>
-                {(product.price / 100).toFixed(2)} {product.currency.toUpperCase()}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <FormationListing />
       </SafeAreaView>
     );
   }
@@ -245,6 +218,7 @@ export default function Formation() {
     },
     container: {
       flex: 1,
+      backgroundColor: '#fff',
       padding: 16,
     },
     productList: {

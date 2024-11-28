@@ -1,6 +1,6 @@
 import { i18n } from '@/app/_layout';
 import Back from '@/components/back-button';
-import BodyTitle from '@/components/body-title/body-title';
+import BodyTitle from '@/components/bodyTitle/body-title';
 import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import Block from '@/components/grid/Block';
 import ParallaxScrollView from '@/components/parallax-scrollview';
