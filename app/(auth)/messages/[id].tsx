@@ -4,7 +4,7 @@ import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text';
 import { AntDesign, Feather } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useCallback, useState } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Composer, GiftedChat, IMessage, InputToolbar, Send } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -261,12 +261,12 @@ export default function MessageDetail() {
   };
 
   return (
-    <KeyboardAvoidingView
-        style={styles.container}
-        behavior="padding"
-    >
+    // <KeyboardAvoidingView
+    //     style={styles.container}
+    //     behavior="padding"
+    // >
       <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
-        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12 }}>
+        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: "rgba(102, 51, 153, 0.1)" }}>
           <View
           style={{
             display: "flex",
@@ -292,7 +292,7 @@ export default function MessageDetail() {
         onSend={messages => onSend(messages)}
         user={{ _id: 1 }}
         scrollToBottom={true}
-        bottomOffset={insets.bottom}
+        bottomOffset={0}
         timeFormat='HH:mm'
         dateFormat='DD/MM/YYYY'
         renderInputToolbar={renderInputToolbar}
@@ -310,10 +310,9 @@ export default function MessageDetail() {
         text={inputText}
         onInputTextChanged={text => setInputText(text)}
         alwaysShowSend={false}
-
       />
       </View>
-    </KeyboardAvoidingView>
+    // </KeyboardAvoidingView>
   );
 }
 

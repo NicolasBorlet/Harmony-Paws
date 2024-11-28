@@ -154,7 +154,7 @@ export default function Messages() {
                 borderRadius: 30,
                 borderWidth: 1,
                 borderColor: "#B9B9B9",
-                color: "#696969",
+                color: "#B9B9B9",
               }}
             />
           </Animated.View>

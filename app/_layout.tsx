@@ -1,3 +1,4 @@
+import { translations } from '@/lib/utils/translations';
 import {
   Montserrat_100Thin,
   Montserrat_200ExtraLight,
@@ -10,16 +11,16 @@ import {
   Montserrat_900Black,
   useFonts,
 } from '@expo-google-fonts/montserrat';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { getLocales } from 'expo-localization';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
+import { I18n } from 'i18n-js';
 import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
-import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
 import { SessionProvider } from './ctx';
-import { getLocales } from 'expo-localization';
-import { I18n } from 'i18n-js';
-import { translations } from '@/lib/utils/translations';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -72,7 +73,9 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SQLiteProvider databaseName="harmonypaws.db" onInit={migrateDbIfNeeded}>
         <SessionProvider>
-          <Slot />
+          <BottomSheetModalProvider>
+            <Slot />
+          </BottomSheetModalProvider>
         </SessionProvider>
       </SQLiteProvider>
     </GestureHandlerRootView>

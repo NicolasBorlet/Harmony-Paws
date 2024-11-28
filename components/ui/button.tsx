@@ -1,5 +1,5 @@
-import styled from 'styled-components/native';
 import { Platform } from 'react-native';
+import styled from 'styled-components/native';
 
 const StyledButton = styled.Pressable`
   paddingTop: 14px;
@@ -32,7 +32,6 @@ const MapButton = styled.Pressable`
   paddingHorizontal: 16px;
   background-color: #663399;
   border-radius: 30px;
-  z-index: 100;
   width: 100px;
   height: 40px;
   gap: 6px;
@@ -88,4 +87,5 @@ const UnderlinedButton = styled.Pressable`
   text-decoration: underline;
 `;
 
-export { BackButton, MapButton, StandardButton, StyledButton, UnderlinedButton, SmallButton, SmallButtonOutlined };
+export { BackButton, MapButton, SmallButton, SmallButtonOutlined, StandardButton, StyledButton, UnderlinedButton };
+
