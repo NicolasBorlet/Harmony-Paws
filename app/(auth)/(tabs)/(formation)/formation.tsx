@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  initStripe,
-  useStripe,
-  PaymentSheet,
-  PaymentSheetError,
-} from "@stripe/stripe-react-native";
-import { StyleSheet, View, Alert, Button, Text, TouchableOpacity, ScrollView } from "react-native";
-import { supabase } from "@/lib/supabase";
-import { SafeAreaView } from "react-native-safe-area-context";
 import VideoProduct from "@/components/product/VideoProduct";
+import {
+  useStripe
+} from "@stripe/stripe-react-native";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface FunctionResponse {
   paymentIntent: string;
@@ -38,172 +34,172 @@ export default function Formation() {
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
 
-    useEffect(() => {
-      async function initialize() {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          setUserId(user.id);
-        }
-        await fetchProducts();
-      }
-      initialize();
-    }, []);
+    // useEffect(() => {
+    //   async function initialize() {
+    //     const { data: { user } } = await supabase.auth.getUser();
+    //     if (user) {
+    //       setUserId(user.id);
+    //     }
+    //     await fetchProducts();
+    //   }
+    //   initialize();
+    // }, []);
 
-    useEffect(() => {
-      if (selectedProduct) {
-        initialisePaymentSheet();
-      }
-    }, [selectedProduct]);
+    // useEffect(() => {
+    //   if (selectedProduct) {
+    //     initialisePaymentSheet();
+    //   }
+    // }, [selectedProduct]);
 
-    const fetchProducts = async () => {
-      try {
-        const { data, error } = await supabase.functions.invoke<Product[]>(
-          "get-products"
-        );
+    // const fetchProducts = async () => {
+    //   try {
+    //     const { data, error } = await supabase.functions.invoke<Product[]>(
+    //       "get-products"
+    //     );
         
-        if (error) {
-          console.error("Error fetching products:", error);
-          Alert.alert("Error", "Failed to load products");
-          return;
-        }
+    //     if (error) {
+    //       console.error("Error fetching products:", error);
+    //       Alert.alert("Error", "Failed to load products");
+    //       return;
+    //     }
 
-        if (data) {
-          setProducts(data);
-          setLoading(false); 
-        }
-      } catch (e) {
-        console.error("Error fetching products:", e);
-        Alert.alert("Error", "Failed to load products");
-        setLoading(false); 
-      }
-    };
+    //     if (data) {
+    //       setProducts(data);
+    //       setLoading(false); 
+    //     }
+    //   } catch (e) {
+    //     console.error("Error fetching products:", e);
+    //     Alert.alert("Error", "Failed to load products");
+    //     setLoading(false); 
+    //   }
+    // };
 
-    const fetchPaymentSheetParams = async () => {
-      if (!selectedProduct) {
-        Alert.alert("Error", "Please select a product first");
-        return {};
-      }
+    // const fetchPaymentSheetParams = async () => {
+    //   if (!selectedProduct) {
+    //     Alert.alert("Error", "Please select a product first");
+    //     return {};
+    //   }
 
-      try {
-        // Create payment session for our customer
-        const { data, error } = await supabase.functions.invoke<FunctionResponse>(
-          "payment-sheet",
-          {
-            body: JSON.stringify({
-              priceId: selectedProduct.priceId
-            })
-          }
-        );
-        console.log("Function response:", data, error);
+    //   try {
+    //     // Create payment session for our customer
+    //     const { data, error } = await supabase.functions.invoke<FunctionResponse>(
+    //       "payment-sheet",
+    //       {
+    //         body: JSON.stringify({
+    //           priceId: selectedProduct.priceId
+    //         })
+    //       }
+    //     );
+    //     console.log("Function response:", data, error);
         
-        if (error) {
-            const errorMessage = await error.context.json()
-            console.log('Function returned an error', errorMessage)
+    //     if (error) {
+    //         const errorMessage = await error.context.json()
+    //         console.log('Function returned an error', errorMessage)
           
-          console.error("Function error:", error);
-          Alert.alert(`Error: ${error.message}`);
-          return {};
-        }
+    //       console.error("Function error:", error);
+    //       Alert.alert(`Error: ${error.message}`);
+    //       return {};
+    //     }
         
-        if (!data) {
-          console.error("No data received");
-          Alert.alert("Error: No data received from the server");
-          return {};
-        }
+    //     if (!data) {
+    //       console.error("No data received");
+    //       Alert.alert("Error: No data received from the server");
+    //       return {};
+    //     }
 
-        const { paymentIntent, ephemeralKey, customer, stripe_pk } = data;
-        setClientSecret(paymentIntent);
-        return {
-          paymentIntent,
-          ephemeralKey,
-          customer,
-          stripe_pk,
-        };
-      } catch (e) {
-        console.error("Error in fetchPaymentSheetParams:", e);
-        Alert.alert(`Error: ${e.message}`);
-        return {};
-      }
-    };
+    //     const { paymentIntent, ephemeralKey, customer, stripe_pk } = data;
+    //     setClientSecret(paymentIntent);
+    //     return {
+    //       paymentIntent,
+    //       ephemeralKey,
+    //       customer,
+    //       stripe_pk,
+    //     };
+    //   } catch (e) {
+    //     console.error("Error in fetchPaymentSheetParams:", e);
+    //     Alert.alert(`Error: ${e.message}`);
+    //     return {};
+    //   }
+    // };
   
-    const openPaymentSheet = async () => {
-      if (!clientSecret) {
-        return;
-      }
-      setLoading(true);
-      const { error } = await presentPaymentSheet();
+    // const openPaymentSheet = async () => {
+    //   if (!clientSecret) {
+    //     return;
+    //   }
+    //   setLoading(true);
+    //   const { error } = await presentPaymentSheet();
   
-      if (!error) {
-        Alert.alert("Success", "The payment was confirmed successfully");
-      } else if (error.code === PaymentSheetError.Failed) {
-        Alert.alert(
-          `PaymentSheet present failed with error code: ${error.code}`,
-          error.message
-        );
-      } else if (error.code === PaymentSheetError.Canceled) {
-        Alert.alert(
-          `PaymentSheet present was canceled with code: ${error.code}`,
-          error.message
-        );
-      }
-      setPaymentSheetEnabled(false);
-      setLoading(false);
-    };
+    //   if (!error) {
+    //     Alert.alert("Success", "The payment was confirmed successfully");
+    //   } else if (error.code === PaymentSheetError.Failed) {
+    //     Alert.alert(
+    //       `PaymentSheet present failed with error code: ${error.code}`,
+    //       error.message
+    //     );
+    //   } else if (error.code === PaymentSheetError.Canceled) {
+    //     Alert.alert(
+    //       `PaymentSheet present was canceled with code: ${error.code}`,
+    //       error.message
+    //     );
+    //   }
+    //   setPaymentSheetEnabled(false);
+    //   setLoading(false);
+    // };
   
-    const initialisePaymentSheet = async () => {
-      setLoading(true);
-      const { paymentIntent, ephemeralKey, customer, stripe_pk } =
-        await fetchPaymentSheetParams();
+    // const initialisePaymentSheet = async () => {
+    //   setLoading(true);
+    //   const { paymentIntent, ephemeralKey, customer, stripe_pk } =
+    //     await fetchPaymentSheetParams();
   
-      if (!stripe_pk || !paymentIntent) return setLoading(false);
+    //   if (!stripe_pk || !paymentIntent) return setLoading(false);
   
-      await initStripe({
-        publishableKey: stripe_pk,
-        merchantIdentifier: "merchant.com.stripe.react.native",
-        urlScheme: "supabase-stripe-example",
-        setReturnUrlSchemeOnAndroid: true,
-      });
+    //   await initStripe({
+    //     publishableKey: stripe_pk,
+    //     merchantIdentifier: "merchant.com.stripe.react.native",
+    //     urlScheme: "supabase-stripe-example",
+    //     setReturnUrlSchemeOnAndroid: true,
+    //   });
 
-      const billingDetails = {
-        name: "Jane Doe",
-        email: "foo@bar.com",
-        phone: "555-555-555",
-        address: {
-          city: "San Francisco",
-          country: "US",
-          line1: "123 Market St",
-          line2: "",
-          state: "CA",
-          postal_code: "94015",
-        }
-      };
+    //   const billingDetails = {
+    //     name: "Jane Doe",
+    //     email: "foo@bar.com",
+    //     phone: "555-555-555",
+    //     address: {
+    //       city: "San Francisco",
+    //       country: "US",
+    //       line1: "123 Market St",
+    //       line2: "",
+    //       state: "CA",
+    //       postal_code: "94015",
+    //     }
+    //   };
   
-      const { error } = await initPaymentSheet({
-        customerId: customer,
-        customerEphemeralKeySecret: ephemeralKey,
-        paymentIntentClientSecret: paymentIntent,
-        customFlow: false,
-        merchantDisplayName: "Example Inc.",
-        style: "automatic",
-        returnURL: "stripe-example://stripe-redirect",
-        defaultBillingDetails: billingDetails,
-        allowsDelayedPaymentMethods: true,
-      });
-      if (!error) {
-        setPaymentSheetEnabled(true);
-      } else if (error.code === PaymentSheetError.Failed) {
-        Alert.alert(
-          `PaymentSheet init failed with error code: ${error.code}`,
-          error.message
-        );
-      } else if (error.code === PaymentSheetError.Canceled) {
-        Alert.alert(
-          `PaymentSheet init was canceled with code: ${error.code}`,
-          error.message
-        );
-      }
-      setLoading(false);
-    };
+    //   const { error } = await initPaymentSheet({
+    //     customerId: customer,
+    //     customerEphemeralKeySecret: ephemeralKey,
+    //     paymentIntentClientSecret: paymentIntent,
+    //     customFlow: false,
+    //     merchantDisplayName: "Example Inc.",
+    //     style: "automatic",
+    //     returnURL: "stripe-example://stripe-redirect",
+    //     defaultBillingDetails: billingDetails,
+    //     allowsDelayedPaymentMethods: true,
+    //   });
+    //   if (!error) {
+    //     setPaymentSheetEnabled(true);
+    //   } else if (error.code === PaymentSheetError.Failed) {
+    //     Alert.alert(
+    //       `PaymentSheet init failed with error code: ${error.code}`,
+    //       error.message
+    //     );
+    //   } else if (error.code === PaymentSheetError.Canceled) {
+    //     Alert.alert(
+    //       `PaymentSheet init was canceled with code: ${error.code}`,
+    //       error.message
+    //     );
+    //   }
+    //   setLoading(false);
+    // };
   
     return (
       <SafeAreaView style={styles.container}>
@@ -235,24 +231,18 @@ export default function Formation() {
             </TouchableOpacity>
           ))}
         </ScrollView>
-
-        <Button
-          disabled={!paymentSheetEnabled || !selectedProduct}
-          title={loading ? "Loading..." : "Buy Now"}
-          onPress={openPaymentSheet}
-        />
       </SafeAreaView>
     );
   }
 
   const styles = StyleSheet.create({
-    contentContainer: {
-        flex: 1,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 50,
-      },
+  contentContainer: {
+      flex: 1,
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 50,
+    },
     container: {
       flex: 1,
       padding: 16,
