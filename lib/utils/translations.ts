@@ -41,6 +41,8 @@ export const translations = {
         back: "Back",
         route: "Route",
         participants: "Participants",
+        about: "About",
+        advice: "Advice",
     },
     fr: {
         home: "Accueil",
@@ -84,5 +86,7 @@ export const translations = {
         back: "Retour",
         route: "Parcours",
         participants: "Participants",
+        about: "À propos",
+        advice: "Avis",
     },
 };

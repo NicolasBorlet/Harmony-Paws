@@ -219,10 +219,10 @@ export default function Formation() {
     container: {
       flex: 1,
       backgroundColor: '#fff',
-      padding: 16,
+      paddingHorizontal: 16,
     },
     productList: {
-    flex: 1,
+      flex: 1,
       marginBottom: 20,
     },
     productItem: {
