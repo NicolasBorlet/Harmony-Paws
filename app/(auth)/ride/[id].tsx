@@ -5,6 +5,7 @@ import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
 import ParticipantListing from '@/components/ride/participant-listing'
+import RouteListing from '@/components/ride/route-listing'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import {
@@ -150,6 +151,7 @@ export default function RideDetails() {
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('route')} />
+            <RouteListing />
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('participants')} />

@@ -24,5 +24,15 @@ const GridItemBackground = styled.View`
     shadow-radius: 6.3px;
     elevation: 4;
 `
+const RouteItemView = styled.View<{ even?: boolean }>`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: ${({ even }) => (even ? "rgba(102, 51, 153, 0.1)" : "#FDE6D7")};
+    border-radius: 10px;
+    height: 100%;
+    padding-horizontal: 20px;
+    justify-content: center;
+`
 
-export { GridItem, GridItemBackground }
+export { GridItem, GridItemBackground, RouteItemView };
