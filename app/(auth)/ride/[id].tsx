@@ -4,6 +4,7 @@ import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import Block from '@/components/grid/Block';
 import ParallaxScrollView from '@/components/parallax-scrollview';
 import { StandardButton } from '@/components/ui/button';
+import Divider from '@/components/ui/divider';
 import { BodyBold, BodyMedium, CardTitle, ExtraSmallSemiBold, Small } from '@/components/ui/text';
 import { GridItemBackground } from '@/components/ui/view';
 import { router} from 'expo-router';
@@ -121,6 +122,7 @@ export default function RideDetails() {
               </GridItemBackground>
             </Block>
           </View>
+          <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title='Créateur de la balade' />
             <MasterDogCardComponent />
