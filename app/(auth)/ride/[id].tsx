@@ -4,6 +4,7 @@ import BodyTitle from '@/components/body-title/body-title'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
+import ParticipantListing from '@/components/ride/participant-listing'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import {
@@ -146,6 +147,13 @@ export default function RideDetails() {
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('rideCreator')} />
             <MasterDogCardComponent />
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title={i18n.t('route')} />
+          </View>
+          <View style={styles.infoContainer}>
+            <BodyTitle title={i18n.t('participants')} />
+            <ParticipantListing />
           </View>
         </View>
       </ParallaxScrollView>

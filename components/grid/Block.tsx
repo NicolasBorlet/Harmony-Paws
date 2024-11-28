@@ -12,7 +12,8 @@ const Block = ({
   alignItems,
   content,
   alignContent,
-  wrap, // <-- add this
+  wrap,
+  gap,
   ...props
 }: {
   children?: React.ReactNode
@@ -25,7 +26,8 @@ const Block = ({
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
   content?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch'
   alignContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch'
-  wrap?: 'wrap' | 'nowrap'
+  wrap?: 'wrap' | 'nowrap',
+  gap?: number
 }) => {
   const blockStyle = StyleSheet.flatten([
     flex !== undefined && { flex },
@@ -36,7 +38,8 @@ const Block = ({
     alignItems !== undefined && { alignItems },
     content !== undefined && { alignContent: content },
     alignContent !== undefined && { alignContent },
-    wrap !== undefined && { flexWrap: wrap }, // <-- add this
+    wrap !== undefined && { flexWrap: wrap }, 
+    gap !== undefined && { gap },
     style,
   ])
 
