@@ -1,19 +1,20 @@
+import { i18n } from '@/app/_layout';
 import Back from '@/components/back-button';
-import MasterDogCardComponent from '@/components/dog/master-dog-card';
-import ParallaxScrollView from '@/components/parallax-scrollview';
-import { StandardButton } from '@/components/ui/button';
-import { BodyMedium, CardTitle, Body, ExtraSmallMedium, BodyBold, ExtraSmallSemiBold } from '@/components/ui/text';
-import { router} from 'expo-router';
-import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import RideItemListing from '@/components/rideListing/ride-item-listing';
 import BodyTitle from '@/components/body-title/body-title';
+import MasterDogCardComponent from '@/components/dog/master-dog-card';
 import Block from '@/components/grid/Block';
+import ParallaxScrollView from '@/components/parallax-scrollview';
+import RideItemListing from '@/components/rideListing/ride-item-listing';
+import { StandardButton } from '@/components/ui/button';
+import Divider from '@/components/ui/divider';
+import { Body, BodyBold, BodyMedium, CardTitle, ExtraSmallMedium } from '@/components/ui/text';
 import { GridItem, GridItemBackground } from '@/components/ui/view';
 import { DogDominance } from '@/lib/api/types';
-import Divider from '@/components/ui/divider';
+import { router } from 'expo-router';
+import { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const dog = {
   id: 1,
@@ -124,15 +125,15 @@ export default function DogDetails() {
             </Block>
           </View>
           <Divider />
-          <View style={styles.infoContainer}>
-            <BodyTitle title={`A propos de ${dog.name}`} />
+            <View style={styles.infoContainer}>
+            <BodyTitle title={`${i18n.t('aboutOf')} ${dog.name}`} />
             <Body>
               {dog.description || ''}
             </Body>
-          </View>
+            </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title='Comportement' />
+            <BodyTitle title={i18n.t('behavior')} />
             <Block flex={0} row wrap="wrap" style={{ gap: 12 }} justifyContent='space-between'>
               {dog.behavors.map((behavor) => (
                 <GridItem key={behavor.id}>
@@ -143,19 +144,19 @@ export default function DogDetails() {
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title='Ma maitresse' />
+            <BodyTitle title={i18n.t('myMaster')} />
             <MasterDogCardComponent />
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title='Sa prochaine balade' />
+            <BodyTitle title={i18n.t('nextRide')} />
             <RideItemListing rideCardData={dog.nextRide} />
           </View>
         </View>
       </ParallaxScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={() => router.push('/dog/invitation')}>
-          <BodyMedium color='#fff'>On se balade ?</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('rideInvitation')}</BodyMedium>
         </StandardButton>
       </Animated.View>
     </>

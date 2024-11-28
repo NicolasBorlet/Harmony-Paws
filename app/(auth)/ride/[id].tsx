@@ -10,8 +10,7 @@ import {
   BodyBold,
   BodyMedium,
   CardTitle,
-  ExtraSmallSemiBold,
-  Small,
+  ExtraSmallSemiBold
 } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { router } from 'expo-router'
@@ -19,8 +18,8 @@ import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
-  withSpring,
   useSharedValue,
+  withSpring,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
