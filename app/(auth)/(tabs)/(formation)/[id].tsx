@@ -1,10 +1,13 @@
 import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
+import ModuleListing from "@/components/formation/moduleListing/module-listing";
 import SegmentedControl from "@/components/formation/segmented-control";
 import { NavigationTitle } from "@/components/ui/text";
 import * as Haptics from "expo-haptics";
 import { useCallback, useState } from "react";
 import { View } from "react-native";
+import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
+import { runOnJS, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const formation = {
@@ -25,6 +28,7 @@ const formation = {
 
 export default function FormationDetails() {
   const insets = useSafeAreaInsets();
+  const startY = useSharedValue(0);
   
   const [selectedTab, setSelectedTab] = useState<'about' | 'advice'>('about');
 
@@ -33,14 +37,32 @@ export default function FormationDetails() {
     setSelectedTab(tab);
   }, []);
 
+  const gesture = Gesture.Pan()
+    .onBegin((event) => {
+      startY.value = event.absoluteY;
+    })
+    .onUpdate((event) => {
+      const deltaY = startY.value - event.absoluteY;
+    })
+    .onEnd((event) => {
+      // Gestion du swipe horizontal existant
+      if (Math.abs(event.translationX) > 50) {
+        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light);
+        if (event.translationX > 0) {
+          runOnJS(setSelectedTab)('about');
+        } else {
+          runOnJS(setSelectedTab)('advice');
+        }
+      }
+  });
+
   return (
-    <View style={{ flex: 1, paddingTop: insets.top + 8, backgroundColor: "#fff" }}>
+    <GestureHandlerRootView style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View
         style={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: 20,
         }}
       >
         <View
@@ -62,7 +84,12 @@ export default function FormationDetails() {
           onTabChange={onTabChange}
           language={i18n.locale}
         />
+        <GestureDetector gesture={gesture}>
+          <View style={{ flex: 1, paddingHorizontal: 20 }}>
+            {selectedTab === 'about' ? <ModuleListing /> : <></>}
+          </View>
+        </GestureDetector>
       </View>
-    </View>
+    </GestureHandlerRootView>
   );
 }
