@@ -7,6 +7,12 @@ const SpecialTitle = styled.Text<{ color?: string }>`
   font-family: RoundsBlack;
 `;
 
+const ModulePrice = styled.Text<{ color?: string }>`
+  font-size: 16px;
+  color: ${props => props.color || '#fff'};
+  font-family: RoundsBlack;
+`;
+
 const CardTitle = styled.Text<{ color?: string }>`
   font-size: 28px;
   color: ${props => props.color || '#fff'};
@@ -98,5 +104,5 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
 `;
 
 
-export { Body, BodyBold, BodyMedium, BodySemiBold, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallBold, SmallMedium, SmallSemiBold, SpecialTitle };
+export { Body, BodyBold, BodyMedium, BodySemiBold, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, ModulePrice, NavigationTitle, Small, SmallBold, SmallMedium, SmallSemiBold, SpecialTitle };
 

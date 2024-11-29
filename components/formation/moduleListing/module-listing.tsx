@@ -9,7 +9,7 @@ import ModuleListingItem from "./module-listing-item";
 const modules: Formation[] = [
   {
     id: 1,
-    name: "Formation 1",
+    name: "Module 1",
     subject: "Subject 1",
     image: "https://picsum.photos/300",
     animator_name: "Animator 1",
@@ -24,7 +24,7 @@ const modules: Formation[] = [
 },
 {
     id: 2,
-    name: "Formation 2",
+    name: "Module 2",
     subject: "Subject 2",
     image: "https://picsum.photos/300",
     animator_name: "Animator 2",
@@ -39,7 +39,7 @@ const modules: Formation[] = [
 },
 {
     id: 3,
-    name: "Formation 3",
+    name: "Module 3",
     subject: "Subject 3",
     image: "https://picsum.photos/300",
     animator_name: "Animator 3",
@@ -98,7 +98,7 @@ export default function ModuleListing () {
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
           ItemSeparatorComponent={() => (
-            <View style={{ height: 20 }} />
+            <View style={{ height: 16 }} />
           )}
           estimatedItemSize={10}
         />
