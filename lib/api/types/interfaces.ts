@@ -36,6 +36,7 @@ export interface Formation extends BaseEntity {
   image: string;
   animator_name: string;
   price: number;
+  old_price?: number;
   description: string;
   place: string;
   date: Date;

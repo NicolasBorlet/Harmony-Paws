@@ -2,10 +2,11 @@ import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import ModuleListing from "@/components/formation/moduleListing/module-listing";
 import SegmentedControl from "@/components/formation/segmented-control";
-import { NavigationTitle } from "@/components/ui/text";
+import { BodyBold, ExtraSmallMedium, ModulePrice, NavigationTitle } from "@/components/ui/text";
+import { AntDesign } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useCallback, useState } from "react";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Gesture, GestureDetector, GestureHandlerRootView } from "react-native-gesture-handler";
 import { runOnJS, useSharedValue } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -17,6 +18,7 @@ const formation = {
   image: "https://picsum.photos/300",
   animator_name: "Animator 1",
   price: 100,
+  old_price: 150,
   description: "Description 1",
   place: "Place 1",
   date: new Date(),
@@ -87,7 +89,49 @@ export default function FormationDetails() {
         <View style={{ flex: 1, paddingHorizontal: 20 }}>
           <GestureDetector gesture={gesture}>
               <View style={{ flex: 1 }}>
-                {selectedTab === 'about' ? <ModuleListing /> : <></>}
+                {selectedTab === 'about' ? (
+                  <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={{
+                    gap: 20,
+                  }}>
+                    <View
+                      style={{
+                        marginTop: 20,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 10,
+                        backgroundColor: "rgba(102, 51, 153, 0.1)",
+                        borderRadius: 10,
+                        padding:16,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <View style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}>
+                        <BodyBold color="#663399">{i18n.t('completeFormation')}</BodyBold>
+                        <View style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          gap: 4,
+                          alignItems: "center",
+                        }}
+                        >
+                          <ModulePrice color="#F7A400">{formation.price}€</ModulePrice>
+                          <AntDesign name="arrowleft" size={12} color="black" />
+                          <ModulePrice color="#663399">{formation.old_price}€</ModulePrice>
+                        </View>
+                      </View>
+                        <View>
+                          <ExtraSmallMedium color="#616060">
+                            Lorem ipsum dolor sit amet consectetur. Velit ac vitae phasellus pharetra urna eu est nec fermentum. Ac at tristique etiam neque.
+                          </ExtraSmallMedium>
+                        </View>
+                      </View>
+                    <ModuleListing />
+                  </ScrollView>
+                ) : <></>}
               </View>
           </GestureDetector>
         </View>

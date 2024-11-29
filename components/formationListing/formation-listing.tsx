@@ -11,6 +11,7 @@ const formations: Formation[] = [
       image: "https://picsum.photos/300",
       animator_name: "Animator 1",
       price: 100,
+      old_price: 150,
       description: "Description 1",
       place: "Place 1",
       date: new Date(),
