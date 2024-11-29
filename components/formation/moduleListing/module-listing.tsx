@@ -1,3 +1,4 @@
+import { i18n } from "@/app/_layout";
 import { ColumnItem } from "@/components/ui/ColumnItem";
 import { BodyBold, ExtraSmallMedium } from "@/components/ui/text";
 import { Formation } from "@/lib/api/types";
@@ -78,7 +79,7 @@ export default function ModuleListing () {
             flexDirection: "row",
             justifyContent: "space-between",
           }}>
-            <BodyBold color="#663399">Formation complète</BodyBold>
+            <BodyBold color="#663399">{i18n.t('completeFormation')}</BodyBold>
           </View>
           <View>
             <ExtraSmallMedium color="#616060">
@@ -99,6 +100,7 @@ export default function ModuleListing () {
           ItemSeparatorComponent={() => (
             <View style={{ height: 20 }} />
           )}
+          estimatedItemSize={10}
         />
       </ScrollView>
     </View>

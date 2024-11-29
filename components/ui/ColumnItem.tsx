@@ -8,9 +8,14 @@ const getItemStyle = (index: number, numColumns: number) => {
     return "center";
   })();
 
+  const paddingRight = (index + 1) % numColumns === 0 ? 0 : 8;
+  const paddingLeft = index % numColumns === 0 ? 0 : 8;
+
   return {
     alignItems,
     width: "100%",
+    paddingRight,
+    paddingLeft
   } as const;
 };
 

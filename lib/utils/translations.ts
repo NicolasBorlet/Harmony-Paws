@@ -43,6 +43,7 @@ export const translations = {
         participants: "Participants",
         about: "About",
         advice: "Advice",
+        completeFormation: "Complete formation",
     },
     fr: {
         home: "Accueil",
@@ -88,5 +89,6 @@ export const translations = {
         participants: "Participants",
         about: "À propos",
         advice: "Avis",
+        completeFormation: "Formation complète",
     },
 };
