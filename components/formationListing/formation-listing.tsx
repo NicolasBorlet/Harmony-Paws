@@ -1,7 +1,10 @@
 import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
+import Animated from "react-native-reanimated";
 import FormationListingItem from "./formation-listing-item";
+
+const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
 const formations: Formation[] = [
   {
@@ -54,13 +57,14 @@ const formations: Formation[] = [
 
 export default function FormationListing() {
   return (
-    <FlashList
+    <AnimatedFlashList
       data={formations}
       renderItem={({ item }) => (
         <FormationListingItem
           formation={item}
         />
       )}
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id.toString()}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
     />

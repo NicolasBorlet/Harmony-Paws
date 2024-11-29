@@ -133,7 +133,7 @@ export default function FormationDetails() {
                     <ModuleListing />
                   </ScrollView>
                 ) : 
-                  <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={{
+                  <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{
                     gap: 20,
                   }}>
                     <AdviceListing />

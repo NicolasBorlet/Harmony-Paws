@@ -1,10 +1,15 @@
+import { i18n } from "@/app/_layout";
 import FormationListing from "@/components/formationListing/formation-listing";
+import RoundedIconLink from "@/components/rounded-icon-link";
+import { SpecialTitle } from "@/components/ui/text";
+import { Ionicons } from "@expo/vector-icons";
 import {
   useStripe
 } from "@stripe/stripe-react-native";
+import { router } from "expo-router";
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface FunctionResponse {
   paymentIntent: string;
@@ -26,6 +31,8 @@ interface Product {
 }
 
 export default function Formation() {
+    const insets = useSafeAreaInsets();
+
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -33,7 +40,6 @@ export default function Formation() {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
-
     // useEffect(() => {
     //   async function initialize() {
     //     const { data: { user } } = await supabase.auth.getUser();
@@ -202,9 +208,24 @@ export default function Formation() {
     // };
   
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={[styles.container, {
+        paddingTop: insets.top
+      }]}>
+        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
+          <RoundedIconLink
+            icon={<Ionicons name="notifications" size={20} color="white" />}
+            onPress={() => router.push('/notifications')}
+          />
+          <RoundedIconLink
+            icon={<Ionicons name="chatbubble" size={20} color="white" />}
+            onPress={() => router.push('/messages')}
+          />
+        </View>
+        <View style={{ paddingBottom: 32 }}>
+          <SpecialTitle>{i18n.t('formations')}</SpecialTitle>
+        </View>
         <FormationListing />
-      </SafeAreaView>
+      </View>
     );
   }
 

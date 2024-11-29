@@ -100,6 +100,7 @@ export default function AdviceListing () {
       )}
       keyExtractor={(item) => item.id.toString()}
       scrollEnabled={false}
+      showsVerticalScrollIndicator={false}
       ItemSeparatorComponent={() => (
         <View style={{ marginTop: 20 }}>
           <Divider />
