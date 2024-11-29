@@ -1,4 +1,4 @@
-import { ActivityVisibility, ActivityType, DogDominance, DogSex } from './enums';
+import { ActivityType, ActivityVisibility, DogDominance, DogSex } from './enums';
 
 export interface BaseEntity {
   id: number;
@@ -31,8 +31,12 @@ export interface Opinion extends BaseEntity {
 }
 
 export interface Formation extends BaseEntity {
+  name: string;
+  subject: string;
+  image: string;
   animator_name: string;
   price: number;
+  old_price?: number;
   description: string;
   place: string;
   date: Date;
@@ -62,6 +66,18 @@ export interface UserActivity extends BaseEntity {
 
 export interface MedicalForm extends BaseEntity {
   dog_id: number;
+}
+
+export interface Advice extends BaseEntity {
+  title: string;
+  description: string;
+  rating: number;
+  date: Date;
+  creator: {
+    id: number;
+    name: string;
+    image: string;
+  }
 }
 
 export interface Dog extends BaseEntity {

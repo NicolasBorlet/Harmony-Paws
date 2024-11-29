@@ -1,9 +1,9 @@
+import { Dog, DogDominance, DogSex } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import OpacityFadeIn from "../animate/opacity-fadeIn";
 import DogItemListing from "./dog-item-listing";
-import { Dog, DogDominance, DogSex } from "@/lib/api/types";
 
 const dogs: Dog[] = [
   {

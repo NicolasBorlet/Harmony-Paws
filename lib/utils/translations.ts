@@ -41,6 +41,11 @@ export const translations = {
         back: "Back",
         route: "Route",
         participants: "Participants",
+        about: "About",
+        advice: "Advice",
+        formation: "Formation",
+        formations: "Formations",
+        completeFormation: "Complete formation",
     },
     fr: {
         home: "Accueil",
@@ -84,5 +89,10 @@ export const translations = {
         back: "Retour",
         route: "Parcours",
         participants: "Participants",
+        about: "À propos",
+        advice: "Avis",
+        formation: "Formation",
+        formations: "Formations",
+        completeFormation: "Formation complète",
     },
 };

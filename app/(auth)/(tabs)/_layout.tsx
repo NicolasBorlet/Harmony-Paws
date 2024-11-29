@@ -1,6 +1,6 @@
 import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 import { Redirect, Tabs } from "expo-router";
 import { GestureResponderEvent, Pressable, Text } from "react-native";
@@ -75,7 +75,7 @@ export default function TabLayout() {
         options={{
           title: "Account",
           tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <FontAwesome5 name="user" size={24} color="black" />
+            <AntDesign name="user" size={24} color="black" />
           ),
         }}
       />

@@ -7,6 +7,12 @@ const SpecialTitle = styled.Text<{ color?: string }>`
   font-family: RoundsBlack;
 `;
 
+const ModulePrice = styled.Text<{ color?: string }>`
+  font-size: 16px;
+  color: ${props => props.color || '#fff'};
+  font-family: RoundsBlack;
+`;
+
 const CardTitle = styled.Text<{ color?: string }>`
   font-size: 28px;
   color: ${props => props.color || '#fff'};
@@ -26,6 +32,12 @@ const Body = styled.Text<{ color?: string }>`
 `;
 
 const BodyBold = styled.Text<{ color?: string }>`
+  font-size: 16px;
+  color: ${props => props.color || '#000'};
+  font-family: Montserrat_600SemiBold;
+`;
+
+const BodySemiBold = styled.Text<{ color?: string }>`
   font-size: 16px;
   color: ${props => props.color || '#000'};
   font-family: Montserrat_600SemiBold;
@@ -92,5 +104,5 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
 `;
 
 
-export { Body, BodyMedium, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, NavigationTitle, Small, SmallMedium, SmallSemiBold, SpecialTitle, SmallBold, BodyBold };
+export { Body, BodyBold, BodyMedium, BodySemiBold, CardTitle, ExtraSmall, ExtraSmallMedium, ExtraSmallSemiBold, Large, MessageListingAuthor, ModulePrice, NavigationTitle, Small, SmallBold, SmallMedium, SmallSemiBold, SpecialTitle };
 
