@@ -1,5 +1,6 @@
 import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
+import AdviceListing from "@/components/formation/adviceListing/advice-listing";
 import ModuleListing from "@/components/formation/moduleListing/module-listing";
 import SegmentedControl from "@/components/formation/segmented-control";
 import { BodyBold, ExtraSmallMedium, ModulePrice, NavigationTitle } from "@/components/ui/text";
@@ -131,7 +132,13 @@ export default function FormationDetails() {
                       </View>
                     <ModuleListing />
                   </ScrollView>
-                ) : <></>}
+                ) : 
+                  <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={{
+                    gap: 20,
+                  }}>
+                    <AdviceListing />
+                  </ScrollView>
+                }
               </View>
           </GestureDetector>
         </View>

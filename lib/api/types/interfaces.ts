@@ -68,6 +68,18 @@ export interface MedicalForm extends BaseEntity {
   dog_id: number;
 }
 
+export interface Advice extends BaseEntity {
+  title: string;
+  description: string;
+  rating: number;
+  date: Date;
+  creator: {
+    id: number;
+    name: string;
+    image: string;
+  }
+}
+
 export interface Dog extends BaseEntity {
   owner_id: number;
   breed_id: number;
