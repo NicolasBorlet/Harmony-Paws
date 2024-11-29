@@ -84,11 +84,13 @@ export default function FormationDetails() {
           onTabChange={onTabChange}
           language={i18n.locale}
         />
-        <GestureDetector gesture={gesture}>
-          <View style={{ flex: 1, paddingHorizontal: 20 }}>
-            {selectedTab === 'about' ? <ModuleListing /> : <></>}
-          </View>
-        </GestureDetector>
+        <View style={{ flex: 1, paddingHorizontal: 20 }}>
+          <GestureDetector gesture={gesture}>
+              <View style={{ flex: 1 }}>
+                {selectedTab === 'about' ? <ModuleListing /> : <></>}
+              </View>
+          </GestureDetector>
+        </View>
       </View>
     </GestureHandlerRootView>
   );
