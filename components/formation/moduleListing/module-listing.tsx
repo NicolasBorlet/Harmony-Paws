@@ -1,7 +1,8 @@
 import { ColumnItem } from "@/components/ui/ColumnItem";
 import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
-import { View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, View } from "react-native";
 import ModuleListingItem from "./module-listing-item";
 
 const modules: Formation[] = [
@@ -61,7 +62,13 @@ export default function ModuleListing () {
       numColumns={numColumns}
       renderItem={({ index, item }) => (
         <ColumnItem index={index} numColumns={numColumns}>
-          <ModuleListingItem module={item} />
+          <Pressable onPress={() => router.push(`/module/${item.id}`)} style={{
+            flex: 1,
+            width: "100%",
+            height: "100%",
+          }}>
+            <ModuleListingItem module={item} />
+          </Pressable>
         </ColumnItem>
       )}
       keyExtractor={(item) => item.id.toString()}
