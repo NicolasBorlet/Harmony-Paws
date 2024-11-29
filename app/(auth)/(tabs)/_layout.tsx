@@ -3,7 +3,7 @@ import { useSession } from "@/app/ctx";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 import { Redirect, Tabs } from "expo-router";
-import { GestureResponderEvent, Pressable, Text } from "react-native";
+import { GestureResponderEvent, Pressable, Text, View } from "react-native";
 
 type TabBarIconProps = {
   focused: boolean;
@@ -68,6 +68,25 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }: TabBarIconProps) => (
             <Ionicons name="information-circle-outline" size={24} color="black" />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="(add)"
+        options={{
+          tabBarIcon: ({ focused }: TabBarIconProps) => (
+            <View style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 50,
+              width: 50,
+              borderRadius: 999,
+              backgroundColor: '#F7A400',
+              boxShadow: '0 4px 12px rgba(247, 164, 0, 0.5)',
+            }}>
+              <AntDesign name="plus" size={24} color="white" />
+            </View>
+          ),
+          tabBarLabel: () => null,
         }}
       />
       <Tabs.Screen
