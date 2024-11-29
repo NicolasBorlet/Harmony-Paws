@@ -96,6 +96,9 @@ export default function ModuleListing () {
           )}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
+          ItemSeparatorComponent={() => (
+            <View style={{ height: 20 }} />
+          )}
         />
       </ScrollView>
     </View>
