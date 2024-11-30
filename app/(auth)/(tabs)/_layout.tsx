@@ -75,6 +75,7 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ focused }: TabBarIconProps) => (
             <View style={{
+              marginBottom: 20,
               alignItems: 'center',
               justifyContent: 'center',
               height: 50,

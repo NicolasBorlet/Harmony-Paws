@@ -63,7 +63,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
       <View>
-        <View style={{ paddingHorizontal: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
+        <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', gap: 12 }}>
           <RoundedIconLink
             icon={<Ionicons name="notifications" size={20} color="white" />}
             onPress={() => router.push('/notifications')}
@@ -73,7 +73,7 @@ export default function HomeScreen() {
             onPress={() => router.push('/messages')}
           />
         </View>
-        <View style={{ paddingBottom: 32, paddingHorizontal: 20 }}>
+        <View style={{ paddingBottom: 32, paddingHorizontal: 16 }}>
           <SpecialTitle>{i18n.t('welcome')} Taico</SpecialTitle>
           <Body>{i18n.t('timeToRide')}</Body>
         </View>
