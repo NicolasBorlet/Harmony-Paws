@@ -1,6 +1,6 @@
 import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 import { Redirect, Tabs } from "expo-router";
 import { GestureResponderEvent, Pressable, Text, View } from "react-native";
@@ -87,6 +87,16 @@ export default function TabLayout() {
             </View>
           ),
           tabBarLabel: () => null,
+        }}
+      />
+      <Tabs.Screen
+        name="(medical)"
+        options={{
+          title: "Medical",
+          tabBarIcon: ({ focused }: TabBarIconProps) => (
+            <FontAwesome5
+             name="clinic-medical" size={24} color="black" />
+          ),
         }}
       />
       <Tabs.Screen
