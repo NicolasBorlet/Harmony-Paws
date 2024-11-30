@@ -1,5 +1,5 @@
-import { Body } from "@/components/ui/text";
-import { SafeAreaView } from "react-native";
+import { Body } from '@/components/ui/text'
+import { SafeAreaView } from 'react-native'
 
 export default function Add() {
   return (

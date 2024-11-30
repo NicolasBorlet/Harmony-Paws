@@ -1,4 +1,4 @@
-import { translations } from '@/lib/utils/translations';
+import { translations } from '@/lib/utils/translations'
 import {
   Montserrat_100Thin,
   Montserrat_200ExtraLight,
@@ -10,32 +10,32 @@ import {
   Montserrat_800ExtraBold,
   Montserrat_900Black,
   useFonts,
-} from '@expo-google-fonts/montserrat';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { getLocales } from 'expo-localization';
-import { Slot } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite';
-import { I18n } from 'i18n-js';
-import { useEffect } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import 'react-native-reanimated';
-import { SessionProvider } from './ctx';
+} from '@expo-google-fonts/montserrat'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { getLocales } from 'expo-localization'
+import { Slot } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { SQLiteProvider, type SQLiteDatabase } from 'expo-sqlite'
+import { I18n } from 'i18n-js'
+import { useEffect } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import 'react-native-reanimated'
+import { SessionProvider } from './ctx'
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
-} from "expo-router";
+  ErrorBoundary,
+} from 'expo-router'
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "login",
-};
+  initialRouteName: 'login',
+}
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
-export const i18n = new I18n(translations);
+export const i18n = new I18n(translations)
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -49,29 +49,29 @@ export default function RootLayout() {
     Montserrat_700Bold,
     Montserrat_800ExtraBold,
     Montserrat_900Black,
-  });
+  })
 
-  i18n.locale = getLocales()[0].languageCode ?? 'en';
-  i18n.enableFallback = true;
+  i18n.locale = getLocales()[0].languageCode ?? 'en'
+  i18n.enableFallback = true
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+    if (error) throw error
+  }, [error])
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      SplashScreen.hideAsync()
     }
-  }, [loaded]);
+  }, [loaded])
 
   if (!loaded) {
-    return null;
+    return null
   }
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SQLiteProvider databaseName="harmonypaws.db" onInit={migrateDbIfNeeded}>
+      <SQLiteProvider databaseName='harmonypaws.db' onInit={migrateDbIfNeeded}>
         <SessionProvider>
           <BottomSheetModalProvider>
             <Slot />
@@ -79,7 +79,7 @@ export default function RootLayout() {
         </SessionProvider>
       </SQLiteProvider>
     </GestureHandlerRootView>
-  );
+  )
 }
 
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
@@ -105,7 +105,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
         value TEXT PRIMARY KEY
       );
       INSERT OR IGNORE INTO dog_dominance (value) VALUES ('neutral'), ('dominant'), ('dominated');
-    `);
+    `)
 
     // Create main tables
     await db.execAsync(`
@@ -205,11 +205,11 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
         FOREIGN KEY (dominance) REFERENCES dog_dominance(value),
         FOREIGN KEY (sex) REFERENCES dog_sex(value)
       );
-    `);
+    `)
 
-    console.log('Database migration completed successfully');
+    console.log('Database migration completed successfully')
   } catch (error) {
-    console.error('Error during database migration:', error);
-    throw error;
+    console.error('Error during database migration:', error)
+    throw error
   }
 }

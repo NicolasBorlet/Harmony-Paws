@@ -1,20 +1,30 @@
-import { i18n } from '@/app/_layout';
-import Back from '@/components/back-button';
-import BodyTitle from '@/components/bodyTitle/body-title';
-import MasterDogCardComponent from '@/components/dog/master-dog-card';
-import Block from '@/components/grid/Block';
-import ParallaxScrollView from '@/components/parallax-scrollview';
-import RideItemListing from '@/components/rideListing/ride-item-listing';
-import { StandardButton } from '@/components/ui/button';
-import Divider from '@/components/ui/divider';
-import { Body, BodyBold, BodyMedium, CardTitle, ExtraSmallMedium } from '@/components/ui/text';
-import { GridItem, GridItemBackground } from '@/components/ui/view';
-import { DogDominance } from '@/lib/api/types';
-import { router } from 'expo-router';
-import { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { i18n } from '@/app/_layout'
+import Back from '@/components/back-button'
+import BodyTitle from '@/components/bodyTitle/body-title'
+import MasterDogCardComponent from '@/components/dog/master-dog-card'
+import Block from '@/components/grid/Block'
+import ParallaxScrollView from '@/components/parallax-scrollview'
+import RideItemListing from '@/components/rideListing/ride-item-listing'
+import { StandardButton } from '@/components/ui/button'
+import Divider from '@/components/ui/divider'
+import {
+  Body,
+  BodyBold,
+  BodyMedium,
+  CardTitle,
+  ExtraSmallMedium,
+} from '@/components/ui/text'
+import { GridItem, GridItemBackground } from '@/components/ui/view'
+import { DogDominance } from '@/lib/api/types'
+import { router } from 'expo-router'
+import { useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const dog = {
   id: 1,
@@ -23,7 +33,8 @@ const dog = {
   image: 'https://picsum.photos/300',
   sex: 'Mâle',
   dominance: DogDominance.DOMINANT,
-  description: 'Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l\'écoute de ses amis.',
+  description:
+    "Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l'écoute de ses amis.",
   owner: {
     name: 'Emma Swane',
     image: 'https://picsum.photos/300',
@@ -59,47 +70,46 @@ const dog = {
     {
       id: 7,
       name: 'Joueur',
-    }
+    },
   ],
   nextRide: {
     image: 'https://picsum.photos/300',
     name: 'Balade 1',
     date: 'Lundi 1er avril',
     time: '14h30',
-  }
-};
+  },
+}
 
 export default function DogDetails() {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
-  const bottomPosition = useSharedValue(-100);
-  const opacity = useSharedValue(0);
+  const bottomPosition = useSharedValue(-100)
+  const opacity = useSharedValue(0)
 
   useEffect(() => {
-    buttonAnimation();
-  }, []);
-
+    buttonAnimation()
+  }, [])
 
   const buttonAnimation = () => {
-  // Animate the button to slide up
+    // Animate the button to slide up
     bottomPosition.value = withSpring(insets.bottom + 16, {
       damping: 20,
       stiffness: 90,
-    });
+    })
 
     // Animate the button opacity
     opacity.value = withSpring(1, {
       damping: 20,
       stiffness: 90,
-    });
-  };
+    })
+  }
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
       bottom: bottomPosition.value,
       opacity: opacity.value,
-    };
-  });
+    }
+  })
 
   return (
     <>
@@ -107,12 +117,18 @@ export default function DogDetails() {
       <ParallaxScrollView headerImage={dog.image}>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
-            <CardTitle color='#000000'>{dog.name}, {dog.age} ans</CardTitle>
+            <CardTitle color='#000000'>
+              {dog.name}, {dog.age} ans
+            </CardTitle>
           </View>
           <View>
-            <Block row wrap='nowrap' style={{
-              gap: 8,
-            }}>
+            <Block
+              row
+              wrap='nowrap'
+              style={{
+                gap: 8,
+              }}
+            >
               <GridItemBackground>
                 <BodyBold color='#663399'>{dog.breed.name}</BodyBold>
               </GridItemBackground>
@@ -125,19 +141,25 @@ export default function DogDetails() {
             </Block>
           </View>
           <Divider />
-            <View style={styles.infoContainer}>
+          <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('aboutOf')} ${dog.name}`} />
-            <Body>
-              {dog.description || ''}
-            </Body>
-            </View>
+            <Body>{dog.description || ''}</Body>
+          </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('behavior')} />
-            <Block flex={0} row wrap="wrap" style={{ gap: 12 }} justifyContent='space-between'>
-              {dog.behavors.map((behavor) => (
+            <Block
+              flex={0}
+              row
+              wrap='wrap'
+              style={{ gap: 12 }}
+              justifyContent='space-between'
+            >
+              {dog.behavors.map(behavor => (
                 <GridItem key={behavor.id}>
-                  <ExtraSmallMedium color='#F49819'>{behavor.name}</ExtraSmallMedium>
+                  <ExtraSmallMedium color='#F49819'>
+                    {behavor.name}
+                  </ExtraSmallMedium>
                 </GridItem>
               ))}
             </Block>
@@ -160,7 +182,7 @@ export default function DogDetails() {
         </StandardButton>
       </Animated.View>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -205,4 +227,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 20,
   },
-});
+})

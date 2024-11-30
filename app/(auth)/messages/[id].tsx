@@ -1,16 +1,22 @@
-import { i18n } from '@/app/_layout';
-import Back from '@/components/back-button';
-import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text';
-import { AntDesign, Feather } from '@expo/vector-icons';
-import { Image } from 'expo-image';
-import { useCallback, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Composer, GiftedChat, IMessage, InputToolbar, Send } from 'react-native-gifted-chat';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { i18n } from '@/app/_layout'
+import Back from '@/components/back-button'
+import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text'
+import { AntDesign, Feather } from '@expo/vector-icons'
+import { Image } from 'expo-image'
+import { useCallback, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import {
+  Composer,
+  GiftedChat,
+  IMessage,
+  InputToolbar,
+  Send,
+} from 'react-native-gifted-chat'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const userData = {
-  avatar: "https://picsum.photos/300",
-  name: "Emma Swane",
+  avatar: 'https://picsum.photos/300',
+  name: 'Emma Swane',
   status: 1,
 }
 
@@ -25,7 +31,7 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 2,
@@ -37,7 +43,7 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 3,
@@ -49,11 +55,11 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 4,
-    text: "Oui, il y en a un dans le 11ème qui est pas mal du tout. Bien plac, lumineux, dans mon budget",
+    text: 'Oui, il y en a un dans le 11ème qui est pas mal du tout. Bien plac, lumineux, dans mon budget',
     createdAt: new Date(Date.now() - 3600000 * 22),
     user: {
       _id: 1,
@@ -61,7 +67,7 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 5,
@@ -73,7 +79,7 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 6,
@@ -85,11 +91,11 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 7,
-    text: "Voilà les photos du salon et de la chambre",
+    text: 'Voilà les photos du salon et de la chambre',
     createdAt: new Date(Date.now() - 3600000 * 21),
     user: {
       _id: 1,
@@ -98,7 +104,7 @@ const messageData = [
     },
     image: 'https://picsum.photos/400',
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 8,
@@ -110,7 +116,7 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 9,
@@ -122,11 +128,11 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 10,
-    text: "Je croise les doigts pour toi aussi ! Tiens moi au courant",
+    text: 'Je croise les doigts pour toi aussi ! Tiens moi au courant',
     createdAt: new Date(Date.now() - 3600000 * 19),
     user: {
       _id: 2,
@@ -134,7 +140,7 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 11,
@@ -146,11 +152,11 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 12,
-    text: "Au fait, si jamais ça marche pas, ma cousine cherche aussi à louer son appart",
+    text: 'Au fait, si jamais ça marche pas, ma cousine cherche aussi à louer son appart',
     createdAt: new Date(Date.now() - 3600000),
     user: {
       _id: 2,
@@ -158,11 +164,11 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 13,
-    text: "Ah bon ? Il est dans quel quartier ?",
+    text: 'Ah bon ? Il est dans quel quartier ?',
     createdAt: new Date(Date.now() - 3000),
     user: {
       _id: 1,
@@ -170,11 +176,11 @@ const messageData = [
       avatar: 'https://picsum.photos/301',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 14,
-    text: "Dans le 10ème, près du canal Saint-Martin",
+    text: 'Dans le 10ème, près du canal Saint-Martin',
     createdAt: new Date(Date.now() - 2000),
     user: {
       _id: 2,
@@ -182,7 +188,7 @@ const messageData = [
       avatar: 'https://picsum.photos/300',
     },
     sent: true,
-    received: true
+    received: true,
   },
   {
     _id: 15,
@@ -195,53 +201,56 @@ const messageData = [
     },
     sent: true,
     received: false,
-    pending: true
-  }
-];
+    pending: true,
+  },
+]
 
 export default function MessageDetail() {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
-  const [messages, setMessages] = useState<IMessage[]>(messageData);
-  const [inputText, setInputText] = useState('');
+  const [messages, setMessages] = useState<IMessage[]>(messageData)
+  const [inputText, setInputText] = useState('')
 
   const onSend = useCallback((newMessages: IMessage[]) => {
     setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, newMessages)
-    );
-    setInputText('');
-  }, []);
+      GiftedChat.append(previousMessages, newMessages),
+    )
+    setInputText('')
+  }, [])
 
   const renderInputToolbar = (props: any) => (
     <InputToolbar
       {...props}
-      containerStyle={{ ...styles.inputContainer, paddingBottom: insets.bottom }}
+      containerStyle={{
+        ...styles.inputContainer,
+        paddingBottom: insets.bottom,
+      }}
       primaryStyle={styles.inputPrimary}
     />
-  );
+  )
 
   const renderComposer = (props: any) => (
     <View style={styles.composerContainer}>
       <View style={styles.plusButton}>
-        <AntDesign name="plus" size={20} color="#8B8B8B" />
+        <AntDesign name='plus' size={20} color='#8B8B8B' />
       </View>
       <Composer
         {...props}
         textInputStyle={styles.composer}
-        placeholder="Message"
+        placeholder='Message'
       />
       {props.text.trim() ? (
         <Send {...props} containerStyle={styles.sendContainer}>
           <View style={styles.sendButton}>
-            <Feather name="send" size={24} color="white" />
+            <Feather name='send' size={24} color='white' />
           </View>
         </Send>
       ) : null}
     </View>
-  );
+  )
 
   const renderBubble = (props: any) => {
-    const isUser = props.currentMessage.user._id === 1;
+    const isUser = props.currentMessage.user._id === 1
     return (
       <View
         style={{
@@ -257,33 +266,57 @@ export default function MessageDetail() {
           {props.currentMessage.text}
         </Small>
       </View>
-    );
-  };
+    )
+  }
 
   return (
     // <KeyboardAvoidingView
     //     style={styles.container}
     //     behavior="padding"
     // >
-      <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
-        <View style={{ gap: 24, display: "flex", flexDirection: "column", paddingHorizontal: 20, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: "rgba(102, 51, 153, 0.1)" }}>
-          <View
+    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
+      <View
+        style={{
+          gap: 24,
+          display: 'flex',
+          flexDirection: 'column',
+          paddingHorizontal: 20,
+          paddingBottom: 12,
+          borderBottomWidth: 1,
+          borderBottomColor: 'rgba(102, 51, 153, 0.1)',
+        }}
+      >
+        <View
           style={{
-            display: "flex",
-            flexDirection: "row",
+            display: 'flex',
+            flexDirection: 'row',
             gap: 10,
-            alignItems: "center",
-            justifyContent: "space-between",
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          <View style={{ display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}>
-            <Back position="relative" left="0" />
-            <View style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <NavigationTitle color="#000">{userData.name}</NavigationTitle>
-              <ExtraSmallMedium color="#1ED325">{userData.status === 0 ? `${i18n.t('disconnect')}` : `${i18n.t('online')}` }</ExtraSmallMedium>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+            }}
+          >
+            <Back position='relative' left='0' />
+            <View style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <NavigationTitle color='#000'>{userData.name}</NavigationTitle>
+              <ExtraSmallMedium color='#1ED325'>
+                {userData.status === 0
+                  ? `${i18n.t('disconnect')}`
+                  : `${i18n.t('online')}`}
+              </ExtraSmallMedium>
             </View>
           </View>
-          <Image source={{ uri: userData.avatar }} style={{ width: 60, height: 60, borderRadius: 100 }} />
+          <Image
+            source={{ uri: userData.avatar }}
+            style={{ width: 60, height: 60, borderRadius: 100 }}
+          />
         </View>
       </View>
       <GiftedChat
@@ -299,21 +332,21 @@ export default function MessageDetail() {
         renderComposer={renderComposer}
         renderBubble={renderBubble}
         messagesContainerStyle={{
-          paddingHorizontal: 12
+          paddingHorizontal: 12,
         }}
         minInputToolbarHeight={70}
         listViewProps={{
           showsVerticalScrollIndicator: false,
           keyboardDismissMode: 'on-drag',
-          keyboardShouldPersistTaps: 'handled'
+          keyboardShouldPersistTaps: 'handled',
         }}
         text={inputText}
         onInputTextChanged={text => setInputText(text)}
         alwaysShowSend={false}
       />
-      </View>
+    </View>
     // </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -369,4 +402,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+})
