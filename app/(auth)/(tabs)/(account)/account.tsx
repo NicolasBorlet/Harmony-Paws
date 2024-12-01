@@ -2,6 +2,10 @@ import { useSession } from '@/app/ctx'
 import { supabase } from '@/lib/supabase'
 import { useEffect, useState } from 'react'
 import { Alert, Button, StyleSheet, TextInput, View } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
+
+// Initialize MMKV
+export const storage = new MMKV()
 
 export default function AccountScreen() {
   const { session } = useSession()
@@ -9,6 +13,10 @@ export default function AccountScreen() {
   const [username, setUsername] = useState('')
   const [website, setWebsite] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+
+  useEffect(() => {
+    console.log('Onboarding', storage.getBoolean('onBoarding'))
+  }, [])
 
   useEffect(() => {
     if (session) getProfile()
@@ -107,6 +115,13 @@ export default function AccountScreen() {
 
       <View style={styles.verticallySpaced}>
         <Button title='Sign Out' onPress={() => supabase.auth.signOut()} />
+      </View>
+
+      <View style={styles.verticallySpaced}>
+        <Button
+          title='Remove onBoarding'
+          onPress={() => storage.set('onBoarding', false)}
+        />
       </View>
     </View>
   )

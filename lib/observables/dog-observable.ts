@@ -1,6 +1,14 @@
 import { observable } from '@legendapp/state'
-import { syncedSupabase } from '@legendapp/state/sync-plugins/supabase'
+import { configureSyncedSupabase, syncedSupabase } from '@legendapp/state/sync-plugins/supabase'
+import { v4 as uuidv4 } from "uuid"
 import { supabase } from '../supabase'
+
+// provide a function to generate ids locally
+const generateId = () => uuidv4()
+configureSyncedSupabase({
+    generateId
+})
+const uid = ''
 
 export const dogs$ = observable(syncedSupabase({
   supabase,
@@ -9,7 +17,7 @@ export const dogs$ = observable(syncedSupabase({
   // Select only id and text fields
   select: (from) => from.select('id,name,image'),
   // Filter by the current user
-  // filter: (select) => select.eq('user_id', uid),
+  filter: (select) => select.eq('user_id', uid),
   // Don't allow delete
   actions: ['read', 'create', 'update'],
   // Realtime filter by user_id
