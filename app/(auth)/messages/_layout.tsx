@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Stack } from 'expo-router'
 
 export default function MessagesLayout() {
   return (
@@ -7,14 +7,17 @@ export default function MessagesLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="index"/>
-      <Stack.Screen name="new" options={{ headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name='index' />
       <Stack.Screen
-        name="[id]"
+        name='new'
+        options={{ headerShown: false, presentation: 'modal' }}
+      />
+      <Stack.Screen
+        name='[id]'
         options={{
           headerShown: false,
         }}
       />
     </Stack>
-  );
+  )
 }

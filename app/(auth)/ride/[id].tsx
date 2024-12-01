@@ -12,7 +12,7 @@ import {
   BodyBold,
   BodyMedium,
   CardTitle,
-  ExtraSmallSemiBold
+  ExtraSmallSemiBold,
 } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { router } from 'expo-router'
