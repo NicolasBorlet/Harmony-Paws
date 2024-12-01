@@ -1,34 +1,23 @@
-import { Dog, DogDominance, DogSex } from "@/lib/api/types";
-import { FlashList } from "@shopify/flash-list";
-import { router } from "expo-router";
-import { Pressable, View } from "react-native";
-import OpacityFadeIn from "../animate/opacity-fadeIn";
-import DogItemListing from "./dog-item-listing";
-
-const dogs: Dog[] = [
-  {
-    id: 1,
-    owner_id: 1,
-    breed_id: 3,
-    name: "Taico",
-    age: 30,
-    image: "https://picsum.photos/300",
-    description: "Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l'écoute de ses amis.",
-    dominance: DogDominance.DOMINANT,
-    sex: DogSex.MALE,
-    created_at: new Date(),
-    updated_at: new Date()
-  },
-];
+import { Dog } from '@/lib/api/types'
+import { dogs$ } from '@/lib/observables/dog-observable'
+import { FlashList } from '@shopify/flash-list'
+import { router } from 'expo-router'
+import { Pressable, View } from 'react-native'
+import OpacityFadeIn from '../animate/opacity-fadeIn'
+import DogItemListing from './dog-item-listing'
 
 export default function DogListing() {
+  const dogs = dogs$.get()
+
+  console.log('Dogs value:', dogs)
+
   const renderDogItem = ({ item }: { item: Dog }) => (
     <OpacityFadeIn>
       <Pressable onPress={() => router.push(`/dog/${item.id}`)}>
-        <DogItemListing />
+        <DogItemListing dog={item} />
       </Pressable>
     </OpacityFadeIn>
-  );
+  )
 
   return (
     <FlashList
@@ -45,5 +34,5 @@ export default function DogListing() {
       //   />
       // }
     />
-  );
+  )
 }
