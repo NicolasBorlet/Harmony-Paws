@@ -1,6 +1,7 @@
 import { AuthError, Session } from '@supabase/supabase-js'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { session$ } from '../lib/observables/session-observable'
 import { supabase } from '../lib/supabase'
 
 const AuthContext = React.createContext<{
@@ -34,6 +35,25 @@ export function SessionProvider(props: React.PropsWithChildren) {
   useEffect(() => {
     console.log('SessionProvider')
     console.log(session)
+    if (session && session.user.email && session.user.id && session.user.last_sign_in_at) {
+      // Update session observable when session changes
+      session$.set({
+        id: session.user.id,
+        email: session.user.email,
+        created_at: session.user.created_at,
+        last_sign_in_at: session.user.last_sign_in_at,
+        access_token: session.access_token,
+      })
+    } else {
+      // Clear session when logged out
+      session$.set({
+        id: '',
+        email: '',
+        created_at: '',
+        last_sign_in_at: '',
+        access_token: '',
+      })
+    }
   }, [session])
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 {
   "workbench.startupEditor": "none",
   "workbench.iconTheme": "moxer-icons",
-  "workbench.colorTheme": "Quiet Light",
+  "workbench.colorTheme": "Solarized Light",
   "workbench.settings.editor": "json",
   "breadcrumbs.enabled": false,
   "explorer.compactFolders": false,
@@ -71,7 +71,7 @@
     "**/node_modules": true,
     "**/.husky": true,
     "**/.github": true,
-    "**/.gitignore": true,
+    "**/.gitignore": false,
     "**/dist": true,
     "**/.next": true,
     "**/*.tsbuildinfo": true,
