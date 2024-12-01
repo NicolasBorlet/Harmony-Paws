@@ -1,9 +1,8 @@
 import { Body } from '@/components/ui/text'
-import { useEffect } from 'react'
-import { Button } from 'react-native'
-import { MMKV } from 'react-native-mmkv'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
+import { useEffect } from 'react'
+import { Button, StyleSheet, View } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
 
 // Initialize MMKV
 export const storage = new MMKV()
@@ -16,7 +15,7 @@ export default function OnBoarding() {
   }, [onboarding])
 
   return (
-    <SafeAreaView>
+    <View style={styles.container}>
       <Body>Onboarding</Body>
       <Button
         title='set onBoarding'
@@ -25,6 +24,15 @@ export default function OnBoarding() {
           router.replace('/(auth)/(tabs)/(home)')
         }}
       />
-    </SafeAreaView>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#663399',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})
