@@ -1,3 +1,4 @@
+import { OnboardingItem } from '@/type';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
@@ -7,7 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 interface PaginationProps {
-  data: any[];
+  data: OnboardingItem[];
   x: { value: number };
   screenWidth: number;
 }

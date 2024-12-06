@@ -1,11 +1,12 @@
 import CustomButton from '@/components/onboarding/CustomBottom';
 import Pagination from '@/components/onboarding/Pagination';
 import { OnBoardingTitle } from '@/components/ui/text';
+import { OnboardingItem } from '@/type';
 import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const data = [
+const data: OnboardingItem[] = [
   {
     id: 1,
     image: require('../../assets/images/onboarding-dog-1.png'),
@@ -47,7 +48,7 @@ export default function OnBoarding() {
   });
 
   // eslint-disable-next-line react/no-unstable-nested-components
-  const RenderItem = ({ item, index }: { item: any, index: number }) => {
+  const RenderItem = ({ item, index }: { item: OnboardingItem, index: number }) => {
     const imageAnimationStyle = useAnimatedStyle(() => {
       const opacityAnimation = interpolate(
         x.value,
