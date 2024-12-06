@@ -1,12 +1,18 @@
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium, SpecialTitle } from "@/components/ui/text";
-import { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { Image } from "expo-image";
+import { router } from "expo-router";
+import { useCallback, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
+import { MMKV } from 'react-native-mmkv';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { i18n } from "../_layout";
 
+const storage = new MMKV()
+
 export default function AccountCreated() {
+  const onboarding = storage.getBoolean('onBoarding')
   const insets = useSafeAreaInsets()
 
   const bottomPosition = useSharedValue(-100)
@@ -37,14 +43,22 @@ export default function AccountCreated() {
     }
   })
 
+  const handleSkip = useCallback(() => {
+    storage.set('onBoarding', true)
+    router.replace('/')
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
-      <SpecialTitle>Ton compte est cree !</SpecialTitle>
+      <View style={styles.itemContainer}>
+        <SpecialTitle>Ton compte est cree !</SpecialTitle>
+        <Image source={require('../../assets/images/onboarding-dog-2.png')} style={{ width: 250, height: 500 }} contentFit="contain" />
+      </View>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={() => { }}>
           <BodyMedium color='#fff'>{i18n.t('createDogProfile')}</BodyMedium>
         </StandardButton>
-        <StandardButton outlined onPress={() => { }}>
+        <StandardButton outlined onPress={handleSkip}>
           <BodyMedium color='#F7A400'>{i18n.t('skipStep')}</BodyMedium>
         </StandardButton>
       </Animated.View>
@@ -63,5 +77,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 20,
     gap: 20
+  },
+  itemContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
 });

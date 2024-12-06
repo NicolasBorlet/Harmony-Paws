@@ -2,12 +2,8 @@ import CustomButton from '@/components/onboarding/CustomBottom';
 import Pagination from '@/components/onboarding/Pagination';
 import { OnBoardingTitle } from '@/components/ui/text';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
-import { MMKV } from 'react-native-mmkv';
 import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-// Initialize MMKV
-export const storage = new MMKV()
 
 const data = [
   {
@@ -33,8 +29,6 @@ const data = [
 ];
 
 export default function OnBoarding() {
-  const onboarding = storage.getBoolean('onBoarding')
-
   const { width: SCREEN_WIDTH } = useWindowDimensions();
   const flatListRef = useAnimatedRef(null);
   const x = useSharedValue(0);
