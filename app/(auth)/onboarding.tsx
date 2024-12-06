@@ -78,7 +78,7 @@ export default function OnBoarding() {
       return {
         opacity: opacityAnimation,
         width: SCREEN_WIDTH * 0.8,
-        height: SCREEN_WIDTH * 0.8,
+        height: SCREEN_WIDTH * 1.0,
         transform: [{ translateY: translateYAnimation }],
       };
     });
