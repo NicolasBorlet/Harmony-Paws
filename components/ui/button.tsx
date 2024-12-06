@@ -42,24 +42,25 @@ const MapButton = styled.Pressable`
   margin-right: auto;
 `;
 
-const StandardButton = styled.Pressable`
-  background-color: #F49819;
+const StandardButton = styled.Pressable<{ outlined?: boolean }>`
+  background-color: ${props => props.outlined ? 'transparent' : '#F49819'};
+  border: ${props => props.outlined ? '1px solid #F49819' : 'none'};
   border-radius: 10px;
   padding: 14px;
   width: 100%;
   align-items: center;
   justify-content: center;
   ${Platform.select({
-    ios: `
+  ios: props => props.outlined ? '' : `
       shadow-color: #000;
       shadow-offset: 0px 2px;
       shadow-opacity: 0.25;
       shadow-radius: 3.84px;
     `,
-    android: `
+  android: props => props.outlined ? '' : `
       elevation: 5;
     `
-  })}
+})};
 `;
 
 const SmallButton = styled.Pressable`

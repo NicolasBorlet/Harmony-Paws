@@ -1,7 +1,7 @@
 {
   "workbench.startupEditor": "none",
   "workbench.iconTheme": "moxer-icons",
-  "workbench.colorTheme": "Quiet Light",
+  "workbench.colorTheme": "Monokai Dimmed",
   "workbench.settings.editor": "json",
   "breadcrumbs.enabled": false,
   "explorer.compactFolders": false,
@@ -50,12 +50,10 @@
   "typescript.updateImportsOnFileMove.enabled": "never",
   "explorer.confirmDragAndDrop": false,
   "javascript.updateImportsOnFileMove.enabled": "never",
-
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "always"
   },
-
   // used by the toggle excluded files extension
   "files.exclude": {
     "**/.open-next": true,

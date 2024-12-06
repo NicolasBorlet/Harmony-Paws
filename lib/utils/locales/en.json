@@ -44,5 +44,7 @@
   "advice": "Advice",
   "formation": "Formation",
   "formations": "Formations",
-  "completeFormation": "Complete formation"
+  "completeFormation": "Complete formation",
+  "createDogProfile": "Create my dog profile",
+  "skipStep": "Skip this step"
 }
