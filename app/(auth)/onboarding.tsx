@@ -114,7 +114,9 @@ export default function OnBoarding() {
         <Animated.View style={textAnimationStyle}>
           <OnBoardingTitle color="#fff" style={{ textAlign: 'center', paddingHorizontal: 20 }}>{item.title}</OnBoardingTitle>
         </Animated.View>
-        <Animated.Image source={item.image} style={imageAnimationStyle} />
+        <Animated.Image source={item.image} style={[imageAnimationStyle, {
+          resizeMode: 'contain',
+        }]} />
       </View>
     );
   };
