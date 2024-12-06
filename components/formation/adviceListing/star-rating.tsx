@@ -1,12 +1,30 @@
 import { AntDesign } from "@expo/vector-icons";
 import { View } from "react-native";
+import { memo, useMemo } from "react";
 
-export default function StarRating ({ rating }: { rating: number }) {
+const StarRating = memo(function StarRating({ rating }: { rating: number }) {
+  const stars = useMemo(() => {
+    return [1, 2, 3, 4, 5].map((i) => (
+      <AntDesign 
+        key={i} 
+        name="star" 
+        size={12} 
+        color={i <= rating ? "#F7A400" : "black"} 
+      />
+    ));
+  }, [rating]);
+
+  const containerStyle = useMemo(() => ({ 
+    display: "flex", 
+    flexDirection: "row", 
+    gap: 4 
+  }), []);
+
   return (
-    <View style={{ display: "flex", flexDirection: "row", gap: 4 }}>
-      {[1, 2, 3, 4, 5].map((i) => (
-        <AntDesign keyExtractor={i} name="star" size={12} color={i <= rating ? "#F7A400" : "black"} />
-      ))}
+    <View style={containerStyle}>
+      {stars}
     </View>
-  )
-};
+  );
+});
+
+export default StarRating;

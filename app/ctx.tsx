@@ -1,8 +1,12 @@
 import { AuthError, Session } from '@supabase/supabase-js'
 import { router } from 'expo-router'
 import React, { useEffect, useState } from 'react'
+import { MMKV } from 'react-native-mmkv'
 import { session$ } from '../lib/observables/session-observable'
 import { supabase } from '../lib/supabase'
+
+// Initialize MMKV
+export const storage = new MMKV()
 
 const AuthContext = React.createContext<{
   signIn: (email: string, password: string) => Promise<AuthError | null>
@@ -59,11 +63,23 @@ export function SessionProvider(props: React.PropsWithChildren) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
+      if (session) {
+        const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+        if (!hasCompletedOnboarding) {
+          router.replace('/(auth)/onboarding')
+        }
+      }
       setIsLoading(false)
     })
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
+      if (session) {
+        const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+        if (!hasCompletedOnboarding) {
+          router.replace('/(auth)/onboarding')
+        }
+      }
     })
   }, [])
 
@@ -74,7 +90,15 @@ export function SessionProvider(props: React.PropsWithChildren) {
         password,
       })
       if (!error) {
-        router.replace('/(auth)/(tabs)/(home)')
+        const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+
+        console.log('hasCompletedOnboarding', hasCompletedOnboarding)
+
+        if (hasCompletedOnboarding) {
+          router.replace('/(auth)/(tabs)/(home)')
+        } else {
+          router.replace('/(auth)/onboarding')
+        }
       }
       return error
     },
