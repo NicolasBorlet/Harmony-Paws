@@ -58,8 +58,10 @@ const CustomButton = ({ flatListRef, flatListIndex, dataLength }) => {
         }
       }}>
       <Animated.View style={[styles.container, buttonAnimationStyle]}>
-        <Animated.Text style={[styles.textButton, textAnimationStyle]}>
-          Get Started
+        <Animated.Text style={[styles.textButton, textAnimationStyle, {
+          fontFamily: 'Montserrat_500Medium'
+        }]}>
+          Commencer
         </Animated.Text>
         <Animated.Image
           source={require('./ArrowIcon.png')}

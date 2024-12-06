@@ -1,7 +1,6 @@
-
 import CustomButton from '@/components/onboarding/CustomBottom';
 import Pagination from '@/components/onboarding/Pagination';
-import { Body } from '@/components/ui/text';
+import { OnBoardingTitle } from '@/components/ui/text';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { MMKV } from 'react-native-mmkv';
 import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
@@ -14,21 +13,23 @@ const data = [
   {
     id: 1,
     image: require('../../assets/images/image1.png'),
-    title: 'Lorem Ipsum',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: `Découvrez les meilleurs itinéraires de promenade et rencontrez d'autres chiens !`,
   },
   {
     id: 2,
     image: require('../../assets/images/image2.png'),
-    title: 'Lorem Ipsum',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: 'Inscrivez-vous à des activités pour partager un moment de complicité avec votre animal',
   },
   {
     id: 3,
     image: require('../../assets/images/image3.png'),
-    title: 'Lorem Ipsum',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: `Formez-vous et apprenez à votre rythme avec des cours sur l'éducation. Profitez de l'accès à vie et améliorez la relation avec votre chien`,
   },
+  {
+    id: 4,
+    image: require('../../assets/images/image1.png'),
+    title: `Explorez, récoltez des os, débloquez des récompenses exclusives`,
+  }
 ];
 
 export default function OnBoarding() {
@@ -40,7 +41,9 @@ export default function OnBoarding() {
   const flatListIndex = useSharedValue(0);
 
   const onViewableItemsChanged = ({ viewableItems }) => {
-    flatListIndex.value = viewableItems[0].index;
+    if (viewableItems && viewableItems.length > 0) {
+      flatListIndex.value = viewableItems[0].index;
+    }
   };
 
   const onScroll = useAnimatedScrollHandler({
@@ -108,11 +111,10 @@ export default function OnBoarding() {
     });
     return (
       <View style={[styles.itemContainer, { width: SCREEN_WIDTH }]}>
-        <Animated.Image source={item.image} style={imageAnimationStyle} />
         <Animated.View style={textAnimationStyle}>
-          <Body style={styles.itemTitle}>{item.title}</Body>
-          <Body style={styles.itemText}>{item.text}</Body>
+          <OnBoardingTitle color="#fff" style={{ textAlign: 'center', paddingHorizontal: 20 }}>{item.title}</OnBoardingTitle>
         </Animated.View>
+        <Animated.Image source={item.image} style={imageAnimationStyle} />
       </View>
     );
   };
