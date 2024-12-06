@@ -1,3 +1,4 @@
+import { OnboardingItem } from '@/type';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
@@ -5,9 +6,16 @@ import Animated, {
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-const Pagination = ({ data, x, screenWidth }) => {
+
+interface PaginationProps {
+  data: OnboardingItem[];
+  x: { value: number };
+  screenWidth: number;
+}
+
+const Pagination = ({ data, x, screenWidth }: PaginationProps) => {
   // eslint-disable-next-line react/no-unstable-nested-components
-  const PaginationComp = ({ i }) => {
+  const PaginationComp = ({ i }: { i: number }) => {
     const animatedDotStyle = useAnimatedStyle(() => {
       const widthAnimation = interpolate(
         x.value,
