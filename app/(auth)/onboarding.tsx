@@ -12,22 +12,22 @@ export const storage = new MMKV()
 const data = [
   {
     id: 1,
-    image: require('../../assets/images/image1.png'),
+    image: require('../../assets/images/onboarding-dog-1.png'),
     title: `Découvrez les meilleurs itinéraires de promenade et rencontrez d'autres chiens !`,
   },
   {
     id: 2,
-    image: require('../../assets/images/image2.png'),
+    image: require('../../assets/images/onboarding-dog-2.png'),
     title: 'Inscrivez-vous à des activités pour partager un moment de complicité avec votre animal',
   },
   {
     id: 3,
-    image: require('../../assets/images/image3.png'),
+    image: require('../../assets/images/onboarding-dog-3.png'),
     title: `Formez-vous et apprenez à votre rythme avec des cours sur l'éducation. Profitez de l'accès à vie et améliorez la relation avec votre chien`,
   },
   {
     id: 4,
-    image: require('../../assets/images/image1.png'),
+    image: require('../../assets/images/onboarding-dog-4.png'),
     title: `Explorez, récoltez des os, débloquez des récompenses exclusives`,
   }
 ];
