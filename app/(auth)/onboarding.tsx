@@ -1,7 +1,7 @@
 import CustomButton from '@/components/onboarding/CustomBottom';
 import Pagination from '@/components/onboarding/Pagination';
 import { OnBoardingTitle } from '@/components/ui/text';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -30,11 +30,11 @@ const data = [
 
 export default function OnBoarding() {
   const { width: SCREEN_WIDTH } = useWindowDimensions();
-  const flatListRef = useAnimatedRef(null);
+  const flatListRef = useAnimatedRef<FlatList>();
   const x = useSharedValue(0);
   const flatListIndex = useSharedValue(0);
 
-  const onViewableItemsChanged = ({ viewableItems }) => {
+  const onViewableItemsChanged = ({ viewableItems }: { viewableItems: any[] }) => {
     if (viewableItems && viewableItems.length > 0) {
       flatListIndex.value = viewableItems[0].index;
     }
@@ -47,7 +47,7 @@ export default function OnBoarding() {
   });
 
   // eslint-disable-next-line react/no-unstable-nested-components
-  const RenderItem = ({ item, index }) => {
+  const RenderItem = ({ item, index }: { item: any, index: number }) => {
     const imageAnimationStyle = useAnimatedStyle(() => {
       const opacityAnimation = interpolate(
         x.value,

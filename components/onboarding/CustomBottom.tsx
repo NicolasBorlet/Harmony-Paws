@@ -1,14 +1,19 @@
-import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
 import React from 'react';
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-const CustomButton = ({ flatListRef, flatListIndex, dataLength }) => {
-  const navigation = useNavigation();
 
+interface CustomButtonProps {
+  flatListRef: React.RefObject<FlatList>;
+  flatListIndex: { value: number };
+  dataLength: number;
+}
+
+const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex, dataLength }) => {
   const buttonAnimationStyle = useAnimatedStyle(() => {
     return {
       width:
@@ -52,12 +57,9 @@ const CustomButton = ({ flatListRef, flatListIndex, dataLength }) => {
     <TouchableWithoutFeedback
       onPress={() => {
         if (flatListIndex.value < dataLength - 1) {
-          flatListRef.current.scrollToIndex({ index: flatListIndex.value + 1 });
+          flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
         } else {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'account-created' }],
-          });
+          router.replace('/(auth)/account-created')
         }
       }}>
       <Animated.View style={[styles.container, buttonAnimationStyle]}>
