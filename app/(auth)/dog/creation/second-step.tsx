@@ -6,13 +6,23 @@ import Block from "@/components/grid/Block";
 import { StandardButton } from "@/components/ui/button";
 import { BodyBold, BodyMedium } from "@/components/ui/text";
 import { GridItemBackground } from "@/components/ui/view";
-import { router } from "expo-router";
-import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { Pressable, SafeAreaView, StyleSheet, View } from "react-native";
 import { MMKV } from "react-native-mmkv";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const storage = new MMKV();
+
+const behaviors = [{
+  id: 1,
+  label: i18n.t('calm')
+}, {
+  id: 2,
+  label: i18n.t('aggressive')
+}, {
+  id: 3,
+  label: i18n.t('active')
+}];
 
 export default function FirstStep() {
   const insets = useSafeAreaInsets();
@@ -20,8 +30,11 @@ export default function FirstStep() {
 
   const userId = session?.user?.id;
 
+  const [selectedBehavior, setSelectedBehavior] = useState<number[]>([]);
+
   function handleNextStep() {
-    router.push('/dog/creation/third-step')
+    storage.set('dog', JSON.stringify({ ...JSON.parse(storage.getString('dog') || '{}'), behaviors: selectedBehavior }))
+    // router.push('/dog/creation/third-step')
   };
 
   return (
@@ -38,15 +51,36 @@ export default function FirstStep() {
               gap: 8,
             }}
           >
-            <GridItemBackground selected>
-              <BodyBold color='#663399'>{i18n.t('calm')}</BodyBold>
-            </GridItemBackground>
-            <GridItemBackground>
-              <BodyBold color='#663399'>{i18n.t('aggressive')}</BodyBold>
-            </GridItemBackground>
-            <GridItemBackground>
-              <BodyBold color='#663399'>{i18n.t('active')}</BodyBold>
-            </GridItemBackground>
+            <Pressable onPress={() => {
+              const newSelection = selectedBehavior.includes(behaviors[0].id)
+                ? selectedBehavior.filter(id => id !== behaviors[0].id)
+                : [...selectedBehavior, behaviors[0].id];
+              setSelectedBehavior(newSelection);
+            }}>
+              <GridItemBackground selected={selectedBehavior.includes(behaviors[0].id)}>
+                <BodyBold color='#663399'>{behaviors[0].label}</BodyBold>
+              </GridItemBackground>
+            </Pressable>
+            <Pressable onPress={() => {
+              const newSelection = selectedBehavior.includes(behaviors[1].id)
+                ? selectedBehavior.filter(id => id !== behaviors[1].id)
+                : [...selectedBehavior, behaviors[1].id];
+              setSelectedBehavior(newSelection);
+            }}>
+              <GridItemBackground selected={selectedBehavior.includes(behaviors[1].id)}>
+                <BodyBold color='#663399'>{behaviors[1].label}</BodyBold>
+              </GridItemBackground>
+            </Pressable>
+            <Pressable onPress={() => {
+              const newSelection = selectedBehavior.includes(behaviors[2].id)
+                ? selectedBehavior.filter(id => id !== behaviors[2].id)
+                : [...selectedBehavior, behaviors[2].id];
+              setSelectedBehavior(newSelection);
+            }}>
+              <GridItemBackground selected={selectedBehavior.includes(behaviors[2].id)}>
+                <BodyBold color='#663399'>{behaviors[2].label}</BodyBold>
+              </GridItemBackground>
+            </Pressable>
           </Block>
           {/* </ScrollView> */}
         </View>
