@@ -47,5 +47,6 @@
   "completeFormation": "Formation complète",
   "accountCreated": "Ton compte est cree !",
   "createDogProfile": "Créer le profil de mon chien",
-  "skipStep": "Passer cette étape"
+  "skipStep": "Passer cette étape",
+  "continue": "Continuer"
 }

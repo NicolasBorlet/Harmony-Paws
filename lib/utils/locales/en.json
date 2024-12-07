@@ -47,5 +47,6 @@
   "completeFormation": "Complete formation",
   "accountCreated": "Your account is created!",
   "createDogProfile": "Create my dog profile",
-  "skipStep": "Skip this step"
+  "skipStep": "Skip this step",
+  "continue": "Continue"
 }
