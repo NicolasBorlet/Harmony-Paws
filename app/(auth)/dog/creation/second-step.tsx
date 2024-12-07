@@ -51,36 +51,13 @@ export default function FirstStep() {
               gap: 8,
             }}
           >
-            <Pressable onPress={() => {
-              const newSelection = selectedBehavior.includes(behaviors[0].id)
-                ? selectedBehavior.filter(id => id !== behaviors[0].id)
-                : [...selectedBehavior, behaviors[0].id];
-              setSelectedBehavior(newSelection);
-            }}>
-              <GridItemBackground selected={selectedBehavior.includes(behaviors[0].id)}>
-                <BodyBold color='#663399'>{behaviors[0].label}</BodyBold>
-              </GridItemBackground>
-            </Pressable>
-            <Pressable onPress={() => {
-              const newSelection = selectedBehavior.includes(behaviors[1].id)
-                ? selectedBehavior.filter(id => id !== behaviors[1].id)
-                : [...selectedBehavior, behaviors[1].id];
-              setSelectedBehavior(newSelection);
-            }}>
-              <GridItemBackground selected={selectedBehavior.includes(behaviors[1].id)}>
-                <BodyBold color='#663399'>{behaviors[1].label}</BodyBold>
-              </GridItemBackground>
-            </Pressable>
-            <Pressable onPress={() => {
-              const newSelection = selectedBehavior.includes(behaviors[2].id)
-                ? selectedBehavior.filter(id => id !== behaviors[2].id)
-                : [...selectedBehavior, behaviors[2].id];
-              setSelectedBehavior(newSelection);
-            }}>
-              <GridItemBackground selected={selectedBehavior.includes(behaviors[2].id)}>
-                <BodyBold color='#663399'>{behaviors[2].label}</BodyBold>
-              </GridItemBackground>
-            </Pressable>
+            {behaviors.map((behavior) => (
+              <Pressable onPress={() => setSelectedBehavior([...selectedBehavior, behavior.id])}>
+                <GridItemBackground selected={selectedBehavior.includes(behavior.id)}>
+                  <BodyBold color='#663399'>{behavior.label}</BodyBold>
+                </GridItemBackground>
+              </Pressable>
+            ))}
           </Block>
           {/* </ScrollView> */}
         </View>
