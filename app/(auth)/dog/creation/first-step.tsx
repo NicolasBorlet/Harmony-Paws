@@ -21,9 +21,10 @@ export default function FirstStep() {
 
   const [dogName, setDogName] = useState('');
   const [selectedSex, setSelectedSex] = useState<'Male' | 'Female'>('Male');
+  const [dogAge, setDogAge] = useState('');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex }))
+    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge }))
     router.push('/dog/creation/second-step')
   };
 
@@ -44,6 +45,15 @@ export default function FirstStep() {
             values={[i18n.t('male'), i18n.t('female')]}
             selectedIndex={selectedSex === 'Male' ? 0 : 1}
             onChange={index => setSelectedSex(index === 0 ? 'Male' : 'Female')}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <BodyTitle title={i18n.t('dogAgeQuestion')} />
+          <CustomTextInput
+            placeholder={i18n.t('addDogAge')}
+            value={dogAge}
+            onChangeText={setDogAge}
+            keyboardType="numeric"
           />
         </View>
       </View>
