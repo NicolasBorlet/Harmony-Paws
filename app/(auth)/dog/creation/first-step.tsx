@@ -51,7 +51,7 @@ export default function FirstStep() {
           <SegmentedControl
             values={[i18n.t('male'), i18n.t('female')]}
             selectedIndex={selectedSex === 'Male' ? 0 : 1}
-            onChange={index => setSelectedSex(index === 0 ? 'Male' : 'Female')}
+            onChange={(event) => setSelectedSex(event.nativeEvent.selectedSegmentIndex === 0 ? 'Male' : 'Female')}
           />
         </View>
         <View style={styles.titleContainer}>
