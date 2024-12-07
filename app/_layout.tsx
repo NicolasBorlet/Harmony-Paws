@@ -1,4 +1,5 @@
 import { translations } from '@/lib/utils/translations'
+import { useMMKVDevTools } from '@dev-plugins/react-native-mmkv'
 import {
   Montserrat_100Thin,
   Montserrat_200ExtraLight,
@@ -32,6 +33,8 @@ SplashScreen.preventAutoHideAsync()
 export const i18n = new I18n(translations)
 
 export default function RootLayout() {
+  useMMKVDevTools();
+
   const [loaded, error] = useFonts({
     RoundsBlack: require('../assets/fonts/RoundsBlack.ttf'),
     Montserrat_100Thin,
