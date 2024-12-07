@@ -7,7 +7,7 @@ export default function MedicalLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name='(medical)' />
+      <Stack.Screen name='medical' />
     </Stack>
   )
 }

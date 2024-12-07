@@ -7,7 +7,7 @@ const GridItem = styled.View`
     border: 1px solid #F49819;
 `
 
-const GridItemBackground = styled.View`
+const GridItemBackground = styled.View<{ selected?: boolean }>`
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -17,7 +17,7 @@ const GridItemBackground = styled.View`
     padding-vertical: 20px;
     padding-horizontal: 24px;
     border-radius: 10px;
-    background-color: rgba(102, 51, 153, 0.1);
+    background-color: ${({ selected }) => (selected ? "#FDE6D7" : "rgba(102, 51, 153, 0.1)")};
     shadow-color: #000;
     shadow-offset: 0px 4px;
     shadow-opacity: 0.15;
