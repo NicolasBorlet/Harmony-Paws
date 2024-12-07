@@ -5,6 +5,7 @@ import Dropdown from "@/components/dropdown";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
 import { CustomTextInput } from "@/components/ui/text-input";
+import { dogColors } from "@/lib/utils/dog-color";
 import { dogRaces } from "@/lib/utils/dog-race";
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { router } from "expo-router";
@@ -25,13 +26,14 @@ export default function FirstStep() {
   const [selectedSex, setSelectedSex] = useState<'Male' | 'Female'>('Male');
   const [dogAge, setDogAge] = useState('');
   const [selectedBreed, setSelectedBreed] = useState('');
+  const [dogColor, setDogColor] = useState('');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed }))
+    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed, color: dogColor }))
     router.push('/dog/creation/second-step')
   };
 
-  const isFormValid = dogName && dogAge && selectedSex && selectedBreed;
+  const isFormValid = dogName && dogAge && selectedSex && selectedBreed && dogColor;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,6 +69,14 @@ export default function FirstStep() {
             data={dogRaces}
             onChange={(item) => setSelectedBreed(item.value)}
             placeholder={i18n.t('addDogBreed')}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <BodyTitle title={i18n.t('dogColorQuestion')} />
+          <Dropdown
+            data={dogColors}
+            onChange={(item) => setDogColor(item.value)}
+            placeholder={i18n.t('addDogColor')}
           />
         </View>
       </View>
