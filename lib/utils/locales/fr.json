@@ -50,5 +50,8 @@
   "skipStep": "Passer cette étape",
   "continue": "Continuer",
   "whatIsYourDogName": "Quel est le nom de votre chien ?",
-  "addDogName": "Ajouter le nom de votre chien"
+  "addDogName": "Ajouter le nom de votre chien",
+  "dogSexQuestion": "Votre chien est un male ou une femelle ?",
+  "male": "Male",
+  "female": "Femelle"
 }

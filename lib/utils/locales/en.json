@@ -50,5 +50,8 @@
   "skipStep": "Skip this step",
   "continue": "Continue",
   "whatIsYourDogName": "What is the name of your dog?",
-  "addDogName": "Add your dog name"
+  "addDogName": "Add your dog name",
+  "dogSexQuestion": "Is your dog a male or a female?",
+  "male": "Male",
+  "female": "Female"
 }
