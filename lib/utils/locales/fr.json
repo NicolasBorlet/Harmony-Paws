@@ -55,6 +55,7 @@
   "dogBreedQuestion": "Quel est la race de votre chien ?",
   "dogAgeQuestion": "Quel est l'âge de votre chien ?",
   "dogColorQuestion": "Quel est la couleur de votre chien ?",
+  "dogBehaviorQuestion": "Votre chien est :",
   "addDogAge": "Ajouter l'âge de votre chien",
   "addDogBreed": "Sélectionner sa race",
   "addDogColor": "Ajouter la couleur de votre chien",

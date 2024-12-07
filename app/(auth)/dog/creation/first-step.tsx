@@ -29,7 +29,7 @@ export default function FirstStep() {
   const [dogColor, setDogColor] = useState('');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed, color: dogColor }))
+    storage.set('dog', JSON.stringify({ ownerId: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed, color: dogColor }))
     router.push('/dog/creation/second-step')
   };
 
