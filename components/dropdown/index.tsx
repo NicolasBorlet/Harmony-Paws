@@ -80,7 +80,10 @@ export default function Dropdown({
                       style={styles.optionItem}
                       onPress={() => onSelect(item)}
                     >
-                      <Text>{item.label}</Text>
+                      <Text style={styles.label}>{item.label}</Text>
+                      {value === item.label && (
+                        <AntDesign name="check" color="#F7A400" size={16} style={styles.checkIcon} />
+                      )}
                     </TouchableOpacity>
                   )}
                   ItemSeparatorComponent={() => (
@@ -105,7 +108,9 @@ const styles = StyleSheet.create({
   },
   optionItem: {
     height: 40,
-    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   separator: {
     height: 4,
@@ -124,6 +129,11 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     fontFamily: "Montserrat_500Medium",
   },
+  label: {
+    fontSize: 14,
+    opacity: 0.8,
+    fontFamily: "Montserrat_400Regular",
+  },
   button: {
     height: 50,
     justifyContent: "space-between",
@@ -133,5 +143,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 15,
     borderRadius: 8,
+  },
+  checkIcon: {
+    marginRight: 10,
   },
 });
