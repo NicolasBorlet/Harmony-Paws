@@ -1,9 +1,11 @@
 import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
 import BodyTitle from "@/components/bodyTitle/body-title";
+import Dropdown from "@/components/dropdown";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
 import { CustomTextInput } from "@/components/ui/text-input";
+import { dogRaces } from "@/lib/utils/dog-race";
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -27,6 +29,8 @@ export default function FirstStep() {
     storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge }))
     router.push('/dog/creation/second-step')
   };
+
+  const isFormValid = dogName && dogAge && selectedSex;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,9 +60,17 @@ export default function FirstStep() {
             keyboardType="numeric"
           />
         </View>
+        <View style={styles.titleContainer}>
+          <BodyTitle title={i18n.t('dogBreedQuestion')} />
+          <Dropdown
+            data={dogRaces}
+            onChange={console.log}
+            placeholder={i18n.t('addDogBreed')}
+          />
+        </View>
       </View>
       <View style={[styles.buttonContainer, { bottom: insets.bottom }]}>
-        <StandardButton onPress={handleNextStep} disabled={!dogName}>
+        <StandardButton onPress={handleNextStep} disabled={!isFormValid}>
           <BodyMedium color='#fff'>{i18n.t('continue')}</BodyMedium>
         </StandardButton>
       </View>

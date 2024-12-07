@@ -55,6 +55,7 @@
   "dogBreedQuestion": "Quel est la race de votre chien ?",
   "dogAgeQuestion": "Quel est l'âge de votre chien ?",
   "addDogAge": "Ajouter l'âge de votre chien",
+  "addDogBreed": "Sélectionner sa race",
   "male": "Male",
   "female": "Femelle"
 }
