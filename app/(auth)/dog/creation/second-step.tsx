@@ -6,6 +6,7 @@ import Block from "@/components/grid/Block";
 import { StandardButton } from "@/components/ui/button";
 import { BodyBold, BodyMedium } from "@/components/ui/text";
 import { GridItemBackground } from "@/components/ui/view";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, SafeAreaView, StyleSheet, View } from "react-native";
 import { MMKV } from "react-native-mmkv";
@@ -34,7 +35,7 @@ export default function FirstStep() {
 
   function handleNextStep() {
     storage.set('dog', JSON.stringify({ ...JSON.parse(storage.getString('dog') || '{}'), behaviors: selectedBehavior }))
-    // router.push('/dog/creation/third-step')
+    router.push('/dog/creation/third-step')
   };
 
   return (
