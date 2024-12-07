@@ -3,12 +3,11 @@ import React, { useCallback, useRef, useState } from "react";
 import {
   FlatList,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 
 type OptionItem = {
@@ -47,13 +46,9 @@ export default function Dropdown({
       ref={buttonRef}
       onLayout={(event) => {
         const layout = event.nativeEvent.layout;
-        const topOffset = layout.y;
         const heightOfComponent = layout.height;
 
-        const finalValue =
-          topOffset + heightOfComponent + (Platform.OS === "android" ? -32 : 3);
-
-        setTop(finalValue);
+        setTop(heightOfComponent);
       }}
     >
       <TouchableOpacity
@@ -72,7 +67,7 @@ export default function Dropdown({
                 style={[
                   styles.options,
                   {
-                    top,
+                    marginTop: top,
                   },
                 ]}
               >
