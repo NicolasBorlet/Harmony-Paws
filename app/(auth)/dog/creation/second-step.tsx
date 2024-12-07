@@ -52,7 +52,13 @@ export default function FirstStep() {
             }}
           >
             {behaviors.map((behavior) => (
-              <Pressable onPress={() => setSelectedBehavior([...selectedBehavior, behavior.id])}>
+              <Pressable onPress={() => {
+                if (selectedBehavior.includes(behavior.id)) {
+                  setSelectedBehavior(selectedBehavior.filter(id => id !== behavior.id));
+                } else {
+                  setSelectedBehavior([...selectedBehavior, behavior.id]);
+                }
+              }} style={{ flex: 1, height: 100 }} key={behavior.id}>
                 <GridItemBackground selected={selectedBehavior.includes(behavior.id)}>
                   <BodyBold color='#663399'>{behavior.label}</BodyBold>
                 </GridItemBackground>
