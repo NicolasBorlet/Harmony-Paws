@@ -60,5 +60,8 @@
   "addDogBreed": "Select the breed",
   "addDogColor": "Add your dog color",
   "male": "Male",
-  "female": "Female"
+  "female": "Female",
+  "calm": "Calm",
+  "active": "Active",
+  "aggressive": "Aggressive"
 }

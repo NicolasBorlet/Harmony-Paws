@@ -2,8 +2,10 @@ import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
 import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
+import Block from "@/components/grid/Block";
 import { StandardButton } from "@/components/ui/button";
-import { BodyMedium } from "@/components/ui/text";
+import { BodyBold, BodyMedium } from "@/components/ui/text";
+import { GridItemBackground } from "@/components/ui/view";
 import { router } from "expo-router";
 import React from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
@@ -28,6 +30,25 @@ export default function FirstStep() {
       <View style={[styles.content, { marginTop: insets.top }]}>
         <View style={styles.titleContainer}>
           <BodyTitle title={i18n.t('dogBehaviorQuestion')} />
+          {/* <ScrollView style={{ flex: 1 }}> */}
+          <Block
+            row
+            wrap='nowrap'
+            style={{
+              gap: 8,
+            }}
+          >
+            <GridItemBackground selected>
+              <BodyBold color='#663399'>{i18n.t('calm')}</BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399'>{i18n.t('aggressive')}</BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399'>{i18n.t('active')}</BodyBold>
+            </GridItemBackground>
+          </Block>
+          {/* </ScrollView> */}
         </View>
       </View>
       <View style={[styles.buttonContainer, { bottom: insets.bottom }]}>

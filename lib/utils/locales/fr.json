@@ -60,5 +60,8 @@
   "addDogBreed": "Sélectionner sa race",
   "addDogColor": "Ajouter la couleur de votre chien",
   "male": "Male",
-  "female": "Femelle"
+  "female": "Femelle",
+  "calm": "Calme",
+  "active": "Actif",
+  "aggressive": "Aggressif"
 }
