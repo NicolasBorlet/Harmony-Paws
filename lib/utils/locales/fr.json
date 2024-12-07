@@ -54,8 +54,10 @@
   "dogSexQuestion": "Votre chien est un male ou une femelle ?",
   "dogBreedQuestion": "Quel est la race de votre chien ?",
   "dogAgeQuestion": "Quel est l'âge de votre chien ?",
+  "dogColorQuestion": "Quel est la couleur de votre chien ?",
   "addDogAge": "Ajouter l'âge de votre chien",
   "addDogBreed": "Sélectionner sa race",
+  "addDogColor": "Ajouter la couleur de votre chien",
   "male": "Male",
   "female": "Femelle"
 }

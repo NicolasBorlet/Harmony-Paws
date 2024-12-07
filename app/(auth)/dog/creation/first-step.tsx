@@ -24,13 +24,14 @@ export default function FirstStep() {
   const [dogName, setDogName] = useState('');
   const [selectedSex, setSelectedSex] = useState<'Male' | 'Female'>('Male');
   const [dogAge, setDogAge] = useState('');
+  const [selectedBreed, setSelectedBreed] = useState('');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge }))
+    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed }))
     router.push('/dog/creation/second-step')
   };
 
-  const isFormValid = dogName && dogAge && selectedSex;
+  const isFormValid = dogName && dogAge && selectedSex && selectedBreed;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,7 +65,7 @@ export default function FirstStep() {
           <BodyTitle title={i18n.t('dogBreedQuestion')} />
           <Dropdown
             data={dogRaces}
-            onChange={console.log}
+            onChange={(item) => setSelectedBreed(item.value)}
             placeholder={i18n.t('addDogBreed')}
           />
         </View>
