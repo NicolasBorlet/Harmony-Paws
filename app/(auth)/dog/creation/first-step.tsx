@@ -23,7 +23,7 @@ export default function FirstStep() {
   const [selectedSex, setSelectedSex] = useState<'Male' | 'Female'>('Male');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ id: userId, name: dogName }))
+    storage.set('dog', JSON.stringify({ id: userId, name: dogName, sex: selectedSex }))
     router.push('/dog/creation/second-step')
   };
 
