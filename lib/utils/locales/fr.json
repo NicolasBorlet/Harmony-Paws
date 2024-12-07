@@ -48,5 +48,7 @@
   "accountCreated": "Ton compte est cree !",
   "createDogProfile": "Créer le profil de mon chien",
   "skipStep": "Passer cette étape",
-  "continue": "Continuer"
+  "continue": "Continuer",
+  "whatIsYourDogName": "Quel est le nom de votre chien ?",
+  "addDogName": "Ajouter le nom de votre chien"
 }

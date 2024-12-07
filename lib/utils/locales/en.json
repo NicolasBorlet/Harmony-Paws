@@ -48,5 +48,7 @@
   "accountCreated": "Your account is created!",
   "createDogProfile": "Create my dog profile",
   "skipStep": "Skip this step",
-  "continue": "Continue"
+  "continue": "Continue",
+  "whatIsYourDogName": "What is the name of your dog?",
+  "addDogName": "Add your dog name"
 }
