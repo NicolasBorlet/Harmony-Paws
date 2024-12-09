@@ -2,12 +2,13 @@ import { Stack } from 'expo-router'
 
 export default function DogLayout() {
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name='invitation'
-        options={{ headerShown: false, presentation: 'modal' }}
+        options={{ presentation: 'modal' }}
       />
-      <Stack.Screen name='[id]' options={{ headerShown: false }} />
+      <Stack.Screen name='creation' />
+      <Stack.Screen name='[id]' />
     </Stack>
   )
 }

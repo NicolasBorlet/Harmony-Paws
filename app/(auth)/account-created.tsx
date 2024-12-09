@@ -48,14 +48,18 @@ export default function AccountCreated() {
     router.replace('/')
   }, [])
 
+  const handleCreateDogProfile = useCallback(() => {
+    router.replace('/dog/creation/first-step')
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.itemContainer}>
-        <SpecialTitle>Ton compte est cree !</SpecialTitle>
+        <SpecialTitle>{i18n.t('accountCreated')}</SpecialTitle>
         <Image source={require('../../assets/images/onboarding-dog-2.png')} style={{ width: 250, height: 500 }} contentFit="contain" />
       </View>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-        <StandardButton onPress={() => { }}>
+        <StandardButton onPress={handleCreateDogProfile}>
           <BodyMedium color='#fff'>{i18n.t('createDogProfile')}</BodyMedium>
         </StandardButton>
         <StandardButton outlined onPress={handleSkip}>
