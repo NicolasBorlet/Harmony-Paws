@@ -1,12 +1,19 @@
 import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
+import { StandardButton } from "@/components/ui/button";
+import { BodyMedium } from "@/components/ui/text";
 import { AntDesign } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from 'expo-image-picker';
+import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
+import { MMKV } from "react-native-mmkv";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+
+export const storage = new MMKV()
+
 export default function ThirdStep() {
   const insets = useSafeAreaInsets();
 
@@ -26,6 +33,12 @@ export default function ThirdStep() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+  };
+
+  function handleNextStep() {
+    storage.set('dog', JSON.stringify({ ...JSON.parse(storage.getString('dog') || '{}'), image }))
+    storage.set('onBoarding', 'true')
+    router.replace('/(home)')
   };
 
   return (
@@ -61,6 +74,11 @@ export default function ThirdStep() {
           </Pressable>
         </View>
       </View>
+      <View style={[styles.buttonContainer, { bottom: insets.bottom }]}>
+        <StandardButton onPress={handleNextStep}>
+          <BodyMedium color='#fff'>{i18n.t('ending')}</BodyMedium>
+        </StandardButton>
+      </View>
     </SafeAreaView>
   )
 }
@@ -84,5 +102,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    gap: 20
   },
 });
