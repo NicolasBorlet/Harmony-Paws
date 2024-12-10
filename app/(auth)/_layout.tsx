@@ -10,6 +10,7 @@ export default function AuthLayout() {
       <Stack.Screen name='(tabs)' />
       <Stack.Screen name='dog' />
       <Stack.Screen name='ride' />
+      <Stack.Screen name='user' options={{ presentation: 'modal' }} />
       <Stack.Screen name='messages' />
       <Stack.Screen name='notifications' />
       <Stack.Screen name='completion' options={{ presentation: 'modal' }} />
