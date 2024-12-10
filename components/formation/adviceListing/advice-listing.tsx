@@ -1,6 +1,7 @@
 import Divider from "@/components/ui/divider";
 import { Advice } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
+import { useCallback } from "react";
 import { View } from "react-native";
 import AdviceListingItem from "./advice-listing-item";
 
@@ -91,13 +92,15 @@ const advice: Advice[] = [
   },
 ]
 
-export default function AdviceListing () {
+export default function AdviceListing() {
+  const renderItem = useCallback(({ item }: { item: Advice }) => (
+    <AdviceListingItem advice={item} />
+  ), []);
+
   return (
     <FlashList
       data={advice}
-      renderItem={({ item }) => (
-        <AdviceListingItem advice={item} />
-      )}
+      renderItem={renderItem}
       keyExtractor={(item) => item.id.toString()}
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
