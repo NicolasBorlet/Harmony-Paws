@@ -104,7 +104,7 @@ export default function HomeScreen() {
           <TabSwitcher
             selectedTab={selectedTab}
             onTabChange={onTabChange}
-            language={i18n.locale}
+            language={i18n.locale as 'fr' | 'en'}
           />
           <Pressable onPress={handlePresentModalPress}>
             <Ionicons

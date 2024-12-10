@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout'
 import { useSession } from '@/app/ctx'
 import AccountHeading from '@/components/account/account-heading'
 import BodyTitle from '@/components/bodyTitle/body-title'
@@ -52,14 +53,14 @@ export default function AccountScreen() {
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color='#F7A400'>
-                  Modifier mon profil
+                  {i18n.t('editProfile')}
                 </Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color='#F7A400'>
-                  Partager mon profil
+                  {i18n.t('shareProfile')}
                 </Small>
               </StandardButton>
             </View>
@@ -69,7 +70,7 @@ export default function AccountScreen() {
         <View style={{
           gap: 24
         }}>
-          <BodyTitle title='Mes chiens' />
+          <BodyTitle title={i18n.t('myDogs')} />
           <FlashList
             data={dogs}
             horizontal
@@ -108,12 +109,12 @@ export default function AccountScreen() {
           <Block row gap={24}>
             <GridItemBackground>
               <BodyBold color='#663399'>
-                Ami(e)s
+                {i18n.t('friends')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
               <BodyBold color='#663399'>
-                Favoris
+                {i18n.t('favorites')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -122,30 +123,14 @@ export default function AccountScreen() {
               <BodyBold color='#663399' style={{
                 textAlign: 'center',
               }}>
-                Les balades crées
+                {i18n.t('createdRides')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
               <BodyBold color='#663399' style={{
                 textAlign: 'center',
               }}>
-                Les formations passées
-              </BodyBold>
-            </GridItemBackground>
-          </Block>
-          <Block row gap={24}>
-            <GridItemBackground>
-              <BodyBold color='#663399' style={{
-                textAlign: 'center',
-              }}>
-                Les activités réalisées
-              </BodyBold>
-            </GridItemBackground>
-            <GridItemBackground>
-              <BodyBold color='#663399' style={{
-                textAlign: 'center',
-              }}>
-                Rencontres
+                {i18n.t('completedFormations')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -154,14 +139,30 @@ export default function AccountScreen() {
               <BodyBold color='#663399' style={{
                 textAlign: 'center',
               }}>
-                Mes os
+                {i18n.t('completedActivities')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
               <BodyBold color='#663399' style={{
                 textAlign: 'center',
               }}>
-                Mes os
+                {i18n.t('meetings')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('myBones')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('myBones')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -169,7 +170,7 @@ export default function AccountScreen() {
 
         <StandardButton onPress={() => supabase.auth.signOut()} color='#FF0000'>
           <Body color='white'>
-            Se déconnecter
+            {i18n.t('disconected')}
           </Body>
         </StandardButton>
 
