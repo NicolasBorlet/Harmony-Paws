@@ -1,17 +1,20 @@
 import { useSession } from '@/app/ctx'
 import AccountHeading from '@/components/account/account-heading'
 import BodyTitle from '@/components/bodyTitle/body-title'
+import Block from '@/components/grid/Block'
 import { StandardButton } from '@/components/ui/button'
+import Divider from '@/components/ui/divider'
 import { RoundedImage } from '@/components/ui/image'
-import { Small } from '@/components/ui/text'
+import { Body, BodyBold, Small } from '@/components/ui/text'
+import { GridItemBackground } from '@/components/ui/view'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { Button, StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // Initialize MMKV
 export const storage = new MMKV()
@@ -33,9 +36,10 @@ const dogs = [
 
 export default function AccountScreen() {
   const { session } = useSession()
+  const insets = useSafeAreaInsets()
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView contentContainerStyle={styles.scrollView}>
         <View style={{
           gap: 24
@@ -96,13 +100,78 @@ export default function AccountScreen() {
           />
         </View>
 
-        <View style={[styles.verticallySpaced, styles.mt20]}>
-          <TextInput value={session?.user?.email} />
+        <Divider />
+
+        <View style={{
+          gap: 24,
+        }}>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399'>
+                Ami(e)s
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399'>
+                Favoris
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Les balades crées
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Les formations passées
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Les activités réalisées
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Rencontres
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Mes os
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                Mes os
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
         </View>
 
-        <View style={styles.verticallySpaced}>
-          <Button title='Sign Out' onPress={() => supabase.auth.signOut()} />
-        </View>
+        <StandardButton onPress={() => supabase.auth.signOut()} color='#FF0000'>
+          <Body color='white'>
+            Se déconnecter
+          </Body>
+        </StandardButton>
 
         {/* <View style={styles.verticallySpaced}>
           <Button
@@ -111,7 +180,7 @@ export default function AccountScreen() {
           />
         </View> */}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

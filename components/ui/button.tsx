@@ -42,8 +42,8 @@ const MapButton = styled.Pressable`
   margin-right: auto;
 `;
 
-const StandardButton = styled.Pressable<{ outlined?: boolean, shadow?: boolean, disabled?: boolean }>`
-  background-color: ${props => props.outlined ? 'transparent' : props.disabled ? '#F0B461' : '#F49819'};
+const StandardButton = styled.Pressable<{ outlined?: boolean, shadow?: boolean, disabled?: boolean, color?: string }>`
+  background-color: ${props => props.outlined ? 'transparent' : props.disabled ? '#F0B461' : props.color || '#F49819'};
   border: ${props => props.outlined ? '1px solid #F49819' : 'none'};
   border-radius: 10px;
   padding: 14px;
