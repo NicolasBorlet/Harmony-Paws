@@ -17,7 +17,7 @@ import {
 import { GridItemBackground } from '@/components/ui/view'
 import { router } from 'expo-router'
 import { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -32,6 +32,7 @@ const ride = {
   duration: '2h',
   activityType: 'forest',
   creator: {
+    id: 1,
     name: 'Emma Swane',
     image: 'https://picsum.photos/300',
   },
@@ -147,7 +148,9 @@ export default function RideDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('rideCreator')} />
-            <MasterDogCardComponent />
+            <Pressable onPress={() => router.push(`/user/${ride.creator.id}`)}>
+              <MasterDogCardComponent />
+            </Pressable>
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('route')} />
@@ -208,6 +211,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
   },
 })

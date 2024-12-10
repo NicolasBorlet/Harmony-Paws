@@ -12,7 +12,7 @@ const StyledButton = styled.Pressable`
 
 const BackButton = styled.Pressable<{ position?: string, left?: string }>`
   position: ${props => props.position || 'absolute'};
-  left: ${props => props.left || '25px'};
+  left: ${props => props.left || '16px'};
   background-color: #F7A400;
   border-radius: 1000px;
   width: 32px;
