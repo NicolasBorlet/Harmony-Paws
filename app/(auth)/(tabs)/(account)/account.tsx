@@ -1,5 +1,4 @@
 import { i18n } from '@/app/_layout'
-import { useSession } from '@/app/ctx'
 import AccountHeading from '@/components/account/account-heading'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import Block from '@/components/grid/Block'
@@ -36,7 +35,6 @@ const dogs = [
 ]
 
 export default function AccountScreen() {
-  const { session } = useSession()
   const insets = useSafeAreaInsets()
 
   return (
