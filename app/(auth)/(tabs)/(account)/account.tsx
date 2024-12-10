@@ -7,6 +7,7 @@ import { Small } from '@/components/ui/text'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
+import { router } from 'expo-router'
 import { Button, StyleSheet, TextInput, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
@@ -77,7 +78,9 @@ export default function AccountScreen() {
             ListFooterComponent={() => (
               <Pressable style={{
                 marginLeft: 12,
-              }}>
+              }}
+                onPress={() => router.push('/dog/creation/first-step')}
+              >
                 <View style={{
                   width: 60,
                   height: 60,
