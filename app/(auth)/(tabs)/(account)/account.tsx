@@ -1,136 +1,195 @@
-import { useSession } from '@/app/ctx'
+import { i18n } from '@/app/_layout'
+import AccountHeading from '@/components/account/account-heading'
+import BodyTitle from '@/components/bodyTitle/body-title'
+import Block from '@/components/grid/Block'
+import { StandardButton } from '@/components/ui/button'
+import Divider from '@/components/ui/divider'
+import { RoundedImage } from '@/components/ui/image'
+import { Body, BodyBold, Small } from '@/components/ui/text'
+import { GridItemBackground } from '@/components/ui/view'
 import { supabase } from '@/lib/supabase'
-import { useEffect, useState } from 'react'
-import { Alert, Button, StyleSheet, TextInput, View } from 'react-native'
+import { AntDesign } from '@expo/vector-icons'
+import { FlashList } from '@shopify/flash-list'
+import { router } from 'expo-router'
+import { StyleSheet, View } from 'react-native'
+import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // Initialize MMKV
 export const storage = new MMKV()
 
+const dogs = [
+  {
+    id: 1,
+    image: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 2,
+    image: 'https://picsum.photos/200/300',
+  },
+  {
+    id: 3,
+    image: 'https://picsum.photos/200/300',
+  },
+]
+
 export default function AccountScreen() {
-  const { session } = useSession()
-  const [loading, setLoading] = useState(true)
-  const [username, setUsername] = useState('')
-  const [website, setWebsite] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState('')
-
-  useEffect(() => {
-    console.log('Onboarding', storage.getBoolean('onBoarding'))
-  }, [])
-
-  useEffect(() => {
-    if (session) getProfile()
-  }, [session])
-
-  async function getProfile() {
-    try {
-      setLoading(true)
-      if (!session?.user) throw new Error('No user on the session!')
-
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url`)
-        .eq('id', session?.user.id)
-        .single()
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        setUsername(data.username)
-        setWebsite(data.website)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function updateProfile({
-    username,
-    website,
-    avatar_url,
-  }: {
-    username: string
-    website: string
-    avatar_url: string
-  }) {
-    try {
-      setLoading(true)
-      if (!session?.user) throw new Error('No user on the session!')
-
-      const updates = {
-        id: session?.user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      }
-
-      const { error } = await supabase.from('profiles').upsert(updates)
-
-      if (error) {
-        throw error
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
+  const insets = useSafeAreaInsets()
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput value={session?.user?.email} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          value={username || ''}
-          onChangeText={text => setUsername(text)}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          value={website || ''}
-          onChangeText={text => setWebsite(text)}
-        />
-      </View>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={{
+          gap: 24
+        }}>
+          <AccountHeading />
+          <View style={{
+            flexDirection: 'row',
+            gap: 12,
+          }}>
+            <View style={{ flex: 1 }}>
+              <StandardButton outlined>
+                <Small color='#F7A400'>
+                  {i18n.t('editProfile')}
+                </Small>
+              </StandardButton>
+            </View>
+            <View style={{ flex: 1 }}>
+              <StandardButton outlined>
+                <Small color='#F7A400'>
+                  {i18n.t('shareProfile')}
+                </Small>
+              </StandardButton>
+            </View>
+          </View>
+        </View>
 
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? 'Loading ...' : 'Update'}
-          onPress={() =>
-            updateProfile({ username, website, avatar_url: avatarUrl })
-          }
-          disabled={loading}
-        />
-      </View>
+        <View style={{
+          gap: 24
+        }}>
+          <BodyTitle title={i18n.t('myDogs')} />
+          <FlashList
+            data={dogs}
+            horizontal
+            ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+            renderItem={({ item }) => (
+              <View key={item.id}>
+                <RoundedImage src={item.image} />
+              </View>
+            )}
+            ListFooterComponent={() => (
+              <Pressable style={{
+                marginLeft: 12,
+              }}
+                onPress={() => router.push('/dog/creation/first-step')}
+              >
+                <View style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: 999,
+                  backgroundColor: '#663399',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <AntDesign name="plus" size={24} color="white" />
+                </View>
+              </Pressable>
+            )}
+          />
+        </View>
 
-      <View style={styles.verticallySpaced}>
-        <Button title='Sign Out' onPress={() => supabase.auth.signOut()} />
-      </View>
+        <Divider />
 
-      <View style={styles.verticallySpaced}>
-        <Button
-          title='Remove onBoarding'
-          onPress={() => storage.set('onBoarding', false)}
-        />
-      </View>
+        <View style={{
+          gap: 24,
+        }}>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399'>
+                {i18n.t('friends')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399'>
+                {i18n.t('favorites')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('createdRides')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('completedFormations')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('completedActivities')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('meetings')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={24}>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('myBones')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold color='#663399' style={{
+                textAlign: 'center',
+              }}>
+                {i18n.t('myBones')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+        </View>
+
+        <StandardButton onPress={() => supabase.auth.signOut()} color='#FF0000'>
+          <Body color='white'>
+            {i18n.t('disconected')}
+          </Body>
+        </StandardButton>
+
+        {/* <View style={styles.verticallySpaced}>
+          <Button
+            title='Remove onBoarding'
+            onPress={() => storage.set('onBoarding', false)}
+          />
+        </View> */}
+      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12,
+    flex: 1,
+  },
+  scrollView: {
+    paddingHorizontal: 16,
+    gap: 32,
   },
   verticallySpaced: {
     paddingTop: 4,

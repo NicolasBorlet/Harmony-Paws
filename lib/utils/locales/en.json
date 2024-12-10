@@ -3,6 +3,7 @@
   "welcome": "Hi",
   "timeToRide": "Is it time to ride?",
   "dogs": "Dogs",
+  "myDogs": "My dogs",
   "ride": "Rides",
   "map": "Map",
   "year": "Year",
@@ -31,6 +32,7 @@
   "messages": "Messages",
   "online": "Online",
   "disconnect": "Disconnected",
+  "disconected": "Disconnect",
   "search": "Search",
   "newMessage": "New conversation",
   "createGroupDiscussion": "Create a group discussion",
@@ -65,5 +67,14 @@
   "calm": "Calm",
   "active": "Active",
   "aggressive": "Aggressive",
-  "ending": "End"
+  "ending": "End",
+  "editProfile": "Edit my profile",
+  "shareProfile": "Share my profile",
+  "friends": "Friends",
+  "favorites": "Favorites",
+  "createdRides": "Created rides",
+  "completedFormations": "Completed formations",
+  "completedActivities": "Completed activities",
+  "meetings": "Meetings",
+  "myBones": "My bones"
 }
