@@ -41,5 +41,21 @@ const MasterDogCard = styled.View`
   elevation: 4;
 `;
 
-export { DogCard, MasterDogCard, RideCard };
+const DogCardItem = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding-vertical: 16px;
+  padding-horizontal: 12px;
+  border-radius: 10px;
+  background-color: white;
+  shadow-color: #000;
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.15;
+  shadow-radius: 29.3px;
+  elevation: 4;
+`;
+
+export { DogCard, DogCardItem, MasterDogCard, RideCard };
 
