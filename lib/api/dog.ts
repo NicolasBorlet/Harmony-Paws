@@ -80,6 +80,13 @@ export const getDogDetails = async (dogId: string) => {
       ),
       breed:breed_id (
         name
+      ),
+      dog_behaviors(
+        id,
+        behavor:behavor_id(
+          id,
+          name
+        )
       )
     `)
     .eq('id', dogId)
@@ -87,8 +94,15 @@ export const getDogDetails = async (dogId: string) => {
 
   if (error) throw error
 
+  // Flatten the nested structure
+  const behaviors = data.dog_behaviors?.map(item => ({
+    id: item.behavor.id,
+    name: item.behavor.name
+  })) || []
+
   return {
     ...data,
+    behaviors,
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
   }

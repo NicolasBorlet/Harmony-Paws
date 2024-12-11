@@ -10,9 +10,10 @@ import {
   Body,
   BodyBold,
   BodyMedium,
-  CardTitle
+  CardTitle,
+  ExtraSmallMedium
 } from '@/components/ui/text'
-import { GridItemBackground } from '@/components/ui/view'
+import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { useDogDetails } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
@@ -114,13 +115,13 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {/* {dog.behavors.map(behavor => (
+              {data?.behaviors.map(behavor => (
                 <GridItem key={behavor.id}>
                   <ExtraSmallMedium color='#F49819'>
                     {behavor.name}
                   </ExtraSmallMedium>
                 </GridItem>
-              ))} */}
+              ))}
             </Block>
           </View>
           <Divider />
