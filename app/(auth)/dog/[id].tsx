@@ -10,9 +10,10 @@ import {
   Body,
   BodyBold,
   BodyMedium,
-  CardTitle
+  CardTitle,
+  ExtraSmallMedium
 } from '@/components/ui/text'
-import { GridItemBackground } from '@/components/ui/view'
+import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { useDogDetails } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
@@ -28,7 +29,7 @@ import LoaderComponent from '@/components/loader'
 
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
-  const { data, isLoading } = useDogDetails(id)
+  const { data, isLoading } = useDogDetails(id as string)
 
   const insets = useSafeAreaInsets()
 
@@ -66,7 +67,7 @@ export default function DogDetails() {
     }
   })
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LoaderComponent />
   }
 
@@ -114,19 +115,19 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {/* {dog.behavors.map(behavor => (
+              {data?.behaviors.map(behavor => (
                 <GridItem key={behavor.id}>
                   <ExtraSmallMedium color='#F49819'>
                     {behavor.name}
                   </ExtraSmallMedium>
                 </GridItem>
-              ))} */}
+              ))}
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('myMaster')} />
-            <Pressable onPress={() => router.push(`/user/${data.owner_id}`)}>
+            <Pressable onPress={() => router.push(`/user/${data.owner.id}`)}>
               <MasterDogCardComponent masterData={{ name: data.owner.first_name, age: data.owner.last_name, image: data.owner.image }} />
             </Pressable>
           </View>

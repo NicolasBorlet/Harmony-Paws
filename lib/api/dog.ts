@@ -1,5 +1,5 @@
 import { supabase } from '../supabase'
-import { DogListingInterface } from './types/interfaces'
+import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
 
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -23,6 +23,8 @@ export const useDogsFromUserId = (userId: string) => {
   return useQuery({
     queryKey: ['dogs', userId],
     queryFn: () => getDogsFromUserId(userId),
+    refetchOnMount: false, // Désactive le refetch auto au montage
+    refetchOnWindowFocus: false
   })
 }
 
@@ -57,6 +59,8 @@ export const usePaginatedDogs = (page: number = 0, pageSize: number = 10) => {
   return useQuery({
     queryKey: ['dogs', 'paginated', page, pageSize],
     queryFn: () => getPaginatedDogs(page, pageSize),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 }
 
@@ -80,15 +84,29 @@ export const getDogDetails = async (dogId: string) => {
       ),
       breed:breed_id (
         name
+      ),
+      dog_behaviors(
+        id,
+        behavor:behavor_id(
+          id,
+          name
+        )
       )
     `)
     .eq('id', dogId)
-    .single()
+    .single() as { data: DogDetailsResponse, error: any }
 
   if (error) throw error
 
+  // Flatten the nested structure
+  const behaviors: Behavior[] = data.dog_behaviors?.map(item => ({
+    id: item.behavor.id,
+    name: item.behavor.name
+  })) || []
+
   return {
     ...data,
+    behaviors,
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
   }
@@ -98,5 +116,7 @@ export const useDogDetails = (dogId: string) => {
   return useQuery({
     queryKey: ['dog', dogId],
     queryFn: () => getDogDetails(dogId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 }
