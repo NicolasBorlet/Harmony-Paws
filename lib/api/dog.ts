@@ -1,5 +1,5 @@
 import { supabase } from '../supabase'
-import { DogListingInterface } from './types/interfaces'
+import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
 
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -90,12 +90,12 @@ export const getDogDetails = async (dogId: string) => {
       )
     `)
     .eq('id', dogId)
-    .single()
+    .single() as { data: DogDetailsResponse, error: any }
 
   if (error) throw error
 
   // Flatten the nested structure
-  const behaviors = data.dog_behaviors?.map(item => ({
+  const behaviors: Behavior[] = data.dog_behaviors?.map(item => ({
     id: item.behavor.id,
     name: item.behavor.name
   })) || []

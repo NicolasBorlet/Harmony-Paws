@@ -119,8 +119,37 @@ export interface Role extends BaseEntity {
   name: string;
 }
 
-export interface Behavor extends BaseEntity {
+export type Behavior = {
+  id: string;
   name: string;
+}
+
+type DogBehavior = {
+  behavor: {
+    id: string;
+    name: string;
+  }
+}
+
+export type DogDetailsResponse = {
+  id: string;
+  name: string;
+  age: number;
+  sex: string;
+  image: string;
+  description: string;
+  dominance: string;
+  created_at: string;
+  updated_at: string;
+  owner: {
+    id: string;
+    first_name: string;
+    last_name: string;
+  };
+  breed: {
+    name: string;
+  };
+  dog_behaviors: DogBehavior[];
 }
 
 export interface DogBehavor extends BaseEntity {
