@@ -93,6 +93,13 @@ export interface Dog extends BaseEntity {
   owner?: Owner;
 }
 
+export interface DogListingInterface extends BaseEntity {
+  name: string;
+  age: number;
+  sex: DogSex;
+  image: string;
+}
+
 export interface Owner {
   id: number;
   name: string;

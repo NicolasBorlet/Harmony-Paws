@@ -1,15 +1,15 @@
-import { Dog } from '@/lib/api/types'
+import { DogListingInterface } from '@/lib/api/types'
 import Foundation from '@expo/vector-icons/Foundation'
 import { Image } from 'expo-image'
+import { memo, useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { DogCard } from '../ui/card'
 import { CardTitle } from '../ui/text'
-import { memo, useMemo } from 'react'
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
 
-const DogItemListing = memo(function DogItemListing({ dog }: { dog: Dog }) {
+const DogItemListing = memo(function DogItemListing({ dog }: { dog: DogListingInterface }) {
   const genderIcon = useMemo(() => {
     if (dog.sex === 'male') {
       return (
