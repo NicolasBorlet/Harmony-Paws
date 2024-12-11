@@ -4,16 +4,12 @@ import { View } from "react-native";
 import { MasterDogCard } from "../ui/card";
 import { Body, Small } from "../ui/text";
 
-const masterData = {
-  name: 'Lucie',
-  age: 30,
-  image: 'https://picsum.photos/300'
-}
-
-export default function MasterDogCardComponent({}) {
+export default function MasterDogCardComponent({ masterData }: { masterData: { name: string, age: number, image: string } }) {
   return (
     <MasterDogCard>
-      <Image source={{ uri: masterData.image }} style={{
+      <Image source={{
+        uri: masterData.image ? masterData.image : 'https://picsum.photos/300'
+      }} style={{
         width: 60,
         height: 60,
         borderRadius: 1000,
@@ -30,7 +26,7 @@ export default function MasterDogCardComponent({}) {
           flexDirection: 'row',
           gap: 4
         }}>
-          <Body>{masterData.name}, {masterData.age} ans</Body>
+          <Body>{masterData.name}</Body>
         </View>
         <Small color="#979898" numberOfLines={2}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</Small>
       </View>
