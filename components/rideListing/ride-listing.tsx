@@ -1,34 +1,22 @@
+import { usePaginatedActivities } from "@/lib/api/ride";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import OpacityFadeIn from "../animate/opacity-fadeIn";
+import LoaderComponent from "../loader";
+import { Body } from "../ui/text";
 import RideItemListing from "./ride-item-listing";
 
-const rideData = [
-  {
-    id: 1,
-    name: 'Ride 1',
-    date: '14/11/2024',
-    time: '10:00',
-  },
-  {
-    id: 2,
-    name: 'Ride 2',
-    date: '14/11/2024',
-    time: '10:00',
-  },
-  {
-    id: 3,
-    name: 'Ride 3',
-    date: '14/11/2024',
-    time: '10:00',
-  },
-];
 
 export default function RideListing() {
+  const { data, isLoading, isError } = usePaginatedActivities()
+
+  if (isLoading) {
+    return <LoaderComponent />
+  }
   return (
     <FlashList
-      data={rideData}
+      data={data?.activities || []}
       renderItem={({ item, index }) => (
         <Pressable onPress={() => router.push(`/ride/${item.id}`)}>
           <OpacityFadeIn delay={index * 200}>
@@ -36,6 +24,9 @@ export default function RideListing() {
           </OpacityFadeIn>
         </Pressable>
       )}
+      ListEmptyComponent={() => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Body>Aucune activité trouvée</Body>
+      </View>}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 24 }}
