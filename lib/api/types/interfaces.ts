@@ -107,11 +107,11 @@ export interface DogListingInterface extends BaseEntity {
 
 export interface Owner {
   id: number;
-  name: string;
+  first_name: string;
+  last_name: string;
 }
 
 export interface Breed {
-  id: number;
   name: string;
 }
 
