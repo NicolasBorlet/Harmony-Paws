@@ -1,5 +1,6 @@
 import { translations } from '@/lib/utils/translations'
 import { useMMKVDevTools } from '@dev-plugins/react-native-mmkv'
+import { useReactQueryDevTools } from '@dev-plugins/react-query'
 import {
   Montserrat_100Thin,
   Montserrat_200ExtraLight,
@@ -13,6 +14,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/montserrat'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { getLocales } from 'expo-localization'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -34,6 +36,10 @@ export const i18n = new I18n(translations)
 
 export default function RootLayout() {
   useMMKVDevTools();
+
+  const queryClient = new QueryClient()
+
+  useReactQueryDevTools(queryClient);
 
   const [loaded, error] = useFonts({
     RoundsBlack: require('../assets/fonts/RoundsBlack.ttf'),
@@ -67,12 +73,14 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SessionProvider>
-        <BottomSheetModalProvider>
-          <Slot />
-        </BottomSheetModalProvider>
-      </SessionProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SessionProvider>
+          <BottomSheetModalProvider>
+            <Slot />
+          </BottomSheetModalProvider>
+        </SessionProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   )
 }

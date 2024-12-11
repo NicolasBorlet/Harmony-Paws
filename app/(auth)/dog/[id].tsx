@@ -4,21 +4,19 @@ import BodyTitle from '@/components/bodyTitle/body-title'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
-import RideItemListing from '@/components/rideListing/ride-item-listing'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import {
   Body,
   BodyBold,
   BodyMedium,
-  CardTitle,
-  ExtraSmallMedium,
+  CardTitle
 } from '@/components/ui/text'
-import { GridItem, GridItemBackground } from '@/components/ui/view'
-import { DogDominance } from '@/lib/api/types'
-import { router } from 'expo-router'
+import { GridItemBackground } from '@/components/ui/view'
+import { useDogDetails } from '@/lib/api/dog'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -26,61 +24,12 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const dog = {
-  id: 1,
-  name: 'Taico',
-  age: 3,
-  image: 'https://picsum.photos/300',
-  sex: 'Mâle',
-  dominance: DogDominance.DOMINANT,
-  description:
-    "Taico est un chien de race australienne. Il est le meilleur ami de la famille et est toujours à l'écoute de ses amis.",
-  owner: {
-    name: 'Emma Swane',
-    image: 'https://picsum.photos/300',
-  },
-  breed: {
-    name: 'Golden Retriever',
-  },
-  behavors: [
-    {
-      id: 1,
-      name: 'Joueur',
-    },
-    {
-      id: 2,
-      name: 'Calme',
-    },
-    {
-      id: 3,
-      name: 'Intéressé',
-    },
-    {
-      id: 4,
-      name: 'Joueur',
-    },
-    {
-      id: 5,
-      name: 'Calme',
-    },
-    {
-      id: 6,
-      name: 'Intéressé',
-    },
-    {
-      id: 7,
-      name: 'Joueur',
-    },
-  ],
-  nextRide: {
-    image: 'https://picsum.photos/300',
-    name: 'Balade 1',
-    date: 'Lundi 1er avril',
-    time: '14h30',
-  },
-}
+import LoaderComponent from '@/components/loader'
 
 export default function DogDetails() {
+  const { id } = useLocalSearchParams()
+  const { data, isLoading } = useDogDetails(id)
+
   const insets = useSafeAreaInsets()
 
   const bottomPosition = useSharedValue(-100)
@@ -89,6 +38,12 @@ export default function DogDetails() {
   useEffect(() => {
     buttonAnimation()
   }, [])
+
+  useEffect(() => {
+    // if (data) {
+    console.log(data)
+    // }
+  }, [data])
 
   const buttonAnimation = () => {
     // Animate the button to slide up
@@ -111,14 +66,18 @@ export default function DogDetails() {
     }
   })
 
+  if (isLoading) {
+    return <LoaderComponent />
+  }
+
   return (
     <>
       <Back />
-      <ParallaxScrollView headerImage={dog.image}>
+      <ParallaxScrollView headerImage={data?.image || ''}>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>
-              {dog.name}, {dog.age} ans
+              {data.name}, {data.age} ans
             </CardTitle>
           </View>
           <View>
@@ -130,20 +89,20 @@ export default function DogDetails() {
               }}
             >
               <GridItemBackground>
-                <BodyBold color='#663399'>{dog.breed.name}</BodyBold>
+                <BodyBold color='#663399'>{data.breed.name}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-                <BodyBold color='#663399'>{dog.sex}</BodyBold>
+                <BodyBold color='#663399'>{data.sex}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-                <BodyBold color='#663399'>{dog.dominance}</BodyBold>
+                <BodyBold color='#663399'>{data.dominance}</BodyBold>
               </GridItemBackground>
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title={`${i18n.t('aboutOf')} ${dog.name}`} />
-            <Body>{dog.description || ''}</Body>
+            <BodyTitle title={`${i18n.t('aboutOf')} ${data.name}`} />
+            <Body>{data.description || ''}</Body>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
@@ -155,24 +114,26 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {dog.behavors.map(behavor => (
+              {/* {dog.behavors.map(behavor => (
                 <GridItem key={behavor.id}>
                   <ExtraSmallMedium color='#F49819'>
                     {behavor.name}
                   </ExtraSmallMedium>
                 </GridItem>
-              ))}
+              ))} */}
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('myMaster')} />
-            <MasterDogCardComponent />
+            <Pressable onPress={() => router.push(`/user/${data.owner_id}`)}>
+              <MasterDogCardComponent masterData={{ name: data.owner.first_name, age: data.owner.last_name, image: data.owner.image }} />
+            </Pressable>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('nextRide')} />
-            <RideItemListing rideCardData={dog.nextRide} />
+            {/* <RideItemListing rideCardData={data.nextRide} /> */}
           </View>
         </View>
       </ParallaxScrollView>

@@ -8,9 +8,8 @@ export const user$ = observable(
   syncedSupabase({
     supabase,
     collection: 'users',
-    select: from => from.select('id, email, token, created_at, last_sign_in_at'),
-    // Persist locally
-    filter: select => select.eq('uid', session$.get().id),
+    select: from => from.select('id, role_id, first_name, last_name, created_at, last_sign_in_at'),
+    filter: (query) => query.eq('uid', session$.get().id),
     persist: {
       plugin: ObservablePersistMMKV,
       name: 'user',
