@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { useCallback, useMemo, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../animate/opacity-fadeIn'
+import LoaderComponent from '../loader'
 import DogItemListing from './dog-item-listing'
 
 
@@ -37,6 +38,10 @@ export default function DogListing() {
     </OpacityFadeIn>
   ), [handleDogPress])
 
+  if (isLoading) {
+    return <LoaderComponent />
+  }
+
   return (
     <FlashList
       data={data?.dogs || []}
@@ -46,6 +51,5 @@ export default function DogListing() {
       contentContainerStyle={contentContainerStyle}
       showsVerticalScrollIndicator={false}
     />
-    // <LoaderComponent />
   )
 }

@@ -16,9 +16,8 @@ export default function LoaderComponent() {
         loop
         ref={animation}
         style={{
-          width: 200,
-          height: 200,
-          backgroundColor: '#eee',
+          width: 250,
+          height: 250,
         }}
         // Find more Lottie files at https://lottiefiles.com/featured
         source={require('../../assets/animations/loader.json')}
@@ -31,7 +30,6 @@ const styles = StyleSheet.create({
   animationContainer: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
     flex: 1,
   },
   buttonContainer: {
