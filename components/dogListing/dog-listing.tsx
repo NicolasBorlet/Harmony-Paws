@@ -1,8 +1,8 @@
-import { useDogsFromUserId } from '@/lib/api/dog'
+import { usePaginatedDogs } from '@/lib/api/dog'
 import { DogListingInterface, DogSex } from '@/lib/api/types'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../animate/opacity-fadeIn'
 import DogItemListing from './dog-item-listing'
@@ -20,8 +20,15 @@ const dogs: DogListingInterface[] = [
 ]
 
 export default function DogListing() {
+  const [page, setPage] = useState(0)
+  const pageSize = 10
+
   // const dogs = dogs$.get()
-  const { data, isLoading, error } = useDogsFromUserId('1')
+  const {
+    data,
+    isLoading,
+    isFetching,
+  } = usePaginatedDogs(page, pageSize)
 
   const separatorStyle = useMemo(() => ({ height: 20 }), [])
   const contentContainerStyle = useMemo(() => ({
@@ -48,7 +55,7 @@ export default function DogListing() {
 
   return (
     <FlashList
-      data={data}
+      data={data?.dogs || []}
       renderItem={renderDogItem}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={separatorStyle} />}

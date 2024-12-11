@@ -25,3 +25,37 @@ export const useDogsFromUserId = (userId: string) => {
     queryFn: () => getDogsFromUserId(userId),
   })
 }
+
+export const getPaginatedDogs = async (
+  page: number = 0,
+  pageSize: number = 10
+) => {
+  const from = page * pageSize
+  const to = from + pageSize - 1
+
+  const { data, error, count } = await supabase
+    .from('dogs')
+    .select('id, name, age, sex, image, created_at, updated_at', { count: 'exact' })
+    .range(from, to)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+
+  return {
+    dogs: data?.map(dog => ({
+      ...dog,
+      created_at: dog.created_at ? new Date(dog.created_at) : new Date(),
+      updated_at: dog.updated_at ? new Date(dog.updated_at) : new Date(),
+    })) as DogListingInterface[],
+    totalCount: count || 0,
+    hasMore: (count || 0) > to + 1
+  }
+}
+
+// Hook avec pagination
+export const usePaginatedDogs = (page: number = 0, pageSize: number = 10) => {
+  return useQuery({
+    queryKey: ['dogs', 'paginated', page, pageSize],
+    queryFn: () => getPaginatedDogs(page, pageSize),
+  })
+}
