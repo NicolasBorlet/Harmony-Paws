@@ -23,6 +23,8 @@ export const useDogsFromUserId = (userId: string) => {
   return useQuery({
     queryKey: ['dogs', userId],
     queryFn: () => getDogsFromUserId(userId),
+    refetchOnMount: false, // Désactive le refetch auto au montage
+    refetchOnWindowFocus: false
   })
 }
 
@@ -57,6 +59,8 @@ export const usePaginatedDogs = (page: number = 0, pageSize: number = 10) => {
   return useQuery({
     queryKey: ['dogs', 'paginated', page, pageSize],
     queryFn: () => getPaginatedDogs(page, pageSize),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 }
 
@@ -112,5 +116,7 @@ export const useDogDetails = (dogId: string) => {
   return useQuery({
     queryKey: ['dog', dogId],
     queryFn: () => getDogDetails(dogId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   })
 }
