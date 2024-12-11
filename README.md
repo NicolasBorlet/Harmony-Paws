@@ -1,50 +1,62 @@
-# Welcome to your Expo app 👋
+# Harmony Paws 🐾
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A social mobile app for dog owners to connect, organize walks, and share experiences.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Dog Profiles**: Create and manage profiles for your dogs with details like breed, age, and behavior
+- **Social Walks**: Organize and join group walks with other dog owners
+- **Real-time Chat**: Message other owners and coordinate meetups
+- **Interactive Map**: Find nearby walks and dog-friendly locations
+- **Training Resources**: Access dog training modules and educational content
+- **Multilingual**: Supports English and French localization
 
+## Tech Stack
+
+- **Framework**: [Expo](https://expo.dev) with React Native
+- **Navigation**: Expo Router with file-based routing
+- **State Management**: TanStack Query
+- **Database**: Supabase
+- **UI Components**: Custom components with Reanimated for animations
+- **Localization**: i18n-js
+- **Maps**: react-native-maps
+- **Chat**: react-native-gifted-chat
+
+## Development
+
+1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. Start the development server:
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+3. Run on your preferred platform:
+   - iOS Simulator
+   - Android Emulator
+   - Physical device with Expo Go
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- `/app`: Main application code with file-based routing
+- `/components`: Reusable UI components
+- `/lib`: Core utilities, API calls, and types
+- `/assets`: Images, fonts, and other static assets
+- `/constants`: Application constants and configurations
 
-## Get a fresh project
+## Contributing
 
-When you're ready, run:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
 
-```bash
-npm run reset-project
-```
+## License
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+MIT License
 
-## Learn more
+## Support
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Join our [Discord community](https://chat.expo.dev) for support and discussions.
