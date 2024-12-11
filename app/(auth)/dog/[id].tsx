@@ -89,7 +89,7 @@ export default function DogDetails() {
               }}
             >
               <GridItemBackground>
-                {/* <BodyBold color='#663399'>{data.breed}</BodyBold> */}
+                <BodyBold color='#663399'>{data.breed.name}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <BodyBold color='#663399'>{data.sex}</BodyBold>
