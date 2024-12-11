@@ -1,23 +1,12 @@
 import { usePaginatedDogs } from '@/lib/api/dog'
-import { DogListingInterface, DogSex } from '@/lib/api/types'
+import { DogListingInterface } from '@/lib/api/types'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../animate/opacity-fadeIn'
 import DogItemListing from './dog-item-listing'
 
-const dogs: DogListingInterface[] = [
-  {
-    id: 1,
-    name: 'Rex',
-    age: 3,
-    image: 'https://picsum.photos/300',
-    sex: DogSex.MALE,
-    updated_at: new Date(),
-    created_at: new Date(),
-  },
-]
 
 export default function DogListing() {
   const [page, setPage] = useState(0)
@@ -48,11 +37,6 @@ export default function DogListing() {
     </OpacityFadeIn>
   ), [handleDogPress])
 
-  useEffect(() => {
-    // console.log('session', session$.get().id)
-    console.log('dogs', data)
-  }, [dogs])
-
   return (
     <FlashList
       data={data?.dogs || []}
@@ -62,5 +46,6 @@ export default function DogListing() {
       contentContainerStyle={contentContainerStyle}
       showsVerticalScrollIndicator={false}
     />
+    // <LoaderComponent />
   )
 }

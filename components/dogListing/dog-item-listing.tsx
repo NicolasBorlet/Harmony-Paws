@@ -29,7 +29,7 @@ const DogItemListing = memo(function DogItemListing({ dog }: { dog: DogListingIn
     <DogCard>
       <Image
         style={styles.image}
-        source={dog.image}
+        source={dog.image || 'https://picsum.photos/200'}
         placeholder={{ blurhash }}
         contentFit='cover'
         transition={1000}
