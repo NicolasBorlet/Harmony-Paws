@@ -157,3 +157,9 @@ export interface DogBehavor extends BaseEntity {
   dog_id: number;
   behavor_id: number;
 }
+
+export interface ActivityListingInterface extends BaseEntity {
+  place: string;
+  date: Date;
+  duration: string;
+}
