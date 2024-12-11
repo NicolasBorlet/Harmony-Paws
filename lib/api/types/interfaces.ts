@@ -145,6 +145,7 @@ export type DogDetailsResponse = {
     id: string;
     first_name: string;
     last_name: string;
+    image: string;
   };
   breed: {
     name: string;

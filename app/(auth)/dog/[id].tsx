@@ -29,7 +29,7 @@ import LoaderComponent from '@/components/loader'
 
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
-  const { data, isLoading } = useDogDetails(id)
+  const { data, isLoading } = useDogDetails(id as string)
 
   const insets = useSafeAreaInsets()
 
@@ -67,7 +67,7 @@ export default function DogDetails() {
     }
   })
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <LoaderComponent />
   }
 
@@ -127,7 +127,7 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('myMaster')} />
-            <Pressable onPress={() => router.push(`/user/${data.owner_id}`)}>
+            <Pressable onPress={() => router.push(`/user/${data.owner.id}`)}>
               <MasterDogCardComponent masterData={{ name: data.owner.first_name, age: data.owner.last_name, image: data.owner.image }} />
             </Pressable>
           </View>
