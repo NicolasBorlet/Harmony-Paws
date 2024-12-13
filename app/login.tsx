@@ -76,12 +76,14 @@ export default function Login() {
             placeholder={i18n.t('email')}
             value={email}
             onChangeText={setEmail}
+            autoCapitalize='none'
           />
           <CustomTextInput
             placeholder={i18n.t('password')}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
+            clearTextOnFocus={false}
           />
           <Pressable onPress={() => { }} style={styles.forgotPassword}>
             <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
