@@ -1,7 +1,9 @@
+import LoginHP from '@/assets/svg/login-hp'
 import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
-import { Body, BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
+import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
+import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -40,26 +42,28 @@ export default function Login() {
     setLoading(false)
   }
 
-  // async function signUpWithEmail() {
-  //   setLoading(true)
-  //   const {
-  //     data: { session },
-  //     error,
-  //   } = await supabase.auth.signUp({
-  //     email: email,
-  //     password: password,
-  //   })
-
-  //   if (error) Alert.alert(error.message)
-  //   if (!session) Alert.alert('Please check your inbox for email verification!')
-  //   setLoading(false)
-  // }
-
   const backgroundContainer = (
-    <View>
-      <Body>
-        {i18n.t('signIn')}
-      </Body>
+    <View style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 12,
+    }}>
+      <View style={{
+        width: 155,
+        height: 155,
+        backgroundColor: '#FDE6D7',
+        borderRadius: 999,
+        overflow: 'hidden',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+      }}>
+        <Image source={require('../assets/images/dog-login.png')} style={{
+          width: 133,
+          height: 141,
+        }} />
+      </View>
+      <LoginHP />
     </View>
   )
 
