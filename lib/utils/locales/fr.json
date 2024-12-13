@@ -83,5 +83,7 @@
   "password": "Mot de passe",
   "forgotPassword": "Mot de passe oublié",
   "signUp": "S'inscrire",
-  "signIn": "Se connecter"
+  "signIn": "Se connecter",
+  "noAccount": "Vous n’avez pas de compte ?",
+  "signUpLink": "Créer un compte"
 }

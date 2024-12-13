@@ -2,6 +2,7 @@ import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
+import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import {
   Alert,
@@ -81,6 +82,10 @@ export default function Login() {
         <StandardButton onPress={handleSignIn}>
           <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
         </StandardButton>
+        <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
+          fontFamily: 'Montserrat_800ExtraBold',
+          color: '#F49819',
+        }} href='/signup'>{i18n.t('signUpLink')}</Link></BodyMedium>
       </View>
     </ParallaxScrollView>
   )
