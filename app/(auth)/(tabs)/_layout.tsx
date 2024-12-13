@@ -5,6 +5,7 @@ import * as Haptics from 'expo-haptics'
 import { Image } from 'expo-image'
 import { Redirect, Tabs } from 'expo-router'
 import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 type TabBarIconProps = {
   focused: boolean
@@ -35,7 +36,7 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontSize: 12,
           fontFamily: 'Montserrat_400Regular',
-          color: '#663399',
+          color: Colors.light.secondary,
         },
         tabBarButton: (props: any) => {
           const { style, ...otherProps } = props
@@ -63,9 +64,9 @@ export default function TabLayout() {
           title: `${i18n.t('home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? (
-              <Ionicons name='paw' size={24} color='#663399' />
+              <Ionicons name='paw' size={24} color={Colors.light.secondary} />
             ) : (
-              <Ionicons name='paw-outline' size={24} color='#663399' />
+              <Ionicons name='paw-outline' size={24} color={Colors.light.secondary} />
             ),
         }}
       />

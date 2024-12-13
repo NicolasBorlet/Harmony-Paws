@@ -26,6 +26,7 @@ import Animated, {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import LoaderComponent from '@/components/loader'
+import { Colors } from '@/constants/Colors'
 
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
@@ -90,13 +91,13 @@ export default function DogDetails() {
               }}
             >
               <GridItemBackground>
-                <BodyBold color='#663399'>{data.breed.name}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{data.breed.name}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-                <BodyBold color='#663399'>{data.sex}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
-                <BodyBold color='#663399'>{data.dominance}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
               </GridItemBackground>
             </Block>
           </View>

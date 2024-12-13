@@ -1,6 +1,7 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text'
+import { Colors } from '@/constants/Colors'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { useCallback, useState } from 'react'
@@ -254,15 +255,15 @@ export default function MessageDetail() {
     return (
       <View
         style={{
-          backgroundColor: isUser ? '#F7A400' : 'white',
+          backgroundColor: isUser ? Colors.light.primary : 'white',
           borderRadius: 10,
           borderWidth: isUser ? 0 : 1,
-          borderColor: '#663399',
+          borderColor: Colors.light.secondary,
           padding: 12,
           maxWidth: '80%',
         }}
       >
-        <Small color={isUser ? 'white' : '#663399'}>
+        <Small color={isUser ? 'white' : Colors.light.secondary}>
           {props.currentMessage.text}
         </Small>
       </View>

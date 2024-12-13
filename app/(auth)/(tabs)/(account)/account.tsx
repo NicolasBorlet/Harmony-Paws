@@ -7,11 +7,12 @@ import Divider from '@/components/ui/divider'
 import { RoundedImage } from '@/components/ui/image'
 import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
+import { Colors } from '@/constants/Colors'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { Button, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -50,14 +51,14 @@ export default function AccountScreen() {
           }}>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
-                <Small color='#F7A400'>
+                <Small color={Colors.light.primary}>
                   {i18n.t('editProfile')}
                 </Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
-                <Small color='#F7A400'>
+                <Small color={Colors.light.primary}>
                   {i18n.t('shareProfile')}
                 </Small>
               </StandardButton>
@@ -88,7 +89,7 @@ export default function AccountScreen() {
                   width: 60,
                   height: 60,
                   borderRadius: 999,
-                  backgroundColor: '#663399',
+                  backgroundColor: Colors.light.secondary,
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
@@ -106,26 +107,26 @@ export default function AccountScreen() {
         }}>
           <Block row gap={24}>
             <GridItemBackground>
-              <BodyBold color='#663399'>
+              <BodyBold color={Colors.light.secondary}>
                 {i18n.t('friends')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color='#663399'>
+              <BodyBold color={Colors.light.secondary}>
                 {i18n.t('favorites')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={24}>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('createdRides')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('completedFormations')}
@@ -134,14 +135,14 @@ export default function AccountScreen() {
           </Block>
           <Block row gap={24}>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('completedActivities')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('meetings')}
@@ -150,14 +151,14 @@ export default function AccountScreen() {
           </Block>
           <Block row gap={24}>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('myBones')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color='#663399' style={{
+              <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
               }}>
                 {i18n.t('myBones')}
@@ -172,12 +173,12 @@ export default function AccountScreen() {
           </Body>
         </StandardButton>
 
-        <View style={styles.verticallySpaced}>
+        {/* <View style={styles.verticallySpaced}>
           <Button
             title='Remove onBoarding'
             onPress={() => storage.set('onBoarding', false)}
           />
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   )
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 16,
     gap: 32,
+    paddingBottom: 24
   },
   verticallySpaced: {
     paddingTop: 4,

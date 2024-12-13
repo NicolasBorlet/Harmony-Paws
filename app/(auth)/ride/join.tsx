@@ -8,6 +8,7 @@ import {
   SmallMedium,
   SpecialTitle,
 } from '@/components/ui/text'
+import { Colors } from '@/constants/Colors'
 import { TextInput, View } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -88,9 +89,9 @@ export default function DogInvitation() {
             >
               <TextInput
                 placeholder={i18n.t('joinPlaceholder')}
-                placeholderTextColor='#663399'
+                placeholderTextColor={Colors.light.secondary}
                 style={{
-                  color: '#663399',
+                  color: Colors.light.secondary,
                   minHeight: 100,
                   maxWidth: '100%',
                   textAlignVertical: 'top',
@@ -104,10 +105,10 @@ export default function DogInvitation() {
           </View>
         </View>
         <View style={{ width: '100%', alignItems: 'center', gap: 16 }}>
-          <StandardButton onPress={() => {}}>
+          <StandardButton onPress={() => { }}>
             <BodyMedium color='#fff'>Envoyer le message</BodyMedium>
           </StandardButton>
-          <UnderlinedButton onPress={() => {}}>
+          <UnderlinedButton onPress={() => { }}>
             <BodyMedium
               color='#000000'
               style={{ textDecorationLine: 'underline' }}
