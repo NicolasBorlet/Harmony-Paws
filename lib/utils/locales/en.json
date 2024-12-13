@@ -77,5 +77,15 @@
   "completedActivities": "Completed activities",
   "meetings": "Meetings",
   "myBones": "My bones",
-  "hisMate": "His mate"
+  "hisMate": "His mate",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "forgotPassword": "Forgot password",
+  "signUp": "Sign up",
+  "signIn": "Sign in",
+  "signInLink": "Sign in",
+  "noAccount": "Don't have an account ?",
+  "alreadyAccount": "Already have an account ?",
+  "signUpLink": "Create an account"
 }

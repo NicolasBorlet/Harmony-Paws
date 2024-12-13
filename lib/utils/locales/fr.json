@@ -77,5 +77,15 @@
   "completedActivities": "Les activités réalisées",
   "meetings": "Mes rencontres",
   "myBones": "Mes os",
-  "hisMate": "Son compagnon"
+  "hisMate": "Son compagnon",
+  "login": "Connexion",
+  "signIn": "Se connecter",
+  "signInLink": "Se connecter",
+  "email": "Email",
+  "password": "Mot de passe",
+  "forgotPassword": "Mot de passe oublié",
+  "signUp": "S'inscrire",
+  "noAccount": "Vous n’avez pas de compte ?",
+  "alreadyAccount": "Vous avez déjà un compte ?",
+  "signUpLink": "Créer un compte"
 }
