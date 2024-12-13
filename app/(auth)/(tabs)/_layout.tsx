@@ -1,11 +1,11 @@
 import { i18n } from '@/app/_layout'
 import { useSession } from '@/app/ctx'
+import { Colors } from '@/constants/Colors'
 import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { Image } from 'expo-image'
 import { Redirect, Tabs } from 'expo-router'
 import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 type TabBarIconProps = {
   focused: boolean
