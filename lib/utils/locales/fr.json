@@ -79,11 +79,12 @@
   "myBones": "Mes os",
   "hisMate": "Son compagnon",
   "login": "Connexion",
+  "signIn": "Se connecter",
+  "signInLink": "Se connecter",
   "email": "Email",
   "password": "Mot de passe",
   "forgotPassword": "Mot de passe oublié",
   "signUp": "S'inscrire",
-  "signIn": "Se connecter",
   "noAccount": "Vous n’avez pas de compte ?",
   "signUpLink": "Créer un compte"
 }

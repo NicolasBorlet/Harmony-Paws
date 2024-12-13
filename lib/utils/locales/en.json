@@ -84,6 +84,7 @@
   "forgotPassword": "Forgot password",
   "signUp": "Sign up",
   "signIn": "Sign in",
+  "signInLink": "Sign in",
   "noAccount": "Don't have an account ?",
   "signUpLink": "Create an account"
 }

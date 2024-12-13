@@ -59,7 +59,7 @@ export default function Login() {
     <ParallaxScrollView headerImage={''}>
       <View style={styles.container}>
         <SpecialTitle style={{ alignSelf: 'center' }}>
-          Connexion
+          {i18n.t('signIn')}
         </SpecialTitle>
         <View style={{
           gap: 12,
