@@ -3,7 +3,10 @@ import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
+import { createDog } from '@/lib/api/dog';
 import { AntDesign } from "@expo/vector-icons";
+import { useQueryClient } from '@tanstack/react-query';
+import * as Burnt from "burnt";
 import { Image } from "expo-image";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
@@ -35,11 +38,41 @@ export default function ThirdStep() {
     }
   };
 
-  function handleNextStep() {
-    storage.set('dog', JSON.stringify({ ...JSON.parse(storage.getString('dog') || '{}'), image }))
-    storage.set('onBoarding', 'true')
-    router.replace('/(home)')
-  };
+  const queryClient = useQueryClient();
+
+  async function handleNextStep() {
+    try {
+      const dogData = JSON.parse(storage.getString('dog') || '{}');
+
+      console.log(dogData.ownerId);
+
+      // Créer le chien
+      const [newDog] = await createDog({
+        name: dogData.name,
+        description: 'description du chien',
+        age: parseInt(dogData.age),
+        sex: dogData.sex.toLowerCase(),
+        breed_id: 10,
+        owner_id: 1,
+        dominance: 'dominant'
+      });
+
+      // Invalider le cache des chiens
+      await queryClient.invalidateQueries({ queryKey: ['dogs'] });
+
+      storage.set('onBoarding', 'true');
+      router.replace('/(home)')
+      Burnt.toast({
+        title: "Chien créé avec succès",
+        preset: "done",
+        message: "Vous pouvez maintenant ajouter des comportements à votre chien.",
+        haptic: "success",
+      });
+    } catch (error) {
+      console.error('Error creating dog:', error);
+      // Gérer l'erreur ici
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>

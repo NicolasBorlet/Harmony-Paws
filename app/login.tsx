@@ -81,6 +81,7 @@ export default function Login() {
             value={email}
             onChangeText={setEmail}
             autoCapitalize='none'
+            placeholderTextColor='#696969'
           />
           <CustomTextInput
             placeholder={i18n.t('password')}
@@ -88,6 +89,7 @@ export default function Login() {
             onChangeText={setPassword}
             secureTextEntry
             clearTextOnFocus={false}
+            placeholderTextColor='#696969'
           />
           <Pressable onPress={() => { }} style={styles.forgotPassword}>
             <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>

@@ -60,11 +60,13 @@ export default function Signup() {
             placeholder={i18n.t('email')}
             value={email}
             onChangeText={setEmail}
+            placeholderTextColor='#696969'
           />
           <CustomTextInput
             placeholder={i18n.t('password')}
             value={password}
             onChangeText={setPassword}
+            placeholderTextColor='#696969'
             secureTextEntry
           />
           <Pressable onPress={() => { }} style={styles.forgotPassword}>

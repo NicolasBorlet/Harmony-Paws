@@ -11,6 +11,7 @@ import { Colors } from '@/constants/Colors'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
+import * as Burnt from "burnt"
 import { router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
@@ -37,6 +38,15 @@ const dogs = [
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets()
+
+  const handleToast = () => {
+    Burnt.toast({
+      title: "Burnt not installed.",
+      preset: "error",
+      message: "See your downloads.",
+      haptic: "error",
+    });
+  }
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -179,6 +189,12 @@ export default function AccountScreen() {
             onPress={() => storage.set('onBoarding', false)}
           />
         </View> */}
+
+        <StandardButton onPress={handleToast}>
+          <Body color='white'>
+            Toast
+          </Body>
+        </StandardButton>
       </ScrollView>
     </View>
   )

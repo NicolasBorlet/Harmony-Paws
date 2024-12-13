@@ -6,6 +6,7 @@ import Dropdown from "@/components/dropdown";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
 import { CustomTextInput } from "@/components/ui/text-input";
+import { session$ } from "@/lib/observables/session-observable";
 import { dogColors } from "@/lib/utils/dog-color";
 import { dogRaces } from "@/lib/utils/dog-race";
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
@@ -33,7 +34,7 @@ export default function FirstStep() {
   const [dogColor, setDogColor] = useState('');
 
   function handleNextStep() {
-    storage.set('dog', JSON.stringify({ ownerId: userId, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed, color: dogColor }))
+    storage.set('dog', JSON.stringify({ ownerId: session$.get().id, name: dogName, sex: selectedSex, age: dogAge, breed: selectedBreed, color: dogColor }))
     router.push('/dog/creation/second-step')
   };
 

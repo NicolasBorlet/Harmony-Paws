@@ -1,3 +1,4 @@
+import { Database } from '@/database.types'
 import { supabase } from '../supabase'
 import { getImageUrl } from '../utils/get-image-url'
 import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
@@ -130,4 +131,43 @@ export const useDogDetails = (dogId: string) => {
     refetchOnMount: false,
     refetchOnWindowFocus: false
   })
+}
+
+export const createDog = async (dog: Partial<Database['public']['Tables']['dogs']['Insert']>) => {
+  // Insérer le chien
+  const { data: dogData, error: dogError } = await supabase
+    .from('dogs')
+    .insert(dog)
+    .select()
+
+  if (dogError) throw dogError
+
+  return dogData
+}
+
+export const updateDog = async (dog) => {
+  const { data, error } = await supabase.from('dogs').update(dog).eq('id', dog.id)
+  if (error) throw error
+  return data
+}
+
+export const deleteDog = async (dogId: string) => {
+  const { data, error } = await supabase.from('dogs').delete().eq('id', dogId)
+  if (error) throw error
+  return data
+}
+
+export const addDogBehaviors = async (dogId: number, behaviorIds: number[]) => {
+  const behaviors = behaviorIds.map(behaviorId => ({
+    dog_id: dogId,
+    behavor_id: behaviorId
+  }))
+
+  const { data, error } = await supabase
+    .from('dog_behaviors')
+    .insert(behaviors)
+    .select()
+
+  if (error) throw error
+  return data
 }
