@@ -58,7 +58,7 @@ export default function Signup() {
   return (
     <ParallaxScrollView headerImage={''}>
       <View style={styles.container}>
-        <SpecialTitle style={{ alignSelf: 'center' }}>
+        <SpecialTitle style={{ alignSelf: 'center' }} color='#F49819'>
           {i18n.t('signUp')}
         </SpecialTitle>
         <View style={{
@@ -84,7 +84,8 @@ export default function Signup() {
         </StandardButton>
         <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('alreadyAccount')} <Link style={{
           fontFamily: 'Montserrat_800ExtraBold',
-          color: '#F49819',
+          color: '#663399',
+          textDecorationLine: 'underline',
         }} href='/login'>{i18n.t('signInLink')}</Link></BodyMedium>
       </View>
     </ParallaxScrollView>
