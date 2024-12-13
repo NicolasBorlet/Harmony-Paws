@@ -1,6 +1,6 @@
 import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
-import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
+import { Body, BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
@@ -55,8 +55,16 @@ export default function Login() {
   //   setLoading(false)
   // }
 
+  const backgroundContainer = (
+    <View>
+      <Body>
+        {i18n.t('signIn')}
+      </Body>
+    </View>
+  )
+
   return (
-    <ParallaxScrollView backgroundColor='#F49819'>
+    <ParallaxScrollView backgroundColor='#F49819' backgroundContainer={backgroundContainer}>
       <View style={styles.container}>
         <SpecialTitle style={{ alignSelf: 'center' }}>
           {i18n.t('signIn')}

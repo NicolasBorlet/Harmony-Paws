@@ -17,12 +17,14 @@ const blurhash =
 type Props = PropsWithChildren<{
   headerImage?: string;
   backgroundColor?: string;
+  backgroundContainer?: React.ReactNode;
 }>;
 
 export default function ParallaxScrollView({
   children,
   headerImage,
   backgroundColor = '#fff',
+  backgroundContainer
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
@@ -60,7 +62,7 @@ export default function ParallaxScrollView({
           ]}>
           {headerImage ? (
             <Image style={styles.image} source={headerImage} contentFit="cover" transition={1000} placeholder={{ blurhash }} />
-          ) : null}
+          ) : backgroundContainer}
         </Animated.View>
         <View style={styles.content}>{children}</View>
       </Animated.ScrollView>
