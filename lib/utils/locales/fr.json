@@ -86,5 +86,6 @@
   "forgotPassword": "Mot de passe oublié",
   "signUp": "S'inscrire",
   "noAccount": "Vous n’avez pas de compte ?",
+  "alreadyAccount": "Vous avez déjà un compte ?",
   "signUpLink": "Créer un compte"
 }

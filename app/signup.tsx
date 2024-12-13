@@ -80,9 +80,9 @@ export default function Signup() {
           </Pressable>
         </View>
         <StandardButton onPress={handleSignIn}>
-          <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('signUp')}</BodyMedium>
         </StandardButton>
-        <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
+        <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('alreadyAccount')} <Link style={{
           fontFamily: 'Montserrat_800ExtraBold',
           color: '#F49819',
         }} href='/login'>{i18n.t('signInLink')}</Link></BodyMedium>
