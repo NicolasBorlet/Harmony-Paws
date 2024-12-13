@@ -79,12 +79,13 @@ export default function Login() {
             <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
           </Pressable>
         </View>
-        <StandardButton onPress={handleSignIn}>
+        <StandardButton onPress={handleSignIn} color='#572B84'>
           <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
         </StandardButton>
         <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
           fontFamily: 'Montserrat_800ExtraBold',
           color: '#F49819',
+          textDecorationLine: 'underline',
         }} href='/signup'>{i18n.t('signUpLink')}</Link></BodyMedium>
       </View>
     </ParallaxScrollView>
