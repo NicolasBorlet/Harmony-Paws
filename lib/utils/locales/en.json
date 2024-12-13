@@ -83,8 +83,8 @@
   "password": "Password",
   "forgotPassword": "Forgot password",
   "signUp": "Sign up",
-  "signIn": "Sign in",
-  "signInLink": "Sign in",
+  "signIn": "Login",
+  "signInLink": "Login",
   "noAccount": "Don't have an account ?",
   "alreadyAccount": "Already have an account ?",
   "signUpLink": "Create an account"

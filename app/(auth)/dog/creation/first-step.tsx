@@ -1,5 +1,6 @@
 import { i18n } from "@/app/_layout";
 import { useSession } from "@/app/ctx";
+import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
 import Dropdown from "@/components/dropdown";
 import { StandardButton } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { CustomTextInput } from "@/components/ui/text-input";
 import { dogColors } from "@/lib/utils/dog-color";
 import { dogRaces } from "@/lib/utils/dog-race";
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { router } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { MMKV } from "react-native-mmkv";
@@ -18,7 +19,10 @@ const storage = new MMKV();
 
 export default function FirstStep() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   const { session } = useSession();
+
+  const canGoBack = navigation.canGoBack();
 
   const userId = session?.user?.id;
 
@@ -37,7 +41,8 @@ export default function FirstStep() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.content, { marginTop: insets.top }]}>
+      <View style={[styles.content]}>
+        {canGoBack && <Back position="relative" left="0" />}
         <View style={styles.titleContainer}>
           <BodyTitle title={i18n.t('whatIsYourDogName')} />
           <CustomTextInput
