@@ -1,19 +1,25 @@
 import { supabase } from '../supabase'
+import { getImageUrl } from '../utils/get-image-url'
 import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
 
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
     .from('dogs')
-    .select('id, name, age, sex, image, created_at, updated_at')
+    .select('id, name, age, sex, created_at, updated_at')
     .eq('owner_id', userId)
 
   if (error) throw error
 
-  return data?.map(dog => ({
-    ...dog,
-    created_at: dog.created_at ? new Date(dog.created_at) : new Date(),
-    updated_at: dog.updated_at ? new Date(dog.updated_at) : new Date(),
-  })) as DogListingInterface[]
+  const dogsWithImages = await Promise.all(
+    data?.map(async dog => ({
+      ...dog,
+      image: await getImageUrl(dog.id.toString()) || '',
+      created_at: dog.created_at ? new Date(dog.created_at) : new Date(),
+      updated_at: dog.updated_at ? new Date(dog.updated_at) : new Date(),
+    }))
+  )
+
+  return dogsWithImages as DogListingInterface[]
 }
 
 // Hook personnalisé pour TanStack Query
@@ -37,18 +43,23 @@ export const getPaginatedDogs = async (
 
   const { data, error, count } = await supabase
     .from('dogs')
-    .select('id, name, age, sex, image, created_at, updated_at', { count: 'exact' })
+    .select('id, name, age, sex, created_at, updated_at', { count: 'exact' })
     .range(from, to)
     .order('created_at', { ascending: false })
 
   if (error) throw error
 
-  return {
-    dogs: data?.map(dog => ({
+  const dogsWithImages = await Promise.all(
+    data?.map(async dog => ({
       ...dog,
+      image: await getImageUrl(dog.id.toString()) || '',
       created_at: dog.created_at ? new Date(dog.created_at) : new Date(),
       updated_at: dog.updated_at ? new Date(dog.updated_at) : new Date(),
-    })) as DogListingInterface[],
+    }))
+  )
+
+  return {
+    dogs: dogsWithImages as DogListingInterface[],
     totalCount: count || 0,
     hasMore: (count || 0) > to + 1
   }
@@ -72,7 +83,6 @@ export const getDogDetails = async (dogId: string) => {
       name,
       age,
       sex,
-      image,
       description,
       dominance,
       created_at,
@@ -106,6 +116,7 @@ export const getDogDetails = async (dogId: string) => {
 
   return {
     ...data,
+    image: await getImageUrl(dogId),
     behaviors,
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),

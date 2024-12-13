@@ -4,7 +4,7 @@ import { RideCard } from "../ui/card";
 import { CardTitle, ExtraSmall } from "../ui/text";
 
 const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+  'L6Pj0^jE.AyE_3t7t7R**0o#DgR4';
 
 export default function RideItemListing({ rideCardData }: { rideCardData: any }) {
   return (
