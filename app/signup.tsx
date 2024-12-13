@@ -47,7 +47,7 @@ export default function Signup() {
   }
 
   return (
-    <ParallaxScrollView headerImage={''}>
+    <ParallaxScrollView backgroundColor='#663399'>
       <View style={styles.container}>
         <SpecialTitle style={{ alignSelf: 'center' }} color='#F49819'>
           {i18n.t('signUp')}

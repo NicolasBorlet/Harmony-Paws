@@ -56,7 +56,7 @@ export default function Login() {
   // }
 
   return (
-    <ParallaxScrollView headerImage={''}>
+    <ParallaxScrollView backgroundColor='#F49819'>
       <View style={styles.container}>
         <SpecialTitle style={{ alignSelf: 'center' }}>
           {i18n.t('signIn')}
