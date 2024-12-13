@@ -1,13 +1,17 @@
+import ParallaxScrollView from '@/components/parallax-scrollview'
+import { StandardButton } from '@/components/ui/button'
+import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
+import { CustomTextInput } from '@/components/ui/text-input'
 import React, { useState } from 'react'
 import {
   Alert,
   AppState,
-  Button,
+  Pressable,
   StyleSheet,
-  TextInput,
-  View,
+  View
 } from 'react-native'
 import { supabase } from '../lib/supabase'
+import { i18n } from './_layout'
 import { useSession } from './ctx'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
@@ -35,55 +39,50 @@ export default function Login() {
     setLoading(false)
   }
 
-  async function signUpWithEmail() {
-    setLoading(true)
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
+  // async function signUpWithEmail() {
+  //   setLoading(true)
+  //   const {
+  //     data: { session },
+  //     error,
+  //   } = await supabase.auth.signUp({
+  //     email: email,
+  //     password: password,
+  //   })
 
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
-    setLoading(false)
-  }
+  //   if (error) Alert.alert(error.message)
+  //   if (!session) Alert.alert('Please check your inbox for email verification!')
+  //   setLoading(false)
+  // }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TextInput
-          onChangeText={text => setEmail(text)}
-          value={email}
-          placeholder='email@address.com'
-          autoCapitalize={'none'}
-        />
+    <ParallaxScrollView headerImage={''}>
+      <View style={styles.container}>
+        <SpecialTitle style={{ alignSelf: 'center' }}>
+          Connexion
+        </SpecialTitle>
+        <View style={{
+          gap: 12,
+        }}>
+          <CustomTextInput
+            placeholder={i18n.t('email')}
+            value={email}
+            onChangeText={setEmail}
+          />
+          <CustomTextInput
+            placeholder={i18n.t('password')}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <Pressable onPress={() => { }} style={styles.forgotPassword}>
+            <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
+          </Pressable>
+        </View>
+        <StandardButton onPress={handleSignIn}>
+          <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
+        </StandardButton>
       </View>
-      <View style={styles.verticallySpaced}>
-        <TextInput
-          onChangeText={text => setPassword(text)}
-          value={password}
-          secureTextEntry={true}
-          placeholder='Password'
-          autoCapitalize={'none'}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          onPress={handleSignIn}
-          title={loading ? 'Loading...' : 'Sign in'}
-          disabled={loading}
-        />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Button
-          title='Sign up'
-          disabled={loading}
-          onPress={() => signUpWithEmail()}
-        />
-      </View>
-    </View>
+    </ParallaxScrollView>
   )
 }
 
@@ -91,6 +90,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 40,
     padding: 12,
+    gap: 32,
   },
   verticallySpaced: {
     paddingTop: 4,
@@ -99,5 +99,8 @@ const styles = StyleSheet.create({
   },
   mt20: {
     marginTop: 20,
+  },
+  forgotPassword: {
+    alignSelf: 'flex-end',
   },
 })

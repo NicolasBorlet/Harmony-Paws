@@ -11,7 +11,7 @@ import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { Button, StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -172,12 +172,12 @@ export default function AccountScreen() {
           </Body>
         </StandardButton>
 
-        {/* <View style={styles.verticallySpaced}>
+        <View style={styles.verticallySpaced}>
           <Button
             title='Remove onBoarding'
             onPress={() => storage.set('onBoarding', false)}
           />
-        </View> */}
+        </View>
       </ScrollView>
     </View>
   )
