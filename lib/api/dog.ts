@@ -1,7 +1,8 @@
-import { Database } from '@/database.types'
-import { supabase } from '../supabase'
-import { getImageUrl } from '../utils/get-image-url'
-import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
+import { Database } from '@/database.types';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { supabase } from '../supabase';
+import { getImageUrl } from '../utils/get-image-url';
+import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces';
 
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -24,7 +25,7 @@ export const getDogsFromUserId = async (userId: string) => {
 }
 
 // Hook personnalisé pour TanStack Query
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query';
 
 export const useDogsFromUserId = (userId: string) => {
   return useQuery({
@@ -170,4 +171,33 @@ export const addDogBehaviors = async (dogId: number, behaviorIds: number[]) => {
 
   if (error) throw error
   return data
+}
+
+export const uploadDogImage = async (dogId: number, uri: string) => {
+  try {
+    // Compresser l'image
+    const manipulatedImage = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { width: 1080 } }], // Redimensionne à 1080px de large max
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // 70% de qualité
+    );
+
+    // Convertir l'URI compressée en Blob
+    const response = await fetch(manipulatedImage.uri);
+    const blob = await response.blob();
+
+    const { data, error } = await supabase.storage
+      .from('dogs')
+      .upload(`${dogId}`, blob, {
+        contentType: 'image/jpeg',
+        upsert: true
+      });
+
+    if (error) throw error;
+    return data.path;
+
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    throw error;
+  }
 }
