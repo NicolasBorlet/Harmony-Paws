@@ -51,7 +51,7 @@ export default function ThirdStep() {
         name: dogData.name,
         age: parseInt(dogData.age),
         sex: dogData.sex.toLowerCase(),
-        breed_id: 10,
+        breed_id: parseInt(dogData.breed),
         owner_id: userData.id,
       });
 
