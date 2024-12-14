@@ -38,7 +38,6 @@ const dogs = [
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets()
-
   const handleToast = () => {
     Burnt.toast({
       title: "Burnt not installed.",

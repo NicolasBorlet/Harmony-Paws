@@ -4,6 +4,7 @@ import BodyTitle from "@/components/bodyTitle/body-title";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
 import { createDog, uploadDogImage } from '@/lib/api/dog';
+import { user$ } from "@/lib/observables/session-observable";
 import { AntDesign } from "@expo/vector-icons";
 import { useQueryClient } from '@tanstack/react-query';
 import * as Burnt from "burnt";
@@ -43,14 +44,15 @@ export default function ThirdStep() {
   async function handleNextStep() {
     try {
       const dogData = JSON.parse(storage.getString('dog') || '{}');
+      const userData = user$.get();
 
       // Créer le chien d'abord
       const [newDog] = await createDog({
         name: dogData.name,
         age: parseInt(dogData.age),
         sex: dogData.sex.toLowerCase(),
-        breed_id: parseInt(dogData.breed),
-        owner_id: parseInt(dogData.ownerId),
+        breed_id: 10,
+        owner_id: userData.id,
       });
 
       // Upload l'image si elle existe

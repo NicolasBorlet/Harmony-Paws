@@ -1,5 +1,4 @@
 import { Database } from '@/database.types';
-import * as ImageManipulator from 'expo-image-manipulator';
 import { supabase } from '../supabase';
 import { getImageUrl } from '../utils/get-image-url';
 import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces';
@@ -173,31 +172,27 @@ export const addDogBehaviors = async (dogId: number, behaviorIds: number[]) => {
   return data
 }
 
-export const uploadDogImage = async (dogId: number, uri: string) => {
-  try {
-    // Compresser l'image
-    const manipulatedImage = await ImageManipulator.manipulateAsync(
-      uri,
-      [{ resize: { width: 1080 } }], // Redimensionne à 1080px de large max
-      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // 70% de qualité
-    );
+// Modifie la fonction uploadDogImage dans lib/api/dog.ts
+export const uploadDogImage = async (dogId: number, imageUri: string) => {
+  const formData = new FormData();
+  formData.append('dogId', dogId.toString());
 
-    // Convertir l'URI compressée en Blob
-    const response = await fetch(manipulatedImage.uri);
-    const blob = await response.blob();
+  // Pour les fichiers locaux sur mobile
+  const filename = imageUri.split('/').pop() || 'image.jpeg';
+  formData.append('image', {
+    uri: imageUri,
+    type: 'image/jpeg',
+    name: filename,
+  } as any);
 
-    const { data, error } = await supabase.storage
-      .from('dogs')
-      .upload(`${dogId}`, blob, {
-        contentType: 'image/jpeg',
-        upsert: true
-      });
+  const { data, error } = await supabase.functions.invoke('upload-dog-image', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${(await supabase.auth.getSession())?.data.session?.access_token}`,
+    },
+  });
 
-    if (error) throw error;
-    return data.path;
-
-  } catch (error) {
-    console.error('Error uploading image:', error);
-    throw error;
-  }
-}
+  if (error) throw error;
+  return data;
+};
