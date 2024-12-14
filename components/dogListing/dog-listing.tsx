@@ -23,7 +23,8 @@ export default function DogListing() {
   const separatorStyle = useMemo(() => ({ height: 20 }), [])
   const contentContainerStyle = useMemo(() => ({
     paddingHorizontal: 16,
-    paddingTop: 24
+    paddingTop: 24,
+    paddingBottom: 24
   }), [])
 
   const handleDogPress = useCallback((dogId: number) => {

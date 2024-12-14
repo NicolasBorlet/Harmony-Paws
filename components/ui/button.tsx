@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/Colors';
 import { Platform } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -30,7 +31,7 @@ const MapButton = styled.Pressable`
   justify-content: center;
   paddingVertical: 10px;
   paddingHorizontal: 16px;
-  background-color: #663399;
+  background-color: ${Colors.light.secondary};
   border-radius: 30px;
   width: 100px;
   height: 40px;

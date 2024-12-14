@@ -1,9 +1,10 @@
+import { Colors } from "@/constants/Colors";
 import { Pressable } from "react-native";
 
 export default function RoundedIconLink({
   icon,
   onPress,
-  color = '#663399',
+  color = Colors.light.secondary,
   roundedValue = 100
 }: {
   icon: React.ReactNode;

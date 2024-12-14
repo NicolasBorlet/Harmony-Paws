@@ -1,6 +1,7 @@
 import { observable } from '@legendapp/state'
 import { ObservablePersistMMKV } from '@legendapp/state/persist-plugins/mmkv'
 import { syncedSupabase } from '@legendapp/state/sync-plugins/supabase'
+import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
 
 // Create user observable
@@ -13,13 +14,21 @@ export const user$ = observable(
     persist: {
       plugin: ObservablePersistMMKV,
       name: 'user',
-      retrySync: true, // Retry sync after reload
+      retrySync: true,
     },
-    changesSince: 'last-sync', // Sync only diffs
+    changesSince: 'last-sync',
     fieldUpdatedAt: 'updated_at',
     fieldCreatedAt: 'created_at',
+    fieldDeleted: 'deleted_at' // Ajout de ce champ
   }),
 )
+
+export const useUser = () => {
+  return useQuery({
+    queryKey: ['user'],
+    queryFn: () => user$.get(),
+  })
+}
 
 // Create session observable with only local persistence
 export const session$ = observable({

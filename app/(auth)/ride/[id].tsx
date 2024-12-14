@@ -15,6 +15,7 @@ import {
   ExtraSmallSemiBold,
 } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
+import { Colors } from '@/constants/Colors'
 import { router } from 'expo-router'
 import { useEffect } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
@@ -129,19 +130,19 @@ export default function RideDetails() {
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('start')}
                 </ExtraSmallSemiBold>
-                <BodyBold color='#663399'>{estimatedStartHour}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{estimatedStartHour}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('duration')}
                 </ExtraSmallSemiBold>
-                <BodyBold color='#663399'>{ride.duration}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{ride.duration}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('activities')}
                 </ExtraSmallSemiBold>
-                <BodyBold color='#663399'>{ride.activityType}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{ride.activityType}</BodyBold>
               </GridItemBackground>
             </Block>
           </View>

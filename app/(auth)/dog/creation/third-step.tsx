@@ -3,7 +3,11 @@ import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
+import { createDog, uploadDogImage } from '@/lib/api/dog';
+import { user$ } from "@/lib/observables/session-observable";
 import { AntDesign } from "@expo/vector-icons";
+import { useQueryClient } from '@tanstack/react-query';
+import * as Burnt from "burnt";
 import { Image } from "expo-image";
 import * as ImagePicker from 'expo-image-picker';
 import { router } from "expo-router";
@@ -35,11 +39,48 @@ export default function ThirdStep() {
     }
   };
 
-  function handleNextStep() {
-    storage.set('dog', JSON.stringify({ ...JSON.parse(storage.getString('dog') || '{}'), image }))
-    storage.set('onBoarding', 'true')
-    router.replace('/(home)')
-  };
+  const queryClient = useQueryClient();
+
+  async function handleNextStep() {
+    try {
+      const dogData = JSON.parse(storage.getString('dog') || '{}');
+      const userData = user$.get();
+
+      // Créer le chien d'abord
+      const [newDog] = await createDog({
+        name: dogData.name,
+        age: parseInt(dogData.age),
+        sex: dogData.sex.toLowerCase(),
+        breed_id: 10,
+        owner_id: userData.id,
+      });
+
+      // Upload l'image si elle existe
+      if (image) {
+        await uploadDogImage(newDog.id, image);
+      }
+
+      // Invalider le cache
+      await queryClient.invalidateQueries({ queryKey: ['dogs'] });
+
+      storage.set('onBoarding', 'true');
+      router.replace('/(home)');
+      Burnt.toast({
+        title: "Chien créé avec succès",
+        preset: "done",
+        message: "Votre chien a été ajouté avec succès.",
+        haptic: "success",
+      });
+    } catch (error) {
+      console.error('Error creating dog:', error);
+      Burnt.toast({
+        title: "Erreur",
+        preset: "error",
+        message: "Une erreur est survenue lors de la création du chien.",
+        haptic: "error",
+      });
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>

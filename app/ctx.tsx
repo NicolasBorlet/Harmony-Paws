@@ -15,7 +15,7 @@ const AuthContext = React.createContext<{
   isLoading: boolean
 }>({
   signIn: async () => null,
-  signOut: async () => {},
+  signOut: async () => { },
   session: null,
   isLoading: false,
 })

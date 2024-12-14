@@ -1,6 +1,7 @@
-import { supabase } from '../supabase'
-import { getImageUrl } from '../utils/get-image-url'
-import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces'
+import { Database } from '@/database.types';
+import { supabase } from '../supabase';
+import { getImageUrl } from '../utils/get-image-url';
+import { Behavior, DogDetailsResponse, DogListingInterface } from './types/interfaces';
 
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
@@ -23,7 +24,7 @@ export const getDogsFromUserId = async (userId: string) => {
 }
 
 // Hook personnalisé pour TanStack Query
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query';
 
 export const useDogsFromUserId = (userId: string) => {
   return useQuery({
@@ -131,3 +132,67 @@ export const useDogDetails = (dogId: string) => {
     refetchOnWindowFocus: false
   })
 }
+
+export const createDog = async (dog: Partial<Database['public']['Tables']['dogs']['Insert']>) => {
+  // Insérer le chien
+  const { data: dogData, error: dogError } = await supabase
+    .from('dogs')
+    .insert(dog)
+    .select()
+
+  if (dogError) throw dogError
+
+  return dogData
+}
+
+export const updateDog = async (dog) => {
+  const { data, error } = await supabase.from('dogs').update(dog).eq('id', dog.id)
+  if (error) throw error
+  return data
+}
+
+export const deleteDog = async (dogId: string) => {
+  const { data, error } = await supabase.from('dogs').delete().eq('id', dogId)
+  if (error) throw error
+  return data
+}
+
+export const addDogBehaviors = async (dogId: number, behaviorIds: number[]) => {
+  const behaviors = behaviorIds.map(behaviorId => ({
+    dog_id: dogId,
+    behavor_id: behaviorId
+  }))
+
+  const { data, error } = await supabase
+    .from('dog_behaviors')
+    .insert(behaviors)
+    .select()
+
+  if (error) throw error
+  return data
+}
+
+// Modifie la fonction uploadDogImage dans lib/api/dog.ts
+export const uploadDogImage = async (dogId: number, imageUri: string) => {
+  const formData = new FormData();
+  formData.append('dogId', dogId.toString());
+
+  // Pour les fichiers locaux sur mobile
+  const filename = imageUri.split('/').pop() || 'image.jpeg';
+  formData.append('image', {
+    uri: imageUri,
+    type: 'image/jpeg',
+    name: filename,
+  } as any);
+
+  const { data, error } = await supabase.functions.invoke('upload-dog-image', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${(await supabase.auth.getSession())?.data.session?.access_token}`,
+    },
+  });
+
+  if (error) throw error;
+  return data;
+};

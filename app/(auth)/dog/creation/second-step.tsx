@@ -6,6 +6,7 @@ import Block from "@/components/grid/Block";
 import { StandardButton } from "@/components/ui/button";
 import { BodyBold, BodyMedium } from "@/components/ui/text";
 import { GridItemBackground } from "@/components/ui/view";
+import { Colors } from "@/constants/Colors";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, SafeAreaView, StyleSheet, View } from "react-native";
@@ -61,7 +62,7 @@ export default function FirstStep() {
                 }
               }} style={{ flex: 1, height: 100 }} key={behavior.id}>
                 <GridItemBackground selected={selectedBehavior.includes(behavior.id)}>
-                  <BodyBold color='#663399'>{behavior.label}</BodyBold>
+                  <BodyBold color={Colors.light.secondary}>{behavior.label}</BodyBold>
                 </GridItemBackground>
               </Pressable>
             ))}

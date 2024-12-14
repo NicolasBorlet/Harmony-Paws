@@ -7,7 +7,6 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
 export const Purple = '#663399';
-export const Orange = '#F7A400';
 
 export const Colors = {
   light: {
@@ -17,6 +16,8 @@ export const Colors = {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
+    primary: '#F7A400',
+    secondary: '#663399',
   },
   dark: {
     text: '#ECEDEE',

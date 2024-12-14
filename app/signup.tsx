@@ -2,6 +2,7 @@ import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
+import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import {
@@ -47,9 +48,9 @@ export default function Signup() {
   }
 
   return (
-    <ParallaxScrollView backgroundColor='#663399'>
+    <ParallaxScrollView backgroundColor={Colors.light.secondary}>
       <View style={styles.container}>
-        <SpecialTitle style={{ alignSelf: 'center' }} color='#F49819'>
+        <SpecialTitle style={{ alignSelf: 'center' }} color={Colors.light.primary}>
           {i18n.t('signUp')}
         </SpecialTitle>
         <View style={{
@@ -59,11 +60,13 @@ export default function Signup() {
             placeholder={i18n.t('email')}
             value={email}
             onChangeText={setEmail}
+            placeholderTextColor='#696969'
           />
           <CustomTextInput
             placeholder={i18n.t('password')}
             value={password}
             onChangeText={setPassword}
+            placeholderTextColor='#696969'
             secureTextEntry
           />
           <Pressable onPress={() => { }} style={styles.forgotPassword}>
@@ -75,7 +78,7 @@ export default function Signup() {
         </StandardButton>
         <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('alreadyAccount')} <Link style={{
           fontFamily: 'Montserrat_800ExtraBold',
-          color: '#663399',
+          color: Colors.light.secondary,
           textDecorationLine: 'underline',
         }} href='/login'>{i18n.t('signInLink')}</Link></BodyMedium>
       </View>

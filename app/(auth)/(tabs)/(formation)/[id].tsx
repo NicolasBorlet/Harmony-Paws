@@ -9,6 +9,7 @@ import {
   ModulePrice,
   NavigationTitle,
 } from '@/components/ui/text'
+import { Colors } from '@/constants/Colors'
 import { AntDesign } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { useCallback, useState } from 'react'
@@ -127,7 +128,7 @@ export default function FormationDetails() {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <BodyBold color='#663399'>
+                      <BodyBold color={Colors.light.secondary}>
                         {i18n.t('completeFormation')}
                       </BodyBold>
                       <View
@@ -142,7 +143,7 @@ export default function FormationDetails() {
                           {formation.price}€
                         </ModulePrice>
                         <AntDesign name='arrowleft' size={12} color='black' />
-                        <ModulePrice color='#663399'>
+                        <ModulePrice color={Colors.light.secondary}>
                           {formation.old_price}€
                         </ModulePrice>
                       </View>

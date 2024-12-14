@@ -1,6 +1,7 @@
 import CustomButton from '@/components/onboarding/CustomBottom';
 import Pagination from '@/components/onboarding/Pagination';
 import { OnBoardingTitle } from '@/components/ui/text';
+import { Colors } from '@/constants/Colors';
 import { OnboardingItem } from '@/type';
 import { FlatList, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated, { Extrapolation, interpolate, useAnimatedRef, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
@@ -152,13 +153,13 @@ export default function OnBoarding() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#663399',
+    backgroundColor: Colors.light.secondary,
   },
   itemContainer: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#663399',
+    backgroundColor: Colors.light.secondary,
   },
   itemTitle: {
     textAlign: 'center',
