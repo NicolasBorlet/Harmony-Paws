@@ -1,14 +1,13 @@
 import { i18n } from "@/app/_layout";
-import { useSession } from "@/app/ctx";
 import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
 import Dropdown from "@/components/dropdown";
 import { StandardButton } from "@/components/ui/button";
 import { BodyMedium } from "@/components/ui/text";
 import { CustomTextInput } from "@/components/ui/text-input";
+import { useBreeds } from "@/lib/api/breed";
 import { session$ } from "@/lib/observables/session-observable";
 import { dogColors } from "@/lib/utils/dog-color";
-import { dogRaces } from "@/lib/utils/dog-race";
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { router, useNavigation } from "expo-router";
 import React, { useState } from "react";
@@ -21,11 +20,9 @@ const storage = new MMKV();
 export default function FirstStep() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
-  const { session } = useSession();
+  const { data: breeds } = useBreeds();
 
   const canGoBack = navigation.canGoBack();
-
-  const userId = session?.user?.id;
 
   const [dogName, setDogName] = useState('');
   const [selectedSex, setSelectedSex] = useState<'Male' | 'Female'>('Male');
@@ -72,7 +69,7 @@ export default function FirstStep() {
         <View style={styles.titleContainer}>
           <BodyTitle title={i18n.t('dogBreedQuestion')} />
           <Dropdown
-            data={dogRaces}
+            data={breeds?.map(breed => ({ label: breed.name, value: breed.id.toString() })) || []}
             onChange={(item) => setSelectedBreed(item.value)}
             placeholder={i18n.t('addDogBreed')}
           />

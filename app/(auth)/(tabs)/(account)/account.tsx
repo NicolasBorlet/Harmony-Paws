@@ -8,6 +8,8 @@ import { RoundedImage } from '@/components/ui/image'
 import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
+import { useDogsFromUserId } from '@/lib/api/dog'
+import { useUser } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
@@ -21,23 +23,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 // Initialize MMKV
 export const storage = new MMKV()
 
-const dogs = [
-  {
-    id: 1,
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 2,
-    image: 'https://picsum.photos/200/300',
-  },
-  {
-    id: 3,
-    image: 'https://picsum.photos/200/300',
-  },
-]
-
 export default function AccountScreen() {
-  const insets = useSafeAreaInsets()
+  const insets = useSafeAreaInsets();
+
+  const { data: user } = useUser()
+  const { data: dogs } = useDogsFromUserId(user?.id)
+
   const handleToast = () => {
     Burnt.toast({
       title: "Burnt not installed.",

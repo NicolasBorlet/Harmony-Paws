@@ -6,7 +6,7 @@ import { Behavior, DogDetailsResponse, DogListingInterface } from './types/inter
 export const getDogsFromUserId = async (userId: string) => {
   const { data, error } = await supabase
     .from('dogs')
-    .select('id, name, age, sex, created_at, updated_at')
+    .select('id, created_at, updated_at')
     .eq('owner_id', userId)
 
   if (error) throw error
