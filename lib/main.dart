@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voyageur/screens/home_screen.dart';
 import 'package:voyageur/screens/trips_screen.dart';
+import 'package:voyageur/screens/map_screen.dart';
 
 void main() async {
 
@@ -36,7 +37,8 @@ class _MainScreenState extends State<MainScreen> {
 
   static const List<Widget> _screens = [
     HomeScreen(),
-    TripsScreen()
+    TripsScreen(),
+    MapScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -59,6 +61,9 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.notifications),
             label: 'Voyages',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map), 
+            label: 'Carte'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
