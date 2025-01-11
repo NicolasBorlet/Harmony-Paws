@@ -1,0 +1,78 @@
+{
+  "workbench.startupEditor": "none",
+  "workbench.iconTheme": "moxer-icons",
+  "workbench.colorTheme": "Monokai Dimmed",
+  "workbench.settings.editor": "json",
+  "breadcrumbs.enabled": false,
+  "explorer.compactFolders": false,
+  "editor.wordWrap": "bounded",
+  "editor.tabSize": 2,
+  "editor.inlineSuggest.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.fontFamily": "Geist Mono",
+  "terminal.integrated.fontFamily": "Geist Mono",
+  "terminal.integrated.fontSize": 12,
+  "editor.fontSize": 12,
+  "explorer.confirmDelete": false,
+  "apc.font.family": "Geist Mono",
+  "apc.activityBar": {
+    "position": "bottom",
+    "hideSettings": true,
+    "size": 24
+  },
+  "apc.statusBar": {
+    "position": "editor-bottom",
+    "height": 22,
+    "fontSize": 10
+  },
+  "apc.electron": {
+    "titleBarStyle": "hiddenInset",
+    "trafficLightPosition": {
+      "x": 8,
+      "y": 10
+    }
+  },
+  "apc.header": {
+    "height": 34,
+    "fontSize": 10
+  },
+  "apc.listRow": {
+    "height": 21,
+    "fontSize": 10
+  },
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "window.zoomLevel": 0.5,
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "nxConsole.showNodeVersionOnStartup": false,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "explorer.confirmDragAndDrop": false,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
+  // used by the toggle excluded files extension
+  "files.exclude": {
+    "**/.open-next": true,
+    "**/.sst": true,
+    "**/.nx": true,
+    "**/.turbo": true,
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true,
+    "**/.husky": true,
+    "**/.github": true,
+    "**/.gitignore": false,
+    "**/dist": true,
+    "**/.next": true,
+    "**/*.tsbuildinfo": true,
+    "**/.astro": true
+  }
+}
