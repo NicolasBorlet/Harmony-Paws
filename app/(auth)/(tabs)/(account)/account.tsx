@@ -1,4 +1,5 @@
 import { i18n } from '@/app/_layout'
+import AccountHeader from '@/components/account/account-header'
 import AccountHeading from '@/components/account/account-heading'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import Block from '@/components/grid/Block'
@@ -18,6 +19,7 @@ import { router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
+import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // Initialize MMKV
@@ -25,6 +27,8 @@ export const storage = new MMKV()
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets();
+
+  const scrollY = useSharedValue(0)
 
   const { data: user } = useUser()
   const { data: dogs } = useDogsFromUserId(user?.id)
@@ -40,7 +44,16 @@ export default function AccountScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <View style={{ paddingHorizontal: 16 }}>
+        <AccountHeader scrollY={scrollY} />
+      </View>
+      <ScrollView 
+        contentContainerStyle={styles.scrollView}
+        onScroll={(event) => {
+          scrollY.value = event.nativeEvent.contentOffset.y
+        }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{
           gap: 24
         }}>
@@ -103,9 +116,9 @@ export default function AccountScreen() {
         <Divider />
 
         <View style={{
-          gap: 24,
+          gap: 12,
         }}>
-          <Block row gap={24}>
+          <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary}>
                 {i18n.t('friends')}
@@ -117,7 +130,7 @@ export default function AccountScreen() {
               </BodyBold>
             </GridItemBackground>
           </Block>
-          <Block row gap={24}>
+          <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
@@ -133,7 +146,7 @@ export default function AccountScreen() {
               </BodyBold>
             </GridItemBackground>
           </Block>
-          <Block row gap={24}>
+          <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',
@@ -149,7 +162,7 @@ export default function AccountScreen() {
               </BodyBold>
             </GridItemBackground>
           </Block>
-          <Block row gap={24}>
+          <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary} style={{
                 textAlign: 'center',

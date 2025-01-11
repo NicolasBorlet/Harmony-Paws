@@ -1,11 +1,11 @@
 import { i18n } from '@/app/_layout'
 import DogListing from '@/components/dogListing/dog-listing'
 import FilterComponent from '@/components/filter/filter-component'
+import HomeHeader from '@/components/home/home-header'
 import RideListing from '@/components/rideListing/ride-listing'
-import RoundedIconLink from '@/components/rounded-icon-link'
 import { MapButton } from '@/components/ui/button'
 import TabSwitcher from '@/components/ui/TabSwitcher'
-import { Body, Small, SpecialTitle } from '@/components/ui/text'
+import { Small } from '@/components/ui/text'
 import { Ionicons } from '@expo/vector-icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import * as Haptics from 'expo-haptics'
@@ -28,6 +28,7 @@ export default function HomeScreen() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const headerHeight = useSharedValue(200)
   const startY = useSharedValue(0)
+  const scrollY = useSharedValue(0)
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -70,27 +71,8 @@ export default function HomeScreen() {
       style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}
     >
       <View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            gap: 12,
-          }}
-        >
-          <RoundedIconLink
-            icon={<Ionicons name='notifications' size={20} color='white' />}
-            onPress={() => router.push('/notifications')}
-          />
-          <RoundedIconLink
-            icon={<Ionicons name='chatbubble' size={20} color='white' />}
-            onPress={() => router.push('/messages')}
-          />
-        </View>
-        <View style={{ paddingBottom: 32, paddingHorizontal: 16 }}>
-          <SpecialTitle>{i18n.t('welcome')} Taico</SpecialTitle>
-          <Body>{i18n.t('timeToRide')}</Body>
+        <View style={{ paddingHorizontal: 16 }}>
+          <HomeHeader scrollY={scrollY} />
         </View>
         <View
           style={{
@@ -118,7 +100,7 @@ export default function HomeScreen() {
       </View>
       <GestureDetector gesture={gesture}>
         <View style={{ flex: 1 }}>
-          {selectedTab === 'dog' ? <DogListing /> : <RideListing />}
+          {selectedTab === 'dog' ? <DogListing scrollY={scrollY}/> : <RideListing />}
         </View>
       </GestureDetector>
       <MapButton onPress={() => router.push('/map')}>

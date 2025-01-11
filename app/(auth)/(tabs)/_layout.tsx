@@ -1,11 +1,11 @@
 import { i18n } from '@/app/_layout'
 import { useSession } from '@/app/ctx'
+import { TabBar } from '@/components/tabbar/tabbar'
 import { Colors } from '@/constants/Colors'
 import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
-import { Image } from 'expo-image'
 import { Redirect, Tabs } from 'expo-router'
-import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { GestureResponderEvent, Pressable, Text } from 'react-native'
 
 type TabBarIconProps = {
   focused: boolean
@@ -32,12 +32,8 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: 'Montserrat_400Regular',
-          color: Colors.light.secondary,
-        },
         tabBarButton: (props: any) => {
           const { style, ...otherProps } = props
           return (
@@ -81,42 +77,6 @@ export default function TabLayout() {
               color='black'
             />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name='(add)'
-        options={{
-          tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <View>
-              <Image
-                style={{
-                  position: 'absolute',
-                  top: -8,
-                  left: -10,
-                  width: 72,
-                  height: 66,
-                  // zIndex: -1,
-                  backgroundColor: 'white',
-                  borderRadius: 999,
-                }}
-              />
-              <View
-                style={{
-                  marginBottom: 20,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 50,
-                  width: 50,
-                  borderRadius: 999,
-                  backgroundColor: '#F7A400',
-                  boxShadow: '0 4px 12px rgba(247, 164, 0, 0.5)',
-                }}
-              >
-                <AntDesign name='plus' size={24} color='white' />
-              </View>
-            </View>
-          ),
-          tabBarLabel: () => null,
         }}
       />
       <Tabs.Screen

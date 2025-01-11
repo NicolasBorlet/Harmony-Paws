@@ -1,12 +1,9 @@
-import { i18n } from '@/app/_layout'
+import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'
-import RoundedIconLink from '@/components/rounded-icon-link'
-import { SpecialTitle } from '@/components/ui/text'
-import { Ionicons } from '@expo/vector-icons'
 import { useStripe } from '@stripe/stripe-react-native'
-import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface FunctionResponse {
@@ -38,6 +35,8 @@ export default function Formation() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const scrollY = useSharedValue(0);
+
   // useEffect(() => {
   //   async function initialize() {
   //     const { data: { user } } = await supabase.auth.getUser();
@@ -205,6 +204,12 @@ export default function Formation() {
   //   setLoading(false);
   // };
 
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y; // Met à jour la valeur partagée
+    },
+  });
+
   return (
     <View
       style={[
@@ -214,27 +219,14 @@ export default function Formation() {
         },
       ]}
     >
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          gap: 12,
-        }}
+      <FormationHeader scrollY={scrollY} />
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
       >
-        <RoundedIconLink
-          icon={<Ionicons name='notifications' size={20} color='white' />}
-          onPress={() => router.push('/notifications')}
-        />
-        <RoundedIconLink
-          icon={<Ionicons name='chatbubble' size={20} color='white' />}
-          onPress={() => router.push('/messages')}
-        />
-      </View>
-      <View style={{ paddingBottom: 32 }}>
-        <SpecialTitle>{i18n.t('formations')}</SpecialTitle>
-      </View>
-      <FormationListing />
+        <FormationListing />
+      </Animated.ScrollView>
     </View>
   )
 }
