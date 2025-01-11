@@ -87,5 +87,6 @@
   "signInLink": "Login",
   "noAccount": "Don't have an account ?",
   "alreadyAccount": "Already have an account ?",
-  "signUpLink": "Create an account"
+  "signUpLink": "Create an account",
+  "account": "Account"
 }

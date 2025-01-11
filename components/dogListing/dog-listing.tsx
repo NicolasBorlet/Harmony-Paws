@@ -9,7 +9,7 @@ import LoaderComponent from '../loader'
 import DogItemListing from './dog-item-listing'
 
 
-export default function DogListing() {
+export default function DogListing({ scrollY }: { scrollY: any }) {
   const [page, setPage] = useState(0)
   const pageSize = 10
 
@@ -50,6 +50,9 @@ export default function DogListing() {
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={separatorStyle} />}
       contentContainerStyle={contentContainerStyle}
+      onScroll={(event) => {
+        scrollY.value = event.nativeEvent.contentOffset.y
+      }}
       showsVerticalScrollIndicator={false}
     />
   )

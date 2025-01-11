@@ -10,6 +10,8 @@ import React, { useState } from 'react'
 import {
   Alert,
   AppState,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   StyleSheet,
   View
@@ -94,43 +96,45 @@ export default function Login() {
   )
 
   return (
-    <ParallaxScrollView backgroundColor='#F49819' backgroundContainer={backgroundContainer}>
-      <View style={styles.container}>
-        <SpecialTitle style={{ alignSelf: 'center' }}>
-          {i18n.t('signIn')}
-        </SpecialTitle>
-        <View style={{
-          gap: 12,
-        }}>
-          <CustomTextInput
-            placeholder={i18n.t('email')}
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize='none'
-            placeholderTextColor='#696969'
-          />
-          <CustomTextInput
-            placeholder={i18n.t('password')}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            clearTextOnFocus={false}
-            placeholderTextColor='#696969'
-          />
-          <Pressable onPress={() => { }} style={styles.forgotPassword}>
-            <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
-          </Pressable>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ParallaxScrollView backgroundColor='#F49819' backgroundContainer={backgroundContainer}>
+        <View style={styles.container}>
+          <SpecialTitle style={{ alignSelf: 'center' }}>
+            {i18n.t('signIn')}
+          </SpecialTitle>
+          <View style={{
+            gap: 12,
+          }}>
+            <CustomTextInput
+              placeholder={i18n.t('email')}
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize='none'
+              placeholderTextColor='#696969'
+            />
+            <CustomTextInput
+              placeholder={i18n.t('password')}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              clearTextOnFocus={false}
+              placeholderTextColor='#696969'
+            />
+            <Pressable onPress={() => { }} style={styles.forgotPassword}>
+              <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
+            </Pressable>
+          </View>
+          <StandardButton onPress={handleSignIn} color='#572B84'>
+            <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
+          </StandardButton>
+          <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
+            fontFamily: 'Montserrat_800ExtraBold',
+            color: '#F49819',
+            textDecorationLine: 'underline',
+          }} href='/signup'>{i18n.t('signUpLink')}</Link></BodyMedium>
         </View>
-        <StandardButton onPress={handleSignIn} color='#572B84'>
-          <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
-        </StandardButton>
-        <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
-          fontFamily: 'Montserrat_800ExtraBold',
-          color: '#F49819',
-          textDecorationLine: 'underline',
-        }} href='/signup'>{i18n.t('signUpLink')}</Link></BodyMedium>
-      </View>
-    </ParallaxScrollView>
+      </ParallaxScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
