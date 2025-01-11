@@ -1,0 +1,93 @@
+import { Colors } from '@/constants/Colors';
+import { Platform } from 'react-native';
+import styled from 'styled-components/native';
+
+const StyledButton = styled.Pressable`
+  paddingTop: 14px;
+  flex: 1;
+  background-color: ${props => (props.onPress ? '#F49819' : '#F49819')};
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+`;
+
+const BackButton = styled.Pressable<{ position?: string, left?: string }>`
+  position: ${props => props.position || 'absolute'};
+  left: ${props => props.left || '16px'};
+  background-color: #F7A400;
+  border-radius: 1000px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+`;
+
+const MapButton = styled.Pressable`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  paddingVertical: 10px;
+  paddingHorizontal: 16px;
+  background-color: ${Colors.light.secondary};
+  border-radius: 30px;
+  width: 100px;
+  height: 40px;
+  gap: 6px;
+  align-self: center;
+  position: absolute;
+  bottom: 30px;
+  margin-left: auto;
+  margin-right: auto;
+`;
+
+const StandardButton = styled.Pressable<{ outlined?: boolean, shadow?: boolean, disabled?: boolean, color?: string }>`
+  background-color: ${props => props.outlined ? 'transparent' : props.disabled ? '#F0B461' : props.color || '#F49819'};
+  border: ${props => props.outlined ? '1px solid #F49819' : 'none'};
+  border-radius: 10px;
+  padding: 14px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  ${Platform.select({
+  ios: props => props.outlined ? '' : props.shadow ? `
+      shadow-color: #000;
+      shadow-offset: 0px 2px;
+      shadow-opacity: 0.25;
+      shadow-radius: 3.84px;
+    ` : '',
+  android: props => props.outlined ? '' : props.shadow ? `
+      elevation: 5;
+    ` : '',
+})};
+`;
+
+const SmallButton = styled.Pressable`
+  background-color: #F49819;
+  border-radius: 5px;
+  padding-vertical: 8px;
+  padding-horizontal: 12px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SmallButtonOutlined = styled.Pressable`
+  background-color: none;
+  border: 1px solid #F49819;
+  border-radius: 5px;
+  padding-vertical: 8px;
+  padding-horizontal: 12px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UnderlinedButton = styled.Pressable`
+  text-decoration: underline;
+`;
+
+export { BackButton, MapButton, SmallButton, SmallButtonOutlined, StandardButton, StyledButton, UnderlinedButton };
+
