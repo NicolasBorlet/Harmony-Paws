@@ -96,9 +96,11 @@ export default function DogDetails() {
               <GridItemBackground>
                 <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
               </GridItemBackground>
-              <GridItemBackground>
-                <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
-              </GridItemBackground>
+              {data.dominance && (
+                <GridItemBackground>
+                  <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
+                </GridItemBackground>
+              )}
             </Block>
           </View>
           <Divider />
