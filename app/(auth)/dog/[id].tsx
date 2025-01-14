@@ -104,7 +104,7 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('aboutOf')} ${data.name}`} />
-            <Body>{data.description || i18n.t('weDontKnowMoreAbout')} {data.name}</Body>
+            <Body>{data.description || i18n.t('weDontKnowMoreAbout')} {data.name}.</Body>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
@@ -135,6 +135,7 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('nextRide')} />
+            <Body>{i18n.t('noNextRide')}</Body>
             {/* <RideItemListing rideCardData={data.nextRide} /> */}
           </View>
         </View>

@@ -89,5 +89,6 @@
   "alreadyAccount": "Already have an account ?",
   "signUpLink": "Create an account",
   "account": "Account",
-  "weDontKnowMoreAbout": "We don't know more about"
+  "weDontKnowMoreAbout": "We don't know more about",
+  "noNextRide": "No next ride planned."
 }
