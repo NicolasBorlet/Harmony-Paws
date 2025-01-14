@@ -116,13 +116,13 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {data?.behaviors.map(behavor => (
+              {data.behaviors.length > 0 ? data.behaviors.map(behavor => (
                 <GridItem key={behavor.id}>
                   <ExtraSmallMedium color='#F49819'>
                     {behavor.name}
                   </ExtraSmallMedium>
                 </GridItem>
-              ))}
+              )) : <Body>{i18n.t('noBehavior')}</Body>}
             </Block>
           </View>
           <Divider />
