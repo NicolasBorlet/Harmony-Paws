@@ -96,15 +96,17 @@ export default function DogDetails() {
               <GridItemBackground>
                 <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
               </GridItemBackground>
-              <GridItemBackground>
-                <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
-              </GridItemBackground>
+              {data.dominance && (
+                <GridItemBackground>
+                  <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
+                </GridItemBackground>
+              )}
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('aboutOf')} ${data.name}`} />
-            <Body>{data.description || ''}</Body>
+            <Body>{data.description || i18n.t('weDontKnowMoreAbout')} {data.name}.</Body>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
@@ -116,13 +118,13 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {data?.behaviors.map(behavor => (
+              {data.behaviors.length > 0 ? data.behaviors.map(behavor => (
                 <GridItem key={behavor.id}>
                   <ExtraSmallMedium color='#F49819'>
                     {behavor.name}
                   </ExtraSmallMedium>
                 </GridItem>
-              ))}
+              )) : <Body>{i18n.t('noBehavior')}</Body>}
             </Block>
           </View>
           <Divider />
@@ -135,6 +137,7 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('nextRide')} />
+            <Body>{i18n.t('noNextRide')}</Body>
             {/* <RideItemListing rideCardData={data.nextRide} /> */}
           </View>
         </View>

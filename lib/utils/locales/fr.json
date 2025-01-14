@@ -88,5 +88,8 @@
   "noAccount": "Vous n’avez pas de compte ?",
   "alreadyAccount": "Vous avez déjà un compte ?",
   "signUpLink": "Créer un compte",
-  "account": "Compte"
+  "account": "Compte",
+  "weDontKnowMoreAbout": "Nous n'en savons pas plus sur",
+  "noNextRide": "Aucune prochaine balade de prévue.",
+  "noBehavior": "Aucun comportement particulier connu."
 }
