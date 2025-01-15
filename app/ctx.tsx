@@ -111,6 +111,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       // Update user$ observable
       user$.set(userData)
 
+      setSession(data.session)
+
       handleOnboarding()
     } catch (error: any) {
       Alert.alert(error.message)
