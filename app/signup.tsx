@@ -16,6 +16,7 @@ import {
 } from 'react-native'
 import { supabase } from '../lib/supabase'
 import { i18n } from './_layout'
+import { useSession } from './ctx'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -33,20 +34,17 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const { signUp } = useSession()
 
-  async function signUpWithEmail() {
+  async function handleSignUp() {
     setLoading(true)
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    })
-
-    if (error) Alert.alert(error.message)
-    if (!session) Alert.alert('Please check your inbox for email verification!')
-    setLoading(false)
+    try {
+      await signUp(email, password)
+    } catch (error: any) {
+      Alert.alert(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -76,7 +74,7 @@ export default function Signup() {
               <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
             </Pressable>
           </View>
-          <StandardButton onPress={signUpWithEmail}>
+          <StandardButton onPress={handleSignUp}>
             <BodyMedium color='#fff'>{i18n.t('signUp')}</BodyMedium>
           </StandardButton>
           <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('alreadyAccount')} <Link style={{

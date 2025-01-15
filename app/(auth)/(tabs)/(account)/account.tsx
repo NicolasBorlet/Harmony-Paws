@@ -10,7 +10,7 @@ import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
-import { useUser } from '@/lib/observables/session-observable'
+import { session$, useUser } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
@@ -34,6 +34,9 @@ export default function AccountScreen() {
   const { data: dogs } = useDogsFromUserId(user?.id)
 
   const handleToast = () => {
+    console.log('user', user)
+    console.log('dogs', dogs)
+
     Burnt.toast({
       title: "Burnt not installed.",
       preset: "error",
@@ -180,7 +183,16 @@ export default function AccountScreen() {
           </Block>
         </View>
 
-        <StandardButton onPress={() => supabase.auth.signOut()} color='#FF0000'>
+        <StandardButton onPress={() => {
+          supabase.auth.signOut()
+          session$.set({
+            id: '',
+            email: '',
+            created_at: '',
+            last_sign_in_at: '',
+            access_token: '',
+          })
+        }} color='#FF0000'>
           <Body color='white'>
             {i18n.t('disconected')}
           </Body>
