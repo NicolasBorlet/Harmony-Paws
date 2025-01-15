@@ -68,7 +68,7 @@
     "**/Thumbs.db": true,
     "**/node_modules": true,
     "**/.husky": true,
-    "**/.github": true,
+    "**/.github": false,
     "**/.gitignore": false,
     "**/dist": true,
     "**/.next": true,
