@@ -3,7 +3,6 @@ import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
-import { user$ } from '@/lib/observables/session-observable'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
@@ -40,34 +39,13 @@ export default function Login() {
 
   async function handleSignIn() {
     setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
+    try {
+      await signIn(email, password)
+    } catch (error: any) {
       Alert.alert(error.message)
+    } finally {
       setLoading(false)
-      return
     }
-
-    // Récupérer l'user de la table users
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('uid', data.session?.user.id)
-      .single()
-
-    if (userError || !userData) {
-      Alert.alert("Utilisateur non trouvé")
-      setLoading(false)
-      return
-    }
-
-    // Mettre à jour user$
-    user$.set(userData)
-    signIn(email, password)
-    setLoading(false)
   }
 
   const backgroundContainer = (

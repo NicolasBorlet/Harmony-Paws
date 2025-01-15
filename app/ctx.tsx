@@ -1,8 +1,10 @@
+import { createUserInDB, verifyUserInDB } from '@/lib/api/user'
 import { AuthError, Session } from '@supabase/supabase-js'
 import { router } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
-import { session$ } from '../lib/observables/session-observable'
+import { session$, user$ } from '../lib/observables/session-observable'
 import { supabase } from '../lib/supabase'
 
 // Initialize MMKV
@@ -10,11 +12,13 @@ export const storage = new MMKV()
 
 const AuthContext = React.createContext<{
   signIn: (email: string, password: string) => Promise<AuthError | null>
+  signUp: (email: string, password: string) => Promise<AuthError | null>
   signOut: () => Promise<void>
   session: Session | null
   isLoading: boolean
 }>({
   signIn: async () => null,
+  signUp: async () => null,
   signOut: async () => { },
   session: null,
   isLoading: false,
@@ -32,7 +36,7 @@ export function useSession() {
   return value
 }
 
-export function SessionProvider(props: React.PropsWithChildren) {
+export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
   const [session, setSession] = useState<Session | null>(null)
 
@@ -83,25 +87,63 @@ export function SessionProvider(props: React.PropsWithChildren) {
     })
   }, [])
 
-  const value = {
-    signIn: async (email: string, password: string) => {
-      const { error } = await supabase.auth.signInWithPassword({
+  const signIn = useCallback(async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
-      if (!error) {
-        const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
 
-        console.log('hasCompletedOnboarding', hasCompletedOnboarding)
+      if (error) throw error
 
-        if (hasCompletedOnboarding) {
-          router.replace('/(auth)/(tabs)/(home)')
-        } else {
-          router.replace('/(auth)/onboarding')
-        }
+      // Verify user exists in DB
+      const userData = await verifyUserInDB(data.session.user.id)
+      
+      // Update user$ observable
+      user$.set(userData)
+
+      const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+
+      if (hasCompletedOnboarding) {
+        router.replace('/(auth)/(tabs)/(home)')
+      } else {
+        router.replace('/(auth)/onboarding')
       }
-      return error
-    },
+    } catch (error: any) {
+      Alert.alert(error.message)
+      // Make sure session is null if verification fails
+      setSession(null)
+    }
+  }, [])
+
+  const signUp = useCallback(async (email: string, password: string) => {
+    try {
+      const { data: { session, user }, error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) throw error
+
+      if (user) {
+        // Create user in DB
+        await createUserInDB(user.id)
+      }
+
+      if (!session) {
+        Alert.alert('Please check your inbox for email verification!')
+      } else {
+        // If email verification is not required, we can set the session
+        setSession(session)
+      }
+    } catch (error: any) {
+      Alert.alert(error.message)
+      setSession(null)
+    }
+  }, [])
+
+  const value = {
+    signIn,
     signOut: async () => {
       await supabase.auth.signOut()
       setSession(null)
@@ -109,9 +151,10 @@ export function SessionProvider(props: React.PropsWithChildren) {
     },
     session,
     isLoading,
+    signUp,
   }
 
   return (
-    <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
   )
 }
