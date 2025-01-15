@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from "../supabase";
 
 export async function getAllUserConversations(userId: string) {
@@ -24,4 +25,13 @@ export async function getAllUserConversations(userId: string) {
     }
 
     return conversations?.map(conv => conv.conversations) || [];
+}
+
+export const useUserConversations = (userId: string) => {
+    return useQuery({
+        queryKey: ['conversations', userId],
+        queryFn: () => getAllUserConversations(userId),
+        refetchOnMount: false,
+        refetchOnWindowFocus: false
+    });
 }

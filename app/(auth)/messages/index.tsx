@@ -3,9 +3,12 @@ import Back from '@/components/back-button'
 import MessageItemListing from '@/components/messageListing/message-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
 import { ExtraSmall, NavigationTitle, SmallMedium } from '@/components/ui/text'
+import { useUserConversations } from '@/lib/api/message'
+import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
+import { useEffect } from 'react'
 import { Pressable, TextInput, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -89,6 +92,7 @@ const messagesData = [
 
 export default function Messages() {
   const insets = useSafeAreaInsets()
+  const userData = user$.get();
 
   const searchHeight = useSharedValue(50) // Hauteur initiale
   const searchOpacity = useSharedValue(1) // Opacité initiale
@@ -110,6 +114,13 @@ export default function Messages() {
     opacity: searchOpacity.value, // Ajoute l'opacité
     overflow: 'hidden', // Assure que le contenu est masqué
   }))
+
+  const { data: conversations, isLoading, error } = useUserConversations(userData.id);
+
+  useEffect(() => {
+    console.log(userData.id);
+    console.log(conversations);
+  }, [conversations]);
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
