@@ -87,6 +87,15 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     })
   }, [])
 
+  const handleOnboarding = useCallback(() => {
+    const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+    if (hasCompletedOnboarding) {
+      router.replace('/(auth)/(tabs)/(home)')
+    } else {
+      router.replace('/(auth)/onboarding')
+    }
+  }, [])
+
   const signIn = useCallback(async (email: string, password: string) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -102,13 +111,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       // Update user$ observable
       user$.set(userData)
 
-      const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
-
-      if (hasCompletedOnboarding) {
-        router.replace('/(auth)/(tabs)/(home)')
-      } else {
-        router.replace('/(auth)/onboarding')
-      }
+      handleOnboarding()
     } catch (error: any) {
       Alert.alert(error.message)
       // Make sure session is null if verification fails
@@ -135,6 +138,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       } else {
         // If email verification is not required, we can set the session
         setSession(session)
+        handleOnboarding()
       }
     } catch (error: any) {
       Alert.alert(error.message)
