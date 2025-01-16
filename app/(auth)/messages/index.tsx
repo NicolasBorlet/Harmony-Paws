@@ -3,9 +3,12 @@ import Back from '@/components/back-button'
 import MessageItemListing from '@/components/messageListing/message-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
 import { ExtraSmall, NavigationTitle, SmallMedium } from '@/components/ui/text'
+import { useUserConversations } from '@/lib/api/message'
+import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
+import { useEffect } from 'react'
 import { Pressable, TextInput, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -14,81 +17,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const messagesData = [
-  {
-    id: 1,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() + 1000000,
-  },
-  {
-    id: 2,
-    name: 'Jane Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 20000,
-  },
-  {
-    id: 3,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 30000,
-  },
-  {
-    id: 4,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 40000,
-  },
-  {
-    id: 5,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 50000,
-  },
-  {
-    id: 6,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 60000,
-  },
-  {
-    id: 7,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 70000,
-  },
-  {
-    id: 8,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 80000,
-  },
-  {
-    id: 9,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 90000,
-  },
-  {
-    id: 10,
-    name: 'John Doe',
-    avatar: 'https://picsum.photos/300',
-    message: 'Hello, how are you?',
-    date: new Date().getTime() - 100000,
-  },
-]
-
 export default function Messages() {
   const insets = useSafeAreaInsets()
+  const userData = user$.get();
+  const { data: conversations, isLoading, error } = useUserConversations(userData.id);
 
   const searchHeight = useSharedValue(50) // Hauteur initiale
   const searchOpacity = useSharedValue(1) // Opacité initiale
@@ -110,6 +42,10 @@ export default function Messages() {
     opacity: searchOpacity.value, // Ajoute l'opacité
     overflow: 'hidden', // Assure que le contenu est masqué
   }))
+
+  useEffect(() => {
+    console.log(conversations)
+  }, [conversations])
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
@@ -146,7 +82,7 @@ export default function Messages() {
           />
         </View>
         {/* Barre de recherche */}
-        {messagesData.length > 0 && (
+        {conversations && conversations.length > 0 && (
           <Animated.View style={[animatedStyle]}>
             <TextInput
               placeholder='Search'
@@ -164,14 +100,17 @@ export default function Messages() {
         )}
       </View>
       <FlashList
-        data={messagesData}
+        data={conversations}
         renderItem={({ item, index }: { item: any; index: number }) => (
           <Pressable
             onPress={() => {
-              router.push(`/messages/${item.id}`)
+              router.push({
+                pathname: `/messages/${item.id}`,
+                params: { title: item.title }
+              })
             }}
           >
-            <MessageItemListing messageData={item} />
+            <MessageItemListing conversation={item} />
           </Pressable>
         )}
         estimatedItemSize={10}
