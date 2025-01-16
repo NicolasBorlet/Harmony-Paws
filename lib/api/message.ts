@@ -2,29 +2,26 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from "../supabase";
 
 export async function getAllUserConversations(userId: string) {
-    const { data: conversations, error } = await supabase
+    console.log("Fetching conversations for user:", userId);
+
+    const { data, error } = await supabase
         .from('conversation_participants')
         .select(`
             conversation_id,
-            conversations:conversation_id (
+            conversation:conversations!conversation_id(
                 id,
-                title,
-                conversation_participants (
-                    user_id,
-                    users:user_id (
-                        id,
-                        email
-                    )
-                )
+                title
             )
         `)
         .eq('user_id', userId);
 
     if (error) {
+        console.error("Supabase error:", error);
         throw error;
     }
 
-    return conversations?.map(conv => conv.conversations) || [];
+    console.log("Raw response:", data);
+    return data?.map(conv => conv.conversation) || [];
 }
 
 export const useUserConversations = (userId: string) => {
