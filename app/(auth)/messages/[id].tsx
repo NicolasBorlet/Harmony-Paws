@@ -30,7 +30,7 @@ export default function MessageDetail() {
   
   const sendMessageMutation = useMutation({
     mutationFn: (content: string) => 
-      sendMessage(id as string, content, userData.id),
+      sendMessage(id as string, content, userData?.id || ''),
     onSuccess: (newMessage) => {
       // Mise à jour du cache
       queryClient.setQueryData(['messages', id], (oldMessages: any) => 
