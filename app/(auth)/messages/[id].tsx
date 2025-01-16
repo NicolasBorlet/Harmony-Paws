@@ -79,7 +79,7 @@ export default function MessageDetail() {
   )
 
   const renderBubble = (props: any) => {
-    const isUser = props.currentMessage.user._id === 1
+    const isUser = props.currentMessage.user._id === userData.id
     return (
       <View
         style={{
