@@ -6,7 +6,7 @@ import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalSearchParams, useLocalSearchParams } from 'expo-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
   Composer,
@@ -97,12 +97,6 @@ export default function MessageDetail() {
       </View>
     )
   }
-
-  useEffect(() => {
-    console.log('messages', messages)
-    console.log('id', id)
-    console.log('title', title)
-  }, [messages])
 
   return (
     // <KeyboardAvoidingView

@@ -19,7 +19,6 @@ export async function getAllUserConversations(userId: number): Promise<Conversat
             )
         `)
         .eq('user_id', userId)
-        // .order('conversation.messages.created_at', { foreignTable: 'conversation.messages', ascending: false })
         .limit(1, { foreignTable: 'conversation.messages' });
 
     if (error) throw error;
