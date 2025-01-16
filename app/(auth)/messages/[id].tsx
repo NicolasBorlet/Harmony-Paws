@@ -146,7 +146,7 @@ export default function MessageDetail() {
         </View>
       </View>
       <GiftedChat
-        // inverted={false}
+        inverted={false}
         messages={messages}
         onSend={onSend}
         user={{ _id: userData.id, name: userData.first_name }}
