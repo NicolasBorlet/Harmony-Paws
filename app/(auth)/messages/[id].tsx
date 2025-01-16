@@ -2,16 +2,17 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useConversationMessages } from '@/lib/api/message'
 import { AntDesign, Feather } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { useCallback, useState } from 'react'
+import { useLocalSearchParams } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
   Composer,
   GiftedChat,
-  IMessage,
   InputToolbar,
-  Send,
+  Send
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -21,203 +22,13 @@ const userData = {
   status: 1,
 }
 
-const messageData = [
-  {
-    _id: 1,
-    text: "Salut ! Comment se passe ta recherche d'appartement ?",
-    createdAt: new Date(Date.now() - 3600000 * 24),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 2,
-    text: "Hey ! Ça avance doucement, j'ai visité 3 apparts hier",
-    createdAt: new Date(Date.now() - 3600000 * 23),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 3,
-    text: "Super ! T'as eu des coups de cœur ?",
-    createdAt: new Date(Date.now() - 3600000 * 23),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 4,
-    text: 'Oui, il y en a un dans le 11ème qui est pas mal du tout. Bien plac, lumineux, dans mon budget',
-    createdAt: new Date(Date.now() - 3600000 * 22),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 5,
-    text: "T'as des photos à me montrer ?",
-    createdAt: new Date(Date.now() - 3600000 * 22),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 6,
-    text: "Je t'envoie ça ! 📸",
-    createdAt: new Date(Date.now() - 3600000 * 21),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 7,
-    text: 'Voilà les photos du salon et de la chambre',
-    createdAt: new Date(Date.now() - 3600000 * 21),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    image: 'https://picsum.photos/400',
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 8,
-    text: "Wow, il a l'air vraiment sympa ! T'as bien fait de le visiter celui-là",
-    createdAt: new Date(Date.now() - 3600000 * 20),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 9,
-    text: "Oui ! J'ai déposé un dossier, je croise les doigts 🤞",
-    createdAt: new Date(Date.now() - 3600000 * 20),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 10,
-    text: 'Je croise les doigts pour toi aussi ! Tiens moi au courant',
-    createdAt: new Date(Date.now() - 3600000 * 19),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 11,
-    text: "Merci ! Je te dis dès que j'ai des nouvelles 😊",
-    createdAt: new Date(Date.now() - 3600000 * 19),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 12,
-    text: 'Au fait, si jamais ça marche pas, ma cousine cherche aussi à louer son appart',
-    createdAt: new Date(Date.now() - 3600000),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 13,
-    text: 'Ah bon ? Il est dans quel quartier ?',
-    createdAt: new Date(Date.now() - 3000),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 14,
-    text: 'Dans le 10ème, près du canal Saint-Martin',
-    createdAt: new Date(Date.now() - 2000),
-    user: {
-      _id: 2,
-      name: 'Alice Martin',
-      avatar: 'https://picsum.photos/300',
-    },
-    sent: true,
-    received: true,
-  },
-  {
-    _id: 15,
-    text: "Cool, je note ! Je te redis pour celui du 11ème d'abord 👍",
-    createdAt: new Date(Date.now() - 1000),
-    user: {
-      _id: 1,
-      name: 'Moi',
-      avatar: 'https://picsum.photos/301',
-    },
-    sent: true,
-    received: false,
-    pending: true,
-  },
-]
-
 export default function MessageDetail() {
+  const { id } = useLocalSearchParams();
+
   const insets = useSafeAreaInsets()
+  const { data: messages, isLoading, error } = useConversationMessages(id as string);
 
-  const [messages, setMessages] = useState<IMessage[]>(messageData)
   const [inputText, setInputText] = useState('')
-
-  const onSend = useCallback((newMessages: IMessage[]) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, newMessages),
-    )
-    setInputText('')
-  }, [])
 
   const renderInputToolbar = (props: any) => (
     <InputToolbar
@@ -269,6 +80,10 @@ export default function MessageDetail() {
       </View>
     )
   }
+
+  useEffect(() => {
+    console.log('messages', messages)
+  }, [messages])
 
   return (
     // <KeyboardAvoidingView
@@ -323,7 +138,7 @@ export default function MessageDetail() {
       <GiftedChat
         // inverted={false}
         messages={messages}
-        onSend={messages => onSend(messages)}
+        onSend={messages => console.log('messages', messages)}
         user={{ _id: 1 }}
         scrollToBottom={true}
         bottomOffset={0}
