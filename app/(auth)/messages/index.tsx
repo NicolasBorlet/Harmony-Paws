@@ -106,7 +106,10 @@ export default function Messages() {
         renderItem={({ item, index }: { item: any; index: number }) => (
           <Pressable
             onPress={() => {
-              router.push(`/messages/${item.id}`)
+              router.push({
+                pathname: `/messages/${item.id}`,
+                params: { title: item.title }
+              })
             }}
           >
             <MessageItemListing conversation={item} />

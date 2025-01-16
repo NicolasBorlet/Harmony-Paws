@@ -4,7 +4,7 @@ import { Colors } from '@/constants/Colors'
 import { useConversationMessages } from '@/lib/api/message'
 import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign, Feather } from '@expo/vector-icons'
-import { useLocalSearchParams } from 'expo-router'
+import { useGlobalSearchParams, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function MessageDetail() {
   const { id } = useLocalSearchParams();
+  const { title } = useGlobalSearchParams();
   const userData = user$.get();
   
   const insets = useSafeAreaInsets()
@@ -77,6 +78,8 @@ export default function MessageDetail() {
 
   useEffect(() => {
     console.log('messages', messages)
+    console.log('id', id)
+    console.log('title', title)
   }, [messages])
 
   return (
@@ -115,7 +118,7 @@ export default function MessageDetail() {
           >
             <Back position='relative' left='0' />
             <View style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <NavigationTitle color='#000'>{userData.first_name}</NavigationTitle>
+              <NavigationTitle color='#000'>{title}</NavigationTitle>
               {/* <ExtraSmallMedium color='#1ED325'>
                 {userData.status === 0
                   ? `${i18n.t('disconnect')}`
