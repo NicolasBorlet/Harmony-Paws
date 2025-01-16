@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { supabase } from "../supabase";
 
 export async function getAllUserConversations(userId: string) {
@@ -69,12 +70,70 @@ export async function getConversationMessages(conversationId: string) {
 }
 
 export const useConversationMessages = (conversationId: string) => {
-    return useQuery({
+    const queryClient = useQueryClient();
+
+    // Initial fetch with useQuery
+    const query = useQuery({
         queryKey: ['messages', conversationId],
         queryFn: () => getConversationMessages(conversationId),
         refetchOnMount: false,
         refetchOnWindowFocus: false
     });
+
+    // Set up realtime subscription
+    useEffect(() => {
+        const subscription = supabase
+            .channel(`messages:${conversationId}`)
+            .on('postgres_changes', {
+                event: '*',  // ou 'INSERT' si vous voulez uniquement les nouveaux messages
+                schema: 'public',
+                table: 'messages',
+                filter: `conversation_id=eq.${conversationId}`
+            }, async (payload) => {
+                // Récupérer le message complet avec les informations de l'expéditeur
+                const { data: newMessage } = await supabase
+                    .from('messages')
+                    .select(`
+                        id,
+                        content,
+                        created_at,
+                        sender_id,
+                        sender:users!sender_id(
+                            id,
+                            first_name
+                        )
+                    `)
+                    .eq('id', payload.new.id)
+                    .single();
+
+                // Formater le nouveau message
+                const formattedMessage = {
+                    _id: newMessage.id,
+                    text: newMessage.content,
+                    createdAt: new Date(newMessage.created_at),
+                    user: {
+                        _id: newMessage.sender_id,
+                        name: newMessage.sender.first_name,
+                    }
+                };
+
+                // Mettre à jour le cache React Query
+                queryClient.setQueryData(['messages', conversationId], (oldMessages: any) => {
+                    // Éviter les doublons
+                    const messageExists = oldMessages?.some((msg: any) => msg._id === formattedMessage._id);
+                    if (messageExists) return oldMessages;
+                    return [...(oldMessages || []), formattedMessage];
+                });
+            })
+            .subscribe();
+
+        // Cleanup subscription
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, [conversationId, queryClient]);
+
+    return query;
 }
 
 export async function sendMessage(conversationId: string, content: string, senderId: string) {
