@@ -1,10 +1,9 @@
-import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
-import { ExtraSmallMedium, NavigationTitle, Small } from '@/components/ui/text'
+import { NavigationTitle, Small } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useConversationMessages } from '@/lib/api/message'
+import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign, Feather } from '@expo/vector-icons'
-import { Image } from 'expo-image'
 import { useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -16,15 +15,10 @@ import {
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const userData = {
-  avatar: 'https://picsum.photos/300',
-  name: 'Emma Swane',
-  status: 1,
-}
-
 export default function MessageDetail() {
   const { id } = useLocalSearchParams();
-
+  const userData = user$.get();
+  
   const insets = useSafeAreaInsets()
   const { data: messages, isLoading, error } = useConversationMessages(id as string);
 
@@ -121,25 +115,25 @@ export default function MessageDetail() {
           >
             <Back position='relative' left='0' />
             <View style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <NavigationTitle color='#000'>{userData.name}</NavigationTitle>
-              <ExtraSmallMedium color='#1ED325'>
+              <NavigationTitle color='#000'>{userData.first_name}</NavigationTitle>
+              {/* <ExtraSmallMedium color='#1ED325'>
                 {userData.status === 0
                   ? `${i18n.t('disconnect')}`
                   : `${i18n.t('online')}`}
-              </ExtraSmallMedium>
+              </ExtraSmallMedium> */}
             </View>
           </View>
-          <Image
+          {/* <Image
             source={{ uri: userData.avatar }}
             style={{ width: 60, height: 60, borderRadius: 100 }}
-          />
+          /> */}
         </View>
       </View>
       <GiftedChat
         // inverted={false}
         messages={messages}
         onSend={messages => console.log('messages', messages)}
-        user={{ _id: 1 }}
+        user={{ _id: userData.id, name: userData.first_name }}
         scrollToBottom={true}
         bottomOffset={0}
         timeFormat='HH:mm'
