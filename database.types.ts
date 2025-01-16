@@ -95,6 +95,60 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_participants: {
+        Row: {
+          conversation_id: number
+          created_at: string
+          id: number
+          user_id: number | null
+        }
+        Insert: {
+          conversation_id: number
+          created_at?: string
+          id?: number
+          user_id?: number | null
+        }
+        Update: {
+          conversation_id?: number
+          created_at?: string
+          id?: number
+          user_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: number
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          title?: string | null
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string
@@ -160,7 +214,6 @@ export type Database = {
           description: string | null
           dominance: Database["public"]["Enums"]["dog_dominance"] | null
           id: number
-          image: string | null
           name: string
           owner_id: number | null
           sex: Database["public"]["Enums"]["dog_sex"] | null
@@ -173,7 +226,6 @@ export type Database = {
           description?: string | null
           dominance?: Database["public"]["Enums"]["dog_dominance"] | null
           id?: number
-          image?: string | null
           name: string
           owner_id?: number | null
           sex?: Database["public"]["Enums"]["dog_sex"] | null
@@ -186,7 +238,6 @@ export type Database = {
           description?: string | null
           dominance?: Database["public"]["Enums"]["dog_dominance"] | null
           id?: number
-          image?: string | null
           name?: string
           owner_id?: number | null
           sex?: Database["public"]["Enums"]["dog_sex"] | null
@@ -248,6 +299,42 @@ export type Database = {
         }
         Relationships: []
       }
+      friend_requests: {
+        Row: {
+          created_at: string
+          id: number
+          recipient_id: number
+          sender_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          recipient_id: number
+          sender_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          recipient_id?: number
+          sender_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friend_requests_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friend_requests_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       medical_form: {
         Row: {
           dog_id: number | null
@@ -267,6 +354,48 @@ export type Database = {
             columns: ["dog_id"]
             isOneToOne: false
             referencedRelation: "dogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string | null
+          conversation_id: number | null
+          created_at: string
+          id: number
+          is_read: boolean | null
+          sender_id: number | null
+        }
+        Insert: {
+          content?: string | null
+          conversation_id?: number | null
+          created_at?: string
+          id?: number
+          is_read?: boolean | null
+          sender_id?: number | null
+        }
+        Update: {
+          content?: string | null
+          conversation_id?: number | null
+          created_at?: string
+          id?: number
+          is_read?: boolean | null
+          sender_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
