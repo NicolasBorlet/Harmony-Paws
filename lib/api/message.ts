@@ -1,7 +1,7 @@
-import { Conversation, GiftedChatMessage } from '@/types/message'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
-import { supabase } from "../supabase"
+import { Conversation, GiftedChatMessage } from '@/types/message';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { supabase } from "../supabase";
 
 export async function getAllUserConversations(userId: number): Promise<Conversation[]> {
     const { data, error } = await supabase
@@ -10,14 +10,22 @@ export async function getAllUserConversations(userId: number): Promise<Conversat
             conversation_id,
             conversation:conversations!conversation_id(
                 id,
-                title
+                title,
+                last_message:messages(
+                    id,
+                    content,
+                    created_at
+                )
             )
         `)
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        // .order('conversation.messages.created_at', { foreignTable: 'conversation.messages', ascending: false })
+        .limit(1, { foreignTable: 'conversation.messages' });
 
     if (error) throw error;
     return data?.map(conv => conv.conversation) || [];
 }
+
 
 export const useUserConversations = (userId: number) => {
     return useQuery({

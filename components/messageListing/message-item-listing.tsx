@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { MessageListingAuthor } from "../ui/text";
+import { ExtraSmall, MessageListingAuthor } from "../ui/text";
 
 export default function MessageItemListing({ conversation }: { conversation: any }) {
   const timeSince = new Date(conversation.date).getTime() - new Date().getTime();
@@ -19,7 +19,7 @@ export default function MessageItemListing({ conversation }: { conversation: any
         gap: 10
       }}>
         <MessageListingAuthor>{conversation.title}</MessageListingAuthor>
-        {/* <ExtraSmall color="#979898">{messageData.message}</ExtraSmall> */}
+        <ExtraSmall color="#979898">{conversation.last_message[0].content}</ExtraSmall>
       </View>
       <View style={{
         flex: 1,

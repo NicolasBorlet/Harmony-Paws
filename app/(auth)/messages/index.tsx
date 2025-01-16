@@ -8,6 +8,7 @@ import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
+import { useEffect } from 'react'
 import { Pressable, TextInput, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -41,6 +42,10 @@ export default function Messages() {
     opacity: searchOpacity.value, // Ajoute l'opacité
     overflow: 'hidden', // Assure que le contenu est masqué
   }))
+
+  useEffect(() => {
+    console.log(conversations)
+  }, [conversations])
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
