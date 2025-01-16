@@ -76,3 +76,41 @@ export const useConversationMessages = (conversationId: string) => {
         refetchOnWindowFocus: false
     });
 }
+
+export async function sendMessage(conversationId: string, content: string, senderId: string) {
+    const { data, error } = await supabase
+        .from('messages')
+        .insert([
+            {
+                conversation_id: conversationId,
+                content,
+                sender_id: senderId,
+            }
+        ])
+        .select(`
+            id,
+            content,
+            created_at,
+            sender_id,
+            sender:users!sender_id(
+                id,
+                first_name
+            )
+        `)
+        .single();
+
+    if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+    }
+
+    return {
+        _id: data.id,
+        text: data.content,
+        createdAt: new Date(data.created_at),
+        user: {
+            _id: data.sender_id,
+            name: data.sender.first_name,
+        }
+    };
+}

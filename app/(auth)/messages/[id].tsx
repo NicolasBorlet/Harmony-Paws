@@ -1,9 +1,10 @@
 import Back from '@/components/back-button'
 import { NavigationTitle, Small } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import { useConversationMessages } from '@/lib/api/message'
+import { sendMessage, useConversationMessages } from '@/lib/api/message'
 import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign, Feather } from '@expo/vector-icons'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useGlobalSearchParams, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -24,6 +25,27 @@ export default function MessageDetail() {
   const { data: messages, isLoading, error } = useConversationMessages(id as string);
 
   const [inputText, setInputText] = useState('')
+
+  const queryClient = useQueryClient()
+  
+  const sendMessageMutation = useMutation({
+    mutationFn: (content: string) => 
+      sendMessage(id as string, content, userData.id),
+    onSuccess: (newMessage) => {
+      // Mise à jour du cache
+      queryClient.setQueryData(['messages', id], (oldMessages: any) => 
+        [...(oldMessages || []), newMessage]
+      )
+      setInputText('')
+    },
+  })
+
+  const onSend = (messages = []) => {
+    const [message] = messages
+    if (message.text.trim()) {
+      sendMessageMutation.mutate(message.text)
+    }
+  }
 
   const renderInputToolbar = (props: any) => (
     <InputToolbar
@@ -119,23 +141,14 @@ export default function MessageDetail() {
             <Back position='relative' left='0' />
             <View style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <NavigationTitle color='#000'>{title}</NavigationTitle>
-              {/* <ExtraSmallMedium color='#1ED325'>
-                {userData.status === 0
-                  ? `${i18n.t('disconnect')}`
-                  : `${i18n.t('online')}`}
-              </ExtraSmallMedium> */}
             </View>
           </View>
-          {/* <Image
-            source={{ uri: userData.avatar }}
-            style={{ width: 60, height: 60, borderRadius: 100 }}
-          /> */}
         </View>
       </View>
       <GiftedChat
         // inverted={false}
         messages={messages}
-        onSend={messages => console.log('messages', messages)}
+        onSend={onSend}
         user={{ _id: userData.id, name: userData.first_name }}
         scrollToBottom={true}
         bottomOffset={0}
