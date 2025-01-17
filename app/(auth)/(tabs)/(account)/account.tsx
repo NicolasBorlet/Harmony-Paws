@@ -16,7 +16,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import * as Burnt from "burnt"
 import { router } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { Button, StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
 import { useSharedValue } from 'react-native-reanimated'
@@ -198,12 +198,12 @@ export default function AccountScreen() {
           </Body>
         </StandardButton>
 
-        {/* <View style={styles.verticallySpaced}>
+        <View style={styles.verticallySpaced}>
           <Button
             title='Remove onBoarding'
             onPress={() => storage.set('onBoarding', false)}
           />
-        </View> */}
+        </View>
 
         <StandardButton onPress={handleToast}>
           <Body color='white'>

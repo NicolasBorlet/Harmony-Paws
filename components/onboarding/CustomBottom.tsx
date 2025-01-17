@@ -1,3 +1,4 @@
+import { registerForPushNotificationsAsync } from '@/lib/api/notification';
 import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
@@ -53,15 +54,22 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
       ],
     };
   });
+
+  const handlePress = async () => {
+    if (flatListIndex.value < dataLength - 1) {
+      flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+    } else {
+      const expoPushToken = await registerForPushNotificationsAsync();
+      if (expoPushToken) {
+        router.replace('/(auth)/account-created');
+      } else {
+        alert('Permission not granted for notifications!');
+      }
+    }
+  };
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        if (flatListIndex.value < dataLength - 1) {
-          flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
-        } else {
-          router.replace('/(auth)/account-created')
-        }
-      }}>
+    <TouchableWithoutFeedback onPress={handlePress}>
       <Animated.View style={[styles.container, buttonAnimationStyle]}>
         <Animated.Text style={[styles.textButton, textAnimationStyle, {
           fontFamily: 'Montserrat_500Medium'
