@@ -1,8 +1,10 @@
+import { updateUserPushToken } from '@/lib/api/user';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Platform } from 'react-native';
+import { user$ } from '../observables/session-observable';
 
 interface NotificationContextType {
   expoPushToken: string;
@@ -17,6 +19,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const [notification, setNotification] = useState<Notifications.Notification | null>(null);
   const notificationListener = useRef<Notifications.EventSubscription>();
   const responseListener = useRef<Notifications.EventSubscription>();
+
+  const userData = user$.get();
 
   async function requestPermissions() {
     if (!Device.isDevice) {
@@ -49,12 +53,29 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     try {
       const token = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
       setExpoPushToken(token);
+      
+      if (userData.id) {
+        try {
+          await updateUserPushToken(userData.id, token);
+          console.log('Push token updated in database');
+        } catch (error) {
+          console.error('Error updating push token in database:', error);
+        }
+      }
+      
       return true;
     } catch (error) {
       console.error('Error getting push token:', error);
       return false;
     }
   }
+
+  useEffect(() => {
+    if (userData?.id && expoPushToken) {
+      updateUserPushToken(userData.id, expoPushToken)
+        .catch(error => console.error('Error updating push token:', error));
+    }
+  }, [userData?.id, expoPushToken]);
 
   useEffect(() => {
     Notifications.setNotificationHandler({

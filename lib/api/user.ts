@@ -27,3 +27,15 @@ export async function verifyUserInDB(uuid: string) {
   if (error) throw error
   return data
 }
+
+export async function updateUserPushToken(userId: string, pushToken: string) {
+  const { data, error } = await supabase
+    .from('users')
+    .update({ expo_push_token: pushToken })
+    .eq('id', userId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
