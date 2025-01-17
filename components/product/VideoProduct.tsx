@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Button, Text } from 'react-native';
+import { supabase } from '@/lib/supabase';
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { supabase } from '@/lib/supabase';
+import React, { useEffect, useState } from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 interface VideoProductProps {
   productId: string;
