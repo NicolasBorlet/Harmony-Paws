@@ -83,36 +83,29 @@ export const useConversationMessages = (conversationId: string) => {
                 table: 'messages',
                 filter: `conversation_id=eq.${conversationId}`
             }, async (payload) => {
-                const { data: newMessage } = await supabase
-                    .from('messages')
-                    .select(`
-                        id,
-                        content,
-                        created_at,
-                        sender_id,
-                        sender:users!sender_id(
-                            id,
-                            first_name
-                        )
-                    `)
-                    .eq('id', payload.new.id)
-                    .single();
+                if (payload.eventType === 'INSERT') {
+                    queryClient.setQueryData<GiftedChatMessage[]>(
+                        ['messages', conversationId], 
+                        (oldMessages = []) => {
+                            const messageExists = oldMessages.some(msg => msg._id === payload.new.id);
+                            if (messageExists) {
+                                return oldMessages;
+                            }
 
-                const formattedMessage: GiftedChatMessage = {
-                    _id: newMessage.id,
-                    text: newMessage.content,
-                    createdAt: new Date(newMessage.created_at),
-                    user: {
-                        _id: newMessage.sender_id!,
-                        name: newMessage.sender.first_name,
-                    }
-                };
+                            const newMessage: GiftedChatMessage = {
+                                _id: payload.new.id,
+                                text: payload.new.content,
+                                createdAt: new Date(payload.new.created_at),
+                                user: {
+                                    _id: payload.new.sender_id,
+                                    name: payload.new.sender?.first_name || '',
+                                }
+                            };
 
-                queryClient.setQueryData<GiftedChatMessage[]>(['messages', conversationId], (oldMessages = []) => {
-                    const messageExists = oldMessages.some(msg => msg._id === formattedMessage._id);
-                    if (messageExists) return oldMessages;
-                    return [...oldMessages, formattedMessage];
-                });
+                            return [...oldMessages, newMessage];
+                        }
+                    );
+                }
             })
             .subscribe();
 
@@ -124,20 +117,25 @@ export const useConversationMessages = (conversationId: string) => {
     return query;
 }
 
-export async function sendMessage(
-    conversationId: string, 
-    content: string, 
-    senderId: number
-): Promise<GiftedChatMessage> {
-    const { data, error } = await supabase
+export async function sendMessage(conversationId: string, content: string, senderId: string) {
+    // Envoyer le message
+    const { data: insertedMessage, error: insertError } = await supabase
         .from('messages')
         .insert([
             {
                 conversation_id: conversationId,
                 content,
                 sender_id: senderId,
-            }
+            },
         ])
+        .select('id')
+        .single()
+
+    if (insertError) throw insertError
+
+    // Récupérer le message avec toutes les relations
+    const { data: messageData, error: messageError } = await supabase
+        .from('messages')
         .select(`
             id,
             content,
@@ -148,17 +146,35 @@ export async function sendMessage(
                 first_name
             )
         `)
-        .single();
+        .eq('id', insertedMessage.id)
+        .single()
 
-    if (error) throw error;
+    if (messageError) throw messageError
 
-    return {
-        _id: data.id,
-        text: data.content,
-        createdAt: new Date(data.created_at),
-        user: {
-            _id: data.sender_id!,
-            name: data.sender.first_name,
+    // Déclencher l'edge function pour les notifications
+    const { error: notificationError } = await supabase.functions.invoke(
+        'send-message-notification',
+        {
+            body: {
+                conversationId,
+                senderId,
+                messageContent: content,
+            },
         }
-    };
+    )
+
+    if (notificationError) {
+        console.error('Error sending notification:', notificationError)
+    }
+
+    // Retourner le message au format GiftedChat
+    return {
+        _id: messageData.id,
+        text: messageData.content,
+        createdAt: new Date(messageData.created_at),
+        user: {
+            _id: messageData.sender_id,
+            name: messageData.sender.first_name,
+        }
+    }
 }

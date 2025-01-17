@@ -32,10 +32,6 @@ export default function MessageDetail() {
     mutationFn: (content: string) => 
       sendMessage(id as string, content, userData?.id || ''),
     onSuccess: (newMessage) => {
-      // Mise à jour du cache
-      queryClient.setQueryData(['messages', id], (oldMessages: any) => 
-        [...(oldMessages || []), newMessage]
-      )
       setInputText('')
     },
   })
