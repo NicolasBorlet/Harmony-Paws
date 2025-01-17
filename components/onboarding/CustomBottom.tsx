@@ -1,4 +1,4 @@
-import { registerForPushNotificationsAsync } from '@/lib/api/notification';
+import { useNotifications } from '@/lib/context/NotificationContext';
 import { router } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
@@ -15,6 +15,7 @@ interface CustomButtonProps {
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex, dataLength }) => {
+  const { requestPermissions } = useNotifications();
   const buttonAnimationStyle = useAnimatedStyle(() => {
     return {
       width:
@@ -55,21 +56,25 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
     };
   });
 
-  const handlePress = async () => {
-    if (flatListIndex.value < dataLength - 1) {
-      flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+  const handleLastStep = async () => {
+    const permissionGranted = await requestPermissions();
+    if (permissionGranted) {
+      console.log('Notifications permissions granted');
     } else {
-      const expoPushToken = await registerForPushNotificationsAsync();
-      if (expoPushToken) {
-        router.replace('/(auth)/account-created');
-      } else {
-        alert('Permission not granted for notifications!');
-      }
+      console.log('Notifications permissions denied');
     }
+    router.replace('/(auth)/account-created');
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        if (flatListIndex.value < dataLength - 1) {
+          flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+        } else {
+          handleLastStep();
+        }
+      }}>
       <Animated.View style={[styles.container, buttonAnimationStyle]}>
         <Animated.Text style={[styles.textButton, textAnimationStyle, {
           fontFamily: 'Montserrat_500Medium'
