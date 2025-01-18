@@ -1,5 +1,6 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
+import LoaderComponent from '@/components/loader'
 import MessageItemListing from '@/components/messageListing/message-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
 import { ExtraSmall, NavigationTitle, SmallMedium } from '@/components/ui/text'
@@ -99,48 +100,51 @@ export default function Messages() {
           </Animated.View>
         )}
       </View>
-      <FlashList
-        data={conversations}
-        renderItem={({ item, index }: { item: any; index: number }) => (
-          <Pressable
-            onPress={() => {
-              router.push({
-                pathname: `/messages/${item.id}`,
-                params: { title: item.title }
-              })
-            }}
-          >
-            <MessageItemListing conversation={item} />
-          </Pressable>
-        )}
-        estimatedItemSize={10}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              height: 1,
-              backgroundColor: '#C5C3C3',
-              width: '100%',
-              marginVertical: 20,
-            }}
+      {isLoading ? <LoaderComponent /> : (
+        <FlashList
+          data={conversations}
+          renderItem={({ item, index }: { item: any; index: number }) => (
+            <Pressable
+              onPress={() => {
+                router.push({
+                  pathname: `/messages/${item.id}`,
+                  params: { title: item.title }
+                })
+              }}
+            >
+              <MessageItemListing conversation={item} />
+            </Pressable>
+          )}
+          estimatedItemSize={10}
+          ItemSeparatorComponent={() => (
+            <View
+              style={{
+                height: 1,
+                backgroundColor: '#C5C3C3',
+                width: '100%',
+                marginVertical: 20,
+              }}
+            />
+          )}
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingTop: 24,
+          }}
+          showsVerticalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          ListFooterComponent={() => <View style={{ height: 32 }} />}
+          ListEmptyComponent={() => (
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <SmallMedium color='#000'>{i18n.t('noMessages')}</SmallMedium>
+              <ExtraSmall color='#979898'>
+                {i18n.t('sendMessageToStart')}
+              </ExtraSmall>
+              </View>
+            )}
           />
         )}
-        contentContainerStyle={{
-          paddingHorizontal: 20,
-          paddingTop: 24,
-        }}
-        showsVerticalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        ListFooterComponent={() => <View style={{ height: 32 }} />}
-        ListEmptyComponent={() => (
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <SmallMedium color='#000'>{i18n.t('noMessages')}</SmallMedium>
-            <ExtraSmall color='#979898'>
-              {i18n.t('sendMessageToStart')}
-            </ExtraSmall>
-          </View>
-        )}
-      />
-    </View>
+      </View>
   )
 }
+
