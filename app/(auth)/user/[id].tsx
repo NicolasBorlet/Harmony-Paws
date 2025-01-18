@@ -4,16 +4,18 @@ import BodyTitle from "@/components/bodyTitle/body-title";
 import { StandardButton } from "@/components/ui/button";
 import { RoundedImage } from "@/components/ui/image";
 import { CardTitle, Small, SmallMedium } from "@/components/ui/text";
-import DogCardComponent from "@/components/user/dog-card";
+import { useDogsFromUserId } from "@/lib/api/dog";
 import { useUser } from "@/lib/api/user";
 import { FontAwesome } from "@expo/vector-icons";
+import { FlashList } from "@shopify/flash-list";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function UserScreen() {
   const { id } = useLocalSearchParams();
-  
+
+  const { data: dogs } = useDogsFromUserId(id.toString())
   const { data: user, isLoading } = useUser(id.toString());
 
   useEffect(() => {
@@ -85,7 +87,19 @@ export default function UserScreen() {
         </View>
         <View style={styles.container}>
           <BodyTitle title={i18n.t('hisDogs')} />
-          <DogCardComponent />
+          <View style={{ height: 60 }}>
+            <FlashList
+              data={dogs}
+              horizontal
+              estimatedItemSize={3}
+              ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+              renderItem={({ item }) => (
+                <View key={item.id}>
+                  <RoundedImage src={item.image} />
+                </View>
+              )}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -100,5 +114,5 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 10,
-  }
+  },
 })
