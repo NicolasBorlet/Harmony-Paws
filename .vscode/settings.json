@@ -73,6 +73,8 @@
     "**/dist": true,
     "**/.next": true,
     "**/*.tsbuildinfo": true,
-    "**/.astro": true
+    "**/.astro": true,
+    "**/ios": true,
+    "**/android": true
   }
 }

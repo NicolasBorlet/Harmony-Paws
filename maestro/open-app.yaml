@@ -1,0 +1,4 @@
+appId: com.konylepanini.harmony-paws
+---
+- launchApp
+- assertVisible: 'Welcome!'
