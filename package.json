@@ -85,7 +85,8 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.2",
     "styled-components": "^6.1.13",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "vexo-analytics": "^1.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
