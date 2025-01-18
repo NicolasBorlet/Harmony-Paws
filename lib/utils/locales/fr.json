@@ -91,5 +91,6 @@
   "account": "Compte",
   "weDontKnowMoreAbout": "Nous n'en savons pas plus sur",
   "noNextRide": "Aucune prochaine balade de prévue.",
-  "noBehavior": "Aucun comportement particulier connu."
+  "noBehavior": "Aucun comportement particulier connu.",
+  "noDescriptionFor": "Aucune description pour"
 }

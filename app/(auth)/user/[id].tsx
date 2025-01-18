@@ -4,12 +4,21 @@ import BodyTitle from "@/components/bodyTitle/body-title";
 import { RoundedImage } from "@/components/ui/image";
 import { CardTitle, SmallMedium } from "@/components/ui/text";
 import DogCardComponent from "@/components/user/dog-card";
+import { useUser } from "@/lib/api/user";
 import { FontAwesome } from "@expo/vector-icons";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function UserScreen() {
-  const insets = useSafeAreaInsets()
+  const { id } = useLocalSearchParams();
+  
+  const { data: user, isLoading } = useUser(id.toString());
+
+  useEffect(() => {
+    console.log('id', id);
+    console.log('user', user);
+  }, [id, user]);
 
   return (
     <View
@@ -52,9 +61,9 @@ export default function UserScreen() {
           }} />
         </View>
         <View style={styles.container}>
-          <CardTitle color="#000" style={{ textAlign: 'center' }}>Emma, 30 ans</CardTitle>
+          <CardTitle color="#000" style={{ textAlign: 'center' }}>{user?.first_name}, {user?.age} ans</CardTitle>
           <SmallMedium color="#000">
-            Lorem ipsum dolor sit amet consectetur. Leo fames dui tortor nunc mi donec lectus dignissim gravida.
+            {user?.description ? user?.description : (i18n.t('noDescriptionFor') + ' ' + user?.first_name)}
           </SmallMedium>
         </View>
         <View style={styles.container}>

@@ -91,5 +91,6 @@
   "account": "Account",
   "weDontKnowMoreAbout": "We don't know more about",
   "noNextRide": "No next ride planned.",
-  "noBehavior": "No behavior known."
+  "noBehavior": "No behavior known.",
+  "noDescriptionFor": "No description for"
 }
