@@ -130,7 +130,12 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('myMaster')} />
-            <Pressable onPress={() => router.push(`/user/${data.owner.id}`)}>
+            <Pressable onPress={() => 
+              router.push({
+                pathname: '/user/[id]',
+                params: { id: data.owner.id }
+              })
+            }>
               <MasterDogCardComponent masterData={{ name: data.owner.first_name, age: data.owner.last_name, image: data.owner.image }} />
             </Pressable>
           </View>
