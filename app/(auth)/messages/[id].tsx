@@ -1,4 +1,5 @@
 import Back from '@/components/back-button'
+import LoaderComponent from '@/components/loader'
 import { NavigationTitle, Small } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { sendMessage, useConversationMessages } from '@/lib/api/message'
@@ -135,31 +136,33 @@ export default function MessageDetail() {
           </View>
         </View>
       </View>
-      <GiftedChat
-        inverted={false}
-        messages={messages}
-        onSend={onSend}
-        user={{ _id: userData.id, name: userData.first_name }}
-        scrollToBottom={true}
-        bottomOffset={0}
-        timeFormat='HH:mm'
-        dateFormat='DD/MM/YYYY'
-        renderInputToolbar={renderInputToolbar}
-        renderComposer={renderComposer}
-        renderBubble={renderBubble}
-        messagesContainerStyle={{
-          paddingHorizontal: 12,
-        }}
-        minInputToolbarHeight={70}
-        listViewProps={{
-          showsVerticalScrollIndicator: false,
-          keyboardDismissMode: 'on-drag',
-          keyboardShouldPersistTaps: 'handled',
-        }}
-        text={inputText}
-        onInputTextChanged={text => setInputText(text)}
-        alwaysShowSend={false}
-      />
+      {isLoading ? <LoaderComponent /> : (
+        <GiftedChat
+          inverted={false}
+          messages={messages}
+          onSend={onSend}
+          user={{ _id: userData.id, name: userData.first_name }}
+          scrollToBottom={true}
+          bottomOffset={0}
+          timeFormat='HH:mm'
+          dateFormat='DD/MM/YYYY'
+          renderInputToolbar={renderInputToolbar}
+          renderComposer={renderComposer}
+          renderBubble={renderBubble}
+          messagesContainerStyle={{
+            paddingHorizontal: 12,
+          }}
+          minInputToolbarHeight={70}
+          listViewProps={{
+            showsVerticalScrollIndicator: false,
+            keyboardDismissMode: 'on-drag',
+            keyboardShouldPersistTaps: 'handled',
+          }}
+          text={inputText}
+          onInputTextChanged={text => setInputText(text)}
+          alwaysShowSend={false}
+        />
+      )}
     </View>
     // </KeyboardAvoidingView>
   )
