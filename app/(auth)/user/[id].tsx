@@ -84,7 +84,7 @@ export default function UserScreen() {
           </View>
         </View>
         <View style={styles.container}>
-          <BodyTitle title={i18n.t('hisMate')} />
+          <BodyTitle title={i18n.t('hisDogs')} />
           <DogCardComponent />
         </View>
       </View>
