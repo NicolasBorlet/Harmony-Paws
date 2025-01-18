@@ -1,8 +1,9 @@
 import { i18n } from "@/app/_layout";
 import Back from "@/components/back-button";
 import BodyTitle from "@/components/bodyTitle/body-title";
+import { StandardButton } from "@/components/ui/button";
 import { RoundedImage } from "@/components/ui/image";
-import { CardTitle, SmallMedium } from "@/components/ui/text";
+import { CardTitle, Small, SmallMedium } from "@/components/ui/text";
 import DogCardComponent from "@/components/user/dog-card";
 import { useUser } from "@/lib/api/user";
 import { FontAwesome } from "@expo/vector-icons";
@@ -65,6 +66,22 @@ export default function UserScreen() {
           <SmallMedium color="#000">
             {user?.description ? user?.description : (i18n.t('noDescriptionFor') + ' ' + user?.first_name)}
           </SmallMedium>
+          <View style={styles.buttonContainer}>
+          <View style={{ flex: 1 }}>
+            <StandardButton>
+              <Small color='#fff'>
+                {i18n.t('addFriend')}
+              </Small>
+              </StandardButton>
+            </View>
+            <View style={{ flex: 1 }}>
+              <StandardButton outlined>
+                <Small color='#F7A400'>
+                  {i18n.t('write')}
+                </Small>
+              </StandardButton>
+            </View>
+          </View>
         </View>
         <View style={styles.container}>
           <BodyTitle title={i18n.t('hisMate')} />
@@ -78,5 +95,10 @@ export default function UserScreen() {
 const styles = StyleSheet.create({
   container: {
     gap: 16
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
   }
 })
