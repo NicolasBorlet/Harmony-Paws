@@ -23,7 +23,6 @@ import { I18n } from 'i18n-js'
 import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
-import { vexo } from 'vexo-analytics'
 import { SessionProvider } from './ctx'
 
 export {
@@ -34,7 +33,7 @@ export {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
-vexo('b3c84bfe-e84b-4f4a-a622-f773fe6e8bdf');
+// vexo('');
 
 export const i18n = new I18n(translations)
 
