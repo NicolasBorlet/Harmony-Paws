@@ -1,10 +1,35 @@
 import { i18n } from "@/app/_layout";
+import { acceptFriendRequest, rejectFriendRequest } from "@/lib/api/friendRequests";
+import { user$ } from "@/lib/observables/session-observable";
+import * as Burnt from "burnt";
 import React from "react";
 import { View } from "react-native";
 import { SmallButton, SmallButtonOutlined } from "../ui/button";
 import { Small, SmallMedium, SmallSemiBold } from "../ui/text";
 
 export default function NotificationItem({notificationData}: {notificationData: any}) {
+    const userData = user$.get()
+
+    const handleAcceptFriendRequest = async () => {
+        await acceptFriendRequest(notificationData.sender_id, userData.id)
+        Burnt.toast({
+            title: "Demande acceptée",
+            preset: "done",
+            message: "Vous êtes maintenant amis",
+            haptic: "success",
+        })
+    }
+
+    const handleRejectFriendRequest = async () => {
+        await rejectFriendRequest(notificationData.sender_id, userData.id)
+        Burnt.toast({
+            title: "Demande refusée",
+            preset: "error",
+            message: "Vous n'êtes plus amis",
+            haptic: "error",
+        })
+    }
+
     return (
         <View style={{ display: 'flex', flexDirection: 'row', gap: 10, alignItems: 'center' }}>
             {/* <Image source={{ uri: notificationData.user.profilePicture }} style={{
@@ -24,12 +49,12 @@ export default function NotificationItem({notificationData}: {notificationData: 
             {notificationData.type === 'new_friend_request' && (
                 <View style={{ display: 'flex', width: 100, flexDirection: 'column', gap: 5 }}>
                     <SmallButton
-                        onPress={() => console.log(`accept ${notificationData.id}`)}
+                        onPress={handleAcceptFriendRequest}
                     >
                         <Small color='#fff'>{i18n.t('accept')}</Small>
                     </SmallButton>
                     <SmallButtonOutlined
-                        onPress={() => console.log(`refuse ${notificationData.id}`)}
+                        onPress={handleRejectFriendRequest}
                     >
                         <Small color='#F7A400'>{i18n.t('refuse')}</Small>
                     </SmallButtonOutlined>

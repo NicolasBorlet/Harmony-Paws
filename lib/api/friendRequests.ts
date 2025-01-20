@@ -12,6 +12,7 @@ export async function getFriendRequests(userId: number) {
       )
     `)
     .eq('recipient_id', userId)
+    .eq('status', 'pending')
     .order('created_at', { ascending: false });
 
   if (error) throw error;
@@ -108,13 +109,6 @@ export const acceptFriendRequest = async (senderId: number, receiverId: number) 
   return data
 }
 
-export const useAcceptFriendRequest = (senderId: number, receiverId: number) => {
-  return useQuery({
-    queryKey: ['acceptFriendRequest', senderId, receiverId],
-    queryFn: () => acceptFriendRequest(senderId, receiverId),
-  })
-}
-
 export const rejectFriendRequest = async (senderId: number, receiverId: number) => {
   const { data, error } = await supabase
     .from('friend_requests')
@@ -126,11 +120,4 @@ export const rejectFriendRequest = async (senderId: number, receiverId: number) 
 
   if (error) throw error
   return data
-}
-
-export const useRejectFriendRequest = (senderId: number, receiverId: number) => {
-  return useQuery({
-    queryKey: ['rejectFriendRequest', senderId, receiverId],
-    queryFn: () => rejectFriendRequest(senderId, receiverId),
-  })
 }
