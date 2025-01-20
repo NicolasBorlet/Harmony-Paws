@@ -132,3 +132,22 @@ export const useRejectFriendRequest = (senderId: number, receiverId: number) => 
     queryFn: () => rejectFriendRequest(senderId, receiverId),
   })
 }
+
+// Get all friend requests for a user in realtime
+export const getFriendRequests = async (userId: number) => {
+  const { data, error } = await supabase
+    .from('friend_requests')
+    .select('*')
+    .eq('recipient_id', userId)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+  return data
+}
+
+export const useFriendRequests = (userId: number) => {
+  return useQuery({
+    queryKey: ['friendRequests', userId],
+    queryFn: () => getFriendRequests(userId),
+  })
+}
