@@ -61,3 +61,25 @@ export const useUser = (userId: string) => {
     refetchOnWindowFocus: false
   })
 }
+
+export const friendRequest = async (senderId: number, receiverId: number) => {
+  if (senderId === receiverId) {
+    throw new Error('Sender and receiver cannot be the same')
+  }
+
+  const { data, error } = await supabase
+    .from('friend_requests')
+    .insert([{ sender_id: senderId, recipient_id: receiverId }])
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export const useFriendRequest = (senderId: number, receiverId: number) => {
+  return useQuery({
+    queryKey: ['friendRequest', senderId, receiverId],
+    queryFn: () => friendRequest(senderId, receiverId),
+  })
+}

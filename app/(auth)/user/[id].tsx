@@ -108,7 +108,7 @@ export default function UserScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 16
+    gap: 16,
   },
   buttonContainer: {
     display: 'flex',
