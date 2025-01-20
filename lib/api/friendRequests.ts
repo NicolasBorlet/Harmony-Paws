@@ -15,7 +15,8 @@ export async function getFriendRequests(userId: number) {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data;
+  // For eacch data, add type="new_friend_request"
+  return data.map(request => ({ ...request, type: 'new_friend_request' }));
 }
 
 export const useFriendRequests = (userId: number) => {

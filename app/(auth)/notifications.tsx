@@ -11,75 +11,6 @@ import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { i18n } from '../_layout'
 
-const notificationsData = [
-  {
-    id: 1,
-    type: 'new_friend_request',
-    title: 'New friend request',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date(),
-  },
-  {
-    id: 2,
-    type: 'new_friend_ride',
-    title: 'New friend ride',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date(),
-  },
-  {
-    id: 3,
-    type: 'new_friend_ride',
-    title: 'New friend ride',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date(),
-  },
-  {
-    id: 4,
-    type: 'new_ride_request',
-    title: 'New ride request',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date(),
-  },
-  {
-    id: 5,
-    type: 'new_friend_ride',
-    title: 'New friend ride',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
-  },
-  {
-    id: 6,
-    type: 'new_friend_ride',
-    title: 'New friend ride',
-    user: {
-      id: 1,
-      name: 'John Doe',
-      profilePicture: 'https://picsum.photos/200',
-    },
-    date: new Date().getTime() - 7 * 24 * 60 * 60 * 1000,
-  },
-]
-
 export default function Notifications() {
   const insets = useSafeAreaInsets()
   const userData = user$.get()
@@ -90,12 +21,14 @@ export default function Notifications() {
   const sevenDaysAgo = new Date()
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
-  const recentNotifications = notificationsData.filter(
-    notification => new Date(notification.date) >= sevenDaysAgo,
-  )
-  const olderNotifications = notificationsData.filter(
-    notification => new Date(notification.date) < sevenDaysAgo,
-  )
+  // Utiliser les vraies données de friendRequests et les trier par date
+  const recentNotifications = friendRequests?.filter(
+    request => new Date(request.created_at) >= sevenDaysAgo,
+  ) || []
+
+  const olderNotifications = friendRequests?.filter(
+    request => new Date(request.created_at) < sevenDaysAgo,
+  ) || []
 
   const renderSectionHeader = (title: string) => (
     <SmallBold color='#000' style={{ marginTop: 10 }}>
