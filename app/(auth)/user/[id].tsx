@@ -5,23 +5,50 @@ import { StandardButton } from "@/components/ui/button";
 import { RoundedImage } from "@/components/ui/image";
 import { CardTitle, Small, SmallMedium } from "@/components/ui/text";
 import { useDogsFromUserId } from "@/lib/api/dog";
+import { sendFriendRequest } from "@/lib/api/friendRequests";
 import { useUser } from "@/lib/api/user";
+import { user$ } from "@/lib/observables/session-observable";
 import { FontAwesome } from "@expo/vector-icons";
 import { FlashList } from "@shopify/flash-list";
+import * as Burnt from "burnt";
 import { useLocalSearchParams } from "expo-router";
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 
 export default function UserScreen() {
   const { id } = useLocalSearchParams();
+  const userData = user$.get();
 
-  const { data: dogs } = useDogsFromUserId(id.toString())
+  const { data: dogs } = useDogsFromUserId(id.toString());
   const { data: user, isLoading } = useUser(id.toString());
 
   useEffect(() => {
     console.log('id', id);
     console.log('user', user);
   }, [id, user]);
+
+  const handleAddFriend = async () => {
+    try {
+      console.log('userData', userData);
+      await sendFriendRequest(userData?.id, Number(id));
+      Burnt.toast({
+        title: "Demande d'ami envoyée",
+        preset: "done",
+        message: "Votre demande d'ami a été envoyée",
+        haptic: "success",
+      });
+    } catch (error) {
+      // If error message {message: 'Sender and receiver cannot be the same'}
+      if (error.message === 'Sender and receiver cannot be the same') {
+        Burnt.toast({
+          title: "Erreur",
+          preset: "error",
+          message: "Vous ne pouvez pas ajouter vous-même comme ami",
+          haptic: "error",
+        });
+      }
+    }
+  };
 
   return (
     <View
@@ -70,7 +97,7 @@ export default function UserScreen() {
           </SmallMedium>
           <View style={styles.buttonContainer}>
           <View style={{ flex: 1 }}>
-            <StandardButton>
+            <StandardButton onPress={handleAddFriend}>
               <Small color='#fff'>
                 {i18n.t('addFriend')}
               </Small>
@@ -108,7 +135,7 @@ export default function UserScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 16
+    gap: 16,
   },
   buttonContainer: {
     display: 'flex',
