@@ -2,7 +2,11 @@ import Back from '@/components/back-button'
 import NotificationItem from '@/components/notification/notification-item'
 import Divider from '@/components/ui/divider'
 import { NavigationTitle, SmallBold, SmallMedium } from '@/components/ui/text'
+// import { useFriendRequests } from '@/lib/api/user'
+import { useFriendRequests } from '@/lib/api/friendRequests'
+import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
+import { useEffect } from 'react'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { i18n } from '../_layout'
@@ -78,6 +82,9 @@ const notificationsData = [
 
 export default function Notifications() {
   const insets = useSafeAreaInsets()
+  const userData = user$.get()
+  
+  const { data: friendRequests } = useFriendRequests(userData.id)
 
   // Split notifications into two arrays based on date
   const sevenDaysAgo = new Date()
@@ -95,6 +102,10 @@ export default function Notifications() {
       {title}
     </SmallBold>
   )
+
+  useEffect(() => {
+    console.log(friendRequests)
+  }, [friendRequests])
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top + 8 }}>
