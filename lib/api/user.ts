@@ -83,3 +83,43 @@ export const useFriendRequest = (senderId: number, receiverId: number) => {
     queryFn: () => friendRequest(senderId, receiverId),
   })
 }
+
+export const acceptFriendRequest = async (senderId: number, receiverId: number) => {
+  const { data, error } = await supabase
+    .from('friend_requests')
+    .update({ status: 'accepted' })
+    .eq('sender_id', senderId)
+    .eq('recipient_id', receiverId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export const useAcceptFriendRequest = (senderId: number, receiverId: number) => {
+  return useQuery({
+    queryKey: ['acceptFriendRequest', senderId, receiverId],
+    queryFn: () => acceptFriendRequest(senderId, receiverId),
+  })
+}
+
+export const rejectFriendRequest = async (senderId: number, receiverId: number) => {
+  const { data, error } = await supabase
+    .from('friend_requests')
+    .update({ status: 'rejected' })
+    .eq('sender_id', senderId)
+    .eq('recipient_id', receiverId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export const useRejectFriendRequest = (senderId: number, receiverId: number) => {
+  return useQuery({
+    queryKey: ['rejectFriendRequest', senderId, receiverId],
+    queryFn: () => rejectFriendRequest(senderId, receiverId),
+  })
+}

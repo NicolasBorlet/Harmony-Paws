@@ -305,18 +305,21 @@ export type Database = {
           id: number
           recipient_id: number
           sender_id: number
+          status: Database["public"]["Enums"]["friend_request_status"]
         }
         Insert: {
           created_at?: string
           id?: number
           recipient_id: number
           sender_id: number
+          status: Database["public"]["Enums"]["friend_request_status"]
         }
         Update: {
           created_at?: string
           id?: number
           recipient_id?: number
           sender_id?: number
+          status: Database["public"]["Enums"]["friend_request_status"]
         }
         Relationships: [
           {
@@ -671,6 +674,7 @@ export type Database = {
       activity_visibility: "private" | "public"
       dog_dominance: "neutral" | "dominant" | "dominated"
       dog_sex: "male" | "female"
+      friend_request_status: "pending" | "accepted" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
