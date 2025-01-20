@@ -62,26 +62,35 @@ export const useUser = (userId: string) => {
   })
 }
 
-export const friendRequest = async (senderId: number, receiverId: number) => {
+export const sendFriendRequest = async (senderId: number, receiverId: number) => {
   if (senderId === receiverId) {
     throw new Error('Sender and receiver cannot be the same')
   }
 
+  // Vérifier si une demande d'ami a déjà été envoyée
+  const { data: existingRequest, error: requestError } = await supabase
+    .from('friend_requests')
+    .select('*')
+    .eq('sender_id', senderId)
+    .eq('recipient_id', receiverId)
+    .single()
+
+  if (requestError && requestError.code !== 'PGRST116') { // PGRST116 signifie qu'aucune ligne n'a été trouvée
+    throw requestError
+  }
+
+  if (existingRequest) {
+    throw new Error('Friend request already sent')
+  }
+
   const { data, error } = await supabase
     .from('friend_requests')
-    .insert([{ sender_id: senderId, recipient_id: receiverId }])
+    .insert([{ sender_id: senderId, recipient_id: receiverId, status: 'pending' }])
     .select()
     .single()
 
   if (error) throw error
   return data
-}
-
-export const useFriendRequest = (senderId: number, receiverId: number) => {
-  return useQuery({
-    queryKey: ['friendRequest', senderId, receiverId],
-    queryFn: () => friendRequest(senderId, receiverId),
-  })
 }
 
 export const acceptFriendRequest = async (senderId: number, receiverId: number) => {
