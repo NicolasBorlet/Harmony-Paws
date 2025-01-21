@@ -14,4 +14,4 @@ export type GiftedChatMessage = {
     _id: number
     name: string | null
   }
-} 
+}
