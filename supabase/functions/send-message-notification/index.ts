@@ -1,20 +1,21 @@
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 interface MessageNotificationPayload {
-  conversationId: string;
-  senderId: string;
-  messageContent: string;
+  conversationId: string
+  senderId: string
+  messageContent: string
 }
 
-serve(async (req) => {
+serve(async req => {
   try {
-    const { conversationId, senderId, messageContent } = await req.json() as MessageNotificationPayload
-    
+    const { conversationId, senderId, messageContent } =
+      (await req.json()) as MessageNotificationPayload
+
     // Initialiser le client Supabase
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     )
 
     // Récupérer les informations de l'expéditeur
@@ -27,23 +28,26 @@ serve(async (req) => {
     if (senderError) throw senderError
 
     // Récupérer tous les participants de la conversation sauf l'expéditeur
-    const { data: participants, error: participantsError } = await supabaseClient
-      .from('conversation_participants')
-      .select(`
+    const { data: participants, error: participantsError } =
+      await supabaseClient
+        .from('conversation_participants')
+        .select(
+          `
         user:users (
           id,
           expo_push_token
         )
-      `)
-      .eq('conversation_id', conversationId)
-      .neq('user_id', senderId)
+      `,
+        )
+        .eq('conversation_id', conversationId)
+        .neq('user_id', senderId)
 
     if (participantsError) throw participantsError
 
     // Envoyer les notifications
     const notifications = participants
       .filter(participant => participant.user?.expo_push_token)
-      .map(async (participant) => {
+      .map(async participant => {
         const message = {
           to: participant.user.expo_push_token,
           sound: 'default',
@@ -58,7 +62,7 @@ serve(async (req) => {
         await fetch('https://exp.host/--/api/v2/push/send', {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
+            Accept: 'application/json',
             'Accept-encoding': 'gzip, deflate',
             'Content-Type': 'application/json',
           },
@@ -68,18 +72,13 @@ serve(async (req) => {
 
     await Promise.all(notifications)
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { headers: { 'Content-Type': 'application/json' } },
-    )
-
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { 'Content-Type': 'application/json' },
+    })
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      },
-    )
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    })
   }
-}) 
+})

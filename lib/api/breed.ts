@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query"
-import { supabase } from "../supabase"
+import { useQuery } from '@tanstack/react-query'
+import { supabase } from '../supabase'
 
 export const getBreeds = async () => {
   const { data, error } = await supabase.from('breeds').select('*')

@@ -1,21 +1,21 @@
 export enum ActivityVisibility {
   PRIVATE = 'private',
-  PUBLIC = 'public'
+  PUBLIC = 'public',
 }
 
 export enum DogSex {
   MALE = 'male',
-  FEMALE = 'female'
+  FEMALE = 'female',
 }
 
 export enum ActivityType {
   FOREST = 'forest',
   CITY = 'city',
-  PLAGE = 'plage'
+  PLAGE = 'plage',
 }
 
 export enum DogDominance {
   NEUTRAL = 'neutral',
   DOMINANT = 'dominant',
-  DOMINATED = 'dominated'
+  DOMINATED = 'dominated',
 }

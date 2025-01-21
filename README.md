@@ -1,10 +1,12 @@
 # Harmony Paws 🐾
 
-A social mobile app for dog owners to connect, organize walks, and share experiences.
+A social mobile app for dog owners to connect, organize walks, and share
+experiences.
 
 ## Features
 
-- **Dog Profiles**: Create and manage profiles for your dogs with details like breed, age, and behavior
+- **Dog Profiles**: Create and manage profiles for your dogs with details like
+  breed, age, and behavior
 - **Social Walks**: Organize and join group walks with other dog owners
 - **Real-time Chat**: Message other owners and coordinate meetups
 - **Interactive Map**: Find nearby walks and dog-friendly locations
@@ -25,11 +27,13 @@ A social mobile app for dog owners to connect, organize walks, and share experie
 ## Development
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Start the development server:
+
    ```bash
    npx expo start
    ```

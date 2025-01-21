@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../supabase';
+import { useQuery } from '@tanstack/react-query'
+import { supabase } from '../supabase'
 
 export async function createUserInDB(uuid: string) {
   const { data, error } = await supabase
@@ -42,7 +42,7 @@ export async function updateUserPushToken(userId: string, pushToken: string) {
 }
 
 export async function getUser(userId: string) {
-  console.log('userId', userId);
+  console.log('userId', userId)
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -58,6 +58,6 @@ export const useUser = (userId: string) => {
     queryKey: ['user', userId],
     queryFn: () => getUser(userId),
     refetchOnMount: false,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
   })
 }
