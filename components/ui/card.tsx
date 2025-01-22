@@ -17,7 +17,7 @@ const RideCard = styled.View`
   border-radius: 20px;
   flex: 1;
   height: 139px;
-  padding: 30px;
+  padding: 16px;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;

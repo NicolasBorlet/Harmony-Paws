@@ -109,7 +109,7 @@ export default function HomeScreen() {
       </View>
       <GestureDetector gesture={gesture}>
         <View style={{ flex: 1 }}>
-          {selectedTab === 'dog' ? <DogListing scrollY={scrollY}/> : <RideListing />}
+          {selectedTab === 'dog' ? <DogListing scrollY={scrollY}/> : <RideListing scrollY={scrollY} />}
         </View>
       </GestureDetector>
       <MapButton onPress={() => router.push('/map')}>
