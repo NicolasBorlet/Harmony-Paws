@@ -30,6 +30,13 @@ export default function RideItemListing({ rideCardData }: { rideCardData: any })
           {`${rideCardData.date.getHours()}h${String(rideCardData.date.getMinutes()).padStart(2, '0')}`}
         </ExtraSmall>
       </View>
+      <View style={{ position: 'absolute', right: 24, top: 16 }}>
+        <View style={{ borderRadius: 999, width: 24, height: 24, borderWidth: 1, borderColor: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <ExtraSmall style={{ fontFamily: 'Montserrat_700Bold' }}>
+            {rideCardData.duration}
+          </ExtraSmall>
+        </View>
+      </View>
     </RideCard>
   );
 }
