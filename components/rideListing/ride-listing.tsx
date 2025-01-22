@@ -8,7 +8,7 @@ import { Body } from "../ui/text";
 import RideItemListing from "./ride-item-listing";
 
 
-export default function RideListing() {
+export default function RideListing({ scrollY }: { scrollY: any }) {
   const { data, isLoading, isError } = usePaginatedActivities()
 
   if (isLoading) {
@@ -31,6 +31,9 @@ export default function RideListing() {
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 24 }}
       showsVerticalScrollIndicator={false}
+      onScroll={(event) => {
+        scrollY.value = event.nativeEvent.contentOffset.y
+      }}
     />
   );
 }
