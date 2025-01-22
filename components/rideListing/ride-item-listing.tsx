@@ -17,14 +17,17 @@ export default function RideItemListing({ rideCardData }: { rideCardData: any })
         transition={1000}
       />
       <CardTitle style={{ color: '#fff' }}>
-        {rideCardData.name}
+        {rideCardData.place}
       </CardTitle>
       <View style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
         <ExtraSmall>
-          {rideCardData.date}
+          {rideCardData.date.toLocaleDateString('fr-FR', {
+            day: 'numeric',
+            month: 'long'
+          })} à
         </ExtraSmall>
         <ExtraSmall style={{ fontFamily: 'Montserrat_700Bold' }}>
-          {rideCardData.time}
+          {`${rideCardData.date.getHours()}h${String(rideCardData.date.getMinutes()).padStart(2, '0')}`}
         </ExtraSmall>
       </View>
     </RideCard>
