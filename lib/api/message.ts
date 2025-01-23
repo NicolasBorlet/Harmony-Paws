@@ -1,40 +1,71 @@
 import { Conversation, GiftedChatMessage } from '@/types/message'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { supabase } from '../supabase'
 
-export async function getAllUserConversations(
+export async function getPaginatedUserConversations(
   userId: number,
-): Promise<Conversation[]> {
-  const { data, error } = await supabase
+  page: number = 0,
+  pageSize: number = 20,
+): Promise<{
+  conversations: Conversation[]
+  totalCount: number
+  hasMore: boolean
+}> {
+  const from = page * pageSize
+  const to = from + pageSize - 1
+
+  const { data, error, count } = await supabase
     .from('conversation_participants')
     .select(
       `
-            conversation_id,
-            conversation:conversations!conversation_id(
+        conversation_id,
+        conversation:conversations!conversation_id(
+            id,
+            title,
+            created_at,
+            last_message:messages(
                 id,
-                title,
-                last_message:messages(
-                    id,
-                    content,
-                    created_at
-                )
+                content,
+                created_at
             )
-        `,
+        )
+      `,
+      { count: 'exact' },
     )
     .eq('user_id', userId)
+    .range(from, to)
     .limit(1, { foreignTable: 'conversation.messages' })
 
   if (error) throw error
-  return data?.map(conv => conv.conversation) || []
+
+  const conversations =
+    data?.map(conv => ({
+      ...conv.conversation,
+      last_message: conv.conversation.last_message[0],
+    })) || []
+
+  return {
+    conversations,
+    totalCount: count || 0,
+    hasMore: (count || 0) > to + 1,
+  }
 }
 
 export const useUserConversations = (userId: number) => {
-  return useQuery({
+  return useInfiniteQuery({
     queryKey: ['conversations', userId],
-    queryFn: () => getAllUserConversations(userId),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    queryFn: ({ pageParam = 0 }) =>
+      getPaginatedUserConversations(userId, pageParam, 20),
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.hasMore) return undefined
+      return allPages.length
+    },
+    initialPageParam: 0,
   })
 }
 

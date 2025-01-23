@@ -9,7 +9,6 @@ import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { useEffect } from 'react'
 import { Pressable, TextInput, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -21,10 +20,24 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function Messages() {
   const insets = useSafeAreaInsets()
   const userData = user$.get();
-  const { data: conversations, isLoading, error } = useUserConversations(userData.id);
+  const { 
+    data, 
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage 
+  } = useUserConversations(userData.id);
 
-  const searchHeight = useSharedValue(50) // Hauteur initiale
-  const searchOpacity = useSharedValue(1) // Opacité initiale
+  const allConversations = data?.pages.flatMap(page => page.conversations) || [];
+
+  const handleLoadMore = () => {
+    if (!isLoading && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  const searchHeight = useSharedValue(50)
+  const searchOpacity = useSharedValue(1)
 
   const handleScroll = (event: any) => {
     const scrollY = event.nativeEvent.contentOffset.y
@@ -37,16 +50,11 @@ export default function Messages() {
     }
   }
 
-  // Style animé pour la barre de recherche
   const animatedStyle = useAnimatedStyle(() => ({
     height: searchHeight.value,
-    opacity: searchOpacity.value, // Ajoute l'opacité
-    overflow: 'hidden', // Assure que le contenu est masqué
+    opacity: searchOpacity.value,
+    overflow: 'hidden',
   }))
-
-  useEffect(() => {
-    console.log(conversations)
-  }, [conversations])
 
   return (
     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}>
@@ -82,8 +90,7 @@ export default function Messages() {
             onPress={() => router.push('/messages/new')}
           />
         </View>
-        {/* Barre de recherche */}
-        {conversations && conversations.length > 0 && (
+        {allConversations && allConversations.length > 0 && (
           <Animated.View style={[animatedStyle]}>
             <TextInput
               placeholder='Search'
@@ -100,15 +107,17 @@ export default function Messages() {
           </Animated.View>
         )}
       </View>
-      {isLoading ? <LoaderComponent /> : (
+      {isLoading && !allConversations.length ? (
+        <LoaderComponent />
+      ) : (
         <FlashList
-          data={conversations}
-          renderItem={({ item, index }: { item: any; index: number }) => (
+          data={allConversations}
+          renderItem={({ item, index }) => (
             <Pressable
               onPress={() => {
                 router.push({
-                  pathname: `/messages/${item.id}`,
-                  params: { title: item.title }
+                  pathname: "/messages/[id]" as const,
+                  params: { id: item.id, title: item.title }
                 })
               }}
             >
@@ -133,18 +142,24 @@ export default function Messages() {
           showsVerticalScrollIndicator={false}
           onScroll={handleScroll}
           scrollEventThrottle={16}
-          ListFooterComponent={() => <View style={{ height: 32 }} />}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={() => (
+            <View style={{ height: isFetchingNextPage ? 50 : 32 }}>
+              {isFetchingNextPage && <LoaderComponent />}
+            </View>
+          )}
           ListEmptyComponent={() => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <SmallMedium color='#000'>{i18n.t('noMessages')}</SmallMedium>
               <ExtraSmall color='#979898'>
                 {i18n.t('sendMessageToStart')}
               </ExtraSmall>
-              </View>
-            )}
-          />
-        )}
-      </View>
+            </View>
+          )}
+        />
+      )}
+    </View>
   )
 }
 

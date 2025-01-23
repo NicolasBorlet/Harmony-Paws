@@ -2,23 +2,28 @@ import { usePaginatedDogs } from '@/lib/api/dog'
 import { DogListingInterface } from '@/lib/api/types'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../animate/opacity-fadeIn'
 import LoaderComponent from '../loader'
 import DogItemListing from './dog-item-listing'
 
-
 export default function DogListing({ scrollY }: { scrollY: any }) {
-  const [page, setPage] = useState(0)
-  const pageSize = 10
-
-  // const dogs = dogs$.get()
   const {
     data,
     isLoading,
-    isFetching,
-  } = usePaginatedDogs(page, pageSize)
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePaginatedDogs(5);
+
+  const allDogs = data?.pages.flatMap(page => page.dogs) || [];
+
+  const handleLoadMore = () => {
+    if (!isLoading && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const separatorStyle = useMemo(() => ({ height: 20 }), [])
   const contentContainerStyle = useMemo(() => ({
@@ -39,13 +44,13 @@ export default function DogListing({ scrollY }: { scrollY: any }) {
     </OpacityFadeIn>
   ), [handleDogPress])
 
-  if (isLoading) {
+  if (isLoading && !allDogs.length) {
     return <LoaderComponent />
   }
 
   return (
     <FlashList
-      data={data?.dogs || []}
+      data={allDogs}
       renderItem={renderDogItem}
       estimatedItemSize={10}
       ItemSeparatorComponent={() => <View style={separatorStyle} />}
@@ -54,6 +59,9 @@ export default function DogListing({ scrollY }: { scrollY: any }) {
         scrollY.value = event.nativeEvent.contentOffset.y
       }}
       showsVerticalScrollIndicator={false}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={() => isFetchingNextPage ? <LoaderComponent /> : null}
     />
   )
 }

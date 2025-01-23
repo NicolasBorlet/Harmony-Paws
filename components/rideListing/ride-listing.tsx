@@ -7,16 +7,30 @@ import LoaderComponent from "../loader";
 import { Body } from "../ui/text";
 import RideItemListing from "./ride-item-listing";
 
-
 export default function RideListing({ scrollY }: { scrollY: any }) {
-  const { data, isLoading, isError } = usePaginatedActivities()
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePaginatedActivities(5);
 
-  if (isLoading) {
+  const allActivities = data?.pages.flatMap(page => page.activities) || [];
+
+  const handleLoadMore = () => {
+    if (!isLoading && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  if (isLoading && !allActivities.length) {
     return <LoaderComponent />
   }
+
   return (
     <FlashList
-      data={data?.activities || []}
+      data={allActivities}
       renderItem={({ item, index }) => (
         <Pressable onPress={() => router.push(`/ride/${item.id}`)}>
           <OpacityFadeIn delay={index * 200}>
@@ -27,13 +41,16 @@ export default function RideListing({ scrollY }: { scrollY: any }) {
       ListEmptyComponent={() => <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Body>Aucune activité trouvée</Body>
       </View>}
-      estimatedItemSize={10}
+      ListFooterComponent={() => isFetchingNextPage ? <LoaderComponent /> : null}
+      estimatedItemSize={5}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 24 }}
       showsVerticalScrollIndicator={false}
       onScroll={(event) => {
         scrollY.value = event.nativeEvent.contentOffset.y
       }}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.5}
     />
   );
 }
