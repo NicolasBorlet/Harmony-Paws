@@ -37,7 +37,7 @@ export default function MessageDetail() {
     },
   })
 
-  const onSend = (messages = []) => {
+  const onSend = (messages: { text: string }[] = []) => {
     const [message] = messages
     if (message.text.trim()) {
       sendMessageMutation.mutate(message.text)

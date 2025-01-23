@@ -116,8 +116,8 @@ export default function Messages() {
             <Pressable
               onPress={() => {
                 router.push({
-                  pathname: `/messages/${item.id}`,
-                  params: { title: item.title }
+                  pathname: "/messages/[id]" as const,
+                  params: { id: item.id, title: item.title }
                 })
               }}
             >
