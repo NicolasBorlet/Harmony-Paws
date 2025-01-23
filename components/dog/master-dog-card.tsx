@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { MasterDogCard } from "../ui/card";
 import { Body, Small } from "../ui/text";
 
-export default function MasterDogCardComponent({ masterData }: { masterData: { first_name: string, age: string } }) {
+export default function MasterDogCardComponent({ masterData }: { masterData: { first_name: string, last_name: string, id: string } }) {
   return (
     <MasterDogCard>
       <Image source={{
