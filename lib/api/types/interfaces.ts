@@ -45,6 +45,8 @@ export interface Formation extends BaseEntity {
 }
 
 export interface Step extends BaseEntity {
+  name: string
+  location: string
   activity_id: number
   place: string
   estimated_hour: Date

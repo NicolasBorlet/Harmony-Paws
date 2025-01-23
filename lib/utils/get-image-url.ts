@@ -18,3 +18,22 @@ export const getImageUrl = async (dogId: string) => {
 
   return url
 }
+
+export const getRideImageUrl = async (rideId: string) => {
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/get-ride-image`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session$.get().access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rideId }),
+    },
+  )
+
+  const { url, error } = await response.json()
+  if (error) throw new Error(error)
+
+  return url
+}

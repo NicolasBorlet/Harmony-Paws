@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
+import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
 import { ActivityListingInterface } from './types/interfaces'
 
@@ -46,13 +47,19 @@ export const getPaginatedActivities = async (
       console.log(data)
     }
 
+    // Ajouter les images pour chaque activité
+    const activitiesWithImages = await Promise.all(
+      data?.map(async activity => ({
+        ...activity,
+        image: (await getRideImageUrl(activity.id.toString())) || '',
+        date: activity.date ? new Date(activity.date) : new Date(),
+        created_at: activity.created_at ? new Date(activity.created_at) : new Date(),
+        updated_at: activity.updated_at ? new Date(activity.updated_at) : new Date(),
+      })) || []
+    )
+
     return {
-      activities: data.map(ride => ({
-        ...ride,
-        date: ride.date ? new Date(ride.date) : new Date(),
-        created_at: ride.created_at ? new Date(ride.created_at) : new Date(),
-        updated_at: ride.updated_at ? new Date(ride.updated_at) : new Date(),
-      })) as ActivityListingInterface[],
+      activities: activitiesWithImages as ActivityListingInterface[],
       totalCount: count || 0,
       hasMore: (count || 0) > to + 1,
     }
@@ -71,5 +78,89 @@ export const usePaginatedActivities = (
     queryFn: () => getPaginatedActivities(page, pageSize),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+  })
+}
+
+export const getActivityById = async (id: number) => {
+  const { data, error } = await supabase
+    .from('activities')
+    .select(
+      `
+      *,
+      creator:creator_id (
+        id,
+        first_name,
+        last_name      
+      ),
+      steps (
+        id,
+        place,
+        estimated_hour,
+        created_at,
+        updated_at
+      ),
+      user_activities (
+        user:user_id (
+          id,
+          first_name,
+          last_name,
+          place
+        )
+      )
+    `,
+    )
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+
+  // Transform dates and add image
+  const transformedData = {
+    ...data,
+    image: (await getRideImageUrl(data.id.toString())),
+    date: data.date ? new Date(data.date) : new Date(),
+    created_at: data.created_at ? new Date(data.created_at) : new Date(),
+    updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
+    // Add creator info
+    creator: data.creator
+      ? {
+          ...data.creator,
+          created_at: data.creator.created_at
+            ? new Date(data.creator.created_at)
+            : new Date(),
+          updated_at: data.creator.updated_at
+            ? new Date(data.creator.updated_at)
+            : new Date(),
+        }
+      : null,
+    // Flatten participants array and get their images
+    participants: await Promise.all(
+      (data.user_activities?.map(async ua => ({
+        ...ua.user,
+        // image: (await getRideImageUrl(ua.user.id.toString())) || '',
+        created_at: ua.user.created_at
+          ? new Date(ua.user.created_at)
+          : new Date(),
+        updated_at: ua.user.updated_at
+          ? new Date(ua.user.updated_at)
+          : new Date(),
+      })) || [])
+    ),
+    // Transform dates in steps
+    steps:
+      data.steps?.map(step => ({
+        ...step,
+        created_at: step.created_at ? new Date(step.created_at) : new Date(),
+        updated_at: step.updated_at ? new Date(step.updated_at) : new Date(),
+      })) || [],
+  }
+
+  return { data: transformedData, error: null }
+}
+
+export const useActivityById = (id: number) => {
+  return useQuery({
+    queryKey: ['activity', id],
+    queryFn: () => getActivityById(id),
   })
 }

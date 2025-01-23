@@ -1,22 +1,17 @@
+import { User } from "@/lib/api/types"
 import Block from "../grid/Block"
 import { RoundedImage } from "../ui/image"
 import { SmallBold } from "../ui/text"
 
-export interface ParticipantItemProps {
-  id: number
-  name: string
-  image: string
-  ownerName: string
-  ownerImage: string
-  ownerSex: number
-}
+export default function ParticipantItem({ participant }: { participant: User }) {
+  // Placeholder image en attendant l'implémentation des images utilisateur
+  const placeholderImage = "https://picsum.photos/300"
 
-export default function ParticipantItem({ participant }: { participant: ParticipantItemProps }) {
   return (
     <Block key={participant.id} row align="center" gap={26}>
       <Block flex={0} row>
         <RoundedImage
-          source={{ uri: participant.ownerImage }} 
+          source={{ uri: participant.image || placeholderImage }} 
           width={35}
           height={35}
           border="1.5px solid #F7A400"
@@ -27,10 +22,12 @@ export default function ParticipantItem({ participant }: { participant: Particip
             right: -14,
           }}
         />
-        <RoundedImage source={{ uri: participant.image }} />
+        <RoundedImage source={{ uri: placeholderImage }} />
       </Block>
       <Block>
-        <SmallBold color="#000">{participant.name} et {participant.ownerSex === 0 ? "son maitre" : "sa maitresse"}, {participant.ownerName}</SmallBold>
+        <SmallBold color="#000">
+          {participant.first_name} {participant.last_name}
+        </SmallBold>
       </Block>
     </Block>
   )
