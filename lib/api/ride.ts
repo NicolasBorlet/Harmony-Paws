@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
@@ -53,9 +53,13 @@ export const getPaginatedActivities = async (
         ...activity,
         image: (await getRideImageUrl(activity.id.toString())) || '',
         date: activity.date ? new Date(activity.date) : new Date(),
-        created_at: activity.created_at ? new Date(activity.created_at) : new Date(),
-        updated_at: activity.updated_at ? new Date(activity.updated_at) : new Date(),
-      })) || []
+        created_at: activity.created_at
+          ? new Date(activity.created_at)
+          : new Date(),
+        updated_at: activity.updated_at
+          ? new Date(activity.updated_at)
+          : new Date(),
+      })) || [],
     )
 
     return {
@@ -69,15 +73,15 @@ export const getPaginatedActivities = async (
   }
 }
 
-export const usePaginatedActivities = (
-  page: number = 0,
-  pageSize: number = 10,
-) => {
-  return useQuery({
-    queryKey: ['activities', 'paginated', page, pageSize],
-    queryFn: () => getPaginatedActivities(page, pageSize),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+export const usePaginatedActivities = (pageSize: number = 5) => {
+  return useInfiniteQuery({
+    queryKey: ['activities', 'infinite'],
+    queryFn: ({ pageParam = 0 }) => getPaginatedActivities(pageParam, pageSize),
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.hasMore) return undefined
+      return allPages.length
+    },
+    initialPageParam: 0,
   })
 }
 
@@ -117,7 +121,7 @@ export const getActivityById = async (id: number) => {
   // Transform dates and add image
   const transformedData = {
     ...data,
-    image: (await getRideImageUrl(data.id.toString())),
+    image: await getRideImageUrl(data.id.toString()),
     date: data.date ? new Date(data.date) : new Date(),
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
@@ -135,7 +139,7 @@ export const getActivityById = async (id: number) => {
       : null,
     // Flatten participants array and get their images
     participants: await Promise.all(
-      (data.user_activities?.map(async ua => ({
+      data.user_activities?.map(async ua => ({
         ...ua.user,
         // image: (await getRideImageUrl(ua.user.id.toString())) || '',
         created_at: ua.user.created_at
@@ -144,7 +148,7 @@ export const getActivityById = async (id: number) => {
         updated_at: ua.user.updated_at
           ? new Date(ua.user.updated_at)
           : new Date(),
-      })) || [])
+      })) || [],
     ),
     // Transform dates in steps
     steps:

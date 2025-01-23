@@ -1,4 +1,5 @@
 import { Database } from '@/database.types'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
 import { getImageUrl } from '../utils/get-image-url'
 import {
@@ -28,8 +29,6 @@ export const getDogsFromUserId = async (userId: string) => {
 }
 
 // Hook personnalisé pour TanStack Query
-import { useQuery } from '@tanstack/react-query'
-
 export const useDogsFromUserId = (userId: string) => {
   return useQuery({
     queryKey: ['dogs', userId],
@@ -71,12 +70,15 @@ export const getPaginatedDogs = async (
 }
 
 // Hook avec pagination
-export const usePaginatedDogs = (page: number = 0, pageSize: number = 10) => {
-  return useQuery({
-    queryKey: ['dogs', 'paginated', page, pageSize],
-    queryFn: () => getPaginatedDogs(page, pageSize),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+export const usePaginatedDogs = (pageSize: number = 5) => {
+  return useInfiniteQuery({
+    queryKey: ['dogs', 'infinite'],
+    queryFn: ({ pageParam = 0 }) => getPaginatedDogs(pageParam, pageSize),
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.hasMore) return undefined
+      return allPages.length
+    },
+    initialPageParam: 0,
   })
 }
 
