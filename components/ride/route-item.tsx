@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { Step } from "@/lib/api/types";
 import { dateToHours } from "@/lib/utils/date";
 import { FontAwesome } from "@expo/vector-icons";
 import React from "react";
@@ -7,16 +8,8 @@ import Block from "../grid/Block";
 import { ExtraSmallMedium, SmallBold, SmallSemiBold } from "../ui/text";
 import { RouteItemView } from "../ui/view";
 
-export interface RouteItemProps {
-  name: string,
-  location: string,
-  startTime: Date,
-  endTime: Date,
-}
-
-export default function RouteItem({ step, index }: { step: RouteItemProps, index: number }) {
-  const startTime = dateToHours(step.startTime)
-  const endTime = dateToHours(step.endTime)
+export default function RouteItem({ step, index }: { step: Step, index: number }) {
+  const startTime = step.estimated_hour ? dateToHours(new Date(step.estimated_hour)) : '--:--'
 
   return (
     <Block gap={8}>
@@ -37,16 +30,16 @@ export default function RouteItem({ step, index }: { step: RouteItemProps, index
         </Block>
         <Block>
           <RouteItemView even={index % 2 === 0}>
-            <SmallSemiBold color="#000">{step.name}</SmallSemiBold>
+            <SmallSemiBold color="#000">{step.place}</SmallSemiBold>
             <Block row gap={6} flex={0}>
               <FontAwesome name="map-marker" size={14} color={Colors.light.secondary} />
-              <ExtraSmallMedium color="#000">{step.location}</ExtraSmallMedium>
+              <ExtraSmallMedium color="#000">{step.place}</ExtraSmallMedium>
             </Block>
           </RouteItemView>
         </Block>
       </Block>
       <Block>
-        <SmallBold color="#000">{endTime}</SmallBold>
+        <SmallBold color="#000">{startTime}</SmallBold>
       </Block>
     </Block>
   )

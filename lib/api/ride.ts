@@ -73,3 +73,59 @@ export const usePaginatedActivities = (
     refetchOnWindowFocus: false,
   })
 }
+
+export const getActivityById = async (id: number) => {
+  const { data, error } = await supabase
+    .from('activities')
+    .select(`
+      *,
+      steps (
+        id,
+        place,
+        estimated_hour,
+        created_at,
+        updated_at
+      ),
+      user_activities (
+        user:user_id (
+          id,
+          first_name,
+          last_name,
+          place
+        )
+      )
+    `)
+    .eq('id', id)
+    .single()
+
+  if (error) throw error
+
+  // Transform dates
+  const transformedData = {
+    ...data,
+    date: data.date ? new Date(data.date) : new Date(),
+    created_at: data.created_at ? new Date(data.created_at) : new Date(),
+    updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
+    // Flatten participants array
+    participants: data.user_activities?.map(ua => ({
+      ...ua.user,
+      created_at: ua.user.created_at ? new Date(ua.user.created_at) : new Date(),
+      updated_at: ua.user.updated_at ? new Date(ua.user.updated_at) : new Date(),
+    })) || [],
+    // Transform dates in steps
+    steps: data.steps?.map(step => ({
+      ...step,
+      created_at: step.created_at ? new Date(step.created_at) : new Date(),
+      updated_at: step.updated_at ? new Date(step.updated_at) : new Date(),
+    })) || [],
+  }
+
+  return { data: transformedData, error: null }
+}
+
+export const useActivityById = (id: number) => {
+  return useQuery({
+    queryKey: ['activity', id],
+    queryFn: () => getActivityById(id),
+  })
+}

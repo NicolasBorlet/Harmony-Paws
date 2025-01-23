@@ -1,8 +1,8 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
-import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
+import LoaderComponent from '@/components/loader'
 import ParallaxScrollView from '@/components/parallax-scrollview'
 import ParticipantListing from '@/components/ride/participant-listing'
 import RouteListing from '@/components/ride/route-listing'
@@ -16,7 +16,8 @@ import {
 } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
-import { router } from 'expo-router'
+import { useActivityById } from '@/lib/api/ride'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
@@ -26,55 +27,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const ride = {
-  place: 'Champagnier',
-  image: 'https://picsum.photos/300',
-  date: new Date(),
-  duration: '2h',
-  activityType: 'forest',
-  creator: {
-    id: 1,
-    name: 'Emma Swane',
-    image: 'https://picsum.photos/300',
-  },
-  steps: [
-    {
-      activity_id: 1,
-      place: 'Place du Laca',
-      estimated_hour: new Date(),
-    },
-    {
-      activity_id: 2,
-      place: 'Tour Ertzienne',
-      estimated_hour: new Date(),
-    },
-    {
-      activity_id: 3,
-      place: 'Place du Laca',
-      estimated_hour: new Date(),
-    },
-  ],
-  participants: [
-    {
-      name: 'Max',
-      image: 'https://picsum.photos/300',
-      owerName: 'Lucie',
-    },
-    {
-      name: 'Taico',
-      image: 'https://picsum.photos/300',
-      owerName: 'Emma',
-    },
-    {
-      name: 'Astro',
-      image: 'https://picsum.photos/300',
-      owerName: 'Aymeric',
-    },
-  ],
-}
-
 export default function RideDetails() {
   const insets = useSafeAreaInsets()
+  const id = parseInt(useLocalSearchParams().id as string)
+  const { data: activityData, isLoading, error } = useActivityById(id)
+  const activity = activityData?.data
 
   const bottomPosition = useSharedValue(-100)
   const opacity = useSharedValue(0)
@@ -83,20 +40,18 @@ export default function RideDetails() {
     buttonAnimation()
   }, [])
 
-  // Avoir une variable pour estimer l'heure de départ en se bsant sur la ride.date et en récupérant uniquement l'heure
-  const estimatedStartHour = new Date(ride.date).toLocaleTimeString('fr-FR', {
+
+  const estimatedStartHour = activity?.date ? new Date(activity.date).toLocaleTimeString('fr-FR', {
     hour: '2-digit',
     minute: '2-digit',
-  })
+  }) : '--'
 
   const buttonAnimation = () => {
-    // Animate the button to slide up
     bottomPosition.value = withSpring(insets.bottom + 16, {
       damping: 20,
       stiffness: 90,
     })
 
-    // Animate the button opacity
     opacity.value = withSpring(1, {
       damping: 20,
       stiffness: 90,
@@ -110,13 +65,16 @@ export default function RideDetails() {
     }
   })
 
+  if (isLoading) return <LoaderComponent />
+  if (error || !activity) return <BodyMedium>Error</BodyMedium>
+
   return (
     <>
       <Back />
-      <ParallaxScrollView headerImage={ride.image}>
+      <ParallaxScrollView headerImage={activity.image || ''}>
         <View style={styles.container}>
           <View style={styles.infoContainer}>
-            <CardTitle color='#000000'>{ride.place}</CardTitle>
+            <CardTitle color='#000000'>{activity.place}</CardTitle>
           </View>
           <View>
             <Block
@@ -136,30 +94,32 @@ export default function RideDetails() {
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('duration')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>{ride.duration}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{activity.duration}</BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('activities')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>{ride.activityType}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>{activity.type}</BodyBold>
               </GridItemBackground>
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('rideCreator')} />
-            <Pressable onPress={() => router.push(`/user/${ride.creator.id}`)}>
-              <MasterDogCardComponent />
-            </Pressable>
+            {activity.creator_id && (
+              <Pressable onPress={() => router.push(`/user/${activity.creator_id}`)}>
+                {/* <MasterDogCardComponent /> */}
+              </Pressable>
+            )}
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('route')} />
-            <RouteListing />
+            <RouteListing steps={activity.steps} />
           </View>
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('participants')} />
-            <ParticipantListing />
+            <ParticipantListing participants={activity.participants} />
           </View>
         </View>
       </ParallaxScrollView>
