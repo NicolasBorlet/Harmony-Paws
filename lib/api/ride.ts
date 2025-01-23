@@ -77,8 +77,14 @@ export const usePaginatedActivities = (
 export const getActivityById = async (id: number) => {
   const { data, error } = await supabase
     .from('activities')
-    .select(`
+    .select(
+      `
       *,
+      creator:creator_id (
+        id,
+        first_name,
+        last_name      
+      ),
       steps (
         id,
         place,
@@ -94,7 +100,8 @@ export const getActivityById = async (id: number) => {
           place
         )
       )
-    `)
+    `,
+    )
     .eq('id', id)
     .single()
 
@@ -106,18 +113,36 @@ export const getActivityById = async (id: number) => {
     date: data.date ? new Date(data.date) : new Date(),
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
+    // Add creator info
+    creator: data.creator
+      ? {
+          ...data.creator,
+          created_at: data.creator.created_at
+            ? new Date(data.creator.created_at)
+            : new Date(),
+          updated_at: data.creator.updated_at
+            ? new Date(data.creator.updated_at)
+            : new Date(),
+        }
+      : null,
     // Flatten participants array
-    participants: data.user_activities?.map(ua => ({
-      ...ua.user,
-      created_at: ua.user.created_at ? new Date(ua.user.created_at) : new Date(),
-      updated_at: ua.user.updated_at ? new Date(ua.user.updated_at) : new Date(),
-    })) || [],
+    participants:
+      data.user_activities?.map(ua => ({
+        ...ua.user,
+        created_at: ua.user.created_at
+          ? new Date(ua.user.created_at)
+          : new Date(),
+        updated_at: ua.user.updated_at
+          ? new Date(ua.user.updated_at)
+          : new Date(),
+      })) || [],
     // Transform dates in steps
-    steps: data.steps?.map(step => ({
-      ...step,
-      created_at: step.created_at ? new Date(step.created_at) : new Date(),
-      updated_at: step.updated_at ? new Date(step.updated_at) : new Date(),
-    })) || [],
+    steps:
+      data.steps?.map(step => ({
+        ...step,
+        created_at: step.created_at ? new Date(step.created_at) : new Date(),
+        updated_at: step.updated_at ? new Date(step.updated_at) : new Date(),
+      })) || [],
   }
 
   return { data: transformedData, error: null }

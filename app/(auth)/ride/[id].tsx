@@ -1,6 +1,7 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
+import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import LoaderComponent from '@/components/loader'
 import ParallaxScrollView from '@/components/parallax-scrollview'
@@ -109,7 +110,7 @@ export default function RideDetails() {
             <BodyTitle title={i18n.t('rideCreator')} />
             {activity.creator_id && (
               <Pressable onPress={() => router.push(`/user/${activity.creator_id}`)}>
-                {/* <MasterDogCardComponent /> */}
+                <MasterDogCardComponent masterData={activity.creator} />
               </Pressable>
             )}
           </View>
