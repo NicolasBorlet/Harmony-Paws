@@ -30,7 +30,7 @@ serve(async (req: Request) => {
       error,
     } = await supabaseAdmin.storage
       .from('formations')
-      .createSignedUrl(`${formationId}/modules/${moduleId}.jpeg`, 3600)
+      .createSignedUrl(`${formationId}/${moduleId}.jpeg`, 3600)
 
     if (error) throw error
 
