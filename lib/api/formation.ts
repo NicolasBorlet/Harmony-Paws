@@ -53,15 +53,44 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
 }
 
 export const getFormationById = async (id: number) => {
-  const { data, error } = await supabase.from('formations').select('*').eq('id', id).single()
+  const { data, error } = await supabase
+    .from('formations')
+    .select(`
+      *,
+      modules (
+        id,
+        name,
+        price,
+        description,
+        created_at,
+        updated_at
+      )
+    `)
+    .eq('id', id)
+    .single()
+
   if (error) throw error
+
+  // Récupérer l'image de la formation
+  const formationImage = await getFormationImageUrl(data.id.toString())
+
+  // Récupérer les images des modules
+  const modulesWithImages = await Promise.all(
+    data.modules?.map(async module => ({
+      ...module,
+      image: await getFormationImageUrl(`${data.id}/${module.id}`),
+      created_at: module.created_at ? new Date(module.created_at) : new Date(),
+      updated_at: module.updated_at ? new Date(module.updated_at) : new Date(),
+    })) || []
+  )
 
   return {
     ...data,
-    image: await getFormationImageUrl(data.id.toString()),
+    image: formationImage,
+    modules: modulesWithImages,
     created_at: data.created_at ? new Date(data.created_at) : new Date(),
     updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
-  }
+  } as FormationInterface
 }
 
 export const useFormationById = (id: number) => {

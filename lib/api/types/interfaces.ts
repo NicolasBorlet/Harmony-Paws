@@ -169,6 +169,7 @@ export interface FormationInterface extends BaseEntity {
   animator_name: string
   name: string
   price: number
+  old_price?: number
   description: string
   place: string
   date: Date
