@@ -1,7 +1,7 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
-import { supabase } from "../supabase"
-import { getFormationImageUrl } from "../utils/get-image-url"
-import { FormationInterface } from "./types/interfaces"
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { supabase } from '../supabase'
+import { getFormationImageUrl } from '../utils/get-image-url'
+import { FormationInterface } from './types/interfaces'
 
 export const getFormations = async () => {
   const { data, error } = await supabase.from('formations').select('*')
@@ -18,7 +18,9 @@ export const getPaginatedFormations = async (
 
   const { data, error, count } = await supabase
     .from('formations')
-    .select('id, animator_name, name, created_at, updated_at', { count: 'exact' })
+    .select('id, animator_name, name, created_at, updated_at', {
+      count: 'exact',
+    })
     .range(from, to)
     .order('created_at', { ascending: false })
 
@@ -28,8 +30,12 @@ export const getPaginatedFormations = async (
     data?.map(async formation => ({
       ...formation,
       image: (await getFormationImageUrl(formation.id.toString())) || '',
-      created_at: formation.created_at ? new Date(formation.created_at) : new Date(),
-      updated_at: formation.updated_at ? new Date(formation.updated_at) : new Date(),
+      created_at: formation.created_at
+        ? new Date(formation.created_at)
+        : new Date(),
+      updated_at: formation.updated_at
+        ? new Date(formation.updated_at)
+        : new Date(),
     })) || [],
   )
 
@@ -53,43 +59,47 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
 }
 
 export const getFormationById = async (id: number) => {
-  const { data, error } = await supabase
+  // 1. Récupérer la formation
+  const { data: formation, error: formationError } = await supabase
     .from('formations')
-    .select(`
-      *,
-      modules (
-        id,
-        name,
-        price,
-        description,
-        created_at,
-        updated_at
-      )
-    `)
+    .select('*')
     .eq('id', id)
     .single()
 
-  if (error) throw error
+  if (formationError) throw formationError
 
-  // Récupérer l'image de la formation
-  const formationImage = await getFormationImageUrl(data.id.toString())
+  // 2. Récupérer les modules de cette formation
+  const { data: modules, error: modulesError } = await supabase
+    .from('modules')
+    .select('*')
+    .eq('formation_id', id)
 
-  // Récupérer les images des modules
+  if (modulesError) throw modulesError
+
+  // 3. Ajouter les images
+  const formationWithImage = {
+    ...formation,
+    image: await getFormationImageUrl(formation.id.toString()),
+    created_at: formation.created_at
+      ? new Date(formation.created_at)
+      : new Date(),
+    updated_at: formation.updated_at
+      ? new Date(formation.updated_at)
+      : new Date(),
+  }
+
   const modulesWithImages = await Promise.all(
-    data.modules?.map(async module => ({
+    modules.map(async module => ({
       ...module,
-      image: await getFormationImageUrl(`${data.id}/${module.id}`),
+      image: await getFormationImageUrl(`${formation.id}/${module.id}`),
       created_at: module.created_at ? new Date(module.created_at) : new Date(),
       updated_at: module.updated_at ? new Date(module.updated_at) : new Date(),
-    })) || []
+    })),
   )
 
   return {
-    ...data,
-    image: formationImage,
+    ...formationWithImage,
     modules: modulesWithImages,
-    created_at: data.created_at ? new Date(data.created_at) : new Date(),
-    updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
   } as FormationInterface
 }
 
