@@ -1,5 +1,7 @@
+import { usePaginatedFormations } from "@/lib/api/formation";
 import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
+import { useEffect } from "react";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import FormationListingItem from "./formation-listing-item";
@@ -11,7 +13,6 @@ const formations: Formation[] = [
     id: 1,
     name: "Formation 1",
     subject: "Subject 1",
-    image: "https://picsum.photos/300",
     animator_name: "Animator 1",
     price: 100,
     old_price: 150,
@@ -27,7 +28,6 @@ const formations: Formation[] = [
     id: 2,
     name: "Formation 2",
     subject: "Subject 2",
-    image: "https://picsum.photos/300",
     animator_name: "Animator 2",
     price: 200,
     description: "Description 2",
@@ -42,7 +42,6 @@ const formations: Formation[] = [
     id: 3,
     name: "Formation 3",
     subject: "Subject 3",
-    image: "https://picsum.photos/300",
     animator_name: "Animator 3",
     price: 300,
     description: "Description 3",
@@ -101,9 +100,29 @@ const formations: Formation[] = [
 ];
 
 export default function FormationListing() {
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePaginatedFormations(5);
+
+  const allFormations = data?.pages.flatMap(page => page.formations) || [];
+
+  const handleLoadMore = () => {
+    if (!isLoading && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  };
+
+  useEffect(() => {
+    console.log(allFormations)
+  }, [allFormations])
+
   return (
     <AnimatedFlashList
-      data={formations}
+      data={allFormations}
       renderItem={({ item }) => (
         <FormationListingItem
           formation={item}
@@ -115,6 +134,9 @@ export default function FormationListing() {
       contentContainerStyle={{
         paddingBottom: 24
       }}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.5}
+      estimatedItemSize={10}
     />
   );
 }

@@ -94,7 +94,9 @@ export const getActivityById = async (id: number) => {
       creator:creator_id (
         id,
         first_name,
-        last_name      
+        last_name,
+        created_at,
+        updated_at      
       ),
       steps (
         id,
@@ -108,7 +110,9 @@ export const getActivityById = async (id: number) => {
           id,
           first_name,
           last_name,
-          place
+          place,
+          created_at,
+          updated_at
         )
       )
     `,

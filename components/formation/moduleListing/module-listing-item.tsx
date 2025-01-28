@@ -1,8 +1,13 @@
 import { ExtraSmallMedium, ModulePrice, SmallBold } from "@/components/ui/text";
+import { ModuleInterface } from "@/lib/api/types/interfaces";
 import { Image } from "expo-image";
 import { View } from "react-native";
 
-export default function ModuleListingItem({ module }) {
+interface ModuleListingItemProps {
+  module: ModuleInterface
+}
+
+export default function ModuleListingItem({ module }: ModuleListingItemProps) {
   return (
     <View style={{ flex: 1, width: "100%", gap: 16 }} >
       <View style={{ flex: 1, borderRadius: 20, overflow: "hidden", height: 150 }}>

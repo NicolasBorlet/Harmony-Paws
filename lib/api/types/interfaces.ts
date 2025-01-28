@@ -33,7 +33,6 @@ export interface Opinion extends BaseEntity {
 export interface Formation extends BaseEntity {
   name: string
   subject: string
-  image: string
   animator_name: string
   price: number
   old_price?: number
@@ -164,4 +163,26 @@ export interface ActivityListingInterface extends BaseEntity {
   place: string
   date: Date
   duration: string
+}
+
+export interface FormationInterface extends BaseEntity {
+  animator_name: string
+  name: string
+  price: number
+  old_price?: number
+  description: string
+  place: string
+  date: Date
+  participant_limit: number
+  duration: number
+  image?: string
+  modules?: ModuleInterface[]
+}
+
+export interface ModuleInterface extends BaseEntity {
+  formation_id: number
+  name: string
+  price: number
+  description: string
+  image?: string
 }

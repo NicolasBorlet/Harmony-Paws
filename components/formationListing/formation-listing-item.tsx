@@ -23,7 +23,7 @@ export default function FormationListingItem({ formation }: { formation: Formati
           }} />
         </Block>
         <BodyBold color="#F7A400">{formation.name}</BodyBold>
-        <SmallMedium color="#979898">{formation.subject}</SmallMedium>
+        <SmallMedium color="#979898">{formation.animator_name}</SmallMedium>
       </Block>
     </Pressable>
   );

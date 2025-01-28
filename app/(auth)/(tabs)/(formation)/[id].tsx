@@ -3,15 +3,19 @@ import Back from '@/components/back-button'
 import AdviceListing from '@/components/formation/adviceListing/advice-listing'
 import ModuleListing from '@/components/formation/moduleListing/module-listing'
 import SegmentedControl from '@/components/formation/segmented-control'
+import LoaderComponent from '@/components/loader'
 import {
   BodyBold,
+  BodyMedium,
   ExtraSmallMedium,
   ModulePrice,
   NavigationTitle,
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useFormationById } from '@/lib/api/formation'
 import { AntDesign } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
+import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
@@ -22,26 +26,11 @@ import {
 import { runOnJS, useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const formation = {
-  id: 1,
-  name: 'Formation 1',
-  subject: 'Subject 1',
-  image: 'https://picsum.photos/300',
-  animator_name: 'Animator 1',
-  price: 100,
-  old_price: 150,
-  description: 'Description 1',
-  place: 'Place 1',
-  date: new Date(),
-  participant_limit: 10,
-  duration: 1,
-  created_at: new Date(),
-  updated_at: new Date(),
-}
-
 export default function FormationDetails() {
   const insets = useSafeAreaInsets()
   const startY = useSharedValue(0)
+  const { id } = useLocalSearchParams()
+  const { data: formation, isLoading, error } = useFormationById(Number(id))
 
   const [selectedTab, setSelectedTab] = useState<'about' | 'advice'>('about')
 
@@ -58,7 +47,6 @@ export default function FormationDetails() {
       const deltaY = startY.value - event.absoluteY
     })
     .onEnd(event => {
-      // Gestion du swipe horizontal existant
       if (Math.abs(event.translationX) > 50) {
         runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
         if (event.translationX > 0) {
@@ -68,6 +56,9 @@ export default function FormationDetails() {
         }
       }
     })
+
+  if (isLoading) return <LoaderComponent />
+  if (error || !formation) return <BodyMedium>Une erreur est survenue</BodyMedium>
 
   return (
     <GestureHandlerRootView
@@ -93,11 +84,10 @@ export default function FormationDetails() {
           <Back position='relative' left='0' />
           <NavigationTitle color='#000'>{formation.name}</NavigationTitle>
         </View>
-        {/* <Divider /> */}
         <SegmentedControl
           selectedTab={selectedTab}
           onTabChange={onTabChange}
-          language={i18n.locale}
+          language={i18n.locale as 'fr' | 'en'}
         />
         <View style={{ flex: 1, paddingHorizontal: 20 }}>
           <GestureDetector gesture={gesture}>
@@ -142,21 +132,23 @@ export default function FormationDetails() {
                         <ModulePrice color='#F7A400'>
                           {formation.price}€
                         </ModulePrice>
-                        <AntDesign name='arrowleft' size={12} color='black' />
-                        <ModulePrice color={Colors.light.secondary}>
-                          {formation.old_price}€
-                        </ModulePrice>
+                        {formation.old_price && (
+                          <>
+                            <AntDesign name='arrowleft' size={12} color='black' />
+                            <ModulePrice color={Colors.light.secondary}>
+                              {formation.old_price}€
+                            </ModulePrice>
+                          </>
+                        )}
                       </View>
                     </View>
                     <View>
                       <ExtraSmallMedium color='#616060'>
-                        Lorem ipsum dolor sit amet consectetur. Velit ac vitae
-                        phasellus pharetra urna eu est nec fermentum. Ac at
-                        tristique etiam neque.
+                        {formation.description}
                       </ExtraSmallMedium>
                     </View>
                   </View>
-                  <ModuleListing />
+                  <ModuleListing modules={formation.modules || []} />
                 </ScrollView>
               ) : (
                 <ScrollView
