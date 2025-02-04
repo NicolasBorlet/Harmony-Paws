@@ -74,6 +74,12 @@ export const getFormationById = async (id: number) => {
     .select('*')
     .eq('formation_id', id)
 
+  // 3. Récupérer les avis de cette formation
+  const { data: advices, error: advicesError } = await supabase
+    .from('opinions')
+    .select('*')
+    .eq('formation_id', id)
+
   if (modulesError) throw modulesError
 
   // 3. Ajouter les images
@@ -100,7 +106,8 @@ export const getFormationById = async (id: number) => {
   return {
     ...formationWithImage,
     modules: modulesWithImages,
-  } as FormationInterface
+    advices,
+  }
 }
 
 export const useFormationById = (id: number) => {

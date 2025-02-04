@@ -74,6 +74,6 @@
     "**/*.tsbuildinfo": true,
     "**/.astro": true,
     "**/ios": true,
-    "**/android": true
+    "**/android": false
   }
 }
