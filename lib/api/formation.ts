@@ -59,26 +59,42 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
 }
 
 export const getUserPaginatedFormations = async (
-  page: number = 0,
-  pageSize: number = 5,
   userId: number,
 ) => {
-  const from = page * pageSize
-  const to = from + pageSize - 1
-
-  const { data, error, count } = await supabase
-    .from('formations')
-    .select('id, animator_name, name, created_at, updated_at', {
-      count: 'exact',
-    })
+  console.log('userId', userId)
+  // First, get formation IDs from user_formations table
+  const { data: userFormations, error: userFormationsError, count } = await supabase
+    .from('user_formations')
+    .select('formation_id')
     .eq('user_id', userId)
-    .range(from, to)
     .order('created_at', { ascending: false })
 
-  if (error) throw error
+  if (userFormationsError) throw userFormationsError
 
-  const useFormationUrl = await Promise.all(
-    data?.map(async formation => ({
+  // If no formations found, return empty result
+  if (!userFormations || userFormations.length === 0) {
+    console.log('No formations found')
+    return {
+      formations: [],
+      totalCount: 0,
+      hasMore: false,
+    }
+  }
+
+  console.log(userFormations)
+
+  // Get formation details for the IDs we found
+  const formationIds = userFormations.map(uf => uf.formation_id)
+  const { data: formations, error: formationsError } = await supabase
+    .from('formations')
+    .select('id, animator_name, name, created_at, updated_at')
+    .in('id', formationIds)
+    .order('created_at', { ascending: false })
+
+  if (formationsError) throw formationsError
+
+  const formationsWithImages = await Promise.all(
+    formations?.map(async formation => ({
       ...formation,
       image: (await getFormationImageUrl(formation.id.toString())) || '',
       created_at: formation.created_at
@@ -91,20 +107,19 @@ export const getUserPaginatedFormations = async (
   )
 
   return {
-    formations: useFormationUrl as FormationInterface[],
+    formations: formationsWithImages as FormationInterface[],
     totalCount: count || 0,
     hasMore: (count || 0) > to + 1,
   }
 }
 
 export const useUserPaginatedFormations = (
-  pageSize: number = 5,
   userId: number,
 ) => {
   return useInfiniteQuery({
-    queryKey: ['formations', 'infinite', userId],
+    queryKey: ['userFormations', 'infinite', userId],
     queryFn: ({ pageParam = 0 }) =>
-      getUserPaginatedFormations(pageParam, pageSize, userId),
+      getUserPaginatedFormations(userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
