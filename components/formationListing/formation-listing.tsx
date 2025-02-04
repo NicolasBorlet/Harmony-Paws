@@ -125,11 +125,11 @@ export default function FormationListing() {
       data={allFormations}
       renderItem={({ item }) => (
         <FormationListingItem
-          formation={item}
+          formation={item as Formation}
         />
       )}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => (item as Formation).id.toString()}
       ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
       contentContainerStyle={{
         paddingBottom: 24
@@ -137,6 +137,7 @@ export default function FormationListing() {
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.5}
       estimatedItemSize={10}
+      numColumns={2}
     />
   );
 }
