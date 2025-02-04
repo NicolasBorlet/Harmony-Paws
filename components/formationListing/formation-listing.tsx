@@ -1,7 +1,6 @@
 import { usePaginatedFormations } from "@/lib/api/formation";
 import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
-import { useEffect } from "react";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import FormationListingItem from "./formation-listing-item";
@@ -116,17 +115,15 @@ export default function FormationListing() {
     }
   };
 
-  useEffect(() => {
-    console.log(allFormations)
-  }, [allFormations])
-
   return (
     <AnimatedFlashList
       data={allFormations}
-      renderItem={({ item }) => (
-        <FormationListingItem
-          formation={item as Formation}
-        />
+      renderItem={({ item, index }) => (
+        <View style={[index % 2 ? {paddingLeft: 12} : {paddingRight: 12}, {flex: 1}]} >
+          <FormationListingItem
+            formation={item as Formation}
+          />
+        </View>
       )}
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => (item as Formation).id.toString()}

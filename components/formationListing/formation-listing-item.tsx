@@ -7,9 +7,11 @@ import { BodyBold, SmallMedium } from "../ui/text";
 
 export default function FormationListingItem({ formation }: { formation: Formation }) {
   return (
-    <Pressable onPress={()=>{
-      router.push(`/(formation)/${formation.id}`);
-    }}>
+    <Pressable
+      onPress={()=>{
+        router.push(`/(formation)/${formation.id}`);
+      }}
+    >
       <Block gap={8}>
         <Block style={{
           width: '100%',
