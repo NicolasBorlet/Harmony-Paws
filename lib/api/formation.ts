@@ -11,7 +11,7 @@ export const getFormations = async () => {
 
 export const getPaginatedFormations = async (
   page: number = 0,
-  pageSize: number = 10,
+  pageSize: number = 5,
 ) => {
   const from = page * pageSize
   const to = from + pageSize - 1
@@ -50,6 +50,61 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
   return useInfiniteQuery({
     queryKey: ['formations', 'infinite'],
     queryFn: ({ pageParam = 0 }) => getPaginatedFormations(pageParam, pageSize),
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.hasMore) return undefined
+      return allPages.length
+    },
+    initialPageParam: 0,
+  })
+}
+
+export const getUserPaginatedFormations = async (
+  page: number = 0,
+  pageSize: number = 5,
+  userId: number,
+) => {
+  const from = page * pageSize
+  const to = from + pageSize - 1
+
+  const { data, error, count } = await supabase
+    .from('formations')
+    .select('id, animator_name, name, created_at, updated_at', {
+      count: 'exact',
+    })
+    .eq('user_id', userId)
+    .range(from, to)
+    .order('created_at', { ascending: false })
+
+  if (error) throw error
+
+  const useFormationUrl = await Promise.all(
+    data?.map(async formation => ({
+      ...formation,
+      image: (await getFormationImageUrl(formation.id.toString())) || '',
+      created_at: formation.created_at
+        ? new Date(formation.created_at)
+        : new Date(),
+      updated_at: formation.updated_at
+        ? new Date(formation.updated_at)
+        : new Date(),
+    })) || [],
+  )
+
+  return {
+    formations: useFormationUrl as FormationInterface[],
+    totalCount: count || 0,
+    hasMore: (count || 0) > to + 1,
+  }
+}
+
+export const useUserPaginatedFormations = (
+  pageSize: number = 5,
+  userId: number,
+) => {
+  return useInfiniteQuery({
+    queryKey: ['formations', 'infinite', userId],
+    queryFn: ({ pageParam = 0 }) =>
+      getUserPaginatedFormations(pageParam, pageSize, userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
