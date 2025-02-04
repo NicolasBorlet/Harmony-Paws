@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'
@@ -230,17 +231,17 @@ export default function Formation() {
         <View style={{ gap: 16 }}>
           <Divider />
           <View style={{ gap: 16 }}>
-            <BodyTitle title='Vos formations' />
+            <BodyTitle title={i18n.t('yourFormations')} />
             <FormationListing />
           </View>
           <Divider />
           <View style={{ gap: 16 }}>
-            <BodyTitle title='Les formations pour Taico' />
+            <BodyTitle title={i18n.t('ourFormations')} />
             <FormationListing />
           </View>
           <Divider />
           <View style={{ gap: 16 }}>
-            <BodyTitle title='Toutes nos formations' />
+            <BodyTitle title={i18n.t('allFormations')} />
             <FormationListing />
           </View>
         </View>
