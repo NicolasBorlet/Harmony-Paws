@@ -1,5 +1,9 @@
+import { i18n } from '@/app/_layout'
+import BodyTitle from '@/components/bodyTitle/body-title'
 import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'
+import UserFormationListing from '@/components/formationListing/user-formation-listing'
+import Divider from '@/components/ui/divider'
 import { useStripe } from '@stripe/stripe-react-native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -225,7 +229,23 @@ export default function Formation() {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <FormationListing />
+        <View style={{ gap: 16 }}>
+          <Divider />
+          <View style={{ gap: 16 }}>
+            <BodyTitle title={i18n.t('yourFormations')} />
+            <UserFormationListing />
+          </View>
+          <Divider />
+          <View style={{ gap: 16 }}>
+            <BodyTitle title={i18n.t('formationForYou')} />
+            {/* <FormationListing /> */}
+          </View>
+          <Divider />
+          <View style={{ gap: 16 }}>
+            <BodyTitle title={i18n.t('allFormations')} />
+            <FormationListing />
+          </View>
+        </View>
       </Animated.ScrollView>
     </View>
   )

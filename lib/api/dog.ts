@@ -9,6 +9,8 @@ import {
 } from './types/interfaces'
 
 export const getDogsFromUserId = async (userId: string) => {
+  console.log('userId', userId)
+
   const { data, error } = await supabase
     .from('dogs')
     .select('id, created_at, updated_at')

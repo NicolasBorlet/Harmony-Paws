@@ -1,7 +1,8 @@
 import Back from '@/components/back-button'
-import { NavigationTitle } from '@/components/ui/text'
+import { BodyMedium, NavigationTitle } from '@/components/ui/text'
 import { Formation } from '@/lib/api/types'
-import { View } from 'react-native'
+import { router } from 'expo-router'
+import { Pressable, View } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const module: Formation = {
@@ -45,6 +46,11 @@ export default function Module() {
           <Back position='relative' left='0' />
           <NavigationTitle color='#000'>{module.name}</NavigationTitle>
         </View>
+      </View>
+      <View>
+        <Pressable onPress={() => router.push('/(formation)/module/lesson/1')}>
+          <BodyMedium color='#000'>{module.name}</BodyMedium>
+        </Pressable>
       </View>
     </SafeAreaView>
   )

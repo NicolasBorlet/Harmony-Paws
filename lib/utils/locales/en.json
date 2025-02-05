@@ -95,5 +95,9 @@
   "noBehavior": "No behavior known.",
   "noDescriptionFor": "No description for",
   "addFriend": "Add as friend",
-  "write": "Write"
+  "write": "Write",
+  "allFormations": "All formations",
+  "yourFormations": "Your formations",
+  "ourFormations": "Our formations",
+  "formationForYou": "Formations for you"
 }

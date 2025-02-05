@@ -11,7 +11,7 @@ export const getFormations = async () => {
 
 export const getPaginatedFormations = async (
   page: number = 0,
-  pageSize: number = 10,
+  pageSize: number = 5,
 ) => {
   const from = page * pageSize
   const to = from + pageSize - 1
@@ -58,6 +58,87 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
   })
 }
 
+export const getUserPaginatedFormations = async (
+  page: number = 0,
+  pageSize: number = 5,
+  userId: number,
+) => {
+  const from = page * pageSize
+  const to = from + pageSize - 1
+
+  // First, get formation IDs from user_formations table
+  const {
+    data: userFormations,
+    error: userFormationsError,
+    count,
+  } = await supabase
+    .from('user_formations')
+    .select('formation_id', { count: 'exact' })
+    .eq('user_id', userId) // Use userId parameter instead of hardcoded 1
+    .range(from, to)
+    .order('created_at', { ascending: false })
+
+  if (userFormationsError) throw userFormationsError
+
+  // If no formations found, return empty result
+  if (!userFormations || userFormations.length === 0) {
+    console.log('No formations found')
+    return {
+      formations: [],
+      totalCount: 0,
+      hasMore: false,
+    }
+  }
+
+  // Get formation details for the IDs we found
+  const formationIds = userFormations.map(uf => uf.formation_id)
+  const { data: formations, error: formationsError } = await supabase
+    .from('formations')
+    .select('id, animator_name, name, created_at, updated_at')
+    .in('id', formationIds)
+    .order('created_at', { ascending: false })
+
+  if (formationsError) throw formationsError
+
+  const formationsWithImages = await Promise.all(
+    formations?.map(async formation => ({
+      ...formation,
+      image: (await getFormationImageUrl(formation.id.toString())) || '',
+      created_at: formation.created_at
+        ? new Date(formation.created_at)
+        : new Date(),
+      updated_at: formation.updated_at
+        ? new Date(formation.updated_at)
+        : new Date(),
+    })) || [],
+  )
+
+  console.log('formationsWithImages', formationsWithImages)
+
+  return {
+    formations: formationsWithImages as FormationInterface[],
+    totalCount: count || 0,
+    hasMore: (count || 0) > to + 1,
+  }
+}
+
+export const useUserPaginatedFormations = (
+  pageSize: number = 5,
+  userId?: number,
+) => {
+  return useInfiniteQuery({
+    queryKey: ['userFormations', 'infinite', userId],
+    queryFn: ({ pageParam = 0 }) =>
+      getUserPaginatedFormations(pageParam, pageSize, userId as number),
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage.hasMore) return undefined
+      return allPages.length
+    },
+    initialPageParam: 0,
+    enabled: !!userId, // Only run query when userId is available
+  })
+}
+
 export const getFormationById = async (id: number) => {
   // 1. Récupérer la formation
   const { data: formation, error: formationError } = await supabase
@@ -71,6 +152,12 @@ export const getFormationById = async (id: number) => {
   // 2. Récupérer les modules de cette formation
   const { data: modules, error: modulesError } = await supabase
     .from('modules')
+    .select('*')
+    .eq('formation_id', id)
+
+  // 3. Récupérer les avis de cette formation
+  const { data: advices, error: advicesError } = await supabase
+    .from('opinions')
     .select('*')
     .eq('formation_id', id)
 
@@ -100,7 +187,8 @@ export const getFormationById = async (id: number) => {
   return {
     ...formationWithImage,
     modules: modulesWithImages,
-  } as FormationInterface
+    advices,
+  }
 }
 
 export const useFormationById = (id: number) => {
