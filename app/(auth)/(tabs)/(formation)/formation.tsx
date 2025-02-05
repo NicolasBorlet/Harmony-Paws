@@ -237,7 +237,7 @@ export default function Formation() {
           </View>
           <Divider />
           <View style={{ gap: 16 }}>
-            <BodyTitle title={i18n.t('formationFor')} />
+            <BodyTitle title={i18n.t('formationForYou')} />
             {/* <FormationListing /> */}
           </View>
           <Divider />

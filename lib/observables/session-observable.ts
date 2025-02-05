@@ -13,7 +13,13 @@ export const user$ = observable(
       from.select(
         'id, role_id, first_name, last_name, created_at, last_sign_in_at',
       ),
-    filter: query => query.eq('uid', session$.get().id),
+    filter: async query => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+      if (!user) return query
+      return query.eq('uid', user.id)
+    },
     persist: {
       plugin: ObservablePersistMMKV,
       name: 'user',
@@ -22,7 +28,7 @@ export const user$ = observable(
     changesSince: 'last-sync',
     fieldUpdatedAt: 'updated_at',
     fieldCreatedAt: 'created_at',
-    fieldDeleted: 'deleted_at', // Ajout de ce champ
+    fieldDeleted: 'deleted_at',
   }),
 )
 

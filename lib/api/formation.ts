@@ -59,14 +59,23 @@ export const usePaginatedFormations = (pageSize: number = 5) => {
 }
 
 export const getUserPaginatedFormations = async (
+  page: number = 0,
+  pageSize: number = 5,
   userId: number,
 ) => {
-  console.log('userId', userId)
+  const from = page * pageSize
+  const to = from + pageSize - 1
+
   // First, get formation IDs from user_formations table
-  const { data: userFormations, error: userFormationsError, count } = await supabase
+  const {
+    data: userFormations,
+    error: userFormationsError,
+    count,
+  } = await supabase
     .from('user_formations')
-    .select('formation_id')
-    .eq('user_id', userId)
+    .select('formation_id', { count: 'exact' })
+    .eq('user_id', userId) // Use userId parameter instead of hardcoded 1
+    .range(from, to)
     .order('created_at', { ascending: false })
 
   if (userFormationsError) throw userFormationsError
@@ -80,8 +89,6 @@ export const getUserPaginatedFormations = async (
       hasMore: false,
     }
   }
-
-  console.log(userFormations)
 
   // Get formation details for the IDs we found
   const formationIds = userFormations.map(uf => uf.formation_id)
@@ -106,6 +113,8 @@ export const getUserPaginatedFormations = async (
     })) || [],
   )
 
+  console.log('formationsWithImages', formationsWithImages)
+
   return {
     formations: formationsWithImages as FormationInterface[],
     totalCount: count || 0,
@@ -114,17 +123,19 @@ export const getUserPaginatedFormations = async (
 }
 
 export const useUserPaginatedFormations = (
-  userId: number,
+  pageSize: number = 5,
+  userId?: number,
 ) => {
   return useInfiniteQuery({
     queryKey: ['userFormations', 'infinite', userId],
     queryFn: ({ pageParam = 0 }) =>
-      getUserPaginatedFormations(userId),
+      getUserPaginatedFormations(pageParam, pageSize, userId as number),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
     },
     initialPageParam: 0,
+    enabled: !!userId, // Only run query when userId is available
   })
 }
 

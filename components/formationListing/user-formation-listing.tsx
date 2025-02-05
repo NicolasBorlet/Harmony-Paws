@@ -1,5 +1,5 @@
 import { useUserPaginatedFormations } from "@/lib/api/formation";
-import { user$ } from "@/lib/observables/session-observable";
+import { useUser } from "@/lib/observables/session-observable";
 import { FlashList } from "@shopify/flash-list";
 import { useEffect } from "react";
 import { View } from "react-native";
@@ -9,14 +9,14 @@ import FormationListingItem from "./formation-listing-item";
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
 
 export default function UserFormationListing() {
-  const userData = user$.get()
+  const { data: user } = useUser()
   const {
     data,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useUserPaginatedFormations(5, userData.id);
+  } = useUserPaginatedFormations(5, user?.id);
 
   const allUserFormations = data?.pages.flatMap(page => page.formations) || [];
 
