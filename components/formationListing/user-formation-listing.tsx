@@ -33,10 +33,12 @@ export default function UserFormationListing() {
   return (
     <AnimatedFlashList
       data={allUserFormations}
-      renderItem={({ item }) => (
-        <FormationListingItem
-          formation={item}
-        />
+      renderItem={({ item, index }) => (
+        <View style={[index % 2 ? {paddingLeft: 12} : {paddingRight: 12}, {flex: 1}]} >
+          <FormationListingItem
+            formation={item}
+          />
+        </View>
       )}
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.id.toString()}
