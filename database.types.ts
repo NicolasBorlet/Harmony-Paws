@@ -448,36 +448,6 @@ export type Database = {
           },
         ]
       }
-      purchases: {
-        Row: {
-          created_at: string | null
-          id: string
-          payment_intent_id: string
-          price_id: string
-          product_id: string
-          status: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          payment_intent_id: string
-          price_id: string
-          product_id: string
-          status: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          payment_intent_id?: string
-          price_id?: string
-          product_id?: string
-          status?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       roles: {
         Row: {
           created_at: string | null
@@ -498,6 +468,51 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      user_purchases: {
+        Row: {
+          created_at: string | null
+          id: string
+          user_id: string
+          content_type: string
+          formation_id: number
+          module_id: number
+          stripe_purchase_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          user_id?: string
+          content_type?: string
+          formation_id?: number
+          module_id?: number
+          stripe_purchase_id?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          user_id?: string
+          content_type?: string
+          formation_id?: number
+          module_id?: number
+          stripe_purchase_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_purchases_formation_id_formations_id_fk'
+            columns: ['formation_id']
+            isOneToOne: false
+            referencedRelation: 'formations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_purchases_user_id_users_id_fk'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
       }
       steps: {
         Row: {
@@ -566,45 +581,6 @@ export type Database = {
           },
           {
             foreignKeyName: 'user_activities_user_id_users_id_fk'
-            columns: ['user_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      user_formations: {
-        Row: {
-          created_at: string | null
-          formation_id: number | null
-          id: number
-          updated_at: string | null
-          user_id: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          formation_id?: number | null
-          id?: number
-          updated_at?: string | null
-          user_id?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          formation_id?: number | null
-          id?: number
-          updated_at?: string | null
-          user_id?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'user_formations_formation_id_formations_id_fk'
-            columns: ['formation_id']
-            isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_formations_user_id_users_id_fk'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'

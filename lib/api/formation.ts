@@ -66,23 +66,23 @@ export const getUserPaginatedFormations = async (
   const from = page * pageSize
   const to = from + pageSize - 1
 
-  // First, get formation IDs from user_formations table
+  // Get formation IDs from user_purchases table where content_type is 'formation'
   const {
-    data: userFormations,
-    error: userFormationsError,
+    data: userPurchases,
+    error: userPurchasesError,
     count,
   } = await supabase
-    .from('user_formations')
+    .from('user_purchases')
     .select('formation_id', { count: 'exact' })
-    .eq('user_id', userId) // Use userId parameter instead of hardcoded 1
+    .eq('user_id', userId)
+    .eq('content_type', 'formation')
     .range(from, to)
     .order('created_at', { ascending: false })
 
-  if (userFormationsError) throw userFormationsError
+  if (userPurchasesError) throw userPurchasesError
 
   // If no formations found, return empty result
-  if (!userFormations || userFormations.length === 0) {
-    console.log('No formations found')
+  if (!userPurchases || userPurchases.length === 0) {
     return {
       formations: [],
       totalCount: 0,
@@ -91,7 +91,7 @@ export const getUserPaginatedFormations = async (
   }
 
   // Get formation details for the IDs we found
-  const formationIds = userFormations.map(uf => uf.formation_id)
+  const formationIds = userPurchases.map(up => up.formation_id)
   const { data: formations, error: formationsError } = await supabase
     .from('formations')
     .select('id, animator_name, name, created_at, updated_at')
@@ -112,8 +112,6 @@ export const getUserPaginatedFormations = async (
         : new Date(),
     })) || [],
   )
-
-  console.log('formationsWithImages', formationsWithImages)
 
   return {
     formations: formationsWithImages as FormationInterface[],
