@@ -403,6 +403,47 @@ export type Database = {
           },
         ]
       }
+      modules: {
+        Row: {
+          created_at: string | null
+          id: number
+          name: string
+          updated_at: string | null
+          formation_id: number | null
+          description: string | null
+          duration: number | null
+          price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          name: string
+          updated_at?: string | null
+          formation_id?: number | null
+          description?: string | null
+          duration?: number | null
+          price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          name?: string
+          updated_at?: string | null
+          formation_id?: number | null
+          description?: string | null
+          duration?: number | null
+          price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'modules_formation_id_formations_id_fk'
+            columns: ['formation_id']
+            isOneToOne: false
+            referencedRelation: 'formations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       opinions: {
         Row: {
           created_at: string | null
