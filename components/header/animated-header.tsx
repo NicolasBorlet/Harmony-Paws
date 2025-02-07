@@ -6,11 +6,15 @@ import { Body, SpecialTitle } from "../ui/text";
 
 export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogName }: { scrollY: any, icons: ReactElement, title: string, subtitle?: string, dogName?: string }) {
   const headerOpacity = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 70], [0, 1], 'clamp');
+    return interpolate(scrollY.value, [0, 50], [0, 1], 'clamp');
   });
 
   const titleOpacity = useDerivedValue(() => {
     return interpolate(scrollY.value, [0, 50], [1, 0], 'clamp');
+  });
+
+  const titleOpacityY = useDerivedValue(() => {
+    return scrollY.value > 50 ? -75 : 0;
   });
 
   const titleY = useDerivedValue(() => {
@@ -43,6 +47,10 @@ export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogNa
   const titleOpacityStyle = useAnimatedStyle(() => {
     return {
       opacity: titleOpacity.value,
+      transform: [{ translateY: withSpring(titleOpacityY.value, {
+        damping: 15,
+        stiffness: 100
+      }) }],
     };
   });
 
