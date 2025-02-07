@@ -13,6 +13,10 @@ export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogNa
     return interpolate(scrollY.value, [0, 50], [1, 0], 'clamp');
   });
 
+  const titleY = useDerivedValue(() => {
+    return scrollY.value > 50 ? 0 : 75;
+  });
+
   const animatedHeaderHeight = useDerivedValue(() => {
     return scrollY.value > 70 ? 60 : 130;
   });
@@ -29,6 +33,10 @@ export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogNa
   const headerOpacityStyle = useAnimatedStyle(() => {
     return {
       opacity: headerOpacity.value,
+      transform: [{ translateY: withSpring(titleY.value, {
+        damping: 15,
+        stiffness: 100
+      }) }],
     };
   });
 
