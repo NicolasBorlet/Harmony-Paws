@@ -1,7 +1,7 @@
 import { i18n } from "@/app/_layout";
 import { ReactElement } from "react";
 import { View } from "react-native";
-import Animated, { interpolate, useAnimatedStyle, useDerivedValue } from "react-native-reanimated";
+import Animated, { interpolate, useAnimatedStyle, useDerivedValue, withSpring } from "react-native-reanimated";
 import { Body, SpecialTitle } from "../ui/text";
 
 export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogName }: { scrollY: any, icons: ReactElement, title: string, subtitle?: string, dogName?: string }) {
@@ -14,12 +14,15 @@ export default function AnimatedHeader ({ scrollY, icons, title, subtitle, dogNa
   });
 
   const animatedHeaderHeight = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 70], [130, 60], 'clamp');
+    return scrollY.value > 70 ? 60 : 130;
   });
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      height: animatedHeaderHeight.value,
+      height: withSpring(animatedHeaderHeight.value, {
+        damping: 15,
+        stiffness: 100
+      }),
     };
   });
 
