@@ -100,6 +100,24 @@ export const DogItemSkeleton = () => {
   )
 }
 
+export const ChatItemSkeleton = () => {
+  const animatedStyle = useSkeletonAnimation()
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <View style={[styles.content, { flexDirection: 'row', alignItems: 'center' }]}>
+        {/* Avatar */}
+        <View style={styles.avatar} />
+        {/* Message */}
+        <View style={{ flex: 1, gap: 10 }}>
+          <View style={styles.mediumLine} />
+          <View style={styles.longLine} />
+        </View>
+      </View>
+    </Animated.View>
+  )
+}
+
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#e5e7eb',
@@ -245,5 +263,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#d1d5db',
     borderRadius: 12,
     marginLeft: 10,
+  },
+  chatItem: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
   },
 })
