@@ -2,12 +2,14 @@ import ListingLoader, { ItemType, LoaderType } from "@/components/loader/listing
 import { useSkeletonAnimation } from "@/components/skeletons/skeletons";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function FormationSingleLoader() {
+  const { top } = useSafeAreaInsets()
   const animatedStyle = useSkeletonAnimation()
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, padding: 16, paddingTop: top }}>
       <Animated.View style={[animatedStyle, { flex: 1, gap: 16 }]}>
         <View style={styles.simpleCard} />
         <View style={styles.descriptionContainer}>
