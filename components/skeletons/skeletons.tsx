@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
   dogCard: {
     backgroundColor: '#e5e7eb',
     borderRadius: 8,
-    height: 200,
+    height: 331,
     marginBottom: 16,
     padding: 16,
     position: 'relative',
