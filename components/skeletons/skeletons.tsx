@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   rideCard: {
     backgroundColor: '#e5e7eb',
     borderRadius: 8,
-    height: 200,
+    height: 139,
     marginBottom: 16,
     padding: 16,
     position: 'relative',

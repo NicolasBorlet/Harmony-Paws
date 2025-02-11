@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { Pressable, View } from "react-native";
 import OpacityFadeIn from "../animate/opacity-fadeIn";
 import LoaderComponent from "../loader";
+import ListingLoader, { ItemType, LoaderType } from "../loader/listing-loader";
 import { Body } from "../ui/text";
 import RideItemListing from "./ride-item-listing";
 
@@ -25,7 +26,7 @@ export default function RideListing({ scrollY }: { scrollY: any }) {
   };
 
   if (isLoading && !allActivities.length) {
-    return <LoaderComponent />
+    return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.RIDE} />
   }
 
   return (

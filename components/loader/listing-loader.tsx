@@ -26,11 +26,13 @@ export default function ListingLoader({ type, itemType }: ListingLoaderProps) {
         <>
           <DogItemSkeleton />
           <DogItemSkeleton />
+          <DogItemSkeleton />
         </>
       )}
       {/* If item type is ride, render a ride item skeleton */}
       {itemType === ItemType.RIDE && (
         <>
+          <RideItemSkeleton />
           <RideItemSkeleton />
           <RideItemSkeleton />
           <RideItemSkeleton />
