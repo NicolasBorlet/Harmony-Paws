@@ -118,6 +118,34 @@ export const ChatItemSkeleton = () => {
   )
 }
 
+export const FormationItemSkeleton = () => {
+  const animatedStyle = useSkeletonAnimation()
+
+  return (
+    <Animated.View style={[styles.formationItem, animatedStyle]}>
+      <View style={styles.content}>
+        <View style={styles.mediumLine} />
+        <View style={styles.mediumLine} />
+        <View style={styles.fullLine} />
+      </View>
+    </Animated.View>
+  )
+}
+
+export const ModuleItemSkeleton = () => {
+  const animatedStyle = useSkeletonAnimation()
+
+  return (
+    <Animated.View style={[styles.simpleCard, animatedStyle]}>
+      <View style={styles.content}>
+        <View style={styles.fullLine} />
+        <View style={styles.longLine} />
+        <View style={styles.mediumLine} />
+      </View>
+    </Animated.View>
+  )
+}
+
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#e5e7eb',
@@ -265,6 +293,21 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   chatItem: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  formationItem: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    aspectRatio: 1,
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  moduleItem: {
     backgroundColor: '#e5e7eb',
     borderRadius: 8,
     padding: 16,

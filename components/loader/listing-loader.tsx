@@ -12,6 +12,8 @@ export enum ItemType {
   DOG = 'dog',
   RIDE = 'ride',
   CONVERSATION = 'conversation',
+  FORMATION = 'formation',
+  MODULE = 'module',
 }
 
 interface ListingLoaderProps {

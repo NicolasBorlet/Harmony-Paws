@@ -1,4 +1,4 @@
-import { ChatItemSkeleton } from '@/components/skeletons/skeletons'
+import { FormationItemSkeleton } from '@/components/skeletons/skeletons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Medical() {
@@ -8,7 +8,8 @@ export default function Medical() {
       <SimpleCardSkeleton />
       <RideItemSkeleton />
       <DogItemSkeleton /> */}
-      <ChatItemSkeleton />
+      <FormationItemSkeleton />
+      {/* <ModuleItemSkeleton /> */}
     </SafeAreaView>
   )
 }
