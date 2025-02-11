@@ -1,4 +1,5 @@
 import { i18n } from '@/app/_layout'
+import OpacityFadeIn from '@/components/animate/opacity-fadeIn'
 import Back from '@/components/back-button'
 import LoaderComponent from '@/components/loader'
 import ListingLoader, { ItemType, LoaderType } from '@/components/loader/listing-loader'
@@ -122,7 +123,9 @@ export default function Messages() {
                 })
               }}
             >
-              <MessageItemListing conversation={item} />
+              <OpacityFadeIn delay={index * 200}>
+                <MessageItemListing conversation={item} />
+              </OpacityFadeIn>
             </Pressable>
           )}
           estimatedItemSize={10}
