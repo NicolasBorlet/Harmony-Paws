@@ -1,8 +1,8 @@
 import { i18n } from '@/app/_layout'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import FormationHeader from '@/components/formation/formation-header'
+import FormationListing from '@/components/formationListing/formation-listing'
 import UserFormationListing from '@/components/formationListing/user-formation-listing'
-import ListingLoader, { ItemType, LoaderType } from '@/components/loader/listing-loader'
 import Divider from '@/components/ui/divider'
 import { useStripe } from '@stripe/stripe-react-native'
 import React, { useState } from 'react'
@@ -243,8 +243,7 @@ export default function Formation() {
           <Divider />
           <View style={{ gap: 16 }}>
             <BodyTitle title={i18n.t('allFormations')} />
-            <ListingLoader type={LoaderType.LISTING} itemType={ItemType.FORMATION} />
-            {/* <FormationListing /> */}
+            <FormationListing />
           </View>
         </View>
       </Animated.ScrollView>
