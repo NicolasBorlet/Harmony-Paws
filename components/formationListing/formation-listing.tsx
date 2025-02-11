@@ -3,6 +3,7 @@ import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
+import ListingLoader, { ItemType, LoaderType } from "../loader/listing-loader";
 import FormationListingItem from "./formation-listing-item";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
@@ -114,6 +115,10 @@ export default function FormationListing() {
       fetchNextPage();
     }
   };
+
+  if (isLoading) {
+    return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.FORMATION} />
+  }
 
   return (
     <AnimatedFlashList

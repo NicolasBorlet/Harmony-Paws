@@ -306,6 +306,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     display: 'flex',
     justifyContent: 'flex-end',
+    flex: 1,
   },
   moduleItem: {
     backgroundColor: '#e5e7eb',
