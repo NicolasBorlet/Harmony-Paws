@@ -18,13 +18,15 @@ type Props = PropsWithChildren<{
   headerImage?: string;
   backgroundColor?: string;
   backgroundContainer?: React.ReactNode;
+  paddingHorizontal?: number;
 }>;
 
 export default function ParallaxScrollView({
   children,
   headerImage,
   backgroundColor = '#fff',
-  backgroundContainer
+  backgroundContainer,
+  paddingHorizontal = 16,
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
@@ -64,7 +66,7 @@ export default function ParallaxScrollView({
             <Image style={styles.image} source={headerImage} contentFit="cover" transition={1000} placeholder={{ blurhash }} />
           ) : backgroundContainer}
         </Animated.View>
-        <View style={styles.content}>{children}</View>
+        <View style={[styles.content, { paddingHorizontal }]}>{children}</View>
       </Animated.ScrollView>
     </View>
   );
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 16,
     paddingVertical: 20,
     gap: 16,
     overflow: 'hidden',
