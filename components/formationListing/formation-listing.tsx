@@ -3,6 +3,8 @@ import { Formation } from "@/lib/api/types";
 import { FlashList } from "@shopify/flash-list";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
+import OpacityFadeIn from "../animate/opacity-fadeIn";
+import ListingLoader, { ItemType, LoaderType } from "../loader/listing-loader";
 import FormationListingItem from "./formation-listing-item";
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList);
@@ -115,14 +117,20 @@ export default function FormationListing() {
     }
   };
 
+  if (isLoading) {
+    return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.FORMATION} />
+  }
+
   return (
     <AnimatedFlashList
       data={allFormations}
       renderItem={({ item, index }) => (
         <View style={[index % 2 ? {paddingLeft: 12} : {paddingRight: 12}, {flex: 1}]} >
-          <FormationListingItem
-            formation={item as Formation}
-          />
+          <OpacityFadeIn delay={index * 200}>
+            <FormationListingItem
+              formation={item as Formation}
+            />
+          </OpacityFadeIn>
         </View>
       )}
       showsVerticalScrollIndicator={false}

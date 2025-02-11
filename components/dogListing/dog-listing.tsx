@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../animate/opacity-fadeIn'
 import LoaderComponent from '../loader'
+import ListingLoader, { ItemType, LoaderType } from '../loader/listing-loader'
 import DogItemListing from './dog-item-listing'
 
 export default function DogListing({ scrollY }: { scrollY: any }) {
@@ -45,7 +46,7 @@ export default function DogListing({ scrollY }: { scrollY: any }) {
   ), [handleDogPress])
 
   if (isLoading && !allDogs.length) {
-    return <LoaderComponent />
+    return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.DOG} />
   }
 
   return (

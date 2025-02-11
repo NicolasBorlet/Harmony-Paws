@@ -5,6 +5,9 @@ import { Pressable } from "react-native";
 import Block from "../grid/Block";
 import { BodyBold, SmallMedium } from "../ui/text";
 
+const blurhash =
+  'L6Pj0^jE.AyE_3t7t7R**0o#DgR4';
+
 export default function FormationListingItem({ formation }: { formation: Formation }) {
   return (
     <Pressable
@@ -22,7 +25,7 @@ export default function FormationListingItem({ formation }: { formation: Formati
           <Image source={{ uri: formation.image }} style={{
             height: '100%',
             width: '100%',
-          }} />
+          }} placeholder={{ blurhash }} />
         </Block>
         <BodyBold color="#F7A400">{formation.name}</BodyBold>
         <SmallMedium color="#979898">{formation.animator_name}</SmallMedium>

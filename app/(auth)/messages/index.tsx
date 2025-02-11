@@ -1,6 +1,8 @@
 import { i18n } from '@/app/_layout'
+import OpacityFadeIn from '@/components/animate/opacity-fadeIn'
 import Back from '@/components/back-button'
 import LoaderComponent from '@/components/loader'
+import ListingLoader, { ItemType, LoaderType } from '@/components/loader/listing-loader'
 import MessageItemListing from '@/components/messageListing/message-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
 import { ExtraSmall, NavigationTitle, SmallMedium } from '@/components/ui/text'
@@ -108,7 +110,7 @@ export default function Messages() {
         )}
       </View>
       {isLoading && !allConversations.length ? (
-        <LoaderComponent />
+        <ListingLoader type={LoaderType.LISTING} itemType={ItemType.CONVERSATION} />
       ) : (
         <FlashList
           data={allConversations}
@@ -121,7 +123,9 @@ export default function Messages() {
                 })
               }}
             >
-              <MessageItemListing conversation={item} />
+              <OpacityFadeIn delay={index * 200}>
+                <MessageItemListing conversation={item} />
+              </OpacityFadeIn>
             </Pressable>
           )}
           estimatedItemSize={10}

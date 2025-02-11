@@ -3,7 +3,8 @@ import Back from '@/components/back-button'
 import AdviceListing from '@/components/formation/adviceListing/advice-listing'
 import ModuleListing from '@/components/formation/moduleListing/module-listing'
 import SegmentedControl from '@/components/formation/segmented-control'
-import LoaderComponent from '@/components/loader'
+import FormationSingleLoader from '@/components/loader/formation-single-loader'
+import ParallaxScrollView from '@/components/parallax-scrollview'
 import {
   BodyBold,
   BodyMedium,
@@ -19,9 +20,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
+  Gesture
 } from 'react-native-gesture-handler'
 import { runOnJS, useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -57,40 +56,38 @@ export default function FormationDetails() {
       }
     })
 
-  if (isLoading) return <LoaderComponent />
+  if (isLoading) return <FormationSingleLoader />
   if (error || !formation) return <BodyMedium>Une erreur est survenue</BodyMedium>
 
   return (
-    <GestureHandlerRootView
-      style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}
-    >
-      <View
-        style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+    <>
+      <Back />
+      <ParallaxScrollView headerImage={formation.image || ''} paddingHorizontal={0}>
         <View
           style={{
+            flex: 1,
             display: 'flex',
-            flexDirection: 'row',
-            gap: 10,
-            alignItems: 'center',
-            paddingHorizontal: 20,
-            paddingBottom: 16,
+            flexDirection: 'column',
           }}
         >
-          <Back position='relative' left='0' />
-          <NavigationTitle color='#000'>{formation.name}</NavigationTitle>
-        </View>
-        <SegmentedControl
-          selectedTab={selectedTab}
-          onTabChange={onTabChange}
-          language={i18n.locale as 'fr' | 'en'}
-        />
-        <View style={{ flex: 1, paddingHorizontal: 20 }}>
-          <GestureDetector gesture={gesture}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+              paddingHorizontal: 16,
+              paddingBottom: 16,
+            }}
+          >
+            <NavigationTitle color='#000'>{formation.name}</NavigationTitle>
+          </View>
+          <SegmentedControl
+            selectedTab={selectedTab}
+            onTabChange={onTabChange}
+            language={i18n.locale as 'fr' | 'en'}
+          />
+          <View style={{ flex: 1, paddingHorizontal: 16 }}>
             <View style={{ flex: 1 }}>
               {selectedTab === 'about' ? (
                 <ScrollView
@@ -161,9 +158,9 @@ export default function FormationDetails() {
                 </ScrollView>
               )}
             </View>
-          </GestureDetector>
+          </View>
         </View>
-      </View>
-    </GestureHandlerRootView>
+      </ParallaxScrollView>
+    </>
   )
 }
