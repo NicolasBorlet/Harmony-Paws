@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { DogItemSkeleton, RideItemSkeleton } from "../skeletons/skeletons";
+import { ChatItemSkeleton, DogItemSkeleton, RideItemSkeleton } from "../skeletons/skeletons";
 
 // enums for type of loader
 export enum LoaderType {
@@ -11,6 +11,7 @@ export enum LoaderType {
 export enum ItemType {
   DOG = 'dog',
   RIDE = 'ride',
+  CONVERSATION = 'conversation',
 }
 
 interface ListingLoaderProps {
@@ -37,6 +38,14 @@ export default function ListingLoader({ type, itemType }: ListingLoaderProps) {
           <RideItemSkeleton />
           <RideItemSkeleton />
         </>
+      )}
+      {/* If item type is conversation, render a conversation item skeleton */}
+      {itemType === ItemType.CONVERSATION && (
+        <View style={{ gap: 20 }}>
+          <ChatItemSkeleton />
+          <ChatItemSkeleton />
+          <ChatItemSkeleton />
+        </View>
       )}
     </View>
   )
