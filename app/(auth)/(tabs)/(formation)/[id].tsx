@@ -3,7 +3,7 @@ import Back from '@/components/back-button'
 import AdviceListing from '@/components/formation/adviceListing/advice-listing'
 import ModuleListing from '@/components/formation/moduleListing/module-listing'
 import SegmentedControl from '@/components/formation/segmented-control'
-import LoaderComponent from '@/components/loader'
+import ListingLoader, { ItemType, LoaderType } from '@/components/loader/listing-loader'
 import {
   BodyBold,
   BodyMedium,
@@ -57,7 +57,7 @@ export default function FormationDetails() {
       }
     })
 
-  if (isLoading) return <LoaderComponent />
+  if (isLoading) return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.FORMATION} />
   if (error || !formation) return <BodyMedium>Une erreur est survenue</BodyMedium>
 
   return (

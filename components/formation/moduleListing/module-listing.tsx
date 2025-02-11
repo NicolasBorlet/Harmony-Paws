@@ -3,6 +3,7 @@ import { ModuleInterface } from "@/lib/api/types/interfaces";
 import { FlashList } from "@shopify/flash-list";
 import { router } from "expo-router";
 import { Pressable, View } from "react-native";
+import OpacityFadeIn from "../../animate/opacity-fadeIn";
 import ModuleListingItem from "./module-listing-item";
 
 const numColumns = 2;
@@ -23,7 +24,9 @@ export default function ModuleListing({ modules = [] }: ModuleListingProps) {
             width: "100%",
             height: "100%",
           }}>
-            <ModuleListingItem module={item} />
+            <OpacityFadeIn delay={index * 200}>
+              <ModuleListingItem module={item} />
+            </OpacityFadeIn>
           </Pressable>
         </ColumnItem>
       )}

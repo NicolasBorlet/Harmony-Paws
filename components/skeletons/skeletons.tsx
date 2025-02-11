@@ -8,7 +8,7 @@ import Animated, {
   withTiming
 } from 'react-native-reanimated'
 
-const useSkeletonAnimation = () => {
+export const useSkeletonAnimation = () => {
   const opacity = useSharedValue(0.3)
 
   useEffect(() => {
