@@ -573,6 +573,57 @@ export type Database = {
           },
         ]
       }
+      activity_invitations: {
+        Row: {
+          created_at: string | null
+          id: number
+          updated_at: string | null
+          sender_id: number | null
+          receiver_id: number | null
+          activity_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          sender_id?: number | null
+          receiver_id?: number | null
+          activity_id?: number | null
+          status: Database['public']['Enums']['activity_invitation_status']
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          sender_id?: number | null
+          receiver_id?: number | null
+          activity_id?: number | null
+          status: Database['public']['Enums']['activity_invitation_status']
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'activity_invitations_sender_id_users_id_fk'
+            columns: ['sender_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'activity_invitations_receiver_id_users_id_fk'
+            columns: ['receiver_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'activity_invitations_activity_id_activities_id_fk'
+            columns: ['activity_id']
+            isOneToOne: false
+            referencedRelation: 'activities'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       user_formations: {
         Row: {
           created_at: string | null
@@ -675,6 +726,7 @@ export type Database = {
       dog_dominance: 'neutral' | 'dominant' | 'dominated'
       dog_sex: 'male' | 'female'
       friend_request_status: 'pending' | 'accepted' | 'rejected'
+      activity_invitation_status: 'pending' | 'accepted' | 'rejected'
     }
     CompositeTypes: {
       [_ in never]: never
