@@ -115,6 +115,12 @@ const ExtraSmallMedium = styled.Text<{ color?: string }>`
   font-family: Montserrat_500Medium;
 `
 
+const ExtraSmallBold = styled.Text<{ color?: string }>`
+  font-size: 12px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_700Bold;
+`
+
 export {
   Body,
   BodyBold,
@@ -123,6 +129,7 @@ export {
   BodySemiBold,
   CardTitle,
   ExtraSmall,
+  ExtraSmallBold,
   ExtraSmallMedium,
   ExtraSmallSemiBold,
   Large,
