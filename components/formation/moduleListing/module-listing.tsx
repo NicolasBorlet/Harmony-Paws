@@ -3,6 +3,7 @@ import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import OpacityFadeIn from '../../animate/opacity-fadeIn'
+import TranslateY from '../../animate/translateY'
 import ModuleListingItem from './module-listing-item'
 
 interface ModuleListingProps {
@@ -16,7 +17,9 @@ export default function ModuleListing({ modules = [] }: ModuleListingProps) {
       renderItem={({ index, item }) => (
         <Pressable onPress={() => router.push(`/module/${item.id}`)}>
           <OpacityFadeIn delay={index * 200}>
-            <ModuleListingItem module={item} />
+            <TranslateY delay={index * 200}>
+              <ModuleListingItem module={item} />
+            </TranslateY>
           </OpacityFadeIn>
         </Pressable>
       )}
