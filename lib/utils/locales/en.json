@@ -99,5 +99,8 @@
   "allFormations": "All formations",
   "yourFormations": "Your formations",
   "ourFormations": "Our formations",
-  "formationForYou": "Formations for you"
+  "formationForYou": "Formations for you",
+  "request_accepted": "Request accepted",
+  "request_rejected": "Request rejected",
+  "you_are_now_friends": "Your are now friends"
 }

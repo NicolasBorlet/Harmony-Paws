@@ -99,5 +99,8 @@
   "allFormations": "Toutes nos formations",
   "yourFormations": "Vos formations",
   "ourFormations": "Nos formations",
-  "formationForYou": "Les formations pour vous"
+  "formationForYou": "Les formations pour vous",
+  "request_accepted": "Demande acceptée",
+  "request_rejected": "Demande refusée",
+  "you_are_now_friends": "Vous êtes désormais amis"
 }

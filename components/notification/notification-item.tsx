@@ -33,9 +33,9 @@ export default function NotificationItem({
   const handleAcceptFriendRequest = async () => {
     await acceptFriendRequest(notificationData.sender_id, userData.id)
     Burnt.toast({
-      title: 'Demande acceptée',
+      title: i18n.t('request_accepted'),
       preset: 'done',
-      message: 'Vous êtes maintenant amis',
+      message: i18n.t('you_are_now_friends'),
       haptic: 'success',
     })
   }
@@ -43,9 +43,8 @@ export default function NotificationItem({
   const handleRejectFriendRequest = async () => {
     await rejectFriendRequest(notificationData.sender_id, userData.id)
     Burnt.toast({
-      title: 'Demande refusée',
+      title: i18n.t('request_rejected'),
       preset: 'error',
-      message: "Vous n'êtes plus amis",
       haptic: 'error',
     })
   }
@@ -102,18 +101,6 @@ export default function NotificationItem({
           <SmallButtonOutlined onPress={handleRejectFriendRequest}>
             <Small color='#F7A400'>{i18n.t('refuse')}</Small>
           </SmallButtonOutlined>
-        </View>
-      )}
-
-      {notificationData.type === 'invitation' && (
-        <View style={{ width: 100 }}>
-          <SmallButton
-            onPress={() =>
-              console.log(`accept invitation ${notificationData.sender_id}`)
-            }
-          >
-            <Small color='#fff'>{i18n.t('accept')}</Small>
-          </SmallButton>
         </View>
       )}
 
