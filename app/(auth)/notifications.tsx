@@ -29,8 +29,8 @@ export default function Notifications() {
       })),
       ...(userInvitations || []).map(invitation => ({
         ...invitation,
-        itemType: 'invitation',
-        type: 'invitation',
+        itemType: 'new_ride_request',
+        type: 'new_ride_request',
         message: `Vous avez une nouvelle invitation en balade de ${invitation.sender.name}`,
       })),
     ]
