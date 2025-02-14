@@ -6,6 +6,8 @@ module.exports = {
       'always',
       ['feat', 'fix', 'chore', 'docs', 'style', 'refactor', 'test'],
     ],
-    'header-pattern': [2, 'always', /^(\w+):\s[\w\s]+$/],
+    'subject-empty': [2, 'never'],
+    'subject-case': [2, 'always', 'sentence-case'],
+    'type-case': [2, 'always', 'lower-case'],
   },
 }
