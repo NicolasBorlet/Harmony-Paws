@@ -96,14 +96,7 @@ export default function Notifications() {
             if (item.type === 'header') {
               return renderSectionHeader(item.title)
             }
-            return (
-              <NotificationItem
-                notificationData={item}
-                message={
-                  item.itemType === 'invitation' ? item.message : undefined
-                }
-              />
-            )
+            return <NotificationItem notificationData={item} />
           }}
           estimatedItemSize={10}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}

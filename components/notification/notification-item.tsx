@@ -1,9 +1,11 @@
 import { i18n } from '@/app/_layout'
+import { acceptActivityInvitation } from '@/lib/api/activty_invitations'
 import {
   acceptFriendRequest,
   rejectFriendRequest,
 } from '@/lib/api/friendRequests'
 import { user$ } from '@/lib/observables/session-observable'
+import { useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import React from 'react'
 import { View } from 'react-native'
@@ -15,20 +17,20 @@ interface NotificationItemProps {
     itemType: 'notification' | 'invitation'
     type: string
     id: number
+    activity_id?: number
     sender: {
       first_name: string
       id: string
     }
     sender_id: string
   }
-  message?: string
 }
 
 export default function NotificationItem({
   notificationData,
-  message,
 }: NotificationItemProps) {
   const userData = user$.get()
+  const queryClient = useQueryClient()
 
   const handleAcceptFriendRequest = async () => {
     await acceptFriendRequest(notificationData.sender_id, userData.id)
@@ -41,13 +43,25 @@ export default function NotificationItem({
   }
 
   const handleAcceptRideRequest = async () => {
-    // await acceptRideRequest(notificationData.id)
-    Burnt.toast({
-      title: i18n.t('ride_request_accepted'),
-      preset: 'done',
-      message: i18n.t('ride_request_accepted_message'),
-      haptic: 'success',
-    })
+    try {
+      await acceptActivityInvitation(notificationData.id)
+      queryClient.invalidateQueries(['userInvitations', userData.id])
+
+      Burnt.toast({
+        title: i18n.t('ride_request_accepted'),
+        preset: 'done',
+        message: i18n.t('ride_request_accepted_message'),
+        haptic: 'success',
+      })
+    } catch (error) {
+      console.error('Error accepting ride request:', error)
+      Burnt.toast({
+        title: i18n.t('error'),
+        preset: 'error',
+        message: i18n.t('error_accepting_ride'),
+        haptic: 'error',
+      })
+    }
   }
 
   const handleRejectFriendRequest = async () => {
@@ -81,18 +95,14 @@ export default function NotificationItem({
           {notificationData.sender.first_name}
         </SmallSemiBold>
         <SmallMedium color='#979898'>
-          {message ? (
-            message
-          ) : (
-            <>
-              {notificationData.type === 'friend_request' &&
-                `${i18n.t('friendRequest')}`}
-              {notificationData.type === 'new_friend_ride' &&
-                `${i18n.t('rideCreation')}`}
-              {notificationData.type === 'new_ride_request' &&
-                `${i18n.t('rideRequest')}`}
-            </>
-          )}
+          <>
+            {notificationData.type === 'friend_request' &&
+              `${i18n.t('friendRequest')}`}
+            {notificationData.type === 'new_friend_ride' &&
+              `${i18n.t('rideCreation')}`}
+            {notificationData.type === 'new_ride_request' &&
+              `${i18n.t('rideRequest')}`}
+          </>
         </SmallMedium>
       </View>
 
