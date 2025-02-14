@@ -663,6 +663,35 @@ export type Database = {
           },
         ]
       }
+      user_purchases: {
+        Row: {
+          created_at: string | null
+          formation_id: number | null
+          id: number
+          updated_at: string | null
+          user_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          formation_id?: number | null
+          id?: number
+          updated_at?: string | null
+          user_id?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          formation_id?: number | null
+          id?: number
+          updated_at?: string | null
+          user_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_purchases_formation_id_formations_id_fk'
+            columns: ['formation_id']
+          },
+        ]
+      }
       users: {
         Row: {
           age: number | null

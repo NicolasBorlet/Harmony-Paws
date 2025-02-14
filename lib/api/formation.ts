@@ -139,7 +139,7 @@ export const useUserPaginatedFormations = (
   })
 }
 
-export const getFormationById = async (id: number) => {
+export const getFormationById = async (id: number, userId?: number) => {
   // 1. Récupérer la formation
   const { data: formation, error: formationError } = await supabase
     .from('formations')
@@ -155,15 +155,46 @@ export const getFormationById = async (id: number) => {
     .select('*')
     .eq('formation_id', id)
 
+  if (modulesError) throw modulesError
+
   // 3. Récupérer les avis de cette formation
   const { data: advices, error: advicesError } = await supabase
     .from('opinions')
     .select('*')
     .eq('formation_id', id)
 
-  if (modulesError) throw modulesError
+  // 4. Récupérer les achats de l'utilisateur pour cette formation
+  let hasPurchase = false
+  let modulesPurchased: number[] = []
 
-  // 3. Ajouter les images
+  if (userId) {
+    const { data: userPurchases, error: purchasesError } = await supabase
+      .from('user_purchases')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('formation_id', id)
+
+    if (purchasesError) throw purchasesError
+
+    if (userPurchases && userPurchases.length > 0) {
+      // Vérifier si l'utilisateur a acheté la formation complète
+      const formationPurchase = userPurchases.find(
+        purchase => purchase.content_type === 'formation'
+      )
+
+      if (formationPurchase) {
+        hasPurchase = true
+      } else {
+        // Si pas d'achat de formation complète, récupérer les modules achetés
+        modulesPurchased = userPurchases
+          .filter(purchase => purchase.content_type === 'module')
+          .map(purchase => purchase.module_id)
+          .filter((id): id is number => id !== null)
+      }
+    }
+  }
+
+  // 5. Ajouter les images et autres informations
   const formationWithImage = {
     ...formation,
     image: await getFormationImageUrl(formation.id.toString()),
@@ -173,6 +204,8 @@ export const getFormationById = async (id: number) => {
     updated_at: formation.updated_at
       ? new Date(formation.updated_at)
       : new Date(),
+    hasPurchase,
+    modulesPurchased,
   }
 
   const modulesWithImages = await Promise.all(
@@ -191,9 +224,9 @@ export const getFormationById = async (id: number) => {
   }
 }
 
-export const useFormationById = (id: number) => {
+export const useFormationById = (id: number, userId?: number) => {
   return useQuery({
-    queryKey: ['formation', id],
-    queryFn: () => getFormationById(id),
+    queryKey: ['formation', id, userId],
+    queryFn: () => getFormationById(id, userId),
   })
 }
