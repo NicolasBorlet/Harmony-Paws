@@ -41,6 +41,13 @@ export default function FormationListingItem({
       onPress={() => {
         router.push(`/(formation)/${formation.id}`)
       }}
+      style={{
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.15,
+        shadowRadius: 3.84,
+        elevation: 5,
+      }}
     >
       <Block
         style={{

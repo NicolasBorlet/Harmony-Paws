@@ -14,22 +14,21 @@ import {
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useFormationById } from '@/lib/api/formation'
+import { user$ } from '@/lib/observables/session-observable'
 import { AntDesign } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { useLocalSearchParams } from 'expo-router'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ScrollView, View } from 'react-native'
-import {
-  Gesture
-} from 'react-native-gesture-handler'
-import { runOnJS, useSharedValue } from 'react-native-reanimated'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function FormationDetails() {
-  const insets = useSafeAreaInsets()
-  const startY = useSharedValue(0)
+  const user = user$.get()
   const { id } = useLocalSearchParams()
-  const { data: formation, isLoading, error } = useFormationById(Number(id))
+  const {
+    data: formation,
+    isLoading,
+    error,
+  } = useFormationById(Number(id), user.id)
 
   const [selectedTab, setSelectedTab] = useState<'about' | 'advice'>('about')
 
@@ -38,31 +37,21 @@ export default function FormationDetails() {
     setSelectedTab(tab)
   }, [])
 
-  const gesture = Gesture.Pan()
-    .onBegin(event => {
-      startY.value = event.absoluteY
-    })
-    .onUpdate(event => {
-      const deltaY = startY.value - event.absoluteY
-    })
-    .onEnd(event => {
-      if (Math.abs(event.translationX) > 50) {
-        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
-        if (event.translationX > 0) {
-          runOnJS(setSelectedTab)('about')
-        } else {
-          runOnJS(setSelectedTab)('advice')
-        }
-      }
-    })
+  useEffect(() => {
+    console.log('formation', formation)
+  }, [formation])
 
   if (isLoading) return <FormationSingleLoader />
-  if (error || !formation) return <BodyMedium>Une erreur est survenue</BodyMedium>
+  if (error || !formation)
+    return <BodyMedium>Une erreur est survenue</BodyMedium>
 
   return (
     <>
       <Back />
-      <ParallaxScrollView headerImage={formation.image || ''} paddingHorizontal={0}>
+      <ParallaxScrollView
+        headerImage={formation.image || ''}
+        paddingHorizontal={0}
+      >
         <View
           style={{
             flex: 1,
@@ -131,7 +120,11 @@ export default function FormationDetails() {
                         </ModulePrice>
                         {formation.old_price && (
                           <>
-                            <AntDesign name='arrowleft' size={12} color='black' />
+                            <AntDesign
+                              name='arrowleft'
+                              size={12}
+                              color='black'
+                            />
                             <ModulePrice color={Colors.light.secondary}>
                               {formation.old_price}€
                             </ModulePrice>

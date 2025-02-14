@@ -7,7 +7,10 @@ import Divider from '@/components/ui/divider'
 import { useStripe } from '@stripe/stripe-react-native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated'
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 interface FunctionResponse {
@@ -39,7 +42,7 @@ export default function Formation() {
   const [products, setProducts] = useState<Product[]>([])
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
-  const scrollY = useSharedValue(0);
+  const scrollY = useSharedValue(0)
 
   // useEffect(() => {
   //   async function initialize() {
@@ -209,10 +212,10 @@ export default function Formation() {
   // };
 
   const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y; // Met à jour la valeur partagée
+    onScroll: event => {
+      scrollY.value = event.contentOffset.y // Met à jour la valeur partagée
     },
-  });
+  })
 
   return (
     <View
