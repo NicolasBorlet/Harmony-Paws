@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { supabase } from "../supabase";
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { supabase } from '../supabase'
 
 export async function getUserInvitations(userId: number) {
   console.log('getUserInvitations', userId)
@@ -41,19 +41,29 @@ export const useUserInvitations = (userId: number) => {
   useEffect(() => {
     const subscription = supabase
       .channel(`userInvitations:${userId}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'activity_invitations', filter: `receiver_id=eq.${userId}` }, async payload => {
-        if (payload.eventType === 'INSERT') {
-          queryClient.setQueryData(
-            ['userInvitations', userId],
-            (oldData = []) => [...oldData, payload.new],
-          )
-        } else if (payload.eventType === 'DELETE') {
-          queryClient.setQueryData(
-            ['userInvitations', userId],
-            (oldData = []) => oldData.filter(invitation => invitation.id !== payload.old.id),
-          )
-        }
-      })
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'activity_invitations',
+          filter: `receiver_id=eq.${userId}`,
+        },
+        async payload => {
+          if (payload.eventType === 'INSERT') {
+            queryClient.setQueryData(
+              ['userInvitations', userId],
+              (oldData = []) => [...oldData, payload.new],
+            )
+          } else if (payload.eventType === 'DELETE') {
+            queryClient.setQueryData(
+              ['userInvitations', userId],
+              (oldData = []) =>
+                oldData.filter(invitation => invitation.id !== payload.old.id),
+            )
+          }
+        },
+      )
       .subscribe()
 
     return () => {
@@ -65,26 +75,41 @@ export const useUserInvitations = (userId: number) => {
 }
 
 export const acceptActivityInvitation = async (invitationId: number) => {
-  const { data, error } = await supabase
+  console.log('acceptActivityInvitation', invitationId)
+
+  // D'abord, récupérer l'invitation
+  const { data: invitation, error: fetchError } = await supabase
+    .from('activity_invitations')
+    .select('*')
+    .eq('id', invitationId)
+    .single()
+
+  if (fetchError) throw fetchError
+  if (!invitation) throw new Error('Invitation not found')
+
+  console.log('fetched invitation', invitation)
+
+  // Mettre à jour le statut
+  const { error: updateError } = await supabase
     .from('activity_invitations')
     .update({ status: 'accepted' })
     .eq('id', invitationId)
-    .select()
-    .single()
 
-  if (error) throw error
-  return data
-}
+  if (updateError) throw updateError
 
-export const useAcceptActivityInvitation = (invitationId: number) => {
-  const queryClient = useQueryClient()
+  // Ajouter l'utilisateur à l'activité
+  const { error: userActivityError } = await supabase
+    .from('user_activities')
+    .insert([
+      {
+        user_id: invitation.receiver_id,
+        activity_id: invitation.activity_id,
+      },
+    ])
 
-  const query = useQuery({
-    queryKey: ['acceptActivityInvitation', invitationId],
-    queryFn: () => acceptActivityInvitation(invitationId),
-  })
+  if (userActivityError) throw userActivityError
 
-  return query
+  return invitation
 }
 
 export const rejectActivityInvitation = async (invitationId: number) => {
@@ -97,17 +122,6 @@ export const rejectActivityInvitation = async (invitationId: number) => {
 
   if (error) throw error
   return data
-}
-
-export const useRejectActivityInvitation = (invitationId: number) => {
-  const queryClient = useQueryClient()
-
-  const query = useQuery({
-    queryKey: ['rejectActivityInvitation', invitationId],
-    queryFn: () => rejectActivityInvitation(invitationId),
-  })
-
-  return query
 }
 
 export const sendActivityInvitation = async (invitation: {
@@ -132,30 +146,19 @@ export const sendActivityInvitation = async (invitation: {
     throw new Error('Invitation already sent')
   }
 
-  const { data, error } = await supabase.from('activity_invitations').insert([
-    {
-      sender_id: invitation.senderId,
-      receiver_id: invitation.receiverId,
-      activity_id: invitation.activityId,
-      status: 'pending',
-    },
-  ]).select().single()
+  const { data, error } = await supabase
+    .from('activity_invitations')
+    .insert([
+      {
+        sender_id: invitation.senderId,
+        receiver_id: invitation.receiverId,
+        activity_id: invitation.activityId,
+        status: 'pending',
+      },
+    ])
+    .select()
+    .single()
 
   if (error) throw error
   return data
-}
-
-export const useSendActivityInvitation = (invitation: {
-  senderId: number
-  receiverId: number
-  activityId: number
-}) => {
-  const queryClient = useQueryClient()
-
-  const query = useQuery({
-    queryKey: ['sendActivityInvitation', invitation],
-    queryFn: () => sendActivityInvitation(invitation),
-  })
-
-  return query
 }
