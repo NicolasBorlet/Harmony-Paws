@@ -3,7 +3,7 @@ import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Block from '../grid/Block'
-import { BodyBold } from '../ui/text'
+import { BodyExtraBold } from '../ui/text'
 
 const blurhash = 'L6Pj0^jE.AyE_3t7t7R**0o#DgR4'
 
@@ -54,7 +54,7 @@ export default function FormationListingItem({
             zIndex: 2,
           }}
         >
-          <BodyBold color='#FFFFFF'>{formation.name}</BodyBold>
+          <BodyExtraBold color='#FFFFFF'>{formation.name}</BodyExtraBold>
         </View>
       </Block>
     </Pressable>
