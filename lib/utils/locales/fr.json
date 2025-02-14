@@ -102,5 +102,7 @@
   "formationForYou": "Les formations pour vous",
   "request_accepted": "Demande acceptée",
   "request_rejected": "Demande refusée",
-  "you_are_now_friends": "Vous êtes désormais amis"
+  "you_are_now_friends": "Vous êtes désormais amis",
+  "ride_request_accepted": "Demande de balade acceptée",
+  "ride_request_accepted_message": "On se balade ensemble !"
 }
