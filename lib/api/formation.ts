@@ -139,6 +139,19 @@ export const useUserPaginatedFormations = (
   })
 }
 
+const getUserModuleProgress = async (userId: number, formationId: number) => {
+  const { data, error } = await supabase
+    .from('user_progress')
+    .select('module_id, progress_percentage')
+    .eq('user_id', userId)
+    .eq('formation_id', formationId)
+    .eq('content_type', 'module')
+
+  if (error) throw error
+
+  return data || []
+}
+
 export const getFormationById = async (id: number, userId?: number) => {
   // 1. Récupérer la formation
   const { data: formation, error: formationError } = await supabase
@@ -217,9 +230,22 @@ export const getFormationById = async (id: number, userId?: number) => {
     })),
   )
 
+  let modulesWithProgress = modulesWithImages
+
+  if (userId) {
+    const userProgress = await getUserModuleProgress(userId, id)
+
+    modulesWithProgress = modulesWithImages.map(module => ({
+      ...module,
+      progress:
+        userProgress.find(p => p.module_id === module.id)?.progress_percentage ||
+        0,
+    }))
+  }
+
   return {
     ...formationWithImage,
-    modules: modulesWithImages,
+    modules: modulesWithProgress,
     advices,
   }
 }
