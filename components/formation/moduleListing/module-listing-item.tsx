@@ -1,4 +1,4 @@
-import { ExtraSmallMedium, ModulePrice, SmallBold } from '@/components/ui/text'
+import { BodyBold, ExtraSmallBold } from '@/components/ui/text'
 import { ModuleInterface } from '@/lib/api/types/interfaces'
 import { Image } from 'expo-image'
 import { View } from 'react-native'
@@ -16,6 +16,13 @@ export default function ModuleListingItem({ module }: ModuleListingItemProps) {
         gap: 16,
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F1F1F1',
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#D9D9D9',
       }}
     >
       <View
@@ -36,17 +43,12 @@ export default function ModuleListingItem({ module }: ModuleListingItemProps) {
         <View
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            flexDirection: 'column',
+            gap: 6,
           }}
         >
-          <SmallBold color='#F7A400'>{module.name}</SmallBold>
-          <ModulePrice color='#F7A400'>{module.price}€</ModulePrice>
-        </View>
-        <View>
-          <ExtraSmallMedium color='D9D9D9'>
-            {module.description}
-          </ExtraSmallMedium>
+          <ExtraSmallBold color='#979898'>{module.price}€</ExtraSmallBold>
+          <BodyBold>{module.name}</BodyBold>
         </View>
       </View>
     </View>

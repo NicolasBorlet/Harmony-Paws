@@ -92,7 +92,7 @@ export default function FormationDetails() {
                       flexDirection: 'column',
                       gap: 10,
                       backgroundColor: 'rgba(102, 51, 153, 0.1)',
-                      borderRadius: 10,
+                      borderRadius: 12,
                       padding: 16,
                       justifyContent: 'center',
                     }}
