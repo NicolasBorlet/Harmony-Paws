@@ -1,7 +1,7 @@
-import { BodyBold, ExtraSmallBold } from '@/components/ui/text'
 import { ModuleInterface } from '@/lib/api/types/interfaces'
-import { Image } from 'expo-image'
 import { View } from 'react-native'
+import ModuleCard from './module-card'
+import ModuleProgress from './module-progress'
 
 interface ModuleListingItemProps {
   module: ModuleInterface
@@ -11,46 +11,14 @@ export default function ModuleListingItem({ module }: ModuleListingItemProps) {
   return (
     <View
       style={{
-        flex: 1,
-        width: '100%',
-        gap: 16,
         display: 'flex',
         flexDirection: 'row',
+        gap: 16,
         alignItems: 'center',
-        backgroundColor: '#F1F1F1',
-        paddingHorizontal: 8,
-        paddingVertical: 16,
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#D9D9D9',
       }}
     >
-      <View
-        style={{
-          borderRadius: 80,
-          overflow: 'hidden',
-          height: 70,
-          width: 70,
-        }}
-      >
-        <Image
-          source={{ uri: module.image }}
-          style={{ width: 70, height: 70 }}
-          contentFit='cover'
-        />
-      </View>
-      <View>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 6,
-          }}
-        >
-          <ExtraSmallBold color='#979898'>{module.price}€</ExtraSmallBold>
-          <BodyBold>{module.name}</BodyBold>
-        </View>
-      </View>
+      <ModuleProgress progress={70} />
+      <ModuleCard module={module} />
     </View>
   )
 }

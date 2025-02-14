@@ -104,5 +104,6 @@
   "request_rejected": "Request rejected",
   "you_are_now_friends": "Your are now friends",
   "ride_request_accepted": "Ride request accepted",
-  "ride_request_accepted_message": "Let's ride together!"
+  "ride_request_accepted_message": "Let's ride together!",
+  "training": "Training"
 }

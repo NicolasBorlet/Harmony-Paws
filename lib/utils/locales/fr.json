@@ -104,5 +104,6 @@
   "request_rejected": "Demande refusée",
   "you_are_now_friends": "Vous êtes désormais amis",
   "ride_request_accepted": "Demande de balade acceptée",
-  "ride_request_accepted_message": "On se balade ensemble !"
+  "ride_request_accepted_message": "On se balade ensemble !",
+  "training": "Entrainement"
 }
