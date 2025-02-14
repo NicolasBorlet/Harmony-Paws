@@ -179,7 +179,7 @@ export const getFormationById = async (id: number, userId?: number) => {
     if (userPurchases && userPurchases.length > 0) {
       // Vérifier si l'utilisateur a acheté la formation complète
       const formationPurchase = userPurchases.find(
-        purchase => purchase.content_type === 'formation'
+        purchase => purchase.content_type === 'formation',
       )
 
       if (formationPurchase) {
