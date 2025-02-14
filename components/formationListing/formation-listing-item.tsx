@@ -1,7 +1,13 @@
 import { Formation } from '@/lib/api/types'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
+import { useEffect } from 'react'
 import { Pressable, View } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 import Block from '../grid/Block'
 import { BodyExtraBold } from '../ui/text'
 
@@ -12,6 +18,24 @@ export default function FormationListingItem({
 }: {
   formation: Formation
 }) {
+  const progressWidth = useSharedValue(0)
+
+  useEffect(() => {
+    // Animer la largeur de 0 à 50%
+    progressWidth.value = withSpring(50, {
+      damping: 12,
+      stiffness: 90,
+    })
+  }, [])
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      width: `${progressWidth.value}%`,
+      height: 4,
+      backgroundColor: '#0DA453',
+    }
+  })
+
   return (
     <Pressable
       onPress={() => {
@@ -55,6 +79,27 @@ export default function FormationListingItem({
           }}
         >
           <BodyExtraBold color='#FFFFFF'>{formation.name}</BodyExtraBold>
+          {formation.progress && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 10,
+              }}
+            >
+              <View
+                style={{
+                  width: '100%',
+                  height: 4,
+                  backgroundColor: 'white',
+                  borderRadius: 10,
+                  overflow: 'hidden',
+                }}
+              >
+                <Animated.View style={animatedStyles} />
+              </View>
+            </View>
+          )}
         </View>
       </Block>
     </Pressable>
