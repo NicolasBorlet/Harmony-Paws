@@ -40,6 +40,16 @@ export default function NotificationItem({
     })
   }
 
+  const handleAcceptRideRequest = async () => {
+    // await acceptRideRequest(notificationData.id)
+    Burnt.toast({
+      title: i18n.t('ride_request_accepted'),
+      preset: 'done',
+      message: i18n.t('ride_request_accepted_message'),
+      haptic: 'success',
+    })
+  }
+
   const handleRejectFriendRequest = async () => {
     await rejectFriendRequest(notificationData.sender_id, userData.id)
     Burnt.toast({
@@ -106,9 +116,7 @@ export default function NotificationItem({
 
       {notificationData.type === 'new_ride_request' && (
         <View style={{ width: 100 }}>
-          <SmallButton
-            onPress={() => console.log(`accept ${notificationData.id}`)}
-          >
+          <SmallButton onPress={handleAcceptRideRequest}>
             <Small color='#fff'>{i18n.t('accept')}</Small>
           </SmallButton>
         </View>
