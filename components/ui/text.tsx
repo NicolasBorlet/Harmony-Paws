@@ -67,6 +67,12 @@ const NavigationTitle = styled.Text<{ color?: string }>`
   font-family: Montserrat_700Bold;
 `
 
+const NavigationTitleExtraBold = styled.Text<{ color?: string }>`
+  font-size: 20px;
+  color: ${props => props.color || '#fff'};
+  font-family: Montserrat_800ExtraBold;
+`
+
 const Large = styled.Text<{ color?: string }>`
   font-size: 20px;
   color: ${props => props.color || '#fff'};
@@ -136,6 +142,7 @@ export {
   MessageListingAuthor,
   ModulePrice,
   NavigationTitle,
+  NavigationTitleExtraBold,
   OnBoardingTitle,
   Small,
   SmallBold,

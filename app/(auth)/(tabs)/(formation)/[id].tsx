@@ -10,7 +10,7 @@ import {
   BodyMedium,
   ExtraSmallMedium,
   ModulePrice,
-  NavigationTitle,
+  NavigationTitleExtraBold,
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useFormationById } from '@/lib/api/formation'
@@ -47,7 +47,7 @@ export default function FormationDetails() {
 
   return (
     <>
-      <Back />
+      <Back backgroundColor='#fff' color='black' />
       <ParallaxScrollView
         headerImage={formation.image || ''}
         paddingHorizontal={0}
@@ -66,16 +66,19 @@ export default function FormationDetails() {
               gap: 10,
               alignItems: 'center',
               paddingHorizontal: 16,
-              paddingBottom: 16,
             }}
           >
-            <NavigationTitle color='#000'>{formation.name}</NavigationTitle>
+            <NavigationTitleExtraBold color='#663399'>
+              {formation.name}
+            </NavigationTitleExtraBold>
           </View>
-          <SegmentedControl
-            selectedTab={selectedTab}
-            onTabChange={onTabChange}
-            language={i18n.locale as 'fr' | 'en'}
-          />
+          {!formation.hasPurchase && (
+            <SegmentedControl
+              selectedTab={selectedTab}
+              onTabChange={onTabChange}
+              language={i18n.locale as 'fr' | 'en'}
+            />
+          )}
           <View style={{ flex: 1, paddingHorizontal: 16 }}>
             <View style={{ flex: 1 }}>
               {selectedTab === 'about' ? (
@@ -97,41 +100,43 @@ export default function FormationDetails() {
                       justifyContent: 'center',
                     }}
                   >
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <BodyBold color={Colors.light.secondary}>
-                        {i18n.t('completeFormation')}
-                      </BodyBold>
+                    {!formation.hasPurchase && (
                       <View
                         style={{
                           display: 'flex',
                           flexDirection: 'row',
-                          gap: 4,
-                          alignItems: 'center',
+                          justifyContent: 'space-between',
                         }}
                       >
-                        <ModulePrice color='#F7A400'>
-                          {formation.price}€
-                        </ModulePrice>
-                        {formation.old_price && (
-                          <>
-                            <AntDesign
-                              name='arrowleft'
-                              size={12}
-                              color='black'
-                            />
-                            <ModulePrice color={Colors.light.secondary}>
-                              {formation.old_price}€
-                            </ModulePrice>
-                          </>
-                        )}
+                        <BodyBold color={Colors.light.secondary}>
+                          {i18n.t('completeFormation')}
+                        </BodyBold>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 4,
+                            alignItems: 'center',
+                          }}
+                        >
+                          <ModulePrice color='#F7A400'>
+                            {formation.price}€
+                          </ModulePrice>
+                          {formation.old_price && (
+                            <>
+                              <AntDesign
+                                name='arrowleft'
+                                size={12}
+                                color='black'
+                              />
+                              <ModulePrice color={Colors.light.secondary}>
+                                {formation.old_price}€
+                              </ModulePrice>
+                            </>
+                          )}
+                        </View>
                       </View>
-                    </View>
+                    )}
                     <View>
                       <ExtraSmallMedium color='#616060'>
                         {formation.description}
