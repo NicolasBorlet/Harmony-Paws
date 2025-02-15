@@ -68,8 +68,13 @@ export default function FirstStep() {
               onPress={() => handleSexCheckbox(true)}
               inactiveColor='#979898'
               opacity={1}
-              // Icon of Male sex
-              icon={<Foundation name='male-symbol' size={20} color='white' />}
+              icon={
+                <Foundation
+                  name='male-symbol'
+                  size={20}
+                  color={maleChecked ? 'white' : '#979898'}
+                />
+              }
             />
             <StandardCheckbox
               label={i18n.t('female')}
@@ -77,8 +82,13 @@ export default function FirstStep() {
               onPress={() => handleSexCheckbox(false)}
               inactiveColor='#979898'
               opacity={1}
-              // Icon of Female sex
-              icon={<Foundation name='female-symbol' size={20} color='white' />}
+              icon={
+                <Foundation
+                  name='female-symbol'
+                  size={20}
+                  color={femaleChecked ? 'white' : '#979898'}
+                />
+              }
             />
           </View>
         </View>
