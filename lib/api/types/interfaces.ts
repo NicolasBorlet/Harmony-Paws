@@ -184,5 +184,7 @@ export interface ModuleInterface extends BaseEntity {
   name: string
   price: number
   description: string
+  is_purchased: boolean
+  progress: number
   image?: string
 }

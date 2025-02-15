@@ -48,7 +48,7 @@ export default function FormationDetails() {
   const modulesWithPurchaseStatus =
     formation.modules?.map(module => ({
       ...module,
-      isPurchased:
+      is_purchased:
         formation.hasPurchase ||
         formation.modulesPurchased?.includes(module.id) ||
         false,
