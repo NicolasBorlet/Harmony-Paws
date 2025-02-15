@@ -108,5 +108,7 @@
   "training": "Entrainement",
   "step": "Étape",
   "steps": "Étapes",
-  "wouldLikeKnowPet": "Nous aimerions connaitre votre animal"
+  "wouldLikeKnowPet": "Nous aimerions connaitre votre animal",
+  "yourDogIs": "Votre chien est",
+  "dogName": "Quel est le prénom de votre chien ?",
 }

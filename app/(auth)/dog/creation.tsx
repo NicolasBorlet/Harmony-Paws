@@ -1,13 +1,13 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
-import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
+import DogNameSection from '@/components/dog/creation/dog-name-section'
+import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import Foundation from '@expo/vector-icons/build/Foundation'
 import { useNavigation } from 'expo-router'
 import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function FirstStep() {
@@ -30,7 +30,7 @@ export default function FirstStep() {
   }
 
   return (
-    <>
+    <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
       <ParallaxScrollViewText
         headerTextContainer={
           <View
@@ -59,41 +59,14 @@ export default function FirstStep() {
         }
         backgroundColor={Colors.light.primary}
       >
-        <View>
+        <View style={styles.dogInformationContainer}>
           {/** Sex container */}
-          <View style={styles.listContainer}>
-            <StandardCheckbox
-              label={i18n.t('male')}
-              checked={maleChecked}
-              onPress={() => handleSexCheckbox(true)}
-              inactiveColor='#979898'
-              opacity={1}
-              icon={
-                <Foundation
-                  name='male-symbol'
-                  size={20}
-                  color={maleChecked ? 'white' : '#979898'}
-                />
-              }
-            />
-            <StandardCheckbox
-              label={i18n.t('female')}
-              checked={femaleChecked}
-              onPress={() => handleSexCheckbox(false)}
-              inactiveColor='#979898'
-              opacity={1}
-              icon={
-                <Foundation
-                  name='female-symbol'
-                  size={20}
-                  color={femaleChecked ? 'white' : '#979898'}
-                />
-              }
-            />
-          </View>
+          <SexSection />
+          {/** Dog name container */}
+          <DogNameSection />
         </View>
       </ParallaxScrollViewText>
-    </>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -117,11 +90,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 20,
   },
-  listContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 14,
-    marginTop: 24,
-    paddingRight: 16,
+  dogInformationContainer: {
+    gap: 32,
   },
 })
