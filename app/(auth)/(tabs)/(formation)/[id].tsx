@@ -45,6 +45,15 @@ export default function FormationDetails() {
   if (error || !formation)
     return <BodyMedium>Une erreur est survenue</BodyMedium>
 
+  const modulesWithPurchaseStatus =
+    formation.modules?.map(module => ({
+      ...module,
+      isPurchased:
+        formation.hasPurchase ||
+        formation.modulesPurchased?.includes(module.id) ||
+        false,
+    })) || []
+
   return (
     <>
       <Back backgroundColor='#fff' color='black' />
@@ -143,7 +152,7 @@ export default function FormationDetails() {
                       </ExtraSmallMedium>
                     </View>
                   </View>
-                  <ModuleListing modules={formation.modules || []} />
+                  <ModuleListing modules={modulesWithPurchaseStatus} />
                 </ScrollView>
               ) : (
                 <ScrollView
