@@ -59,11 +59,18 @@ export default function ParallaxScrollViewText({
         scrollIndicatorInsets={{ bottom }}
         contentContainerStyle={{ paddingBottom: bottom }}
       >
-        <Animated.View
-          style={[styles.header, headerAnimatedStyle, { backgroundColor }]}
-        >
-          {headerTextContainer ? headerTextContainer : backgroundContainer}
-        </Animated.View>
+        <View style={[styles.header]}>
+          <Animated.View
+            style={[
+              headerAnimatedStyle,
+              { backgroundColor },
+              { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
+            ]}
+          />
+          <View>
+            {headerTextContainer ? headerTextContainer : backgroundContainer}
+          </View>
+        </View>
         <View style={[styles.content, { paddingHorizontal }]}>{children}</View>
       </Animated.ScrollView>
     </View>
@@ -88,9 +95,5 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,
     marginTop: -32,
-  },
-  image: {
-    flex: 1,
-    width: '100%',
   },
 })

@@ -26,12 +26,26 @@ export default function FirstStep() {
 
   return (
     <>
-      {canGoBack && <Back position='relative' left='0' />}
       <ParallaxScrollViewText
         headerTextContainer={
-          <View>
-            <Text>Etape 1/2</Text>
-            <Text>Informations</Text>
+          <View
+            style={{
+              paddingTop: insets.top,
+              padding: 16,
+            }}
+          >
+            {canGoBack && (
+              <Back
+                position='relative'
+                left='0'
+                backgroundColor='white'
+                color='black'
+              />
+            )}
+            <View>
+              <Text>Etape 1/2</Text>
+              <Text>Informations</Text>
+            </View>
           </View>
         }
         backgroundColor={Colors.light.primary}
