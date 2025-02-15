@@ -2,6 +2,12 @@ import { Colors } from '@/constants/Colors'
 import * as Haptics from 'expo-haptics'
 import { FC, PropsWithChildren } from 'react'
 import { Platform, PressableProps } from 'react-native'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 
 interface ButtonProps extends PressableProps {
@@ -13,6 +19,7 @@ interface ButtonProps extends PressableProps {
   disabled?: boolean
   color?: string
   backgroundColor?: string
+  width?: string
 }
 
 interface StandardButtonProps extends ButtonProps, PropsWithChildren {
@@ -62,49 +69,86 @@ const MapButton = styled.Pressable<ButtonProps>`
   margin-right: auto;
 `
 
-const StyledStandardButton = styled.Pressable<ButtonProps>`
-  background-color: ${(props: ButtonProps) =>
-    props.outlined
-      ? 'transparent'
-      : props.disabled
-        ? '#F0B461'
-        : props.color || '#F49819'};
-  border: ${(props: ButtonProps) =>
-    props.outlined ? '1px solid #F49819' : 'none'};
-  border-radius: 10px;
-  padding: 14px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  ${(props: ButtonProps) => {
-    if (props.outlined || !props.shadow) return ''
-    return Platform.OS === 'ios'
-      ? `
-        shadow-color: #000;
-        shadow-offset: 0px 2px;
-        shadow-opacity: 0.25;
-        shadow-radius: 3.84px;
-      `
-      : `
-        elevation: 5;
-      `
-  }}
-`
+const AnimatedPressable = Animated.createAnimatedComponent(styled.Pressable``)
 
 const StandardButton: FC<StandardButtonProps> = ({
   children,
   onPress,
+  outlined,
+  disabled,
+  color = '#F49819',
   ...props
 }) => {
+  const pressed = useSharedValue(0)
+
+  const animatedStyle = useAnimatedStyle(() => {
+    const backgroundColor = interpolateColor(
+      pressed.value,
+      [0, 1],
+      [
+        outlined ? 'transparent' : disabled ? '#F0B461' : color,
+        outlined ? 'rgba(244, 152, 25, 0.1)' : disabled ? '#F0B461' : '#F5B265',
+      ],
+    )
+
+    return {
+      backgroundColor,
+      transform: [
+        {
+          scale: withSpring(pressed.value ? 0.98 : 1, {
+            mass: 0.5,
+            damping: 15,
+            stiffness: 200,
+          }),
+        },
+      ],
+    }
+  })
+
   const handlePress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     onPress?.()
   }
 
   return (
-    <StyledStandardButton onPress={handlePress} {...props}>
+    <AnimatedPressable
+      onPressIn={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+        pressed.value = 1
+      }}
+      onPressOut={() => {
+        pressed.value = 0
+      }}
+      onPress={handlePress}
+      {...props}
+      style={[
+        {
+          width: props.width || '100%',
+          backgroundColor: outlined ? 'transparent' : color,
+          borderRadius: 10,
+          padding: 14,
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: outlined ? '1px solid #F49819' : 'none',
+          ...(!outlined && props.shadow && Platform.OS === 'ios'
+            ? {
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+              }
+            : {}),
+          ...(!outlined && props.shadow && Platform.OS === 'android'
+            ? {
+                elevation: 5,
+              }
+            : {}),
+        },
+        animatedStyle,
+      ]}
+    >
       {children}
-    </StyledStandardButton>
+    </AnimatedPressable>
   )
 }
 
