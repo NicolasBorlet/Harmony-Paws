@@ -3,8 +3,6 @@ import { AntDesign } from '@expo/vector-icons'
 import Color from 'color'
 import { StyleSheet } from 'react-native'
 import Animated, {
-  FadeIn,
-  FadeOut,
   LinearTransition,
   useAnimatedStyle,
   withTiming,
@@ -29,7 +27,7 @@ const TimingConfig = {
   duration: 150,
 }
 
-export const Checkbox: React.FC<CheckboxProps> = ({
+export const StandardCheckbox: React.FC<CheckboxProps> = ({
   label,
   checked,
   onPress,
@@ -52,8 +50,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         checked ? activeColor : inactiveColor,
         TimingConfig,
       ),
-      paddingLeft: 20,
-      paddingRight: !checked ? 20 : 14,
+      paddingLeft: 16,
+      paddingRight: 16,
     }
   }, [checked])
 
@@ -69,22 +67,14 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       style={[styles.container, rContainerStyle]}
       onTouchEnd={onPress}
     >
-      <Animated.Text style={[styles.label, rTextStyle]}>{label}</Animated.Text>
-      {checked && hasIcon && (
-        <Animated.View
-          entering={FadeIn.duration(350)}
-          exiting={FadeOut.duration(150)}
-          style={{
-            marginLeft: 8,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 20,
-            width: 20,
-          }}
-        >
-          {icon || <AntDesign name='check' size={16} color='#fff' />}
-        </Animated.View>
+      {icon || (
+        <AntDesign
+          name='check'
+          size={16}
+          color={checked ? activeColor : inactiveColor}
+        />
       )}
+      <Animated.Text style={[styles.label, rTextStyle]}>{label}</Animated.Text>
     </Animated.View>
   )
 }
@@ -95,13 +85,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     borderRadius: 12,
+    gap: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   label: {
-    fontSize: 18,
-    fontFamily: 'SF-Pro-Rounded-Bold',
+    fontSize: 16,
+    fontFamily: 'Montserrat_400Regular',
     color: '#fff',
   },
 })
