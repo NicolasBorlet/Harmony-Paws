@@ -14,11 +14,20 @@ export default function FirstStep() {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
 
-  const [checked, setChecked] = useState(false)
-  const [checked2, setChecked2] = useState(false)
-  const [checked3, setChecked3] = useState(false)
-
   const canGoBack = navigation.canGoBack()
+
+  const [maleChecked, setMaleChecked] = useState(false)
+  const [femaleChecked, setFemaleChecked] = useState(false)
+
+  const handleSexCheckbox = (isMale: boolean) => {
+    if (isMale) {
+      setMaleChecked(true)
+      setFemaleChecked(false)
+    } else {
+      setMaleChecked(false)
+      setFemaleChecked(true)
+    }
+  }
 
   return (
     <>
@@ -54,13 +63,22 @@ export default function FirstStep() {
           {/** Sex container */}
           <View style={styles.listContainer}>
             <StandardCheckbox
-              label='test'
-              checked={checked}
-              onPress={() => setChecked(!checked)}
+              label={i18n.t('male')}
+              checked={maleChecked}
+              onPress={() => handleSexCheckbox(true)}
               inactiveColor='#979898'
               opacity={1}
               // Icon of Male sex
               icon={<Foundation name='male-symbol' size={20} color='white' />}
+            />
+            <StandardCheckbox
+              label={i18n.t('female')}
+              checked={femaleChecked}
+              onPress={() => handleSexCheckbox(false)}
+              inactiveColor='#979898'
+              opacity={1}
+              // Icon of Female sex
+              icon={<Foundation name='female-symbol' size={20} color='white' />}
             />
           </View>
         </View>
