@@ -1,3 +1,4 @@
+import { ModulePrice } from '@/components/ui/text'
 import { ModuleInterface } from '@/lib/api/types/interfaces'
 import { View } from 'react-native'
 import ModuleCard from './module-card'
@@ -17,8 +18,11 @@ export default function ModuleListingItem({ module }: ModuleListingItemProps) {
         alignItems: 'center',
       }}
     >
-      <ModuleProgress progress={70} />
+      {module.isPurchased && <ModuleProgress progress={module.progress} />}
       <ModuleCard module={module} />
+      {!module.isPurchased && (
+        <ModulePrice color='#F7A400'>{module.price}€</ModulePrice>
+      )}
     </View>
   )
 }

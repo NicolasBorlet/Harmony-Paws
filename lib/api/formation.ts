@@ -238,8 +238,8 @@ export const getFormationById = async (id: number, userId?: number) => {
     modulesWithProgress = modulesWithImages.map(module => ({
       ...module,
       progress:
-        userProgress.find(p => p.module_id === module.id)?.progress_percentage ||
-        0,
+        userProgress.find(p => p.module_id === module.id)
+          ?.progress_percentage || 0,
     }))
   }
 
