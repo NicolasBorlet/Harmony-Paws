@@ -21,6 +21,8 @@ type CheckboxProps = {
   opacity?: number
   hasIcon?: boolean
   icon?: React.ReactNode
+  height?: number
+  width?: number
 }
 
 const TimingConfig = {
@@ -37,6 +39,8 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
   hasIcon = true,
   labelColor = '#fff',
   icon,
+  height = 'auto',
+  width = 'auto',
 }) => {
   const fadedActiveColor = Color(activeColor).alpha(opacity).toString()
 
@@ -64,10 +68,17 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
   return (
     <Animated.View
       layout={LinearTransition.springify().mass(0.8)}
-      style={[styles.container, rContainerStyle]}
+      style={[
+        styles.container,
+        rContainerStyle,
+        {
+          height: height,
+          width: width,
+        },
+      ]}
       onTouchEnd={onPress}
     >
-      {icon || (
+      {icon && hasIcon && (
         <AntDesign
           name='check'
           size={16}
