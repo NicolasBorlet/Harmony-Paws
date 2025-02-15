@@ -47,6 +47,7 @@
     "@types/aes-js": "^3.1.4",
     "aes-js": "^3.1.2",
     "burnt": "^0.12.2",
+    "color": "^5.0.0",
     "drizzle-orm": "^0.36.3",
     "expo": "~52.0.4",
     "expo-background-fetch": "~13.0.2",
