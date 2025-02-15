@@ -105,5 +105,8 @@
   "you_are_now_friends": "Your are now friends",
   "ride_request_accepted": "Ride request accepted",
   "ride_request_accepted_message": "Let's ride together!",
-  "training": "Training"
+  "training": "Training",
+  "step": "Step",
+  "steps": "Steps",
+  "wouldLikeKnowPet": "We would like to know more about your pet"
 }

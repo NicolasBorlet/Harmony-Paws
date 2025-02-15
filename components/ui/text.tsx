@@ -7,6 +7,12 @@ const SpecialTitle = styled.Text<{ color?: string }>`
   font-family: RoundsBlack;
 `
 
+const SpecialTitle_3 = styled.Text<{ color?: string }>`
+  font-size: 22px;
+  color: ${props => props.color || Purple};
+  font-family: RoundsBlack;
+`
+
 const OnBoardingTitle = styled.Text<{ color?: string }>`
   font-size: 22px;
   color: ${props => props.color || Purple};
@@ -29,6 +35,18 @@ const MessageListingAuthor = styled.Text<{ color?: string }>`
   font-size: 14px;
   color: ${props => props.color || '#F7A400'};
   font-family: Montserrat_700Bold;
+`
+
+const ParagraphMedium = styled.Text<{ color?: string }>`
+  font-size: 18px;
+  color: ${props => props.color || '#000'};
+  font-family: Montserrat_500Medium;
+`
+
+const ParagraphSemiBold = styled.Text<{ color?: string }>`
+  font-size: 18px;
+  color: ${props => props.color || '#000'};
+  font-family: Montserrat_600SemiBold;
 `
 
 const Body = styled.Text<{ color?: string }>`
@@ -144,9 +162,12 @@ export {
   NavigationTitle,
   NavigationTitleExtraBold,
   OnBoardingTitle,
+  ParagraphMedium,
+  ParagraphSemiBold,
   Small,
   SmallBold,
   SmallMedium,
   SmallSemiBold,
   SpecialTitle,
+  SpecialTitle_3,
 }
