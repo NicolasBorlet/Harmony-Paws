@@ -18,9 +18,9 @@ export default function ModuleListingItem({ module }: ModuleListingItemProps) {
         alignItems: 'center',
       }}
     >
-      {module.isPurchased && <ModuleProgress progress={module.progress} />}
+      {module.is_purchased && <ModuleProgress progress={module.progress} />}
       <ModuleCard module={module} />
-      {!module.isPurchased && (
+      {!module.is_purchased && (
         <ModulePrice color='#F7A400'>{module.price}€</ModulePrice>
       )}
     </View>
