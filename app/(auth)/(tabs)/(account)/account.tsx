@@ -14,7 +14,7 @@ import { session$, useUser } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
-import * as Burnt from "burnt"
+import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import { Button, StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
@@ -26,7 +26,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export const storage = new MMKV()
 
 export default function AccountScreen() {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
   const scrollY = useSharedValue(0)
 
@@ -38,11 +38,11 @@ export default function AccountScreen() {
     console.log('dogs', dogs)
 
     Burnt.toast({
-      title: "Burnt not installed.",
-      preset: "error",
-      message: "See your downloads.",
-      haptic: "error",
-    });
+      title: 'Burnt not installed.',
+      preset: 'error',
+      message: 'See your downloads.',
+      haptic: 'error',
+    })
   }
 
   return (
@@ -50,21 +50,25 @@ export default function AccountScreen() {
       <View style={{ paddingHorizontal: 16 }}>
         <AccountHeader scrollY={scrollY} />
       </View>
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={styles.scrollView}
-        onScroll={(event) => {
+        onScroll={event => {
           scrollY.value = event.nativeEvent.contentOffset.y
         }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{
-          gap: 24
-        }}>
+        <View
+          style={{
+            gap: 24,
+          }}
+        >
           <AccountHeading />
-          <View style={{
-            flexDirection: 'row',
-            gap: 12,
-          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 12,
+            }}
+          >
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color={Colors.light.primary}>
@@ -82,9 +86,11 @@ export default function AccountScreen() {
           </View>
         </View>
 
-        <View style={{
-          gap: 24
-        }}>
+        <View
+          style={{
+            gap: 24,
+          }}
+        >
           <BodyTitle title={i18n.t('myDogs')} />
           <FlashList
             data={dogs}
@@ -96,20 +102,23 @@ export default function AccountScreen() {
               </View>
             )}
             ListFooterComponent={() => (
-              <Pressable style={{
-                marginLeft: 12,
-              }}
-                onPress={() => router.push('/dog/creation/first-step')}
+              <Pressable
+                style={{
+                  marginLeft: 12,
+                }}
+                onPress={() => router.push('/dog/creation')}
               >
-                <View style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 999,
-                  backgroundColor: Colors.light.secondary,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <AntDesign name="plus" size={24} color="white" />
+                <View
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 999,
+                    backgroundColor: Colors.light.secondary,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <AntDesign name='plus' size={24} color='white' />
                 </View>
               </Pressable>
             )}
@@ -118,9 +127,11 @@ export default function AccountScreen() {
 
         <Divider />
 
-        <View style={{
-          gap: 12,
-        }}>
+        <View
+          style={{
+            gap: 12,
+          }}
+        >
           <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary}>
@@ -135,67 +146,86 @@ export default function AccountScreen() {
           </Block>
           <Block row gap={12}>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('createdRides')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('completedFormations')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('completedActivities')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('meetings')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('myBones')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
-              <BodyBold color={Colors.light.secondary} style={{
-                textAlign: 'center',
-              }}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 {i18n.t('myBones')}
               </BodyBold>
             </GridItemBackground>
           </Block>
         </View>
 
-        <StandardButton onPress={() => {
-          supabase.auth.signOut()
-          session$.set({
-            id: '',
-            email: '',
-            created_at: '',
-            last_sign_in_at: '',
-            access_token: '',
-          })
-        }} color='#FF0000'>
-          <Body color='white'>
-            {i18n.t('disconected')}
-          </Body>
+        <StandardButton
+          onPress={() => {
+            supabase.auth.signOut()
+            session$.set({
+              id: '',
+              email: '',
+              created_at: '',
+              last_sign_in_at: '',
+              access_token: '',
+            })
+          }}
+          color='#FF0000'
+        >
+          <Body color='white'>{i18n.t('disconected')}</Body>
         </StandardButton>
 
         <View style={styles.verticallySpaced}>
@@ -206,9 +236,7 @@ export default function AccountScreen() {
         </View>
 
         <StandardButton onPress={handleToast}>
-          <Body color='white'>
-            Toast
-          </Body>
+          <Body color='white'>Toast</Body>
         </StandardButton>
       </ScrollView>
     </View>
@@ -223,7 +251,7 @@ const styles = StyleSheet.create({
   scrollView: {
     paddingHorizontal: 16,
     gap: 32,
-    paddingBottom: 24
+    paddingBottom: 24,
   },
   verticallySpaced: {
     paddingTop: 4,
