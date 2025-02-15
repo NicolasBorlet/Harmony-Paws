@@ -1,12 +1,13 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
-import { Checkbox } from '@/components/checkbox'
+import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import Foundation from '@expo/vector-icons/build/Foundation'
 import { useNavigation } from 'expo-router'
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function FirstStep() {
@@ -50,23 +51,16 @@ export default function FirstStep() {
         backgroundColor={Colors.light.primary}
       >
         <View>
-          <Text>Etape 1/2</Text>
-          <Text>Informations</Text>
+          {/** Sex container */}
           <View style={styles.listContainer}>
-            <Checkbox
+            <StandardCheckbox
               label='test'
               checked={checked}
               onPress={() => setChecked(!checked)}
-            />
-            <Checkbox
-              label='test'
-              checked={checked2}
-              onPress={() => setChecked2(!checked2)}
-            />
-            <Checkbox
-              label='testtesttesttesttesttest'
-              checked={checked3}
-              onPress={() => setChecked3(!checked3)}
+              inactiveColor='#979898'
+              opacity={1}
+              // Icon of Male sex
+              icon={<Foundation name='male-symbol' size={20} color='white' />}
             />
           </View>
         </View>
