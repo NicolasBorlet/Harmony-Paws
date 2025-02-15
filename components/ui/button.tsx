@@ -1,4 +1,6 @@
 import { Colors } from '@/constants/Colors'
+import * as Haptics from 'expo-haptics'
+import { FC, PropsWithChildren } from 'react'
 import { Platform, PressableProps } from 'react-native'
 import styled from 'styled-components/native'
 
@@ -11,6 +13,10 @@ interface ButtonProps extends PressableProps {
   disabled?: boolean
   color?: string
   backgroundColor?: string
+}
+
+interface StandardButtonProps extends ButtonProps, PropsWithChildren {
+  onPress?: () => void
 }
 
 const StyledButton = styled.Pressable<ButtonProps>`
@@ -56,7 +62,7 @@ const MapButton = styled.Pressable<ButtonProps>`
   margin-right: auto;
 `
 
-const StandardButton = styled.Pressable<ButtonProps>`
+const StyledStandardButton = styled.Pressable<ButtonProps>`
   background-color: ${(props: ButtonProps) =>
     props.outlined
       ? 'transparent'
@@ -84,6 +90,23 @@ const StandardButton = styled.Pressable<ButtonProps>`
       `
   }}
 `
+
+const StandardButton: FC<StandardButtonProps> = ({
+  children,
+  onPress,
+  ...props
+}) => {
+  const handlePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    onPress?.()
+  }
+
+  return (
+    <StyledStandardButton onPress={handlePress} {...props}>
+      {children}
+    </StyledStandardButton>
+  )
+}
 
 const SmallButton = styled.Pressable<ButtonProps>`
   background-color: #f49819;
