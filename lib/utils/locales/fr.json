@@ -8,7 +8,7 @@
   "ride": "Balades",
   "map": "Carte",
   "year": "An",
-  "years": "Ans",
+  "years": "ans",
   "start": "Départ",
   "duration": "Durée",
   "activities": "Activités",
@@ -86,7 +86,7 @@
   "password": "Mot de passe",
   "forgotPassword": "Mot de passe oublié",
   "signUp": "S'inscrire",
-  "noAccount": "Vous n’avez pas de compte ?",
+  "noAccount": "Vous n'avez pas de compte ?",
   "alreadyAccount": "Vous avez déjà un compte ?",
   "signUpLink": "Créer un compte",
   "account": "Compte",
@@ -111,4 +111,5 @@
   "wouldLikeKnowPet": "Nous aimerions connaitre votre animal",
   "yourDogIs": "Votre chien est",
   "dogName": "Quel est le prénom de votre chien ?",
+  "dogAge": "Quel est l'âge de votre chien ?"
 }

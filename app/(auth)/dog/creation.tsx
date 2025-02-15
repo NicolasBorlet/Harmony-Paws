@@ -1,5 +1,7 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
+import DogAgeSection from '@/components/dog/creation/age-section'
+import DogBreedSection from '@/components/dog/creation/breed-section'
 import DogNameSection from '@/components/dog/creation/dog-name-section'
 import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
@@ -64,6 +66,10 @@ export default function FirstStep() {
           <SexSection />
           {/** Dog name container */}
           <DogNameSection />
+          {/** Dog age container */}
+          <DogAgeSection />
+          {/** Dog breed container */}
+          <DogBreedSection />
         </View>
       </ParallaxScrollViewText>
     </KeyboardAvoidingView>
