@@ -1,7 +1,8 @@
 import { i18n } from '@/app/_layout'
+import Dropdown from '@/components/dropdown/animated-dropdown'
 import { Body } from '@/components/ui/text'
 import { useState } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 export default function DogBreedSection() {
   const [dogBreed, setDogBreed] = useState('')
@@ -9,12 +10,26 @@ export default function DogBreedSection() {
   return (
     <View style={styles.container}>
       <Body color='black'>{i18n.t('dogBreedQuestion')}</Body>
-      <TextInput
+      <Dropdown
+        options={[
+          {
+            id: '1',
+            label: 'Labrador',
+            value: 'labrador',
+          },
+          {
+            id: '2',
+            label: 'Terrier',
+            value: 'terrier',
+          },
+          {
+            id: '3',
+            label: 'Poodle',
+            value: 'poodle',
+          },
+        ]}
         placeholder={i18n.t('addDogName')}
-        placeholderTextColor='#696969'
-        style={styles.input}
-        value={dogBreed}
-        onChangeText={setDogBreed}
+        onSelect={() => {}}
       />
     </View>
   )
