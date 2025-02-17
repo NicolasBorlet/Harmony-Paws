@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import {
   Dimensions,
-  FlatList,
   Modal,
   Pressable,
   StyleSheet,
@@ -10,11 +9,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
-import Animated from 'react-native-reanimated'
 
-import { useDropdown } from '@/hooks/useDropDown'
+import { useDropdown } from '@/hooks/useDropdown'
 import { DropdownProps } from '@/lib/utils/drop-down'
-
+import { FlashList } from '@shopify/flash-list'
 const { width } = Dimensions.get('window')
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -53,29 +51,38 @@ const Dropdown: React.FC<DropdownProps> = ({
       >
         <TouchableWithoutFeedback onPress={toggleDropdown}>
           <View style={styles.modalOverlay}>
-            {buttonLayout && (
-              <Animated.View style={[styles.modalContainer, animatedStyle]}>
-                <FlatList
-                  data={options}
-                  keyExtractor={(item, index) => `${item.value}-${index}`}
-                  renderItem={({ item }) => (
-                    <Pressable
-                      style={styles.option}
-                      onPress={() => {
-                        handleSelect(item)
-                        if (onSelect) onSelect(item)
+            <View
+              style={{
+                width: '80%',
+                height: '60%',
+                backgroundColor: 'red',
+              }}
+            >
+              <FlashList
+                data={options}
+                renderItem={({ item }) => (
+                  <View
+                    style={{
+                      padding: 10,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontFamily: 'Montserrat_400Regular',
                       }}
                     >
-                      <Text style={styles.optionText}>{item.label}</Text>
-                      {selectedOption?.value === item.value && (
-                        <Ionicons name='checkmark' size={20} color='green' />
-                      )}
-                    </Pressable>
-                  )}
-                  showsVerticalScrollIndicator={false}
-                />
-              </Animated.View>
-            )}
+                      {item.label}
+                    </Text>
+                  </View>
+                )}
+                keyExtractor={item => item.value}
+              />
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
