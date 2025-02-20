@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import {
-  Dimensions,
   Modal,
   Pressable,
   StyleSheet,
@@ -13,7 +12,6 @@ import {
 import { useDropdown } from '@/hooks/useDropdown'
 import { DropdownProps } from '@/lib/utils/drop-down'
 import { FlashList } from '@shopify/flash-list'
-const { width } = Dimensions.get('window')
 
 const Dropdown: React.FC<DropdownProps> = ({
   options,
@@ -31,7 +29,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   } = useDropdown()
 
   return (
-    <View style={styles.container}>
+    <View>
       <Pressable
         ref={buttonRef}
         style={styles.dropdownButton}
@@ -93,9 +91,6 @@ const Dropdown: React.FC<DropdownProps> = ({
 export default Dropdown
 
 const styles = StyleSheet.create({
-  container: {
-    width: width,
-  },
   dropdownButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',
