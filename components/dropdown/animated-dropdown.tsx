@@ -95,21 +95,19 @@ export default Dropdown
 const styles = StyleSheet.create({
   container: {
     width: width,
-    marginVertical: 10,
   },
   dropdownButton: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'gray',
     borderRadius: 8,
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#F5F5F5',
   },
   dropdownButtonText: {
-    fontSize: 16,
-    color: 'gray',
+    fontSize: 14,
+    fontFamily: 'Montserrat_400Regular',
+    color: '#696969',
   },
   modalOverlay: {
     flex: 1,
@@ -118,7 +116,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContainer: {
-    backgroundColor: 'white',
     borderRadius: 8,
     padding: 16,
     overflow: 'hidden',
