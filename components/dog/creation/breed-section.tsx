@@ -28,7 +28,7 @@ export default function DogBreedSection() {
             value: 'poodle',
           },
         ]}
-        placeholder={i18n.t('addDogName')}
+        placeholder={i18n.t('addDogBreed')}
         onSelect={() => {}}
       />
     </View>
