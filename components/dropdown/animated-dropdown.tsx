@@ -106,6 +106,8 @@ const Dropdown: React.FC<DropdownProps> = ({
         y: targetY,
         animated: true,
       })
+      onSelect(options[index])
+      console.log('Scroll selected breed:', options[index].label)
     }
   }
 
@@ -182,7 +184,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   ref={scrollViewRef}
                   showsVerticalScrollIndicator={false}
                   snapToInterval={ITEM_HEIGHT}
-                  decelerationRate={0.85}
+                  decelerationRate='fast'
                   onScroll={!isClosing && isVisible ? handleScroll : undefined}
                   onMomentumScrollEnd={
                     !isClosing && isVisible
@@ -193,6 +195,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   scrollEventThrottle={32}
                   bounces={true}
                   scrollEnabled={!isClosing && isVisible}
+                  pagingEnabled={false}
                 >
                   <View
                     style={{ height: (SCREEN_HEIGHT * 0.8 - ITEM_HEIGHT) / 2 }}

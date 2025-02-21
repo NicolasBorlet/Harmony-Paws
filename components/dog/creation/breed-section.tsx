@@ -27,6 +27,26 @@ export default function DogBreedSection() {
             label: 'Poodle',
             value: 'poodle',
           },
+          {
+            id: '4',
+            label: 'Border Collie',
+            value: 'border-collie',
+          },
+          {
+            id: '5',
+            label: 'Pitbull',
+            value: 'pitbull',
+          },
+          {
+            id: '6',
+            label: 'Beagle',
+            value: 'beagle',
+          },
+          {
+            id: '7',
+            label: 'Berger Australien',
+            value: 'berger-australien',
+          },
         ]}
         placeholder={i18n.t('addDogBreed')}
         onSelect={() => {}}
