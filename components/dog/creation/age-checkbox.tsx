@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 14,
-    paddingHorizontal: 16,
+    marginLeft: 16,
   },
 })

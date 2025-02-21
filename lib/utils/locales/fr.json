@@ -111,5 +111,6 @@
   "wouldLikeKnowPet": "Nous aimerions connaitre votre animal",
   "yourDogIs": "Votre chien est",
   "dogName": "Quel est le prénom de votre chien ?",
-  "dogAge": "Quel est l'âge de votre chien ?"
+  "dogAge": "Quel est l'âge de votre chien ?",
+  "dogBehavior": "Votre chien est :"
 }
