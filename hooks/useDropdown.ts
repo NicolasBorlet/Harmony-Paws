@@ -33,7 +33,6 @@ export const useDropdown = () => {
   const hideDropdown = React.useCallback(() => {
     dropdownHeight.value = withTiming(0, { duration: 200 })
     dropdownOpacity.value = withTiming(0, { duration: 200 })
-    setTimeout(() => setIsVisible(false), 200)
   }, [dropdownHeight, dropdownOpacity])
 
   const toggleDropdown = React.useCallback(() => {
@@ -48,6 +47,7 @@ export const useDropdown = () => {
   const handleSelect = React.useCallback(
     (option: IOption) => {
       setSelectedOption(option)
+      setIsVisible(false)
       hideDropdown()
     },
     [hideDropdown],
