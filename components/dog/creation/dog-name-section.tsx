@@ -23,6 +23,7 @@ export default function DogNameSection() {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
+    paddingHorizontal: 16,
   },
   input: {
     borderRadius: 12,

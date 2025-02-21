@@ -1,6 +1,7 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import DogAgeSection from '@/components/dog/creation/age-section'
+import DogBehaviorSection from '@/components/dog/creation/behavior-section'
 import DogBreedSection from '@/components/dog/creation/breed-section'
 import DogNameSection from '@/components/dog/creation/dog-name-section'
 import SexSection from '@/components/dog/creation/sex-section'
@@ -8,7 +9,7 @@ import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useNavigation } from 'expo-router'
-import React, { useState } from 'react'
+import React from 'react'
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -17,19 +18,6 @@ export default function FirstStep() {
   const navigation = useNavigation()
 
   const canGoBack = navigation.canGoBack()
-
-  const [maleChecked, setMaleChecked] = useState(false)
-  const [femaleChecked, setFemaleChecked] = useState(false)
-
-  const handleSexCheckbox = (isMale: boolean) => {
-    if (isMale) {
-      setMaleChecked(true)
-      setFemaleChecked(false)
-    } else {
-      setMaleChecked(false)
-      setFemaleChecked(true)
-    }
-  }
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
@@ -60,6 +48,7 @@ export default function FirstStep() {
           </View>
         }
         backgroundColor={Colors.light.primary}
+        paddingHorizontal={0}
       >
         <View style={styles.dogInformationContainer}>
           {/** Sex container */}
@@ -70,6 +59,8 @@ export default function FirstStep() {
           <DogAgeSection />
           {/** Dog breed container */}
           <DogBreedSection />
+          {/** Dog behavior container */}
+          <DogBehaviorSection />
         </View>
       </ParallaxScrollViewText>
     </KeyboardAvoidingView>
@@ -77,25 +68,6 @@ export default function FirstStep() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 16,
-  },
-  titleContainer: {
-    gap: 16,
-  },
-  content: {
-    paddingHorizontal: 20,
-    gap: 20,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: 20,
-    gap: 20,
-  },
   dogInformationContainer: {
     gap: 32,
   },
