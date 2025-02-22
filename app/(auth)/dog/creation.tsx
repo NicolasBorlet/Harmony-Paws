@@ -7,7 +7,8 @@ import DogNameSection from '@/components/dog/creation/dog-name-section'
 import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
-import { Colors } from '@/constants/Colors'
+import { Colors, Purple } from '@/constants/Colors'
+import { AntDesign } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
 import React from 'react'
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
@@ -62,21 +63,30 @@ export default function FirstStep() {
           >
             <View
               style={{
-                backgroundColor: 'blue',
+                backgroundColor: '#FFFFFF',
                 width: 120,
                 height: 120,
                 borderRadius: 20,
+                shadowColor: '#000000',
+                shadowOffset: { width: 0, height: 3 },
+                shadowOpacity: 0.15,
+                shadowRadius: 6.3,
+                elevation: 10,
               }}
             />
             <View
               style={{
-                backgroundColor: 'red',
+                backgroundColor: Purple,
                 width: 37,
                 height: 37,
                 borderRadius: 25,
                 marginTop: -18,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-            />
+            >
+              <AntDesign name='plus' size={16} color='#FFFFFF' />
+            </View>
           </View>
           {/** Sex container */}
           <SexSection />
