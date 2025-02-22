@@ -1,5 +1,6 @@
 import { i18n } from '@/app/_layout'
 import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
+import { Purple } from '@/constants/Colors'
 import Foundation from '@expo/vector-icons/build/Foundation'
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -25,12 +26,13 @@ export default function SexCheckbox() {
         checked={maleChecked}
         onPress={() => handleSexCheckbox(true)}
         inactiveColor='#979898'
+        activeColor={Purple}
         opacity={1}
         icon={
           <Foundation
             name='male-symbol'
             size={20}
-            color={maleChecked ? 'white' : '#979898'}
+            color={maleChecked ? '#FFFFFF' : '#979898'}
           />
         }
       />
@@ -39,12 +41,13 @@ export default function SexCheckbox() {
         checked={femaleChecked}
         onPress={() => handleSexCheckbox(false)}
         inactiveColor='#979898'
+        activeColor={Purple}
         opacity={1}
         icon={
           <Foundation
             name='female-symbol'
             size={20}
-            color={femaleChecked ? 'white' : '#979898'}
+            color={femaleChecked ? '#FFFFFF' : '#979898'}
           />
         }
       />
