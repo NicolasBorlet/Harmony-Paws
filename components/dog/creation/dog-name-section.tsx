@@ -15,6 +15,7 @@ export default function DogNameSection() {
         style={styles.input}
         value={dogName}
         onChangeText={setDogName}
+        autoCorrect={false}
       />
     </View>
   )
