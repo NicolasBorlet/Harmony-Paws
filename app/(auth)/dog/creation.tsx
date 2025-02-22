@@ -4,11 +4,11 @@ import DogAgeSection from '@/components/dog/creation/age-section'
 import DogBehaviorSection from '@/components/dog/creation/behavior-section'
 import DogBreedSection from '@/components/dog/creation/breed-section'
 import DogNameSection from '@/components/dog/creation/dog-name-section'
+import ImageSelector from '@/components/dog/creation/image-selector'
 import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
-import { Colors, Purple } from '@/constants/Colors'
-import { AntDesign } from '@expo/vector-icons'
+import { Colors } from '@/constants/Colors'
 import { useNavigation } from 'expo-router'
 import React from 'react'
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
@@ -54,40 +54,11 @@ export default function FirstStep() {
         paddingHorizontal={0}
       >
         <View style={styles.dogInformationContainer}>
-          <View
-            style={{
-              marginTop: -80,
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: '#FFFFFF',
-                width: 120,
-                height: 120,
-                borderRadius: 20,
-                shadowColor: '#000000',
-                shadowOffset: { width: 0, height: 3 },
-                shadowOpacity: 0.15,
-                shadowRadius: 6.3,
-                elevation: 10,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: Purple,
-                width: 37,
-                height: 37,
-                borderRadius: 25,
-                marginTop: -18,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <AntDesign name='plus' size={16} color='#FFFFFF' />
-            </View>
-          </View>
+          {/** Image selector */}
+          <ImageSelector
+            image='https://placehold.co/120x120'
+            onPress={() => {}}
+          />
           {/** Sex container */}
           <SexSection />
           {/** Dog name container */}
