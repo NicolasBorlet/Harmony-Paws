@@ -56,7 +56,7 @@ export default function FirstStep() {
         <View style={styles.dogInformationContainer}>
           {/** Image selector */}
           <ImageSelector
-            image='https://placehold.co/120x120'
+            image='https://picsum.photos/200/300'
             onPress={() => {}}
           />
           {/** Sex container */}
