@@ -72,19 +72,20 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
         styles.container,
         rContainerStyle,
         {
-          height: height,
-          width: width,
+          height: typeof height === 'number' ? height : 'auto',
+          width: typeof width === 'number' ? width : 'auto',
         },
       ]}
       onTouchEnd={onPress}
     >
-      {icon && hasIcon && (
-        <AntDesign
-          name='check'
-          size={16}
-          color={checked ? activeColor : inactiveColor}
-        />
-      )}
+      {hasIcon &&
+        (icon || (
+          <AntDesign
+            name='check'
+            size={16}
+            color={checked ? activeColor : inactiveColor}
+          />
+        ))}
       <Animated.Text style={[styles.label, rTextStyle]}>{label}</Animated.Text>
     </Animated.View>
   )
