@@ -1,11 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import { StyleSheet, View } from 'react-native'
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from 'react-native-reanimated'
+import Animated, { useAnimatedRef } from 'react-native-reanimated'
 
 import { useBottomTabOverflow } from './ui/TabBarBackground'
 
@@ -27,28 +22,7 @@ export default function ParallaxScrollViewText({
   paddingHorizontal = 16,
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
-  const scrollOffset = useScrollViewOffset(scrollRef)
   const bottom = useBottomTabOverflow()
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75],
-          ),
-        },
-        {
-          scale: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [2, 1, 1],
-          ),
-        },
-      ],
-    }
-  })
 
   return (
     <View style={styles.container}>
@@ -62,7 +36,6 @@ export default function ParallaxScrollViewText({
         <View style={[styles.header]}>
           <Animated.View
             style={[
-              headerAnimatedStyle,
               { backgroundColor },
               { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 },
             ]}
@@ -89,7 +62,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     gap: 16,
-    overflow: 'hidden',
     backgroundColor: 'white',
     minHeight: '100%',
     borderTopLeftRadius: 32,

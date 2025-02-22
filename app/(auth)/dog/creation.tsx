@@ -53,6 +53,31 @@ export default function FirstStep() {
         paddingHorizontal={0}
       >
         <View style={styles.dogInformationContainer}>
+          <View
+            style={{
+              marginTop: -80,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: 'blue',
+                width: 120,
+                height: 120,
+                borderRadius: 20,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: 'red',
+                width: 37,
+                height: 37,
+                borderRadius: 25,
+                marginTop: -18,
+              }}
+            />
+          </View>
           {/** Sex container */}
           <SexSection />
           {/** Dog name container */}
