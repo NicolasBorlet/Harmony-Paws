@@ -31,16 +31,18 @@ export default function FirstStep() {
           >
             <View style={{ flexDirection: 'column', gap: 20 }}>
               {canGoBack && (
-                <Back
-                  position='relative'
-                  left='0'
-                  backgroundColor='white'
-                  color='black'
-                />
+                <>
+                  <Back
+                    position='relative'
+                    left='0'
+                    backgroundColor='white'
+                    color='black'
+                  />
+                  <ParagraphMedium color='white'>
+                    {i18n.t('step')} 1/2
+                  </ParagraphMedium>
+                </>
               )}
-              <ParagraphMedium color='white'>
-                {i18n.t('step')} 1/2
-              </ParagraphMedium>
               <SpecialTitle_3 color='white'>
                 {i18n.t('wouldLikeKnowPet')}
               </SpecialTitle_3>
