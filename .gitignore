@@ -47,3 +47,6 @@ nativewind-env.d.ts
 config.toml
 
 Harmony Paws diagram-2.sql
+
+## VSCode
+.vscode/

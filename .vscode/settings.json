@@ -1,7 +1,7 @@
 {
   "workbench.startupEditor": "none",
   "workbench.iconTheme": "moxer-icons",
-  "workbench.colorTheme": "Monokai Dimmed",
+  "workbench.colorTheme": "React Dev Theme (light)",
   "workbench.settings.editor": "json",
   "breadcrumbs.enabled": false,
   "explorer.compactFolders": false,
