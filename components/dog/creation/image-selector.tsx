@@ -1,5 +1,6 @@
 import { Purple } from '@/constants/Colors'
 import { AntDesign } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 import { Pressable, View } from 'react-native'
 
 export default function ImageSelector({
@@ -16,7 +17,7 @@ export default function ImageSelector({
         alignItems: 'center',
       }}
     >
-      <Pressable style={{ alignItems: 'center' }} onPress={onPress}>
+      <Pressable style={{ alignItems: 'center' }}>
         <View
           style={{
             backgroundColor: '#FFFFFF',
@@ -29,7 +30,13 @@ export default function ImageSelector({
             shadowRadius: 6.3,
             elevation: 10,
           }}
-        />
+        >
+          <Image
+            source={{ uri: image }}
+            contentFit='cover'
+            style={{ flex: 1, borderRadius: 20 }}
+          />
+        </View>
         <View
           style={{
             backgroundColor: Purple,
