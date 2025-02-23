@@ -15,6 +15,7 @@
     "updateSnapshots": "jest -u --coverage=false",
     "prebuild:ios": "expo prebuild --platform ios",
     "prebuild:android": "expo prebuild --platform android",
+    "rid": "expo run:ios --device",
     "lint": "expo lint",
     "format": "prettier --write \"**/*.{ts, tsx, js, jsx, md, mdx, css, yaml, ym?}\"",
     "check": "prettier --check \"**/*.{ts, tsx, js, jsx,md, mdx, css, yaml, ym?}\"",

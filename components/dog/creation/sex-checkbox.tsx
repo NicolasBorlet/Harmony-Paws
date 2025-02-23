@@ -4,6 +4,9 @@ import { Purple } from '@/constants/Colors'
 import Foundation from '@expo/vector-icons/build/Foundation'
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
+
+const storage = new MMKV()
 
 export default function SexCheckbox() {
   const [maleChecked, setMaleChecked] = useState(false)
@@ -13,9 +16,11 @@ export default function SexCheckbox() {
     if (isMale) {
       setMaleChecked(true)
       setFemaleChecked(false)
+      storage.set('dog', JSON.stringify({ sex: isMale ? 'male' : 'female' }))
     } else {
       setMaleChecked(false)
       setFemaleChecked(true)
+      storage.set('dog', JSON.stringify({ sex: isMale ? 'male' : 'female' }))
     }
   }
 
