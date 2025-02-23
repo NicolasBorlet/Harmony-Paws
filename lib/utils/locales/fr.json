@@ -113,5 +113,11 @@
   "dogName": "Quel est le prénom de votre chien ?",
   "dogAge": "Quel est l'âge de votre chien ?",
   "dogBehavior": "Votre chien est :",
-  "wouldLikeKnowYou": "Nous aimerions vous connaître"
+  "wouldLikeKnowYou": "Nous aimerions vous connaître",
+  "WhatIsYourName": "Quel est votre prénom ?",
+  "addName": "Ajouter votre prénom",
+  "youAre": "Vous êtes",
+  "other": "Autre",
+  "man": "Homme",
+  "woman": "Femme"
 }

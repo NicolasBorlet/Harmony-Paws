@@ -1,9 +1,9 @@
 import Back from '@/components/back-button'
 import DogAgeSection from '@/components/dog/creation/age-section'
-import DogNameSection from '@/components/dog/creation/dog-name-section'
 import ImageSelector from '@/components/dog/creation/image-selector'
-import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
+import ProfileNameSection from '@/components/profile/creation/name-section'
+import ProfileSexSection from '@/components/profile/creation/sex-section'
 import { StandardButton } from '@/components/ui/button'
 import {
   BodyMedium,
@@ -64,10 +64,10 @@ export default function ProfileCreation() {
         <View style={styles.dogInformationContainer}>
           {/** Image selector */}
           <ImageSelector />
+          {/** Profile name container */}
+          <ProfileNameSection />
           {/** Sex container */}
-          <SexSection />
-          {/** Dog name container */}
-          <DogNameSection />
+          <ProfileSexSection />
           {/** Dog age container */}
           <DogAgeSection />
           {/** Dog breed container */}
