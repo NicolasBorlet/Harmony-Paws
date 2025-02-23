@@ -21,6 +21,7 @@ export default function DogBehaviorCheckbox({
       checked={checked}
       onPress={onPress}
       inactiveColor={inactiveColor}
+      activeColor='white'
       opacity={opacity}
     />
   )
