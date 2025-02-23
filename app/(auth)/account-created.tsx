@@ -1,13 +1,17 @@
-import { StandardButton } from "@/components/ui/button";
-import { BodyMedium, SpecialTitle } from "@/components/ui/text";
-import { Image } from "expo-image";
-import { router } from "expo-router";
-import { useCallback, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
-import { MMKV } from 'react-native-mmkv';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-import { i18n } from "../_layout";
+import { StandardButton } from '@/components/ui/button'
+import { BodyMedium, SpecialTitle } from '@/components/ui/text'
+import { Image } from 'expo-image'
+import { router } from 'expo-router'
+import { useCallback, useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated'
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
+import { i18n } from '../_layout'
 
 const storage = new MMKV()
 
@@ -49,14 +53,18 @@ export default function AccountCreated() {
   }, [])
 
   const handleCreateDogProfile = useCallback(() => {
-    router.replace('/dog/creation/first-step')
+    router.replace('/dog/creation')
   }, [])
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.itemContainer}>
         <SpecialTitle>{i18n.t('accountCreated')}</SpecialTitle>
-        <Image source={require('../../assets/images/onboarding-dog-2.png')} style={{ width: 250, height: 500 }} contentFit="contain" />
+        <Image
+          source={require('../../assets/images/onboarding-dog-2.png')}
+          style={{ width: 250, height: 500 }}
+          contentFit='contain'
+        />
       </View>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={handleCreateDogProfile}>
@@ -80,11 +88,11 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     paddingHorizontal: 20,
-    gap: 20
+    gap: 20,
   },
   itemContainer: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-});
+})
