@@ -120,16 +120,8 @@ export interface Role extends BaseEntity {
   name: string
 }
 
-export type Behavior = {
-  id: string
+export interface Behavior extends BaseEntity {
   name: string
-}
-
-type DogBehavior = {
-  behavor: {
-    id: string
-    name: string
-  }
 }
 
 export type DogDetailsResponse = {
@@ -154,9 +146,9 @@ export type DogDetailsResponse = {
   dog_behaviors: DogBehavior[]
 }
 
-export interface DogBehavor extends BaseEntity {
+export interface DogBehavior extends BaseEntity {
   dog_id: number
-  behavor_id: number
+  behavior_id: number
 }
 
 export interface ActivityListingInterface extends BaseEntity {

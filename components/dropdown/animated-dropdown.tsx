@@ -90,27 +90,6 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }
 
-  const handleMomentumScrollEnd = (
-    event: NativeSyntheticEvent<NativeScrollEvent>,
-  ) => {
-    if (isClosing || !isVisible) return
-    const y = event.nativeEvent.contentOffset.y
-    const offsetTop = (SCREEN_HEIGHT * 0.8 - ITEM_HEIGHT) / 2
-    const adjustedY = Math.max(0, y - offsetTop)
-    const index = Math.round(adjustedY / ITEM_HEIGHT)
-
-    if (index >= 0 && index < options.length && scrollViewRef.current) {
-      setCurrentIndex(index)
-      const targetY = index * ITEM_HEIGHT + offsetTop
-      scrollViewRef.current.scrollTo({
-        y: targetY,
-        animated: true,
-      })
-      onSelect(options[index])
-      console.log('Scroll selected breed:', options[index].label)
-    }
-  }
-
   const handleOptionPress = (item: any, index: number) => {
     if (isClosing) return
     console.log('Press - Selected breed:', item.label)
@@ -166,31 +145,12 @@ const Dropdown: React.FC<DropdownProps> = ({
             <BlurView intensity={20} style={StyleSheet.absoluteFill} />
             <Animated.View style={[styles.modalContent, modalAnimatedStyle]}>
               <View style={styles.pickerContainer}>
-                <View
-                  style={[
-                    styles.selectionBars,
-                    {
-                      top:
-                        (SCREEN_HEIGHT * 0.8 - SELECTION_HEIGHT) / 2 +
-                        currentIndex * ITEM_HEIGHT,
-                    },
-                  ]}
-                >
-                  <View style={styles.selectionBarTop} />
-                  <View style={styles.selectionBarBottom} />
-                </View>
-
                 <ScrollView
                   ref={scrollViewRef}
                   showsVerticalScrollIndicator={false}
                   snapToInterval={ITEM_HEIGHT}
                   decelerationRate='fast'
                   onScroll={!isClosing && isVisible ? handleScroll : undefined}
-                  onMomentumScrollEnd={
-                    !isClosing && isVisible
-                      ? handleMomentumScrollEnd
-                      : undefined
-                  }
                   contentContainerStyle={styles.scrollContent}
                   scrollEventThrottle={32}
                   bounces={true}

@@ -53,7 +53,7 @@ export type Database = {
           },
         ]
       }
-      behavors: {
+      behavior: {
         Row: {
           created_at: string | null
           id: number
@@ -169,21 +169,21 @@ export type Database = {
       }
       dog_behaviors: {
         Row: {
-          behavor_id: number | null
+          behavior_id: number | null
           created_at: string | null
           dog_id: number | null
           id: number
           updated_at: string | null
         }
         Insert: {
-          behavor_id?: number | null
+          behavior_id?: number | null
           created_at?: string | null
           dog_id?: number | null
           id?: number
           updated_at?: string | null
         }
         Update: {
-          behavor_id?: number | null
+          behavior_id?: number | null
           created_at?: string | null
           dog_id?: number | null
           id?: number
@@ -191,10 +191,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'dog_behaviors_behavor_id_behavors_id_fk'
-            columns: ['behavor_id']
+            foreignKeyName: 'dog_behaviors_behavior_id_behavior_id_fk'
+            columns: ['behavior_id']
             isOneToOne: false
-            referencedRelation: 'behavors'
+            referencedRelation: 'behavior'
             referencedColumns: ['id']
           },
           {

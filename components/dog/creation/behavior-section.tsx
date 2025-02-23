@@ -1,37 +1,55 @@
 import { i18n } from '@/app/_layout'
 import { Body } from '@/components/ui/text'
+import { Database } from '@/database.types'
+import { storage } from '@/lib/utils/storage'
+import { useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import DogBehaviorCheckbox from './behavior-checkbox'
 
-const behaviorOptions = [
-  {
-    label: 'Joueur',
-    checked: false,
-  },
-  {
-    label: 'Joueur',
-    checked: false,
-  },
-  {
-    label: 'Joueur',
-    checked: false,
-  },
-]
+type Behavior = Database['public']['Tables']['behavior']['Row']
 
-export default function DogBehaviorSection() {
+interface Props {
+  behaviors: Behavior[] | undefined
+}
+
+export default function DogBehaviorSection({ behaviors }: Props) {
+  const [selectedBehaviors, setSelectedBehaviors] = useState<number[]>([])
+
+  const handleBehaviorToggle = (behaviorId: number) => {
+    setSelectedBehaviors(prev => {
+      const newSelected = prev.includes(behaviorId)
+        ? prev.filter(id => id !== behaviorId)
+        : [...prev, behaviorId]
+
+      const existingData = storage.getString('dog')
+      const dogData = existingData ? JSON.parse(existingData) : {}
+
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...dogData,
+          behavior_ids: newSelected,
+        }),
+      )
+
+      return newSelected
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Body>{i18n.t('dogBehavior')}</Body>
       </View>
       <FlatList
-        data={behaviorOptions}
+        data={behaviors}
         renderItem={({ item }) => (
           <DogBehaviorCheckbox
-            label={item.label}
-            checked={item.checked}
+            label={item.name}
+            checked={selectedBehaviors.includes(item.id)}
             inactiveColor='#979898'
             opacity={1}
+            onPress={() => handleBehaviorToggle(item.id)}
           />
         )}
         horizontal

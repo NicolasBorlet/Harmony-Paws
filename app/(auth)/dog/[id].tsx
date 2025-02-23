@@ -11,7 +11,7 @@ import {
   BodyBold,
   BodyMedium,
   CardTitle,
-  ExtraSmallMedium
+  ExtraSmallMedium,
 } from '@/components/ui/text'
 import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { useDogDetails } from '@/lib/api/dog'
@@ -91,14 +91,18 @@ export default function DogDetails() {
               }}
             >
               <GridItemBackground>
-                <BodyBold color={Colors.light.secondary}>{data.breed.name}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {data.breed.name}
+                </BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
               </GridItemBackground>
               {data.dominance && (
                 <GridItemBackground>
-                  <BodyBold color={Colors.light.secondary}>{data.dominance}</BodyBold>
+                  <BodyBold color={Colors.light.secondary}>
+                    {data.dominance}
+                  </BodyBold>
                 </GridItemBackground>
               )}
             </Block>
@@ -106,7 +110,9 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('aboutOf')} ${data.name}`} />
-            <Body>{data.description || i18n.t('weDontKnowMoreAbout')} {data.name}.</Body>
+            <Body>
+              {data.description || i18n.t('weDontKnowMoreAbout')} {data.name}.
+            </Body>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
@@ -118,25 +124,37 @@ export default function DogDetails() {
               style={{ gap: 12 }}
               justifyContent='space-between'
             >
-              {data.behaviors.length > 0 ? data.behaviors.map(behavor => (
-                <GridItem key={behavor.id}>
-                  <ExtraSmallMedium color='#F49819'>
-                    {behavor.name}
-                  </ExtraSmallMedium>
-                </GridItem>
-              )) : <Body>{i18n.t('noBehavior')}</Body>}
+              {data.behaviors.length > 0 ? (
+                data.behaviors.map(behavior => (
+                  <GridItem key={behavior.id}>
+                    <ExtraSmallMedium color='#F49819'>
+                      {behavior.name}
+                    </ExtraSmallMedium>
+                  </GridItem>
+                ))
+              ) : (
+                <Body>{i18n.t('noBehavior')}</Body>
+              )}
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('myMaster')} />
-            <Pressable onPress={() => 
-              router.push({
-                pathname: '/user/[id]',
-                params: { id: data.owner.id }
-              })
-            }>
-              <MasterDogCardComponent masterData={{ name: data.owner.first_name, age: data.owner.last_name, image: data.owner.image }} />
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: '/user/[id]',
+                  params: { id: data.owner.id },
+                })
+              }
+            >
+              <MasterDogCardComponent
+                masterData={{
+                  name: data.owner.first_name,
+                  age: data.owner.last_name,
+                  image: data.owner.image,
+                }}
+              />
             </Pressable>
           </View>
           <Divider />

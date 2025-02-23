@@ -9,16 +9,35 @@ import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
 import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useBehaviors } from '@/lib/api/behavior'
+import { useBreeds } from '@/lib/api/breed'
 import { useNavigation } from 'expo-router'
 import React from 'react'
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function FirstStep() {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
-
   const canGoBack = navigation.canGoBack()
+
+  const { data: breeds, isLoading: isLoadingBreeds } = useBreeds()
+  const { data: behaviors, isLoading: isLoadingBehaviors } = useBehaviors()
+
+  const isLoading = isLoadingBreeds || isLoadingBehaviors
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size='large' color={Colors.light.primary} />
+      </View>
+    )
+  }
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
@@ -66,9 +85,9 @@ export default function FirstStep() {
           {/** Dog age container */}
           <DogAgeSection />
           {/** Dog breed container */}
-          <DogBreedSection />
+          <DogBreedSection breeds={breeds} />
           {/** Dog behavior container */}
-          <DogBehaviorSection />
+          <DogBehaviorSection behaviors={behaviors} />
         </View>
       </ParallaxScrollViewText>
     </KeyboardAvoidingView>
@@ -78,5 +97,10 @@ export default function FirstStep() {
 const styles = StyleSheet.create({
   dogInformationContainer: {
     gap: 32,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })

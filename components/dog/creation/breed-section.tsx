@@ -1,55 +1,52 @@
 import { i18n } from '@/app/_layout'
 import Dropdown from '@/components/dropdown/animated-dropdown'
 import { Body } from '@/components/ui/text'
+import { Database } from '@/database.types'
+import { IOption } from '@/lib/utils/drop-down'
+import { storage } from '@/lib/utils/storage'
 import { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-export default function DogBreedSection() {
-  const [dogBreed, setDogBreed] = useState('')
+type Breed = Database['public']['Tables']['breeds']['Row']
+
+interface Props {
+  breeds: Breed[] | undefined
+}
+
+export default function DogBreedSection({ breeds }: Props) {
+  const [selectedBreed, setSelectedBreed] = useState<Breed | null>(null)
+
+  const handleBreedSelect = (option: IOption) => {
+    const breed = breeds?.find(b => b.id.toString() === option.value)
+    if (!breed) return
+
+    setSelectedBreed(breed)
+    const existingData = storage.getString('dog')
+    const dogData = existingData ? JSON.parse(existingData) : {}
+
+    storage.set(
+      'dog',
+      JSON.stringify({
+        ...dogData,
+        breed_id: breed.id,
+      }),
+    )
+  }
+
+  const breedOptions =
+    breeds?.map(breed => ({
+      id: breed.id.toString(),
+      label: breed.name,
+      value: breed.id.toString(),
+    })) || []
 
   return (
     <View style={styles.container}>
       <Body color='black'>{i18n.t('dogBreedQuestion')}</Body>
       <Dropdown
-        options={[
-          {
-            id: '1',
-            label: 'Labrador',
-            value: 'labrador',
-          },
-          {
-            id: '2',
-            label: 'Terrier',
-            value: 'terrier',
-          },
-          {
-            id: '3',
-            label: 'Poodle',
-            value: 'poodle',
-          },
-          {
-            id: '4',
-            label: 'Border Collie',
-            value: 'border-collie',
-          },
-          {
-            id: '5',
-            label: 'Pitbull',
-            value: 'pitbull',
-          },
-          {
-            id: '6',
-            label: 'Beagle',
-            value: 'beagle',
-          },
-          {
-            id: '7',
-            label: 'Berger Australien',
-            value: 'berger-australien',
-          },
-        ]}
+        options={breedOptions}
         placeholder={i18n.t('addDogBreed')}
-        onSelect={() => {}}
+        onSelect={handleBreedSelect}
       />
     </View>
   )
