@@ -1,21 +1,25 @@
-import { useNotifications } from '@/lib/context/NotificationContext';
-import { router } from 'expo-router';
-import React from 'react';
-import { FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { useNotifications } from '@/lib/context/NotificationContext'
+import { router } from 'expo-router'
+import React from 'react'
+import { FlatList, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   withSpring,
   withTiming,
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 
 interface CustomButtonProps {
-  flatListRef: React.RefObject<FlatList>;
-  flatListIndex: { value: number };
-  dataLength: number;
+  flatListRef: React.RefObject<FlatList>
+  flatListIndex: { value: number }
+  dataLength: number
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex, dataLength }) => {
-  const { requestPermissions } = useNotifications();
+const CustomButton: React.FC<CustomButtonProps> = ({
+  flatListRef,
+  flatListIndex,
+  dataLength,
+}) => {
+  const { requestPermissions } = useNotifications()
   const buttonAnimationStyle = useAnimatedStyle(() => {
     return {
       width:
@@ -23,8 +27,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
           ? withSpring(140)
           : withSpring(60),
       height: 60,
-    };
-  });
+    }
+  })
   const arrowAnimationStyle = useAnimatedStyle(() => {
     return {
       width: 30,
@@ -39,8 +43,8 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
               : withTiming(0),
         },
       ],
-    };
-  });
+    }
+  })
   const textAnimationStyle = useAnimatedStyle(() => {
     return {
       opacity:
@@ -53,32 +57,39 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
               : withTiming(-100),
         },
       ],
-    };
-  });
+    }
+  })
 
   const handleLastStep = async () => {
-    const permissionGranted = await requestPermissions();
+    const permissionGranted = await requestPermissions()
     if (permissionGranted) {
-      console.log('Notifications permissions granted');
+      console.log('Notifications permissions granted')
     } else {
-      console.log('Notifications permissions denied');
+      console.log('Notifications permissions denied')
     }
-    router.replace('/(auth)/account-created');
-  };
+    router.replace('/(auth)/dog/creation')
+  }
 
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         if (flatListIndex.value < dataLength - 1) {
-          flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 });
+          flatListRef.current?.scrollToIndex({ index: flatListIndex.value + 1 })
         } else {
-          handleLastStep();
+          handleLastStep()
         }
-      }}>
+      }}
+    >
       <Animated.View style={[styles.container, buttonAnimationStyle]}>
-        <Animated.Text style={[styles.textButton, textAnimationStyle, {
-          fontFamily: 'Montserrat_500Medium'
-        }]}>
+        <Animated.Text
+          style={[
+            styles.textButton,
+            textAnimationStyle,
+            {
+              fontFamily: 'Montserrat_500Medium',
+            },
+          ]}
+        >
           Commencer
         </Animated.Text>
         <Animated.Image
@@ -87,10 +98,10 @@ const CustomButton: React.FC<CustomButtonProps> = ({ flatListRef, flatListIndex,
         />
       </Animated.View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
-export default CustomButton;
+export default CustomButton
 
 const styles = StyleSheet.create({
   container: {
@@ -105,4 +116,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   textButton: { color: 'white', fontSize: 16, position: 'absolute' },
-});
+})
