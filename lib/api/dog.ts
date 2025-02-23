@@ -107,7 +107,7 @@ export const getDogDetails = async (dogId: string) => {
       ),
       dog_behaviors(
         id,
-        behavor:behavor_id(
+        behavior:behavior_id(
           id,
           name
         )
@@ -122,8 +122,8 @@ export const getDogDetails = async (dogId: string) => {
   // Flatten the nested structure
   const behaviors: Behavior[] =
     data.dog_behaviors?.map(item => ({
-      id: item.behavor.id,
-      name: item.behavor.name,
+      id: item.behavior.id,
+      name: item.behavior.name,
     })) || []
 
   return {
@@ -176,7 +176,7 @@ export const deleteDog = async (dogId: string) => {
 export const addDogBehaviors = async (dogId: number, behaviorIds: number[]) => {
   const behaviors = behaviorIds.map(behaviorId => ({
     dog_id: dogId,
-    behavor_id: behaviorId,
+    behavior_id: behaviorId,
   }))
 
   const { data, error } = await supabase
