@@ -1,24 +1,59 @@
+import { Database } from '@/database.types'
 import { observable } from '@legendapp/state'
 import { ObservablePersistMMKV } from '@legendapp/state/persist-plugins/mmkv'
 import { syncedSupabase } from '@legendapp/state/sync-plugins/supabase'
-import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
+
+// Définir l'interface User
+export interface User {
+  age: number | null
+  created_at: string | null
+  description: string | null
+  expo_push_token: string | null
+  first_name: string | null
+  id: number
+  last_name: string | null
+  onBoarding: boolean
+  place: string | null
+  role_id: number | null
+  uid: string
+  updated_at: string | null
+}
+
+type UserRow = Database['public']['Tables']['users']['Row']
 
 // Create user observable
 export const user$ = observable(
-  syncedSupabase({
+  syncedSupabase<typeof supabase, UserRow>({
     supabase,
     collection: 'users',
-    select: from =>
-      from.select(
-        'id, role_id, first_name, last_name, created_at, last_sign_in_at',
-      ),
-    filter: async query => {
+    select: query => query.select('*'),
+    filter: query => {
       const {
         data: { user },
-      } = await supabase.auth.getUser()
+      } = supabase.auth.getUser()
       if (!user) return query
       return query.eq('uid', user.id)
+    },
+    transform: (data: Record<string, UserRow> | UserRow[] | null) => {
+      if (!data) return null
+
+      if (Array.isArray(data)) {
+        return data[0] as User
+      }
+
+      if (typeof data === 'object') {
+        const firstValue = Object.values(data)[0]
+        if (
+          firstValue &&
+          typeof firstValue === 'object' &&
+          'id' in firstValue
+        ) {
+          return firstValue as User
+        }
+      }
+
+      return null
     },
     persist: {
       plugin: ObservablePersistMMKV,
@@ -31,13 +66,6 @@ export const user$ = observable(
     fieldDeleted: 'deleted_at',
   }),
 )
-
-export const useUser = () => {
-  return useQuery({
-    queryKey: ['user'],
-    queryFn: () => user$.get(),
-  })
-}
 
 // Create session observable with only local persistence
 export const session$ = observable({
