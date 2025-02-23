@@ -16,10 +16,12 @@ import {
 import { Colors } from '@/constants/Colors'
 import { useBehaviors } from '@/lib/api/behavior'
 import { useBreeds } from '@/lib/api/breed'
+import { addDogBehaviors, createDog, uploadDogImage } from '@/lib/api/dog'
 import { user$ } from '@/lib/observables/session-observable'
 import { storage } from '@/lib/utils/storage'
-import { useNavigation } from 'expo-router'
-import React, { useLayoutEffect } from 'react'
+import * as Burnt from 'burnt'
+import { router, useNavigation } from 'expo-router'
+import React, { useLayoutEffect, useState } from 'react'
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -37,6 +39,7 @@ export default function FirstStep() {
   const { data: behaviors, isLoading: isLoadingBehaviors } = useBehaviors()
 
   const isLoading = isLoadingBreeds || isLoadingBehaviors || !user$.get()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   useLayoutEffect(() => {
     const userData = user$.get()
@@ -66,6 +69,93 @@ export default function FirstStep() {
       console.log('No valid user data available in user$')
     }
   }, [])
+
+  // Fonction pour vérifier si tous les champs requis sont remplis
+  const validateDogData = (dogData: any) => {
+    const requiredFields = [
+      'owner_id',
+      'image',
+      'sex',
+      'name',
+      'age',
+      'breed_id',
+      'behavior_ids',
+    ]
+
+    // Vérifier que tous les champs requis existent et ne sont pas vides
+    const isValid = requiredFields.every(field => {
+      if (field === 'behavior_ids') {
+        return Array.isArray(dogData[field]) && dogData[field].length > 0
+      }
+      return dogData[field] !== undefined && dogData[field] !== ''
+    })
+
+    return isValid
+  }
+
+  // Fonction pour obtenir les données actuelles du chien
+  const getCurrentDogData = () => {
+    try {
+      return JSON.parse(storage.getString('dog') || '{}')
+    } catch {
+      return {}
+    }
+  }
+
+  const handleCreateDog = async () => {
+    const dogData = getCurrentDogData()
+
+    if (!validateDogData(dogData)) {
+      // Vous pouvez ajouter ici une alerte ou un message d'erreur
+      Burnt.toast({
+        title: 'Erreur',
+        preset: 'error',
+        message: 'Veuillez remplir tous les champs',
+        haptic: 'error',
+      })
+      return
+    }
+
+    try {
+      setIsSubmitting(true)
+
+      // Récupérer les données du storage
+      const { image, behavior_ids, ...dogInfo } = dogData
+
+      // Créer le chien
+      const [newDog] = await createDog(dogInfo)
+
+      // Si on a une image, l'uploader
+      if (image) {
+        await uploadDogImage(newDog.id, image)
+      }
+
+      // Si on a des comportements, les ajouter
+      if (behavior_ids && behavior_ids.length > 0) {
+        await addDogBehaviors(newDog.id, behavior_ids)
+      }
+
+      // Nettoyer le storage
+      storage.delete('dog')
+
+      // Rediriger vers la page suivante
+      Burnt.toast({
+        title: 'Chien créé avec succès',
+        preset: 'done',
+        message: 'Votre chien a été créé avec succès',
+        haptic: 'success',
+      })
+      router.replace(`/(auth)/profile-creation`)
+    } catch (error) {
+      console.error('Error creating dog:', error)
+      // Ici vous pourriez ajouter une gestion d'erreur UI
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Vérifier si le formulaire est valide pour activer/désactiver le bouton
+  const isFormValid = validateDogData(getCurrentDogData())
 
   if (isLoading) {
     return (
@@ -131,7 +221,14 @@ export default function FirstStep() {
           },
         ]}
       >
-        <StandardButton onPress={() => {}}>
+        <StandardButton
+          onPress={handleCreateDog}
+          disabled={isSubmitting || !isFormValid}
+          style={[
+            styles.button,
+            (!isFormValid || isSubmitting) && styles.buttonDisabled,
+          ]}
+        >
           <BodyMedium color='#fff'>{i18n.t('continue')}</BodyMedium>
         </StandardButton>
       </View>
@@ -153,5 +250,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     paddingHorizontal: 16,
+  },
+  button: {
+    opacity: 1,
+  },
+  buttonDisabled: {
+    opacity: 0.5,
   },
 })

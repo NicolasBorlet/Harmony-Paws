@@ -6,8 +6,8 @@ export default function AuthLayout() {
       screenOptions={{
         headerShown: false,
         contentStyle: {
-          backgroundColor: '#fff'
-        }
+          backgroundColor: '#fff',
+        },
       }}
     >
       <Stack.Screen name='(tabs)' />
@@ -18,7 +18,7 @@ export default function AuthLayout() {
       <Stack.Screen name='notifications' />
       <Stack.Screen name='completion' options={{ presentation: 'modal' }} />
       <Stack.Screen name='onboarding' />
-      <Stack.Screen name='account-created' />
+      <Stack.Screen name='profile-creation' />
     </Stack>
   )
 }

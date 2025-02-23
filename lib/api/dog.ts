@@ -145,12 +145,16 @@ export const useDogDetails = (dogId: string) => {
 }
 
 export const createDog = async (
-  dog: Partial<Database['public']['Tables']['dogs']['Insert']>,
+  dog: Database['public']['Tables']['dogs']['Insert'],
 ) => {
   // Insérer le chien
   const { data: dogData, error: dogError } = await supabase
     .from('dogs')
-    .insert(dog)
+    .insert({
+      ...dog,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
     .select()
 
   if (dogError) throw dogError

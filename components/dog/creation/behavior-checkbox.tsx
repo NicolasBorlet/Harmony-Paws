@@ -1,4 +1,5 @@
 import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
+import { Colors } from '@/constants/Colors'
 
 interface Props {
   label: string
@@ -21,7 +22,7 @@ export default function DogBehaviorCheckbox({
       checked={checked}
       onPress={onPress}
       inactiveColor={inactiveColor}
-      activeColor='white'
+      activeColor={Colors.light.secondary}
       opacity={opacity}
     />
   )
