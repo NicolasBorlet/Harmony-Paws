@@ -1,15 +1,48 @@
 import { Purple } from '@/constants/Colors'
+import { storage } from '@/lib/utils/storage'
 import { AntDesign } from '@expo/vector-icons'
 import { Image } from 'expo-image'
+import * as ImagePicker from 'expo-image-picker'
+import { useState } from 'react'
 import { Pressable, View } from 'react-native'
 
-export default function ImageSelector({
-  image,
-  onPress,
-}: {
-  image: string
-  onPress: () => void
-}) {
+export default function ImageSelector() {
+  const [image, setImage] = useState<string | null>(null)
+
+  const handleImageSelection = async () => {
+    // Demander la permission d'accéder à la galerie
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (permission.status !== 'granted') {
+      return
+    }
+
+    // Ouvrir le sélecteur d'image
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    })
+
+    if (!result.canceled) {
+      const selectedImage = result.assets[0].uri
+      setImage(selectedImage)
+
+      // Sauvegarder l'URI de l'image dans le storage MMKV
+      const existingData = storage.getString('dog')
+      const dogData = existingData ? JSON.parse(existingData) : {}
+
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...dogData,
+          image: selectedImage,
+        }),
+      )
+    }
+  }
+
   return (
     <View
       style={{
@@ -17,7 +50,10 @@ export default function ImageSelector({
         alignItems: 'center',
       }}
     >
-      <Pressable style={{ alignItems: 'center' }}>
+      <Pressable
+        style={{ alignItems: 'center' }}
+        onPress={handleImageSelection}
+      >
         <View
           style={{
             backgroundColor: '#FFFFFF',

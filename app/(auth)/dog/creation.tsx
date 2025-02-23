@@ -105,10 +105,7 @@ export default function FirstStep() {
       >
         <View style={styles.dogInformationContainer}>
           {/** Image selector */}
-          <ImageSelector
-            image='https://picsum.photos/200/300'
-            onPress={() => {}}
-          />
+          <ImageSelector />
           {/** Sex container */}
           <SexSection />
           {/** Dog name container */}
