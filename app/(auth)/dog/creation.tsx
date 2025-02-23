@@ -11,6 +11,7 @@ import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useBehaviors } from '@/lib/api/behavior'
 import { useBreeds } from '@/lib/api/breed'
+import { user$ } from '@/lib/observables/session-observable'
 import { useNavigation } from 'expo-router'
 import React from 'react'
 import {
@@ -25,6 +26,7 @@ export default function FirstStep() {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
   const canGoBack = navigation.canGoBack()
+  const user = user$.get()
 
   const { data: breeds, isLoading: isLoadingBreeds } = useBreeds()
   const { data: behaviors, isLoading: isLoadingBehaviors } = useBehaviors()
@@ -38,6 +40,16 @@ export default function FirstStep() {
       </View>
     )
   }
+
+  // useLayoutEffect(() => {
+  //   //Initialize the storage of the dog object with the field owner_id with the stringify owner_id
+  //   storage.set(
+  //     'dog',
+  //     JSON.stringify({
+  //       owner_id: user.id,
+  //     }),
+  //   )
+  // }, [])
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
