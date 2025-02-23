@@ -223,7 +223,7 @@ export default function FirstStep() {
       >
         <StandardButton
           onPress={handleCreateDog}
-          disabled={isSubmitting || !isFormValid}
+          disabled={isSubmitting}
           style={[
             styles.button,
             (!isFormValid || isSubmitting) && styles.buttonDisabled,
