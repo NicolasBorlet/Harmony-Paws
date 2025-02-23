@@ -12,8 +12,9 @@ import { Colors } from '@/constants/Colors'
 import { useBehaviors } from '@/lib/api/behavior'
 import { useBreeds } from '@/lib/api/breed'
 import { user$ } from '@/lib/observables/session-observable'
+import { storage } from '@/lib/utils/storage'
 import { useNavigation } from 'expo-router'
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -26,12 +27,32 @@ export default function FirstStep() {
   const insets = useSafeAreaInsets()
   const navigation = useNavigation()
   const canGoBack = navigation.canGoBack()
-  const user = user$.get()
 
   const { data: breeds, isLoading: isLoadingBreeds } = useBreeds()
   const { data: behaviors, isLoading: isLoadingBehaviors } = useBehaviors()
 
-  const isLoading = isLoadingBreeds || isLoadingBehaviors
+  const isLoading = isLoadingBreeds || isLoadingBehaviors || !user$.get()
+
+  useLayoutEffect(() => {
+    const currentUser = user$.get()
+    console.log('Current user from user$:', currentUser)
+
+    if (currentUser && 'id' in currentUser) {
+      console.log('Setting dog owner_id with:', currentUser.id)
+      storage.set(
+        'dog',
+        JSON.stringify({
+          owner_id: currentUser.id,
+        }),
+      )
+
+      // Vérification du stockage
+      const storedDog = storage.getString('dog')
+      console.log('Stored dog data:', storedDog)
+    } else {
+      console.log('No valid user data available in user$')
+    }
+  }, [])
 
   if (isLoading) {
     return (
@@ -40,16 +61,6 @@ export default function FirstStep() {
       </View>
     )
   }
-
-  // useLayoutEffect(() => {
-  //   //Initialize the storage of the dog object with the field owner_id with the stringify owner_id
-  //   storage.set(
-  //     'dog',
-  //     JSON.stringify({
-  //       owner_id: user.id,
-  //     }),
-  //   )
-  // }, [])
 
   return (
     <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
