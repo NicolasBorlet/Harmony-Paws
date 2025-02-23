@@ -34,21 +34,29 @@ export default function FirstStep() {
   const isLoading = isLoadingBreeds || isLoadingBehaviors || !user$.get()
 
   useLayoutEffect(() => {
-    const currentUser = user$.get()
-    console.log('Current user from user$:', currentUser)
+    const userData = user$.get()
+    console.log('Current user from user$:', userData)
 
-    if (currentUser && 'id' in currentUser) {
-      console.log('Setting dog owner_id with:', currentUser.id)
-      storage.set(
-        'dog',
-        JSON.stringify({
-          owner_id: currentUser.id,
-        }),
-      )
+    // Accéder à l'objet utilisateur dans la structure imbriquée
+    if (userData && typeof userData === 'object') {
+      // Trouver l'ID numérique (la clé)
+      const userId = Object.keys(userData)[0]
+      // Accéder à l'objet utilisateur
+      const user = userData[userId]
 
-      // Vérification du stockage
-      const storedDog = storage.getString('dog')
-      console.log('Stored dog data:', storedDog)
+      if (user && user.id) {
+        console.log('Setting dog owner_id with:', user.id)
+        storage.set(
+          'dog',
+          JSON.stringify({
+            owner_id: user.id,
+          }),
+        )
+
+        // Vérification du stockage
+        const storedDog = storage.getString('dog')
+        console.log('Stored dog data:', storedDog)
+      }
     } else {
       console.log('No valid user data available in user$')
     }

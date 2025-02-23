@@ -35,24 +35,15 @@ export const user$ = observable(
       if (!user) return query
       return query.eq('uid', user.id)
     },
+    // Retirez la propriété primaryKey pour éviter le mapping par id
     transform: (data: Record<string, UserRow> | UserRow[] | null) => {
       if (!data) return null
-
       if (Array.isArray(data)) {
         return data[0] as User
       }
-
       if (typeof data === 'object') {
-        const firstValue = Object.values(data)[0]
-        if (
-          firstValue &&
-          typeof firstValue === 'object' &&
-          'id' in firstValue
-        ) {
-          return firstValue as User
-        }
+        return Object.values(data)[0] as User
       }
-
       return null
     },
     persist: {
