@@ -1,10 +1,25 @@
 import { i18n } from '@/app/_layout'
 import { Body } from '@/components/ui/text'
+import { storage } from '@/lib/utils/storage'
 import { useState } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native'
 
 export default function DogNameSection() {
   const [dogName, setDogName] = useState('')
+
+  const handleNameChange = (text: string) => {
+    setDogName(text)
+    const existingData = storage.getString('dog')
+    const dogData = existingData ? JSON.parse(existingData) : {}
+
+    storage.set(
+      'dog',
+      JSON.stringify({
+        ...dogData,
+        name: text,
+      }),
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -14,7 +29,7 @@ export default function DogNameSection() {
         placeholderTextColor='#696969'
         style={styles.input}
         value={dogName}
-        onChangeText={setDogName}
+        onChangeText={handleNameChange}
         autoCorrect={false}
       />
     </View>

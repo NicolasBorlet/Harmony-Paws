@@ -11,14 +11,29 @@ export default function SexCheckbox() {
   const [femaleChecked, setFemaleChecked] = useState(false)
 
   const handleSexCheckbox = (isMale: boolean) => {
+    const existingData = storage.getString('dog')
+    const dogData = existingData ? JSON.parse(existingData) : {}
+
     if (isMale) {
       setMaleChecked(true)
       setFemaleChecked(false)
-      storage.set('dog', JSON.stringify({ sex: isMale ? 'male' : 'female' }))
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...dogData,
+          sex: isMale ? 'male' : 'female',
+        }),
+      )
     } else {
       setMaleChecked(false)
       setFemaleChecked(true)
-      storage.set('dog', JSON.stringify({ sex: isMale ? 'male' : 'female' }))
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...dogData,
+          sex: isMale ? 'male' : 'female',
+        }),
+      )
     }
   }
 
