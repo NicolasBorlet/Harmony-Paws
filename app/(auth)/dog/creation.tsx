@@ -7,7 +7,12 @@ import DogNameSection from '@/components/dog/creation/dog-name-section'
 import ImageSelector from '@/components/dog/creation/image-selector'
 import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
-import { ParagraphMedium, SpecialTitle_3 } from '@/components/ui/text'
+import { StandardButton } from '@/components/ui/button'
+import {
+  BodyMedium,
+  ParagraphMedium,
+  SpecialTitle_3,
+} from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useBehaviors } from '@/lib/api/behavior'
 import { useBreeds } from '@/lib/api/breed'
@@ -82,18 +87,17 @@ export default function FirstStep() {
           >
             <View style={{ flexDirection: 'column', gap: 20 }}>
               {canGoBack && (
-                <>
-                  <Back
-                    position='relative'
-                    left='0'
-                    backgroundColor='white'
-                    color='black'
-                  />
-                  <ParagraphMedium color='white'>
-                    {i18n.t('step')} 1/2
-                  </ParagraphMedium>
-                </>
+                <Back
+                  position='relative'
+                  left='0'
+                  backgroundColor='white'
+                  color='black'
+                />
               )}
+              <ParagraphMedium color='white'>
+                {i18n.t('step')} 1/2
+              </ParagraphMedium>
+
               <SpecialTitle_3 color='white'>
                 {i18n.t('wouldLikeKnowPet')}
               </SpecialTitle_3>
@@ -116,8 +120,21 @@ export default function FirstStep() {
           <DogBreedSection breeds={breeds} />
           {/** Dog behavior container */}
           <DogBehaviorSection behaviors={behaviors} />
+          {/** Button container */}
         </View>
       </ParallaxScrollViewText>
+      <View
+        style={[
+          styles.buttonContainer,
+          {
+            bottom: insets.bottom,
+          },
+        ]}
+      >
+        <StandardButton onPress={() => {}}>
+          <BodyMedium color='#fff'>{i18n.t('continue')}</BodyMedium>
+        </StandardButton>
+      </View>
     </KeyboardAvoidingView>
   )
 }
@@ -125,10 +142,16 @@ export default function FirstStep() {
 const styles = StyleSheet.create({
   dogInformationContainer: {
     gap: 32,
+    paddingBottom: 72,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    width: '100%',
+    paddingHorizontal: 16,
   },
 })

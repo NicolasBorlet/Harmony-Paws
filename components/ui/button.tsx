@@ -1,5 +1,7 @@
+import { i18n } from '@/app/_layout'
 import { Colors } from '@/constants/Colors'
 import * as Haptics from 'expo-haptics'
+import { router } from 'expo-router'
 import { FC, PropsWithChildren } from 'react'
 import { Platform, PressableProps } from 'react-native'
 import Animated, {
@@ -9,6 +11,7 @@ import Animated, {
   withSpring,
 } from 'react-native-reanimated'
 import styled from 'styled-components/native'
+import { BodyMedium } from './text'
 
 interface ButtonProps extends PressableProps {
   onPress?: () => void
@@ -152,6 +155,42 @@ const StandardButton: FC<StandardButtonProps> = ({
   )
 }
 
+const AnimatedStandardButton = ({
+  route,
+  trad,
+}: {
+  route: string
+  trad: string
+}) => {
+  const bottomPosition = useSharedValue(-100)
+  const opacity = useSharedValue(0)
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      bottom: bottomPosition.value,
+      opacity: opacity.value,
+    }
+  })
+
+  return (
+    <Animated.View
+      style={[
+        {
+          position: 'absolute',
+          width: '100%',
+          alignSelf: 'center',
+          paddingHorizontal: 16,
+        },
+        animatedStyles,
+      ]}
+    >
+      <StandardButton onPress={() => router.push(route)}>
+        <BodyMedium color='#fff'>{i18n.t(trad)}</BodyMedium>
+      </StandardButton>
+    </Animated.View>
+  )
+}
+
 const SmallButton = styled.Pressable<ButtonProps>`
   background-color: #f49819;
   border-radius: 5px;
@@ -178,6 +217,7 @@ const UnderlinedButton = styled.Pressable<ButtonProps>`
 `
 
 export {
+  AnimatedStandardButton,
   BackButton,
   MapButton,
   SmallButton,
