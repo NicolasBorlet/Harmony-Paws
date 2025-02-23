@@ -83,7 +83,7 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
           <AntDesign
             name='check'
             size={16}
-            color={checked ? activeColor : inactiveColor}
+            color={checked ? 'white' : inactiveColor}
           />
         ))}
       <Animated.Text style={[styles.label, rTextStyle]}>{label}</Animated.Text>
