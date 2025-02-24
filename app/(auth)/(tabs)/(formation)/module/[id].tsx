@@ -9,7 +9,6 @@ const module: Formation = {
   id: 1,
   name: 'Module 1',
   subject: 'Subject 1',
-  image: 'https://picsum.photos/300',
   animator_name: 'Animator 1',
   price: 100,
   description: 'Description 1',

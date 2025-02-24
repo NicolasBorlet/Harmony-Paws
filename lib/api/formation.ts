@@ -256,3 +256,35 @@ export const useFormationById = (id: number, userId?: number) => {
     queryFn: () => getFormationById(id, userId),
   })
 }
+
+export const getModuleById = async (id: number) => {
+  // Récupérer le module et ses leçons avec une requête jointe
+  const { data: module, error: moduleError } = await supabase
+    .from('modules')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (moduleError) throw moduleError
+
+  // Récupérer les leçons associées au module
+  const { data: lessons, error: lessonsError } = await supabase
+    .from('lessons')
+    .select('*')
+    .eq('module_id', id)
+    .order('order', { ascending: true })
+
+  if (lessonsError) throw lessonsError
+
+  return {
+    ...module,
+    lessons: lessons || [],
+  }
+}
+
+export const useModuleById = (id: number) => {
+  return useQuery({
+    queryKey: ['module', id],
+    queryFn: () => getModuleById(id),
+  })
+}

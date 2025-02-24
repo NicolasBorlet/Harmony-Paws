@@ -338,6 +338,41 @@ export type Database = {
           },
         ]
       }
+      lessons: {
+        Row: {
+          created_at: string | null
+          id: number
+          module_id: number | null
+          name: string
+          order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          module_id?: number | null
+          name: string
+          order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          module_id?: number | null
+          name?: string
+          order?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'lessons_module_id_modules_id_fk'
+            columns: ['module_id']
+            isOneToOne: false
+            referencedRelation: 'modules'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       medical_form: {
         Row: {
           dog_id: number | null
@@ -399,6 +434,50 @@ export type Database = {
             columns: ['sender_id']
             isOneToOne: false
             referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          created_at: string | null
+          id: number
+          formation_id: number | null
+          name: string
+          description: string | null
+          duration: number | null
+          price: number | null
+          stripe_item_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          formation_id?: number | null
+          name: string
+          description?: string | null
+          duration?: number | null
+          price?: number | null
+          stripe_item_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          formation_id?: number | null
+          name?: string
+          description?: string | null
+          duration?: number | null
+          price?: number | null
+          stripe_item_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'modules_formation_id_formations_id_fk'
+            columns: ['formation_id']
+            isOneToOne: false
+            referencedRelation: 'formations'
             referencedColumns: ['id']
           },
         ]
