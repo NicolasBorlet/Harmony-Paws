@@ -1,56 +1,51 @@
 import Back from '@/components/back-button'
-import { BodyMedium, NavigationTitle } from '@/components/ui/text'
-import { Formation } from '@/lib/api/types'
-import { router } from 'expo-router'
-import { Pressable, View } from 'react-native'
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
-
-const module: Formation = {
-  id: 1,
-  name: 'Module 1',
-  subject: 'Subject 1',
-  animator_name: 'Animator 1',
-  price: 100,
-  description: 'Description 1',
-  place: 'Place 1',
-  date: new Date(),
-  participant_limit: 10,
-  duration: 1,
-  created_at: new Date(),
-  updated_at: new Date(),
-}
+import ParallaxScrollView from '@/components/parallax-scrollview'
+import { useLocalSearchParams } from 'expo-router'
+import { View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Module() {
   const insets = useSafeAreaInsets()
 
+  const { id } = useLocalSearchParams<{ id: string }>()
+
+  // const { data, isLoading } = useModuleById(Number(id))
+
+  // if (isLoading) {
+  //   return <LoaderComponent />
+  // }
+
   return (
-    <SafeAreaView
-      style={{
-        paddingHorizontal: 20,
-        paddingTop: 32,
-        flex: 1,
-        paddingBottom: insets.bottom,
-        gap: 48,
-      }}
-    >
-      <View style={{ gap: 24, display: 'flex', flexDirection: 'column' }}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 10,
-            alignItems: 'center',
-          }}
-        >
-          <Back position='relative' left='0' />
-          <NavigationTitle color='#000'>{module.name}</NavigationTitle>
+    <>
+      <Back />
+      <ParallaxScrollView
+        headerImage={'https://picsum.photos/200/300'}
+        paddingHorizontal={0}
+      >
+        <View style={{ gap: 24, display: 'flex', flexDirection: 'column' }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              alignItems: 'center',
+            }}
+          >
+            {/* <NavigationTitle color='#000'>{data?.name}</NavigationTitle> */}
+          </View>
         </View>
-      </View>
-      <View>
-        <Pressable onPress={() => router.push('/(formation)/module/lesson/1')}>
-          <BodyMedium color='#000'>{module.name}</BodyMedium>
-        </Pressable>
-      </View>
-    </SafeAreaView>
+        <View style={{ gap: 16 }}>
+          {/* {data?.lessons.map(lesson => (
+            <Pressable
+              onPress={() =>
+                router.push(`/(formation)/module/lesson/${lesson.id}`)
+              }
+            >
+              <BodyMedium color='#000'>{lesson.title}</BodyMedium>
+            </Pressable>
+          ))} */}
+        </View>
+      </ParallaxScrollView>
+    </>
   )
 }
