@@ -10,7 +10,7 @@ import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
-import { session$, useUser } from '@/lib/observables/session-observable'
+import { session$, user$ } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
@@ -30,7 +30,7 @@ export default function AccountScreen() {
 
   const scrollY = useSharedValue(0)
 
-  const { data: user } = useUser()
+  const user = user$.get()
   const { data: dogs } = useDogsFromUserId(user?.id)
 
   const handleToast = () => {

@@ -1,54 +1,53 @@
-import { i18n } from "@/app/_layout";
-import Back from "@/components/back-button";
-import BodyTitle from "@/components/bodyTitle/body-title";
-import { StandardButton } from "@/components/ui/button";
-import { RoundedImage } from "@/components/ui/image";
-import { CardTitle, Small, SmallMedium } from "@/components/ui/text";
-import { useDogsFromUserId } from "@/lib/api/dog";
-import { sendFriendRequest } from "@/lib/api/friendRequests";
-import { useUser } from "@/lib/api/user";
-import { user$ } from "@/lib/observables/session-observable";
-import { FontAwesome } from "@expo/vector-icons";
-import { FlashList } from "@shopify/flash-list";
-import * as Burnt from "burnt";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { i18n } from '@/app/_layout'
+import Back from '@/components/back-button'
+import BodyTitle from '@/components/bodyTitle/body-title'
+import { StandardButton } from '@/components/ui/button'
+import { RoundedImage } from '@/components/ui/image'
+import { CardTitle, Small, SmallMedium } from '@/components/ui/text'
+import { useDogsFromUserId } from '@/lib/api/dog'
+import { sendFriendRequest } from '@/lib/api/friendRequests'
+import { user$ } from '@/lib/observables/session-observable'
+import { FontAwesome } from '@expo/vector-icons'
+import { FlashList } from '@shopify/flash-list'
+import * as Burnt from 'burnt'
+import { useLocalSearchParams } from 'expo-router'
+import { useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
 
 export default function UserScreen() {
-  const { id } = useLocalSearchParams();
-  const userData = user$.get();
+  const { id } = useLocalSearchParams()
+  const userData = user$.get()
 
-  const { data: dogs } = useDogsFromUserId(id.toString());
-  const { data: user, isLoading } = useUser(id.toString());
+  const { data: dogs } = useDogsFromUserId(id.toString())
+  const user = user$.get()
 
   useEffect(() => {
-    console.log('id', id);
-    console.log('user', user);
-  }, [id, user]);
+    console.log('id', id)
+    console.log('user', user)
+  }, [id, user])
 
   const handleAddFriend = async () => {
     try {
-      console.log('userData', userData);
-      await sendFriendRequest(userData?.id, Number(id));
+      console.log('userData', userData)
+      await sendFriendRequest(userData?.id, Number(id))
       Burnt.toast({
         title: "Demande d'ami envoyée",
-        preset: "done",
+        preset: 'done',
         message: "Votre demande d'ami a été envoyée",
-        haptic: "success",
-      });
+        haptic: 'success',
+      })
     } catch (error) {
       // If error message {message: 'Sender and receiver cannot be the same'}
       if (error.message === 'Sender and receiver cannot be the same') {
         Burnt.toast({
-          title: "Erreur",
-          preset: "error",
-          message: "Vous ne pouvez pas ajouter vous-même comme ami",
-          haptic: "error",
-        });
+          title: 'Erreur',
+          preset: 'error',
+          message: 'Vous ne pouvez pas ajouter vous-même comme ami',
+          haptic: 'error',
+        })
       }
     }
-  };
+  }
 
   return (
     <View
@@ -81,33 +80,38 @@ export default function UserScreen() {
           <RoundedImage
             height={150}
             width={150}
-            src="https://picsum.photos/300"
+            src='https://picsum.photos/300'
           />
-          <FontAwesome name="paw" size={42} color="#DE6E48" style={{
-            position: 'absolute',
-            top: 0,
-            right: '30%',
-            transform: [{ rotate: '-16deg' }],
-          }} />
+          <FontAwesome
+            name='paw'
+            size={42}
+            color='#DE6E48'
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: '30%',
+              transform: [{ rotate: '-16deg' }],
+            }}
+          />
         </View>
         <View style={styles.container}>
-          <CardTitle color="#000" style={{ textAlign: 'center' }}>{user?.first_name}, {user?.age} ans</CardTitle>
-          <SmallMedium color="#000">
-            {user?.description ? user?.description : (i18n.t('noDescriptionFor') + ' ' + user?.first_name)}
+          <CardTitle color='#000' style={{ textAlign: 'center' }}>
+            {user?.first_name}, {user?.age} ans
+          </CardTitle>
+          <SmallMedium color='#000'>
+            {user?.description
+              ? user?.description
+              : i18n.t('noDescriptionFor') + ' ' + user?.first_name}
           </SmallMedium>
           <View style={styles.buttonContainer}>
-          <View style={{ flex: 1 }}>
-            <StandardButton onPress={handleAddFriend}>
-              <Small color='#fff'>
-                {i18n.t('addFriend')}
-              </Small>
+            <View style={{ flex: 1 }}>
+              <StandardButton onPress={handleAddFriend}>
+                <Small color='#fff'>{i18n.t('addFriend')}</Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
-                <Small color='#F7A400'>
-                  {i18n.t('write')}
-                </Small>
+                <Small color='#F7A400'>{i18n.t('write')}</Small>
               </StandardButton>
             </View>
           </View>
