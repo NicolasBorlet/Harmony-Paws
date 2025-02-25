@@ -1,25 +1,24 @@
-import type { PropsWithChildren } from 'react';
-import { StyleSheet, View } from 'react-native';
+import type { PropsWithChildren } from 'react'
+import { StyleSheet, View } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 
-import { Image } from 'expo-image';
-import { useBottomTabOverflow } from './ui/TabBarBackground';
+import { Image } from 'expo-image'
+import { useBottomTabOverflow } from './ui/TabBarBackground'
 
-const HEADER_HEIGHT = 375;
-const blurhash =
-  'L6Pj0^jE.AyE_3t7t7R**0o#DgR4';
+const HEADER_HEIGHT = 375
+const blurhash = 'L6Pj0^jE.AyE_3t7t7R**0o#DgR4'
 
 type Props = PropsWithChildren<{
-  headerImage?: string;
-  backgroundColor?: string;
-  backgroundContainer?: React.ReactNode;
-  paddingHorizontal?: number;
-}>;
+  headerImage?: string
+  backgroundColor?: string
+  backgroundContainer?: React.ReactNode
+  paddingHorizontal?: number
+}>
 
 export default function ParallaxScrollView({
   children,
@@ -28,9 +27,9 @@ export default function ParallaxScrollView({
   backgroundContainer,
   paddingHorizontal = 16,
 }: Props) {
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-  const bottom = useBottomTabOverflow();
+  const scrollRef = useAnimatedRef<Animated.ScrollView>()
+  const scrollOffset = useScrollViewOffset(scrollRef)
+  const bottom = useBottomTabOverflow()
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -38,15 +37,19 @@ export default function ParallaxScrollView({
           translateY: interpolate(
             scrollOffset.value,
             [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
+            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75],
           ),
         },
         {
-          scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
+          scale: interpolate(
+            scrollOffset.value,
+            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
+            [2, 1, 1],
+          ),
         },
       ],
-    };
-  });
+    }
+  })
 
   return (
     <View style={styles.container}>
@@ -55,21 +58,27 @@ export default function ParallaxScrollView({
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         scrollIndicatorInsets={{ bottom }}
-        contentContainerStyle={{ paddingBottom: bottom }}>
+        contentContainerStyle={{ paddingBottom: bottom }}
+      >
         <Animated.View
-          style={[
-            styles.header,
-            headerAnimatedStyle,
-            { backgroundColor },
-          ]}>
+          style={[styles.header, headerAnimatedStyle, { backgroundColor }]}
+        >
           {headerImage ? (
-            <Image style={styles.image} source={headerImage} contentFit="cover" transition={1000} placeholder={{ blurhash }} />
-          ) : backgroundContainer}
+            <Image
+              style={styles.image}
+              source={headerImage}
+              contentFit='cover'
+              transition={1000}
+              placeholder={{ blurhash }}
+            />
+          ) : (
+            backgroundContainer
+          )}
         </Animated.View>
         <View style={[styles.content, { paddingHorizontal }]}>{children}</View>
       </Animated.ScrollView>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -95,4 +104,4 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-});
+})
