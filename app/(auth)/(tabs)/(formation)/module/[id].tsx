@@ -1,5 +1,6 @@
 import Back from '@/components/back-button'
 import ParallaxScrollView from '@/components/parallax-scrollview'
+import { NavigationTitle } from '@/components/ui/text'
 import { useLocalSearchParams } from 'expo-router'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -31,7 +32,10 @@ export default function Module() {
               alignItems: 'center',
             }}
           >
-            {/* <NavigationTitle color='#000'>{data?.name}</NavigationTitle> */}
+            <NavigationTitle color='#000'>
+              {/* {data?.name} */}
+              Faire le beau
+            </NavigationTitle>
           </View>
         </View>
         <View style={{ gap: 16 }}>
