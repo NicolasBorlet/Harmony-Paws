@@ -1,25 +1,25 @@
-import { Colors } from '@/constants/Colors';
-import { AntDesign } from '@expo/vector-icons';
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { PlatformPressable } from '@react-navigation/elements';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
-import { StyleSheet, Text, View } from 'react-native';
+import { Colors } from '@/constants/Colors'
+import { AntDesign } from '@expo/vector-icons'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
+import { PlatformPressable } from '@react-navigation/elements'
+import { useLinkBuilder, useTheme } from '@react-navigation/native'
+import { StyleSheet, Text, View } from 'react-native'
 
 interface TabButtonProps {
-  route: any;
-  isFocused: boolean;
-  descriptors: any;
-  navigation: any;
-  buildHref: any;
-  colors: any;
-  options: any;
-  isFirst?: boolean;
-  isLast?: boolean;
+  route: any
+  isFocused: boolean
+  descriptors: any
+  navigation: any
+  buildHref: any
+  colors: any
+  options: any
+  isFirst?: boolean
+  isLast?: boolean
 }
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
-  const { colors } = useTheme();
-  const { buildHref } = useLinkBuilder();
+  const { colors } = useTheme()
+  const { buildHref } = useLinkBuilder()
 
   return (
     <View style={styles.tabbar}>
@@ -42,12 +42,15 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
       <PlatformPressable
         onPress={() => console.log('Plus button pressed')}
-        style={[{
-          backgroundColor: Colors.light.primary,
-          shadowColor: Colors.light.primary,
-        }, styles.plusButton]}
+        style={[
+          {
+            backgroundColor: Colors.light.primary,
+            shadowColor: Colors.light.primary,
+          },
+          styles.plusButton,
+        ]}
       >
-        <AntDesign name="plus" size={24} color="white" />
+        <AntDesign name='plus' size={24} color='white' />
       </PlatformPressable>
 
       {/* Deuxième groupe (2 derniers tabs) */}
@@ -67,31 +70,45 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
         ))}
       </View>
     </View>
-  );
+  )
 }
 
 // Composant helper pour les boutons de tab
-function TabButton({ route, isFocused, descriptors, navigation, buildHref, colors, options, isFirst, isLast }: TabButtonProps) {
-  const { options: routeOptions } = descriptors[route.key];
+function TabButton({
+  route,
+  isFocused,
+  descriptors,
+  navigation,
+  buildHref,
+  colors,
+  options,
+  isFirst,
+  isLast,
+}: TabButtonProps) {
+  const { options: routeOptions } = descriptors[route.key]
 
   const onPress = () => {
     const event = navigation.emit({
       type: 'tabPress',
       target: route.key,
       canPreventDefault: true,
-    });
+    })
 
     if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(route.name, route.params);
+      navigation.navigate(route.name, route.params)
     }
-  };
+  }
 
   const renderIcon = () => {
     if (routeOptions.tabBarIcon) {
-      return routeOptions.tabBarIcon({ focused: isFocused, color: Colors.light.secondary, size: 24 });
+      return routeOptions.tabBarIcon({
+        focused: isFocused,
+        color: Colors.light.secondary,
+        size: 24,
+      })
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <PlatformPressable
@@ -100,11 +117,7 @@ function TabButton({ route, isFocused, descriptors, navigation, buildHref, color
       accessibilityLabel={routeOptions.tabBarAccessibilityLabel}
       testID={routeOptions.tabBarTestID}
       onPress={onPress}
-      style={[
-        styles.tab,
-        isFirst && styles.firstTab,
-        isLast && styles.lastTab,
-      ]}
+      style={[styles.tab, isFirst && styles.firstTab, isLast && styles.lastTab]}
     >
       {renderIcon()}
       {routeOptions.title && (
@@ -112,7 +125,7 @@ function TabButton({ route, isFocused, descriptors, navigation, buildHref, color
           style={{
             fontSize: 12,
             fontFamily: 'Montserrat_500Medium',
-            color: Colors.light.secondary,
+            color: isFocused ? Colors.light.secondary : Colors.zinc[400],
             marginTop: 4,
           }}
         >
@@ -120,7 +133,7 @@ function TabButton({ route, isFocused, descriptors, navigation, buildHref, color
         </Text>
       )}
     </PlatformPressable>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -134,7 +147,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: -2,
@@ -178,5 +191,5 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 8,
     backgroundColor: Colors.light.primary,
-  }
-});
+  },
+})
