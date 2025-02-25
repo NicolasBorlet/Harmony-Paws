@@ -8,8 +8,11 @@ import Paw from '@/assets/svg/tabbar/paw/paw'
 import PawFocused from '@/assets/svg/tabbar/paw/paw-focused'
 import { TabBar } from '@/components/tabbar/tabbar'
 import { Colors } from '@/constants/Colors'
+import { useUserPicture } from '@/lib/api/user'
+import { user$ } from '@/lib/observables/session-observable'
 import { Feather } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
+import { Image } from 'expo-image'
 import { Redirect, Tabs } from 'expo-router'
 import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
 
@@ -21,6 +24,7 @@ type TabBarIconProps = {
 
 export default function TabLayout() {
   const { session, isLoading } = useSession()
+  const { data: userPicture } = useUserPicture(user$?.id ?? '')
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -35,6 +39,10 @@ export default function TabLayout() {
     await new Promise(resolve => setTimeout(resolve, 150))
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
+
+  // useEffect(() => {
+  //   console.log('userPicture', userPicture)
+  // }, [userPicture])
 
   return (
     <Tabs
@@ -102,7 +110,14 @@ export default function TabLayout() {
                   height: 21,
                 }}
               >
-                <Feather name='user' size={16} color={Colors.light.primary} />
+                {userPicture ? (
+                  <Image
+                    source={{ uri: userPicture.url }}
+                    style={{ width: 21, height: 21 }}
+                  />
+                ) : (
+                  <Feather name='user' size={16} color={Colors.light.primary} />
+                )}
               </View>
             ) : (
               <View
@@ -117,7 +132,14 @@ export default function TabLayout() {
                   height: 22,
                 }}
               >
-                <Feather name='user' size={14} color='white' />
+                {userPicture ? (
+                  <Image
+                    source={{ uri: userPicture.url }}
+                    style={{ width: 21, height: 21 }}
+                  />
+                ) : (
+                  <Feather name='user' size={16} color={Colors.light.primary} />
+                )}
               </View>
             ),
         }}
