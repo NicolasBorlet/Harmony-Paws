@@ -61,3 +61,22 @@ export const useUser = (userId: string) => {
     refetchOnWindowFocus: false,
   })
 }
+
+export async function getUserPicture(userId: string) {
+  // Recup from storage supabase from folder users and file userId.jpg
+  const { data, error } = await supabase.storage
+    .from('users')
+    .download(userId + '.jpg')
+
+  if (error) throw error
+  return data
+}
+
+export const useUserPicture = (userId: string) => {
+  return useQuery({
+    queryKey: ['userPicture', userId],
+    queryFn: () => getUserPicture(userId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+}

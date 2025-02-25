@@ -1,11 +1,20 @@
 import { i18n } from '@/app/_layout'
 import { useSession } from '@/app/ctx'
+import Bone from '@/assets/svg/tabbar/bone/bone'
+import BoneFocused from '@/assets/svg/tabbar/bone/bone-focused'
+import Formation from '@/assets/svg/tabbar/formation/formation'
+import FormationFocused from '@/assets/svg/tabbar/formation/formation-focused'
+import Paw from '@/assets/svg/tabbar/paw/paw'
+import PawFocused from '@/assets/svg/tabbar/paw/paw-focused'
 import { TabBar } from '@/components/tabbar/tabbar'
 import { Colors } from '@/constants/Colors'
-import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
+import { useUserPicture } from '@/lib/api/user'
+import { user$ } from '@/lib/observables/session-observable'
+import { Feather } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
+import { Image } from 'expo-image'
 import { Redirect, Tabs } from 'expo-router'
-import { GestureResponderEvent, Pressable, Text } from 'react-native'
+import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
 
 type TabBarIconProps = {
   focused: boolean
@@ -15,6 +24,7 @@ type TabBarIconProps = {
 
 export default function TabLayout() {
   const { session, isLoading } = useSession()
+  const { data: userPicture } = useUserPicture(user$?.id ?? '')
 
   if (isLoading) {
     return <Text>Loading...</Text>
@@ -30,9 +40,13 @@ export default function TabLayout() {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
   }
 
+  // useEffect(() => {
+  //   console.log('userPicture', userPicture)
+  // }, [userPicture])
+
   return (
     <Tabs
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={props => <TabBar {...props} />}
       screenOptions={{
         tabBarButton: (props: any) => {
           const { style, ...otherProps } = props
@@ -59,42 +73,75 @@ export default function TabLayout() {
         options={{
           title: `${i18n.t('home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
-            focused ? (
-              <Ionicons name='paw' size={24} color={Colors.light.secondary} />
-            ) : (
-              <Ionicons name='paw-outline' size={24} color={Colors.light.secondary} />
-            ),
+            focused ? <PawFocused /> : <Paw />,
         }}
       />
       <Tabs.Screen
         name='(formation)'
         options={{
           title: 'Formation',
-          tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <Ionicons
-              name='information-circle-outline'
-              size={24}
-              color='black'
-            />
-          ),
+          tabBarIcon: ({ focused }: TabBarIconProps) =>
+            focused ? <FormationFocused /> : <Formation />,
         }}
       />
       <Tabs.Screen
         name='(medical)'
         options={{
           title: 'Medical',
-          tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <FontAwesome5 name='clinic-medical' size={24} color='black' />
-          ),
+          tabBarIcon: ({ focused }: TabBarIconProps) =>
+            focused ? <BoneFocused /> : <Bone />,
         }}
       />
       <Tabs.Screen
         name='(account)'
         options={{
           title: 'Account',
-          tabBarIcon: ({ focused }: TabBarIconProps) => (
-            <AntDesign name='user' size={24} color='black' />
-          ),
+          tabBarIcon: ({ focused }: TabBarIconProps) =>
+            focused ? (
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: Colors.light.primary,
+                  borderRadius: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: Colors.zinc[400],
+                  width: 21,
+                  height: 21,
+                }}
+              >
+                {userPicture ? (
+                  <Image
+                    source={{ uri: userPicture.url }}
+                    style={{ width: 21, height: 21 }}
+                  />
+                ) : (
+                  <Feather name='user' size={16} color={Colors.light.primary} />
+                )}
+              </View>
+            ) : (
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: Colors.light.primary,
+                  borderRadius: 100,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  backgroundColor: Colors.zinc[300],
+                  width: 22,
+                  height: 22,
+                }}
+              >
+                {userPicture ? (
+                  <Image
+                    source={{ uri: userPicture.url }}
+                    style={{ width: 21, height: 21 }}
+                  />
+                ) : (
+                  <Feather name='user' size={16} color={Colors.light.primary} />
+                )}
+              </View>
+            ),
         }}
       />
     </Tabs>
