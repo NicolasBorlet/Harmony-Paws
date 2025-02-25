@@ -1,7 +1,8 @@
 import { i18n } from '@/app/_layout'
 import { useSession } from '@/app/ctx'
+import Paw from '@/assets/svg/tabbar/paw/paw'
+import PawFocused from '@/assets/svg/tabbar/paw/paw-focused'
 import { TabBar } from '@/components/tabbar/tabbar'
-import { Colors } from '@/constants/Colors'
 import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { Redirect, Tabs } from 'expo-router'
@@ -32,7 +33,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      tabBar={(props) => <TabBar {...props} />}
+      tabBar={props => <TabBar {...props} />}
       screenOptions={{
         tabBarButton: (props: any) => {
           const { style, ...otherProps } = props
@@ -59,11 +60,7 @@ export default function TabLayout() {
         options={{
           title: `${i18n.t('home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
-            focused ? (
-              <Ionicons name='paw' size={24} color={Colors.light.secondary} />
-            ) : (
-              <Ionicons name='paw-outline' size={24} color={Colors.light.secondary} />
-            ),
+            focused ? <PawFocused /> : <Paw />,
         }}
       />
       <Tabs.Screen
