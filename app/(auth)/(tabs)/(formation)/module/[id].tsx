@@ -10,6 +10,39 @@ import { useLocalSearchParams } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+const lessons = [
+  {
+    id: 1,
+    title: 'Introduction',
+    image: 'https://picsum.photos/200/300',
+    available: true,
+  },
+  {
+    id: 2,
+    title: 'Les modes de communication',
+    image: 'https://picsum.photos/200/300',
+    available: true,
+  },
+  {
+    id: 3,
+    title: 'Les signaux d’apaisement',
+    image: 'https://picsum.photos/200/300',
+    available: false,
+  },
+  {
+    id: 4,
+    title: 'Les expressions faciales',
+    image: 'https://picsum.photos/200/300',
+    available: false,
+  },
+  {
+    id: 5,
+    title: 'Quizz final',
+    image: 'https://picsum.photos/200/300',
+    available: false,
+  },
+]
+
 export default function Module() {
   const insets = useSafeAreaInsets()
 
@@ -43,66 +76,59 @@ export default function Module() {
               <Divider />
               <BodyTitle title='Leçon' />
               <View style={styles.lessonContainer}>
-                <View style={styles.lessonItem}>
-                  <View style={styles.check}>
-                    <FontAwesome name='check' size={17} color={Colors.white} />
-                  </View>
-                  <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
-                    style={styles.lessonImage}
-                  />
-                  <ExtraSmallSemiBold style={styles.lessonText}>
-                    Introduction
-                  </ExtraSmallSemiBold>
-                </View>
-                <View style={[styles.lessonItem, styles.lessonItem2]}>
-                  <View style={styles.check}>
-                    <FontAwesome name='check' size={17} color={Colors.white} />
-                  </View>
-                  <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
-                    style={styles.lessonImage}
-                  />
-                  <ExtraSmallSemiBold style={styles.lessonText}>
-                    Introduction
-                  </ExtraSmallSemiBold>
-                </View>
-                <View style={[styles.lessonItem, styles.lessonItem3]}>
-                  <View style={styles.check}>
-                    <FontAwesome name='check' size={17} color={Colors.white} />
-                  </View>
-                  <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
-                    style={styles.lessonImage}
-                  />
-                  <ExtraSmallSemiBold style={styles.lessonText}>
-                    Introduction
-                  </ExtraSmallSemiBold>
-                </View>
-                <View style={[styles.lessonItem, styles.lessonItem4]}>
-                  <View style={styles.check}>
-                    <FontAwesome name='check' size={17} color={Colors.white} />
-                  </View>
-                  <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
-                    style={styles.lessonImage}
-                  />
-                  <ExtraSmallSemiBold style={styles.lessonText}>
-                    Introduction
-                  </ExtraSmallSemiBold>
-                </View>
-                <View style={[styles.lessonItem, styles.lessonItem5]}>
-                  <View style={styles.check}>
-                    <FontAwesome name='check' size={17} color={Colors.white} />
-                  </View>
-                  <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
-                    style={styles.lessonImage}
-                  />
-                  <ExtraSmallSemiBold style={styles.lessonText}>
-                    Introduction
-                  </ExtraSmallSemiBold>
-                </View>
+                {lessons.map(lesson => {
+                  const lessonItemStyle =
+                    lesson.id > 1 && lesson.id <= 5
+                      ? styles[`lessonItem${lesson.id}` as keyof typeof styles]
+                      : undefined
+
+                  return (
+                    <View
+                      key={lesson.id}
+                      style={[styles.lessonItem, lessonItemStyle]}
+                    >
+                      <View
+                        style={[
+                          styles.check,
+                          {
+                            backgroundColor: lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800],
+                          },
+                        ]}
+                      >
+                        <FontAwesome
+                          name='check'
+                          size={17}
+                          color={Colors.white}
+                        />
+                      </View>
+                      <Image
+                        source={{ uri: lesson.image }}
+                        style={[
+                          styles.lessonImage,
+                          {
+                            borderColor: lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800],
+                          },
+                        ]}
+                      />
+                      <ExtraSmallSemiBold
+                        style={[
+                          styles.lessonText,
+                          {
+                            backgroundColor: lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800],
+                          },
+                        ]}
+                      >
+                        {lesson.title}
+                      </ExtraSmallSemiBold>
+                    </View>
+                  )
+                })}
               </View>
             </View>
           </View>
@@ -153,7 +179,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     width: 32,
     height: 32,
-    backgroundColor: Colors.green[500],
     borderRadius: 999,
     display: 'flex',
     alignItems: 'center',
@@ -179,6 +204,8 @@ const styles = StyleSheet.create({
     left: '30%',
   },
   lessonText: {
+    maxWidth: 150,
+    textAlign: 'center',
     marginTop: -16,
     paddingHorizontal: 16,
     paddingVertical: 8,
