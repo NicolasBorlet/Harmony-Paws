@@ -1,3 +1,4 @@
+import Path1 from '@/assets/svg/paw-path/path-1'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
@@ -129,6 +130,15 @@ export default function Module() {
                     </View>
                   )
                 })}
+                <Path1
+                  style={{
+                    position: 'absolute',
+                    top: '10%',
+                    right: '20%',
+                    width: 87,
+                    height: 112,
+                  }}
+                />
               </View>
             </View>
           </View>
