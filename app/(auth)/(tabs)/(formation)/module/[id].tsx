@@ -7,8 +7,8 @@ import { Body, ExtraSmallSemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { useLocalSearchParams } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { router, useLocalSearchParams } from 'expo-router'
+import { Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const lessons = [
@@ -84,9 +84,12 @@ export default function Module() {
                       : undefined
 
                   return (
-                    <View
+                    <Pressable
                       key={lesson.id}
                       style={[styles.lessonItem, lessonItemStyle]}
+                      onPress={() => {
+                        router.push(`/(formation)/module/lesson/${lesson.id}`)
+                      }}
                     >
                       <View
                         style={[
@@ -127,7 +130,7 @@ export default function Module() {
                       >
                         {lesson.title}
                       </ExtraSmallSemiBold>
-                    </View>
+                    </Pressable>
                   )
                 })}
                 <Path1
