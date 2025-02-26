@@ -61,7 +61,6 @@ export default function StandardScrollView({
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         scrollIndicatorInsets={{ bottom }}
-        contentContainerStyle={{ paddingBottom: bottom }}
       >
         <View style={[styles.header, { backgroundColor }]}>
           {headerImage ? (
