@@ -133,8 +133,9 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   lessonContainer: {
-    gap: 16,
     backgroundColor: Colors.lightOrange[50],
+    paddingTop: 0,
+    paddingBottom: 32,
     padding: 16,
     borderRadius: 20,
   },
