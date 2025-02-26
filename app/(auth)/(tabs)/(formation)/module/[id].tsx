@@ -1,8 +1,10 @@
 import Back from '@/components/back-button'
-import ParallaxScrollView from '@/components/parallax-scrollview'
-import { NavigationTitle } from '@/components/ui/text'
+import BodyTitle from '@/components/bodyTitle/body-title'
+import StandardScrollView from '@/components/scrollview/standard-scrollview'
+import Divider from '@/components/ui/divider'
+import { Body } from '@/components/ui/text'
 import { useLocalSearchParams } from 'expo-router'
-import { View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Module() {
@@ -19,24 +21,25 @@ export default function Module() {
   return (
     <>
       <Back />
-      <ParallaxScrollView
+      <StandardScrollView
         headerImage={'https://picsum.photos/200/300'}
         paddingHorizontal={0}
         title='Faire le beau'
       >
         <View style={{ gap: 24, display: 'flex', flexDirection: 'column' }}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: 10,
-              alignItems: 'center',
-            }}
-          >
-            <NavigationTitle color='#000'>
-              {/* {data?.name} */}
-              Faire le beau
-            </NavigationTitle>
+          <View style={styles.container}>
+            <Body>
+              Lorem ipsum dolor sit amet consectetur. Velit ac vitae phasellus
+              pharetra urna eu est nec fermentum. Ac at tristique etiam neque.
+            </Body>
+            <View style={styles.content}>
+              <Divider />
+              <BodyTitle title='Matériels nécessaires' />
+            </View>
+            <View style={styles.content}>
+              <Divider />
+              <BodyTitle title='Leçon' />
+            </View>
           </View>
         </View>
         <View style={{ gap: 16 }}>
@@ -50,7 +53,18 @@ export default function Module() {
             </Pressable>
           ))} */}
         </View>
-      </ParallaxScrollView>
+      </StandardScrollView>
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    gap: 32,
+  },
+  content: {
+    gap: 16,
+  },
+})
