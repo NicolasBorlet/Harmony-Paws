@@ -51,7 +51,9 @@ export default function Module() {
                     source={{ uri: 'https://picsum.photos/200/300' }}
                     style={styles.lessonImage}
                   />
-                  <ExtraSmallSemiBold>Introduction</ExtraSmallSemiBold>
+                  <View style={styles.lessonText}>
+                    <ExtraSmallSemiBold>Introduction</ExtraSmallSemiBold>
+                  </View>
                 </View>
               </View>
             </View>
@@ -104,5 +106,12 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 7,
     borderColor: Colors.green[500],
+  },
+  lessonText: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: Colors.green[500],
+    borderRadius: 8,
   },
 })
