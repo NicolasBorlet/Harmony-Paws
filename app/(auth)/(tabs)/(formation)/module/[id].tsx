@@ -55,6 +55,54 @@ export default function Module() {
                     Introduction
                   </ExtraSmallSemiBold>
                 </View>
+                <View style={[styles.lessonItem, styles.lessonItem2]}>
+                  <View style={styles.check}>
+                    <FontAwesome name='check' size={17} color={Colors.white} />
+                  </View>
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.lessonImage}
+                  />
+                  <ExtraSmallSemiBold style={styles.lessonText}>
+                    Introduction
+                  </ExtraSmallSemiBold>
+                </View>
+                <View style={[styles.lessonItem, styles.lessonItem3]}>
+                  <View style={styles.check}>
+                    <FontAwesome name='check' size={17} color={Colors.white} />
+                  </View>
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.lessonImage}
+                  />
+                  <ExtraSmallSemiBold style={styles.lessonText}>
+                    Introduction
+                  </ExtraSmallSemiBold>
+                </View>
+                <View style={[styles.lessonItem, styles.lessonItem4]}>
+                  <View style={styles.check}>
+                    <FontAwesome name='check' size={17} color={Colors.white} />
+                  </View>
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.lessonImage}
+                  />
+                  <ExtraSmallSemiBold style={styles.lessonText}>
+                    Introduction
+                  </ExtraSmallSemiBold>
+                </View>
+                <View style={[styles.lessonItem, styles.lessonItem5]}>
+                  <View style={styles.check}>
+                    <FontAwesome name='check' size={17} color={Colors.white} />
+                  </View>
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.lessonImage}
+                  />
+                  <ExtraSmallSemiBold style={styles.lessonText}>
+                    Introduction
+                  </ExtraSmallSemiBold>
+                </View>
               </View>
             </View>
           </View>
@@ -91,16 +139,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   lessonItem: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
   check: {
-    zIndex: 1,
     position: 'relative',
     top: 32,
     right: -32,
+    zIndex: 1,
     width: 32,
     height: 32,
     backgroundColor: Colors.green[500],
@@ -115,6 +164,18 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 7,
     borderColor: Colors.green[500],
+  },
+  lessonItem2: {
+    left: '20%',
+  },
+  lessonItem3: {
+    right: '30%',
+  },
+  lessonItem4: {
+    right: '10%',
+  },
+  lessonItem5: {
+    left: '30%',
   },
   lessonText: {
     marginTop: -16,
