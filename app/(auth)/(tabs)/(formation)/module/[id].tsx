@@ -2,8 +2,10 @@ import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
 import Divider from '@/components/ui/divider'
-import { Body } from '@/components/ui/text'
+import { Body, ExtraSmallSemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { FontAwesome } from '@expo/vector-icons'
+import { Image } from 'expo-image'
 import { useLocalSearchParams } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -41,7 +43,16 @@ export default function Module() {
               <Divider />
               <BodyTitle title='Leçon' />
               <View style={styles.lessonContainer}>
-                <View style={styles.lessonItem}></View>
+                <View style={styles.lessonItem}>
+                  <View style={styles.check}>
+                    <FontAwesome name='check' size={17} color={Colors.white} />
+                  </View>
+                  <Image
+                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    style={styles.lessonImage}
+                  />
+                  <ExtraSmallSemiBold>Introduction</ExtraSmallSemiBold>
+                </View>
               </View>
             </View>
           </View>
@@ -77,7 +88,21 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 20,
   },
-  lessonItem: {
-    gap: 16,
+  lessonItem: {},
+  check: {
+    width: 32,
+    height: 32,
+    backgroundColor: Colors.green[500],
+    borderRadius: 999,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lessonImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 999,
+    borderWidth: 7,
+    borderColor: Colors.green[500],
   },
 })
