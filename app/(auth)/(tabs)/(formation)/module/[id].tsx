@@ -3,6 +3,7 @@ import BodyTitle from '@/components/bodyTitle/body-title'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
 import Divider from '@/components/ui/divider'
 import { Body } from '@/components/ui/text'
+import { Colors } from '@/constants/Colors'
 import { useLocalSearchParams } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -39,6 +40,9 @@ export default function Module() {
             <View style={styles.content}>
               <Divider />
               <BodyTitle title='Leçon' />
+              <View style={styles.lessonContainer}>
+                <View style={styles.lessonItem}></View>
+              </View>
             </View>
           </View>
         </View>
@@ -65,6 +69,15 @@ const styles = StyleSheet.create({
     gap: 32,
   },
   content: {
+    gap: 16,
+  },
+  lessonContainer: {
+    gap: 16,
+    backgroundColor: Colors.lightOrange[50],
+    padding: 16,
+    borderRadius: 20,
+  },
+  lessonItem: {
     gap: 16,
   },
 })
