@@ -22,6 +22,7 @@ export default function Module() {
       <ParallaxScrollView
         headerImage={'https://picsum.photos/200/300'}
         paddingHorizontal={0}
+        title='Faire le beau'
       >
         <View style={{ gap: 24, display: 'flex', flexDirection: 'column' }}>
           <View

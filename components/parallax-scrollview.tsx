@@ -9,6 +9,7 @@ import Animated, {
 
 import { Image } from 'expo-image'
 import { useBottomTabOverflow } from './ui/TabBarBackground'
+import { NavigationTitleExtraBold } from './ui/text'
 
 const HEADER_HEIGHT = 375
 const blurhash = 'L6Pj0^jE.AyE_3t7t7R**0o#DgR4'
@@ -18,6 +19,7 @@ type Props = PropsWithChildren<{
   backgroundColor?: string
   backgroundContainer?: React.ReactNode
   paddingHorizontal?: number
+  title?: string
 }>
 
 export default function ParallaxScrollView({
@@ -26,6 +28,7 @@ export default function ParallaxScrollView({
   backgroundColor = '#fff',
   backgroundContainer,
   paddingHorizontal = 16,
+  title,
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
@@ -73,6 +76,11 @@ export default function ParallaxScrollView({
             />
           ) : (
             backgroundContainer
+          )}
+          {title && (
+            <View style={{ position: 'absolute', bottom: 48, left: 16 }}>
+              <NavigationTitleExtraBold>{title}</NavigationTitleExtraBold>
+            </View>
           )}
         </Animated.View>
         <View style={[styles.content, { paddingHorizontal }]}>{children}</View>
