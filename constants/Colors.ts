@@ -9,6 +9,7 @@ const tintColorDark = '#fff'
 export const Purple = '#663399'
 
 export const Colors = {
+  white: '#FFFFFF',
   zinc: {
     50: '#FAFAFA',
     100: '#F4F4F5',
@@ -33,6 +34,18 @@ export const Colors = {
     700: '#C67D00',
     800: '#A16400',
     900: '#663300',
+  },
+  green: {
+    50: '#EFFCF3',
+    100: '#D9F9E3',
+    200: '#B5F2C9',
+    300: '#8EEDB0',
+    400: '#5EE292',
+    500: '#0DA453',
+    600: '#0C8544',
+    700: '#0B6635',
+    800: '#094726',
+    900: '#062817',
   },
   light: {
     text: '#11181C',
