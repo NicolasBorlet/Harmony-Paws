@@ -67,13 +67,16 @@ export default function ParallaxScrollView({
           style={[styles.header, headerAnimatedStyle, { backgroundColor }]}
         >
           {headerImage ? (
-            <Image
-              style={styles.image}
-              source={headerImage}
-              contentFit='cover'
-              transition={1000}
-              placeholder={{ blurhash }}
-            />
+            <>
+              <Image
+                style={styles.image}
+                source={headerImage}
+                contentFit='cover'
+                transition={1000}
+                placeholder={{ blurhash }}
+              />
+              <View style={styles.overlay} />
+            </>
           ) : (
             backgroundContainer
           )}
@@ -111,5 +114,16 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: '100%',
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
   },
 })
