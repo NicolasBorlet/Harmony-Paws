@@ -5,8 +5,9 @@ import Path4 from '@/assets/svg/paw-path/path-4'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
+import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
-import { Body, ExtraSmallSemiBold } from '@/components/ui/text'
+import { Body, BodyMedium, ExtraSmallSemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
@@ -187,16 +188,10 @@ export default function Module() {
             </View>
           </View>
         </View>
-        <View style={{ gap: 16 }}>
-          {/* {data?.lessons.map(lesson => (
-            <Pressable
-              onPress={() =>
-                router.push(`/(formation)/module/lesson/${lesson.id}`)
-              }
-            >
-              <BodyMedium color='#000'>{lesson.title}</BodyMedium>
-            </Pressable>
-          ))} */}
+        <View style={styles.buttonContainer}>
+          <StandardButton>
+            <BodyMedium color='#fff'>Module suivant</BodyMedium>
+          </StandardButton>
         </View>
       </StandardScrollView>
     </>
@@ -295,5 +290,8 @@ const styles = StyleSheet.create({
     left: '5%',
     width: 87,
     height: 112,
+  },
+  buttonContainer: {
+    paddingHorizontal: 16,
   },
 })
