@@ -390,7 +390,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           module_id?: number | null
-          name: string
+          title: string
           order?: number | null
           updated_at?: string | null
         }
@@ -398,7 +398,7 @@ export type Database = {
           created_at?: string | null
           id?: number
           module_id?: number | null
-          name?: string
+          title?: string
           order?: number | null
           updated_at?: string | null
         }
@@ -877,6 +877,68 @@ export type Database = {
             columns: ['role_id']
             isOneToOne: false
             referencedRelation: 'roles'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      user_progress: {
+        Row: {
+          created_at: string | null
+          id: number
+          updated_at: string | null
+          user_id: number | null
+          module_id: number | null
+          formation_id: number | null
+          lesson_id: number | null
+          progress_percentage: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          user_id?: number | null
+          module_id?: number | null
+          formation_id?: number | null
+          lesson_id?: number | null
+          progress_percentage?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          user_id?: number | null
+          module_id?: number | null
+          formation_id?: number | null
+          lesson_id?: number | null
+          progress_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_progress_user_id_users_id_fk'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_module_id_modules_id_fk'
+            columns: ['module_id']
+            isOneToOne: false
+            referencedRelation: 'modules'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_formation_id_formations_id_fk'
+            columns: ['formation_id']
+            isOneToOne: false
+            referencedRelation: 'formations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_lesson_id_lessons_id_fk'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
             referencedColumns: ['id']
           },
         ]

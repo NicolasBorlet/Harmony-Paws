@@ -257,7 +257,7 @@ export const useFormationById = (id: number, userId?: number) => {
   })
 }
 
-export const getModuleById = async (id: number) => {
+export const getModuleById = async (id: number, userId?: number) => {
   try {
     // Récupérer le module avec sa formation en une seule requête
     const { data: module, error: moduleError } = await supabase
@@ -292,6 +292,38 @@ export const getModuleById = async (id: number) => {
     const lessons = lessonsResult.data || []
     const materials = materialsResult.data || []
 
+    // Récupérer les données de progression pour l'utilisateur si userId est fourni
+    let userProgress: Array<{
+      lesson_id: number
+      progress_percentage: number
+    }> = []
+
+    if (userId) {
+      const { data: progressData, error: progressError } = await supabase
+        .from('user_progress')
+        .select('lesson_id, progress_percentage')
+        .eq('user_id', userId)
+        .eq('content_type', 'lesson')
+        .in(
+          'lesson_id',
+          lessons.map(lesson => lesson.id),
+        )
+
+      if (!progressError && progressData) {
+        // Assurer que tous les champs sont non-null avant l'assignation
+        userProgress = progressData
+          .filter(
+            progress =>
+              progress.lesson_id !== null &&
+              progress.progress_percentage !== null,
+          )
+          .map(progress => ({
+            lesson_id: progress.lesson_id as number,
+            progress_percentage: progress.progress_percentage as number,
+          }))
+      }
+    }
+
     // Préparer les chemins d'images pour le module et toutes les leçons
     const imagePaths = [
       `${formationId}/${id}`, // Module image path
@@ -306,11 +338,17 @@ export const getModuleById = async (id: number) => {
     // L'image du module est la première du tableau
     const moduleImage = imageResults[0] || ''
 
-    // Mapper les images aux leçons correspondantes
-    const lessonsWithImages = lessons.map((lesson, index) => ({
-      ...lesson,
-      image: imageResults[index + 1] || '', // +1 car la première image est celle du module
-    }))
+    // Mapper les images aux leçons correspondantes et ajouter les données de progression
+    const lessonsWithImagesAndProgress = lessons.map((lesson, index) => {
+      // Chercher la progression pour cette leçon
+      const lessonProgress = userProgress.find(p => p.lesson_id === lesson.id)
+
+      return {
+        ...lesson,
+        image: imageResults[index + 1] || '', // +1 car la première image est celle du module
+        progress_percentage: lessonProgress?.progress_percentage || 0,
+      }
+    })
 
     return {
       ...module,
@@ -319,7 +357,7 @@ export const getModuleById = async (id: number) => {
       materials:
         materials.map(material => material.materials?.name).filter(Boolean) ||
         [],
-      lessons: lessonsWithImages,
+      lessons: lessonsWithImagesAndProgress,
     }
   } catch (error) {
     console.error('Error in getModuleById:', error)
@@ -327,9 +365,10 @@ export const getModuleById = async (id: number) => {
   }
 }
 
-export const useModuleById = (id: number) => {
+export const useModuleById = (id: number, userId?: number) => {
   return useQuery({
-    queryKey: ['module', id],
-    queryFn: () => getModuleById(id),
+    queryKey: ['module', id, userId],
+    queryFn: () => getModuleById(id, userId),
+    enabled: !!id,
   })
 }
