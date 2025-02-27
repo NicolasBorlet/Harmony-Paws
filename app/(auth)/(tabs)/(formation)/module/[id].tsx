@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout'
 import Path1 from '@/assets/svg/paw-path/path-1'
 import Path2 from '@/assets/svg/paw-path/path-2'
 import Path3 from '@/assets/svg/paw-path/path-3'
@@ -190,7 +191,7 @@ export default function Module() {
         </View>
         <View style={styles.buttonContainer}>
           <StandardButton>
-            <BodyMedium color='#fff'>Module suivant</BodyMedium>
+            <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
           </StandardButton>
         </View>
       </StandardScrollView>

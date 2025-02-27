@@ -112,5 +112,6 @@
   "yourDogIs": "Your dog is",
   "dogName": "What is the name of your dog?",
   "dogAge": "What is the age of your dog?",
-  "dogBehavior": "Your dog is:"
+  "dogBehavior": "Your dog is:",
+  "nextModule": "Next module"
 }
