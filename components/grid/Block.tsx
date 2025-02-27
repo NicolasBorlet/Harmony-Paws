@@ -14,20 +14,48 @@ const Block = ({
   alignContent,
   wrap,
   gap,
+  gapHorizontal,
+  gapVertical,
   ...props
 }: {
   children?: React.ReactNode
   style?: any
   flex?: number
   row?: boolean
-  justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
-  justifyContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'
+  justify?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'space-evenly'
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
   alignItems?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
-  content?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch'
-  alignContent?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'stretch'
-  wrap?: 'wrap' | 'nowrap',
+  content?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'stretch'
+  alignContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'stretch'
+  wrap?: 'wrap' | 'nowrap'
   gap?: number
+  gapHorizontal?: number
+  gapVertical?: number
 }) => {
   const blockStyle = StyleSheet.flatten([
     flex !== undefined && { flex },
@@ -38,8 +66,10 @@ const Block = ({
     alignItems !== undefined && { alignItems },
     content !== undefined && { alignContent: content },
     alignContent !== undefined && { alignContent },
-    wrap !== undefined && { flexWrap: wrap }, 
+    wrap !== undefined && { flexWrap: wrap },
     gap !== undefined && { gap },
+    gapHorizontal !== undefined && { columnGap: gapHorizontal },
+    gapVertical !== undefined && { rowGap: gapVertical },
     style,
   ])
 

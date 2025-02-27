@@ -5,6 +5,8 @@ import Path3 from '@/assets/svg/paw-path/path-3'
 import Path4 from '@/assets/svg/paw-path/path-4'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
+import MaterialItem from '@/components/formation/module/material-item'
+import Block from '@/components/grid/Block'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
@@ -50,6 +52,25 @@ const lessons = [
   },
 ]
 
+const materials = [
+  {
+    id: 1,
+    title: 'Idée 1',
+  },
+  {
+    id: 2,
+    title: 'Idée 2',
+  },
+  {
+    id: 3,
+    title: 'Idée 3',
+  },
+  {
+    id: 4,
+    title: 'Idée 4',
+  },
+]
+
 export default function Module() {
   const insets = useSafeAreaInsets()
 
@@ -78,6 +99,11 @@ export default function Module() {
             <View style={styles.content}>
               <Divider />
               <BodyTitle title={i18n.t('materialNeeded')} />
+              <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
+                {materials.map(material => (
+                  <MaterialItem key={material.id} title={material.title} />
+                ))}
+              </Block>
             </View>
             <View style={styles.content}>
               <Divider />

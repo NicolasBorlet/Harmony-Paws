@@ -338,6 +338,45 @@ export type Database = {
           },
         ]
       }
+      lesson_materials: {
+        Row: {
+          created_at: string | null
+          id: number
+          lesson_id: number
+          material_id: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          lesson_id: number
+          material_id: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          lesson_id?: number
+          material_id?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'lesson_materials_lesson_id_lessons_id_fk'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'lesson_materials_material_id_materials_id_fk'
+            columns: ['material_id']
+            isOneToOne: false
+            referencedRelation: 'materials'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       lessons: {
         Row: {
           created_at: string | null
@@ -372,6 +411,27 @@ export type Database = {
             referencedColumns: ['id']
           },
         ]
+      }
+      materials: {
+        Row: {
+          created_at: string | null
+          id: number
+          name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       medical_form: {
         Row: {
