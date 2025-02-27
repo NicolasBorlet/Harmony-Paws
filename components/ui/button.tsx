@@ -109,16 +109,19 @@ const StandardButton: FC<StandardButtonProps> = ({
   })
 
   const handlePress = () => {
+    if (disabled) return
     onPress?.()
   }
 
   return (
     <AnimatedPressable
       onPressIn={() => {
+        if (disabled) return
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         pressed.value = 1
       }}
       onPressOut={() => {
+        if (disabled) return
         pressed.value = 0
       }}
       onPress={handlePress}
