@@ -64,7 +64,7 @@ export default function Module() {
               <Divider />
               <BodyTitle title={i18n.t('lesson')} />
               <View style={styles.lessonContainer}>
-                {data?.lessons.map(lesson => {
+                {data?.lessons.map((lesson, index) => {
                   const lessonItemStyle =
                     lesson.id > 1 && lesson.id <= 5
                       ? styles[`lessonItem${lesson.id}` as keyof typeof styles]
@@ -133,51 +133,56 @@ export default function Module() {
                           {lesson.title}
                         </ExtraSmallSemiBold>
                       </Pressable>
-                      {data?.lessons.length > 1 && (
-                        <>
-                          {lesson.id === 1 ? (
-                            <Path1
-                              style={styles.path_1}
-                              color={
-                                data?.lessons.find(l => l.id === lesson.id + 1)
-                                  ?.progress_percentage === 100
-                                  ? Colors.green[500]
-                                  : Colors.grey[800]
-                              }
-                            />
-                          ) : lesson.id === 2 ? (
-                            <Path2
-                              style={styles.path_2}
-                              color={
-                                data?.lessons.find(l => l.id === lesson.id + 1)
-                                  ?.progress_percentage === 100
-                                  ? Colors.green[500]
-                                  : Colors.grey[800]
-                              }
-                            />
-                          ) : lesson.id === 3 ? (
-                            <Path3
-                              style={styles.path_3}
-                              color={
-                                data?.lessons.find(l => l.id === lesson.id + 1)
-                                  ?.progress_percentage === 100
-                                  ? Colors.green[500]
-                                  : Colors.grey[800]
-                              }
-                            />
-                          ) : lesson.id === 4 ? (
-                            <Path4
-                              style={styles.path_4}
-                              color={
-                                data?.lessons.find(l => l.id === lesson.id + 1)
-                                  ?.progress_percentage === 100
-                                  ? Colors.green[500]
-                                  : Colors.grey[800]
-                              }
-                            />
-                          ) : null}
-                        </>
-                      )}
+                      {index < data.lessons.length - 1 &&
+                        data?.lessons.length > 1 && (
+                          <>
+                            {lesson.id === 1 ? (
+                              <Path1
+                                style={styles.path_1}
+                                color={
+                                  data?.lessons.find(
+                                    l => l.id === lesson.id + 1,
+                                  )?.progress_percentage === 100
+                                    ? Colors.green[500]
+                                    : Colors.grey[800]
+                                }
+                              />
+                            ) : lesson.id === 2 ? (
+                              <Path2
+                                style={styles.path_2}
+                                color={
+                                  data?.lessons.find(
+                                    l => l.id === lesson.id + 1,
+                                  )?.progress_percentage === 100
+                                    ? Colors.green[500]
+                                    : Colors.grey[800]
+                                }
+                              />
+                            ) : lesson.id === 3 ? (
+                              <Path3
+                                style={styles.path_3}
+                                color={
+                                  data?.lessons.find(
+                                    l => l.id === lesson.id + 1,
+                                  )?.progress_percentage === 100
+                                    ? Colors.green[500]
+                                    : Colors.grey[800]
+                                }
+                              />
+                            ) : lesson.id === 4 ? (
+                              <Path4
+                                style={styles.path_4}
+                                color={
+                                  data?.lessons.find(
+                                    l => l.id === lesson.id + 1,
+                                  )?.progress_percentage === 100
+                                    ? Colors.green[500]
+                                    : Colors.grey[800]
+                                }
+                              />
+                            ) : null}
+                          </>
+                        )}
                     </View>
                   )
                 })}

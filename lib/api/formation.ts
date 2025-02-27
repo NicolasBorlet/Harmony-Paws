@@ -324,28 +324,39 @@ export const getModuleById = async (id: number, userId?: number) => {
       }
     }
 
-    // Préparer les chemins d'images pour le module et toutes les leçons
-    const imagePaths = [
-      `${formationId}/${id}`, // Module image path
-      ...lessons.map(lesson => `${formationId}/${id}/${lesson.id}`), // Lesson image paths
-    ]
+    // Sécuriser la récupération des images en gérant les erreurs potentielles
+    let moduleImage = ''
+    let lessonImages: Record<number, string> = {}
 
-    // Récupérer toutes les images en parallèle
-    const imageResults = await Promise.all(
-      imagePaths.map(path => getFormationImageUrl(path)),
-    )
+    try {
+      // Essayer de récupérer l'image du module
+      moduleImage = (await getFormationImageUrl(`${formationId}/${id}`)) || ''
+    } catch (error) {
+      console.warn(`Failed to get module image: ${error}`)
+      moduleImage = ''
+    }
 
-    // L'image du module est la première du tableau
-    const moduleImage = imageResults[0] || ''
+    // Récupérer les images des leçons une par une pour gérer les erreurs individuellement
+    for (const lesson of lessons) {
+      try {
+        const imagePath = `${formationId}/${id}/${lesson.id}`
+        lessonImages[lesson.id] = (await getFormationImageUrl(imagePath)) || ''
+      } catch (error) {
+        console.warn(
+          `Failed to get lesson image for lesson ${lesson.id}: ${error}`,
+        )
+        lessonImages[lesson.id] = ''
+      }
+    }
 
     // Mapper les images aux leçons correspondantes et ajouter les données de progression
-    const lessonsWithImagesAndProgress = lessons.map((lesson, index) => {
+    const lessonsWithImagesAndProgress = lessons.map(lesson => {
       // Chercher la progression pour cette leçon
       const lessonProgress = userProgress.find(p => p.lesson_id === lesson.id)
 
       return {
         ...lesson,
-        image: imageResults[index + 1] || '', // +1 car la première image est celle du module
+        image: lessonImages[lesson.id] || '',
         progress_percentage: lessonProgress?.progress_percentage || 0,
       }
     })
