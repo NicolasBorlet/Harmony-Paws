@@ -21,39 +21,6 @@ import React, { useEffect } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const lessons = [
-  {
-    id: 1,
-    title: 'Introduction',
-    image: 'https://picsum.photos/200/300',
-    available: true,
-  },
-  {
-    id: 2,
-    title: 'Les modes de communication',
-    image: 'https://picsum.photos/200/300',
-    available: true,
-  },
-  {
-    id: 3,
-    title: "Les signaux d'apaisement",
-    image: 'https://picsum.photos/200/300',
-    available: false,
-  },
-  {
-    id: 4,
-    title: 'Les expressions faciales',
-    image: 'https://picsum.photos/200/300',
-    available: false,
-  },
-  {
-    id: 5,
-    title: 'Quizz final',
-    image: 'https://picsum.photos/200/300',
-    available: false,
-  },
-]
-
 export default function Module() {
   const insets = useSafeAreaInsets()
 
@@ -86,7 +53,7 @@ export default function Module() {
               {data?.materials.length && data?.materials.length > 0 ? (
                 <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
                   {data?.materials.map(material => (
-                    <MaterialItem key={material.id} title={material.name} />
+                    <MaterialItem key={material?.id} title={material?.name} />
                   ))}
                 </Block>
               ) : (
@@ -97,7 +64,7 @@ export default function Module() {
               <Divider />
               <BodyTitle title={i18n.t('lesson')} />
               <View style={styles.lessonContainer}>
-                {lessons.map(lesson => {
+                {data?.lessons.map(lesson => {
                   const lessonItemStyle =
                     lesson.id > 1 && lesson.id <= 5
                       ? styles[`lessonItem${lesson.id}` as keyof typeof styles]
@@ -115,13 +82,14 @@ export default function Module() {
                           style={[
                             styles.check,
                             {
-                              backgroundColor: lesson.available
-                                ? Colors.green[500]
-                                : Colors.grey[800],
+                              backgroundColor:
+                                lesson.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800],
                             },
                           ]}
                         >
-                          {lesson.available ? (
+                          {lesson.progress_percentage === 100 ? (
                             <FontAwesome
                               name='check'
                               size={17}
@@ -140,9 +108,10 @@ export default function Module() {
                           style={[
                             styles.lessonImage,
                             {
-                              borderColor: lesson.available
-                                ? Colors.green[500]
-                                : Colors.grey[800],
+                              borderColor:
+                                lesson.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800],
                             },
                           ]}
                         />
@@ -150,9 +119,10 @@ export default function Module() {
                           style={[
                             styles.lessonText,
                             {
-                              backgroundColor: lesson.available
-                                ? Colors.green[500]
-                                : Colors.grey[800],
+                              backgroundColor:
+                                lesson.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800],
                             },
                           ]}
                         >
@@ -163,7 +133,8 @@ export default function Module() {
                         <Path1
                           style={styles.path_1}
                           color={
-                            lessons.find(l => l.id === lesson.id + 1)?.available
+                            data?.lessons.find(l => l.id === lesson.id + 1)
+                              ?.progress_percentage === 100
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -172,7 +143,8 @@ export default function Module() {
                         <Path2
                           style={styles.path_2}
                           color={
-                            lessons.find(l => l.id === lesson.id + 1)?.available
+                            data?.lessons.find(l => l.id === lesson.id + 1)
+                              ?.progress_percentage === 100
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -181,7 +153,8 @@ export default function Module() {
                         <Path3
                           style={styles.path_3}
                           color={
-                            lessons.find(l => l.id === lesson.id + 1)?.available
+                            data?.lessons.find(l => l.id === lesson.id + 1)
+                              ?.progress_percentage === 100
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -190,7 +163,8 @@ export default function Module() {
                         <Path4
                           style={styles.path_4}
                           color={
-                            lessons.find(l => l.id === lesson.id + 1)?.available
+                            data?.lessons.find(l => l.id === lesson.id + 1)
+                              ?.progress_percentage === 100
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -205,7 +179,7 @@ export default function Module() {
         </View>
         <View style={styles.buttonContainer}>
           <StandardButton
-            disabled={!lessons.every(l => l.available)}
+            disabled={!data?.lessons.every(l => l.progress_percentage === 100)}
             disabledText={i18n.t('allModulesNotCompleted')}
           >
             <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
