@@ -50,10 +50,10 @@ export default function Module() {
             <View style={styles.content}>
               <Divider />
               <BodyTitle title={i18n.t('materialNeeded')} />
-              {data?.materials.length && data?.materials.length > 0 ? (
+              {data?.materials && data.materials.length > 0 ? (
                 <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
-                  {data?.materials.map(material => (
-                    <MaterialItem key={material?.id} title={material?.name} />
+                  {data.materials.map((material, index) => (
+                    <MaterialItem key={index} title={material || ''} />
                   ))}
                 </Block>
               ) : (
@@ -83,13 +83,15 @@ export default function Module() {
                             styles.check,
                             {
                               backgroundColor:
+                                lesson.id === 1 ||
                                 lesson.progress_percentage === 100
                                   ? Colors.green[500]
                                   : Colors.grey[800],
                             },
                           ]}
                         >
-                          {lesson.progress_percentage === 100 ? (
+                          {lesson.id === 1 ||
+                          lesson.progress_percentage === 100 ? (
                             <FontAwesome
                               name='check'
                               size={17}
@@ -109,6 +111,7 @@ export default function Module() {
                             styles.lessonImage,
                             {
                               borderColor:
+                                lesson.id === 1 ||
                                 lesson.progress_percentage === 100
                                   ? Colors.green[500]
                                   : Colors.grey[800],
@@ -120,6 +123,7 @@ export default function Module() {
                             styles.lessonText,
                             {
                               backgroundColor:
+                                lesson.id === 1 ||
                                 lesson.progress_percentage === 100
                                   ? Colors.green[500]
                                   : Colors.grey[800],
@@ -129,47 +133,51 @@ export default function Module() {
                           {lesson.title}
                         </ExtraSmallSemiBold>
                       </Pressable>
-                      {lesson.id === 1 ? (
-                        <Path1
-                          style={styles.path_1}
-                          color={
-                            data?.lessons.find(l => l.id === lesson.id + 1)
-                              ?.progress_percentage === 100
-                              ? Colors.green[500]
-                              : Colors.grey[800]
-                          }
-                        />
-                      ) : lesson.id === 2 ? (
-                        <Path2
-                          style={styles.path_2}
-                          color={
-                            data?.lessons.find(l => l.id === lesson.id + 1)
-                              ?.progress_percentage === 100
-                              ? Colors.green[500]
-                              : Colors.grey[800]
-                          }
-                        />
-                      ) : lesson.id === 3 ? (
-                        <Path3
-                          style={styles.path_3}
-                          color={
-                            data?.lessons.find(l => l.id === lesson.id + 1)
-                              ?.progress_percentage === 100
-                              ? Colors.green[500]
-                              : Colors.grey[800]
-                          }
-                        />
-                      ) : lesson.id === 4 ? (
-                        <Path4
-                          style={styles.path_4}
-                          color={
-                            data?.lessons.find(l => l.id === lesson.id + 1)
-                              ?.progress_percentage === 100
-                              ? Colors.green[500]
-                              : Colors.grey[800]
-                          }
-                        />
-                      ) : null}
+                      {data?.lessons.length > 1 && (
+                        <>
+                          {lesson.id === 1 ? (
+                            <Path1
+                              style={styles.path_1}
+                              color={
+                                data?.lessons.find(l => l.id === lesson.id + 1)
+                                  ?.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800]
+                              }
+                            />
+                          ) : lesson.id === 2 ? (
+                            <Path2
+                              style={styles.path_2}
+                              color={
+                                data?.lessons.find(l => l.id === lesson.id + 1)
+                                  ?.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800]
+                              }
+                            />
+                          ) : lesson.id === 3 ? (
+                            <Path3
+                              style={styles.path_3}
+                              color={
+                                data?.lessons.find(l => l.id === lesson.id + 1)
+                                  ?.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800]
+                              }
+                            />
+                          ) : lesson.id === 4 ? (
+                            <Path4
+                              style={styles.path_4}
+                              color={
+                                data?.lessons.find(l => l.id === lesson.id + 1)
+                                  ?.progress_percentage === 100
+                                  ? Colors.green[500]
+                                  : Colors.grey[800]
+                              }
+                            />
+                          ) : null}
+                        </>
+                      )}
                     </View>
                   )
                 })}
