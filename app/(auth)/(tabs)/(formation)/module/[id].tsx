@@ -190,13 +190,7 @@ export default function Module() {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <StandardButton
-            color={
-              lessons.every(l => l.available)
-                ? Colors.orange[500]
-                : Colors.grey[800]
-            }
-          >
+          <StandardButton disabled={!lessons.every(l => l.available)}>
             <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
           </StandardButton>
         </View>
