@@ -11,6 +11,7 @@ import { Colors } from '@/constants/Colors'
 import { FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { router, useLocalSearchParams } from 'expo-router'
+import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -29,7 +30,7 @@ const lessons = [
   },
   {
     id: 3,
-    title: 'Les signaux d’apaisement',
+    title: "Les signaux d'apaisement",
     image: 'https://picsum.photos/200/300',
     available: false,
   },
@@ -139,7 +140,7 @@ export default function Module() {
                         <Path1
                           style={styles.path_1}
                           color={
-                            lesson.available
+                            lessons.find(l => l.id === lesson.id + 1)?.available
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -148,7 +149,7 @@ export default function Module() {
                         <Path2
                           style={styles.path_2}
                           color={
-                            lesson.available
+                            lessons.find(l => l.id === lesson.id + 1)?.available
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -157,7 +158,7 @@ export default function Module() {
                         <Path3
                           style={styles.path_3}
                           color={
-                            lesson.available
+                            lessons.find(l => l.id === lesson.id + 1)?.available
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
@@ -166,7 +167,7 @@ export default function Module() {
                         <Path4
                           style={styles.path_4}
                           color={
-                            lesson.available
+                            lessons.find(l => l.id === lesson.id + 1)?.available
                               ? Colors.green[500]
                               : Colors.grey[800]
                           }
