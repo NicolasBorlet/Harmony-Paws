@@ -88,9 +88,8 @@ export default function Module() {
                       : undefined
 
                   return (
-                    <>
+                    <View key={lesson.id}>
                       <Pressable
-                        key={lesson.id}
                         style={[styles.lessonItem, lessonItemStyle]}
                         onPress={() => {
                           router.push(`/(formation)/module/lesson/${lesson.id}`)
@@ -181,7 +180,7 @@ export default function Module() {
                           }
                         />
                       ) : null}
-                    </>
+                    </View>
                   )
                 })}
               </View>
@@ -221,6 +220,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   lessonItem: {
+    zIndex: 1,
     marginTop: -32,
     position: 'relative',
     display: 'flex',
@@ -270,8 +270,8 @@ const styles = StyleSheet.create({
   },
   path_1: {
     position: 'absolute',
-    top: '10%',
-    right: '20%',
+    top: '15%',
+    right: '15%',
     width: 87,
     height: 112,
   },
@@ -284,15 +284,15 @@ const styles = StyleSheet.create({
   },
   path_3: {
     position: 'absolute',
-    top: '50%',
-    left: '40%',
+    top: '30%',
+    left: '35%',
     width: 87,
     height: 112,
   },
   path_4: {
     position: 'absolute',
     top: '75%',
-    left: '10%',
+    left: '5%',
     width: 87,
     height: 112,
   },
