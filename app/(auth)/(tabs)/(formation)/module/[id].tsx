@@ -136,13 +136,41 @@ export default function Module() {
                         </ExtraSmallSemiBold>
                       </Pressable>
                       {lesson.id === 1 ? (
-                        <Path1 style={styles.path_1} />
+                        <Path1
+                          style={styles.path_1}
+                          color={
+                            lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800]
+                          }
+                        />
                       ) : lesson.id === 2 ? (
-                        <Path2 style={styles.path_2} />
+                        <Path2
+                          style={styles.path_2}
+                          color={
+                            lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800]
+                          }
+                        />
                       ) : lesson.id === 3 ? (
-                        <Path3 style={styles.path_3} />
+                        <Path3
+                          style={styles.path_3}
+                          color={
+                            lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800]
+                          }
+                        />
                       ) : lesson.id === 4 ? (
-                        <Path4 style={styles.path_4} />
+                        <Path4
+                          style={styles.path_4}
+                          color={
+                            lesson.available
+                              ? Colors.green[500]
+                              : Colors.grey[800]
+                          }
+                        />
                       ) : null}
                     </>
                   )
