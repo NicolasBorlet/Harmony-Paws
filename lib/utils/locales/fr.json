@@ -113,5 +113,8 @@
   "dogName": "Quel est le prénom de votre chien ?",
   "dogAge": "Quel est l'âge de votre chien ?",
   "dogBehavior": "Votre chien est :",
-  "nextModule": "Module suivant"
+  "nextModule": "Module suivant",
+  "allModulesNotCompleted": "Tous les modules n'ont pas été complétés",
+  "lesson": "Leçon",
+  "materialNeeded": "Matériel nécessaire"
 }

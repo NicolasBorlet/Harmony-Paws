@@ -77,11 +77,11 @@ export default function Module() {
             </Body>
             <View style={styles.content}>
               <Divider />
-              <BodyTitle title='Matériels nécessaires' />
+              <BodyTitle title={i18n.t('materialNeeded')} />
             </View>
             <View style={styles.content}>
               <Divider />
-              <BodyTitle title='Leçon' />
+              <BodyTitle title={i18n.t('lesson')} />
               <View style={styles.lessonContainer}>
                 {lessons.map(lesson => {
                   const lessonItemStyle =
@@ -192,7 +192,7 @@ export default function Module() {
         <View style={styles.buttonContainer}>
           <StandardButton
             disabled={!lessons.every(l => l.available)}
-            disabledText="Tous les modules n'ont pas été complétés"
+            disabledText={i18n.t('allModulesNotCompleted')}
           >
             <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
           </StandardButton>
