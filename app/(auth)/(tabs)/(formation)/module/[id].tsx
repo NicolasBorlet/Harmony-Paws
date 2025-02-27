@@ -8,7 +8,7 @@ import StandardScrollView from '@/components/scrollview/standard-scrollview'
 import Divider from '@/components/ui/divider'
 import { Body, ExtraSmallSemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import { FontAwesome } from '@expo/vector-icons'
+import { Entypo, FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { router, useLocalSearchParams } from 'expo-router'
 import React from 'react'
@@ -106,11 +106,19 @@ export default function Module() {
                             },
                           ]}
                         >
-                          <FontAwesome
-                            name='check'
-                            size={17}
-                            color={Colors.white}
-                          />
+                          {lesson.available ? (
+                            <FontAwesome
+                              name='check'
+                              size={17}
+                              color={Colors.white}
+                            />
+                          ) : (
+                            <Entypo
+                              name='lock'
+                              size={17}
+                              color={Colors.white}
+                            />
+                          )}
                         </View>
                         <Image
                           source={{ uri: lesson.image }}
