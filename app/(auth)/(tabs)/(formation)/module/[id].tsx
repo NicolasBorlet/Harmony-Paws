@@ -1,4 +1,7 @@
 import Path1 from '@/assets/svg/paw-path/path-1'
+import Path2 from '@/assets/svg/paw-path/path-2'
+import Path3 from '@/assets/svg/paw-path/path-3'
+import Path4 from '@/assets/svg/paw-path/path-4'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
@@ -84,64 +87,66 @@ export default function Module() {
                       : undefined
 
                   return (
-                    <Pressable
-                      key={lesson.id}
-                      style={[styles.lessonItem, lessonItemStyle]}
-                      onPress={() => {
-                        router.push(`/(formation)/module/lesson/${lesson.id}`)
-                      }}
-                    >
-                      <View
-                        style={[
-                          styles.check,
-                          {
-                            backgroundColor: lesson.available
-                              ? Colors.green[500]
-                              : Colors.grey[800],
-                          },
-                        ]}
+                    <>
+                      <Pressable
+                        key={lesson.id}
+                        style={[styles.lessonItem, lessonItemStyle]}
+                        onPress={() => {
+                          router.push(`/(formation)/module/lesson/${lesson.id}`)
+                        }}
                       >
-                        <FontAwesome
-                          name='check'
-                          size={17}
-                          color={Colors.white}
+                        <View
+                          style={[
+                            styles.check,
+                            {
+                              backgroundColor: lesson.available
+                                ? Colors.green[500]
+                                : Colors.grey[800],
+                            },
+                          ]}
+                        >
+                          <FontAwesome
+                            name='check'
+                            size={17}
+                            color={Colors.white}
+                          />
+                        </View>
+                        <Image
+                          source={{ uri: lesson.image }}
+                          style={[
+                            styles.lessonImage,
+                            {
+                              borderColor: lesson.available
+                                ? Colors.green[500]
+                                : Colors.grey[800],
+                            },
+                          ]}
                         />
-                      </View>
-                      <Image
-                        source={{ uri: lesson.image }}
-                        style={[
-                          styles.lessonImage,
-                          {
-                            borderColor: lesson.available
-                              ? Colors.green[500]
-                              : Colors.grey[800],
-                          },
-                        ]}
-                      />
-                      <ExtraSmallSemiBold
-                        style={[
-                          styles.lessonText,
-                          {
-                            backgroundColor: lesson.available
-                              ? Colors.green[500]
-                              : Colors.grey[800],
-                          },
-                        ]}
-                      >
-                        {lesson.title}
-                      </ExtraSmallSemiBold>
-                    </Pressable>
+                        <ExtraSmallSemiBold
+                          style={[
+                            styles.lessonText,
+                            {
+                              backgroundColor: lesson.available
+                                ? Colors.green[500]
+                                : Colors.grey[800],
+                            },
+                          ]}
+                        >
+                          {lesson.title}
+                        </ExtraSmallSemiBold>
+                      </Pressable>
+                      {lesson.id === 1 ? (
+                        <Path1 style={styles.path_1} />
+                      ) : lesson.id === 2 ? (
+                        <Path2 style={styles.path_2} />
+                      ) : lesson.id === 3 ? (
+                        <Path3 style={styles.path_3} />
+                      ) : lesson.id === 4 ? (
+                        <Path4 style={styles.path_4} />
+                      ) : null}
+                    </>
                   )
                 })}
-                <Path1
-                  style={{
-                    position: 'absolute',
-                    top: '10%',
-                    right: '20%',
-                    width: 87,
-                    height: 112,
-                  }}
-                />
               </View>
             </View>
           </View>
@@ -224,5 +229,34 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: Colors.green[500],
     borderRadius: 8,
+  },
+  path_1: {
+    position: 'absolute',
+    top: '10%',
+    right: '20%',
+    width: 87,
+    height: 112,
+  },
+  path_2: {
+    position: 'absolute',
+    top: '10%',
+    right: '20%',
+    width: 87,
+    height: 112,
+  },
+  path_3: {
+    position: 'absolute',
+    top: '10%',
+    right: '20%',
+    width: 87,
+    height: 112,
+  },
+  path_4: {
+    position: 'absolute',
+    top: '10%',
+    right: '20%',
+    width: 87,
+    height: 112,
+    transform: [{ rotate: '180deg' }],
   },
 })
