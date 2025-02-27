@@ -116,5 +116,6 @@
   "nextModule": "Module suivant",
   "allModulesNotCompleted": "Tous les modules n'ont pas été complétés",
   "lesson": "Leçon",
-  "materialNeeded": "Matériel nécessaire"
+  "materialNeeded": "Matériel nécessaire",
+  "noMaterialNeeded": "Pas de matériel nécessaire"
 }

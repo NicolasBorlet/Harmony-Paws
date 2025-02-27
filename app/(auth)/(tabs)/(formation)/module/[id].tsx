@@ -7,15 +7,17 @@ import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import MaterialItem from '@/components/formation/module/material-item'
 import Block from '@/components/grid/Block'
+import LoaderComponent from '@/components/loader'
 import StandardScrollView from '@/components/scrollview/standard-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import { Body, BodyMedium, ExtraSmallSemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useModuleById } from '@/lib/api/formation'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { router, useLocalSearchParams } from 'expo-router'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -52,58 +54,44 @@ const lessons = [
   },
 ]
 
-const materials = [
-  {
-    id: 1,
-    title: 'Idée 1',
-  },
-  {
-    id: 2,
-    title: 'Idée 2',
-  },
-  {
-    id: 3,
-    title: 'Idée 3',
-  },
-  {
-    id: 4,
-    title: 'Idée 4',
-  },
-]
-
 export default function Module() {
   const insets = useSafeAreaInsets()
 
   const { id } = useLocalSearchParams<{ id: string }>()
 
-  // const { data, isLoading } = useModuleById(Number(id))
+  const { data, isLoading } = useModuleById(Number(id))
 
-  // if (isLoading) {
-  //   return <LoaderComponent />
-  // }
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
+  if (isLoading) {
+    return <LoaderComponent />
+  }
 
   return (
     <>
       <Back />
       <StandardScrollView
-        headerImage={'https://picsum.photos/200/300'}
+        headerImage={data?.image}
         paddingHorizontal={0}
-        title='Faire le beau'
+        title={data?.name}
       >
         <View style={{ gap: 24, display: 'flex', flexDirection: 'column' }}>
           <View style={styles.container}>
-            <Body>
-              Lorem ipsum dolor sit amet consectetur. Velit ac vitae phasellus
-              pharetra urna eu est nec fermentum. Ac at tristique etiam neque.
-            </Body>
+            <Body>{data?.description}</Body>
             <View style={styles.content}>
               <Divider />
               <BodyTitle title={i18n.t('materialNeeded')} />
-              <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
-                {materials.map(material => (
-                  <MaterialItem key={material.id} title={material.title} />
-                ))}
-              </Block>
+              {data?.materials.length && data?.materials.length > 0 ? (
+                <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
+                  {data?.materials.map(material => (
+                    <MaterialItem key={material.id} title={material.name} />
+                  ))}
+                </Block>
+              ) : (
+                <Body>{i18n.t('noMaterialNeeded')}</Body>
+              )}
             </View>
             <View style={styles.content}>
               <Divider />
