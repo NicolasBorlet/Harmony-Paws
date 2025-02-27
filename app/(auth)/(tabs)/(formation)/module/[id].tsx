@@ -190,7 +190,10 @@ export default function Module() {
           </View>
         </View>
         <View style={styles.buttonContainer}>
-          <StandardButton disabled={!lessons.every(l => l.available)}>
+          <StandardButton
+            disabled={!lessons.every(l => l.available)}
+            disabledText="Tous les modules n'ont pas été complétés"
+          >
             <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
           </StandardButton>
         </View>
