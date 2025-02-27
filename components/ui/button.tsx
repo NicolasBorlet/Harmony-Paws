@@ -1,5 +1,6 @@
 import { i18n } from '@/app/_layout'
 import { Colors } from '@/constants/Colors'
+import * as Burnt from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
 import { FC, PropsWithChildren } from 'react'
@@ -27,6 +28,7 @@ interface ButtonProps extends PressableProps {
 
 interface StandardButtonProps extends ButtonProps, PropsWithChildren {
   onPress?: () => void
+  disabledText?: string
 }
 
 const StyledButton = styled.Pressable<ButtonProps>`
@@ -80,6 +82,7 @@ const StandardButton: FC<StandardButtonProps> = ({
   outlined,
   disabled,
   color = '#F49819',
+  disabledText = "Cette action n'est pas disponible",
   ...props
 }) => {
   const pressed = useSharedValue(0)
@@ -109,19 +112,22 @@ const StandardButton: FC<StandardButtonProps> = ({
   })
 
   const handlePress = () => {
-    if (disabled) return
+    if (disabled) {
+      Burnt.toast({
+        title: disabledText,
+        preset: 'error',
+      })
+    }
     onPress?.()
   }
 
   return (
     <AnimatedPressable
       onPressIn={() => {
-        if (disabled) return
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         pressed.value = 1
       }}
       onPressOut={() => {
-        if (disabled) return
         pressed.value = 0
       }}
       onPress={handlePress}
