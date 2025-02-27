@@ -338,38 +338,38 @@ export type Database = {
           },
         ]
       }
-      lesson_materials: {
+      module_materials: {
         Row: {
           created_at: string | null
           id: number
-          lesson_id: number
+          module_id: number
           material_id: number
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           id?: number
-          lesson_id: number
+          module_id: number
           material_id: number
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           id?: number
-          lesson_id?: number
+          module_id?: number
           material_id?: number
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'lesson_materials_lesson_id_lessons_id_fk'
-            columns: ['lesson_id']
+            foreignKeyName: 'module_materials_module_id_modules_id_fk'
+            columns: ['module_id']
             isOneToOne: false
-            referencedRelation: 'lessons'
+            referencedRelation: 'modules'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'lesson_materials_material_id_materials_id_fk'
+            foreignKeyName: 'module_materials_material_id_materials_id_fk'
             columns: ['material_id']
             isOneToOne: false
             referencedRelation: 'materials'

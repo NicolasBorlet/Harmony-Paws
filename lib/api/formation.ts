@@ -258,27 +258,72 @@ export const useFormationById = (id: number, userId?: number) => {
 }
 
 export const getModuleById = async (id: number) => {
-  // Récupérer le module et ses leçons avec une requête jointe
-  const { data: module, error: moduleError } = await supabase
-    .from('modules')
-    .select('*')
-    .eq('id', id)
-    .single()
+  try {
+    // Récupérer le module avec sa formation en une seule requête
+    const { data: module, error: moduleError } = await supabase
+      .from('modules')
+      .select('*, formations!inner(id)')
+      .eq('id', id)
+      .single()
 
-  if (moduleError) throw moduleError
+    if (moduleError) throw moduleError
 
-  // Récupérer les leçons associées au module
-  const { data: lessons, error: lessonsError } = await supabase
-    .from('lessons')
-    .select('*')
-    .eq('module_id', id)
-    .order('order', { ascending: true })
+    const formationId = module.formations.id
 
-  if (lessonsError) throw lessonsError
+    // Exécuter les requêtes en parallèle pour améliorer les performances
+    const [lessonsResult, materialsResult] = await Promise.all([
+      // Récupérer les leçons associées au module
+      supabase
+        .from('lessons')
+        .select('*')
+        .eq('module_id', id)
+        .order('order', { ascending: true }),
 
-  return {
-    ...module,
-    lessons: lessons || [],
+      // Récupérer le matériel nécessaire pour ce module
+      supabase
+        .from('module_materials')
+        .select('materials(name)')
+        .eq('module_id', id),
+    ])
+
+    if (lessonsResult.error) throw lessonsResult.error
+    if (materialsResult.error) throw materialsResult.error
+
+    const lessons = lessonsResult.data || []
+    const materials = materialsResult.data || []
+
+    // Préparer les chemins d'images pour le module et toutes les leçons
+    const imagePaths = [
+      `${formationId}/${id}`, // Module image path
+      ...lessons.map(lesson => `${formationId}/${id}/${lesson.id}`), // Lesson image paths
+    ]
+
+    // Récupérer toutes les images en parallèle
+    const imageResults = await Promise.all(
+      imagePaths.map(path => getFormationImageUrl(path)),
+    )
+
+    // L'image du module est la première du tableau
+    const moduleImage = imageResults[0] || ''
+
+    // Mapper les images aux leçons correspondantes
+    const lessonsWithImages = lessons.map((lesson, index) => ({
+      ...lesson,
+      image: imageResults[index + 1] || '', // +1 car la première image est celle du module
+    }))
+
+    return {
+      ...module,
+      image: moduleImage,
+      // Corrige le problème TypeScript en vérifiant si materials.materials est null
+      materials:
+        materials.map(material => material.materials?.name).filter(Boolean) ||
+        [],
+      lessons: lessonsWithImages,
+    }
+  } catch (error) {
+    console.error('Error in getModuleById:', error)
+    throw error
   }
 }
 
