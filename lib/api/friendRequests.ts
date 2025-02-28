@@ -1,25 +1,36 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { supabase } from '../supabase'
+import { defaultQueryOptions, handleSupabaseError, logDev } from './utils'
 
 export async function getFriendRequests(userId: number) {
-  const { data, error } = await supabase
-    .from('friend_requests')
-    .select(
-      `
-      *,
-      sender:users!sender_id(
-        first_name
+  try {
+    // Select only necessary fields
+    const { data, error } = await supabase
+      .from('friend_requests')
+      .select(
+        `
+        id, created_at, updated_at, status, sender_id, recipient_id,
+        sender:users!sender_id(
+          first_name
+        )
+      `,
       )
-    `,
-    )
-    .eq('recipient_id', userId)
-    .eq('status', 'pending')
-    .order('created_at', { ascending: false })
+      .eq('recipient_id', userId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
 
-  if (error) throw error
-  // For eacch data, add type="new_friend_request"
-  return data.map(request => ({ ...request, type: 'new_friend_request' }))
+    if (error) throw handleSupabaseError(error, 'friend requests')
+
+    // Add type information for each request
+    return (data || []).map(request => ({
+      ...request,
+      type: 'new_friend_request',
+    }))
+  } catch (error) {
+    logDev('Error in getFriendRequests:', error)
+    throw error
+  }
 }
 
 export const useFriendRequests = (userId: number) => {
@@ -28,8 +39,7 @@ export const useFriendRequests = (userId: number) => {
   const query = useQuery({
     queryKey: ['friendRequests', userId],
     queryFn: () => getFriendRequests(userId),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    ...defaultQueryOptions,
   })
 
   useEffect(() => {
@@ -44,27 +54,10 @@ export const useFriendRequests = (userId: number) => {
           filter: `recipient_id=eq.${userId}`,
         },
         async payload => {
-          if (payload.eventType === 'INSERT') {
-            queryClient.setQueryData(
-              ['friendRequests', userId],
-              (oldData = []) => {
-                const requestExists = oldData.some(
-                  req => req.id === payload.new.id,
-                )
-                if (requestExists) {
-                  return oldData
-                }
-
-                return [...oldData, payload.new]
-              },
-            )
-          } else if (payload.eventType === 'DELETE') {
-            queryClient.setQueryData(
-              ['friendRequests', userId],
-              (oldData = []) =>
-                oldData.filter(req => req.id !== payload.old.id),
-            )
-          }
+          // Use query invalidation instead of manual cache updates
+          queryClient.invalidateQueries({
+            queryKey: ['friendRequests', userId],
+          })
         },
       )
       .subscribe()
@@ -81,67 +74,95 @@ export const sendFriendRequest = async (
   senderId: number,
   receiverId: number,
 ) => {
-  if (senderId === receiverId) {
-    throw new Error('Sender and receiver cannot be the same')
+  try {
+    if (senderId === receiverId) {
+      throw new Error('Sender and receiver cannot be the same')
+    }
+
+    // Check if request already exists, using maybeSingle to handle not found
+    const { data: existingRequest, error: requestError } = await supabase
+      .from('friend_requests')
+      .select('id')
+      .eq('sender_id', senderId)
+      .eq('recipient_id', receiverId)
+      .maybeSingle()
+
+    if (requestError)
+      throw handleSupabaseError(requestError, 'friend request check')
+
+    if (existingRequest) {
+      throw new Error('Friend request already sent')
+    }
+
+    // Insert new request
+    const { data, error } = await supabase
+      .from('friend_requests')
+      .insert([
+        { sender_id: senderId, recipient_id: receiverId, status: 'pending' },
+      ])
+      .select()
+      .single()
+
+    if (error) throw handleSupabaseError(error, 'friend request')
+    return data
+  } catch (error) {
+    logDev('Error in sendFriendRequest:', error)
+    throw error
   }
-
-  // Vérifier si une demande d'ami a déjà été envoyée
-  const { data: existingRequest, error: requestError } = await supabase
-    .from('friend_requests')
-    .select('*')
-    .eq('sender_id', senderId)
-    .eq('recipient_id', receiverId)
-    .single()
-
-  if (requestError && requestError.code !== 'PGRST116') {
-    // PGRST116 signifie qu'aucune ligne n'a été trouvée
-    throw requestError
-  }
-
-  if (existingRequest) {
-    throw new Error('Friend request already sent')
-  }
-
-  const { data, error } = await supabase
-    .from('friend_requests')
-    .insert([
-      { sender_id: senderId, recipient_id: receiverId, status: 'pending' },
-    ])
-    .select()
-    .single()
-
-  if (error) throw error
-  return data
 }
 
 export const acceptFriendRequest = async (
   senderId: number,
   receiverId: number,
 ) => {
-  const { data, error } = await supabase
-    .from('friend_requests')
-    .update({ status: 'accepted' })
-    .eq('sender_id', senderId)
-    .eq('recipient_id', receiverId)
-    .select()
-    .single()
+  try {
+    // Try to use RPC if available
+    try {
+      const { data, error } = await supabase.rpc('accept_friend_request', {
+        sender_id: senderId,
+        receiver_id: receiverId,
+      })
 
-  if (error) throw error
-  return data
+      if (error) throw error
+      return data
+    } catch (rpcError) {
+      // Fall back to client implementation
+      logDev('Falling back to client implementation for acceptFriendRequest')
+
+      const { data, error } = await supabase
+        .from('friend_requests')
+        .update({ status: 'accepted' })
+        .eq('sender_id', senderId)
+        .eq('recipient_id', receiverId)
+        .select()
+        .single()
+
+      if (error) throw handleSupabaseError(error, 'friend request acceptance')
+      return data
+    }
+  } catch (error) {
+    logDev('Error in acceptFriendRequest:', error)
+    throw error
+  }
 }
 
 export const rejectFriendRequest = async (
   senderId: number,
   receiverId: number,
 ) => {
-  const { data, error } = await supabase
-    .from('friend_requests')
-    .update({ status: 'rejected' })
-    .eq('sender_id', senderId)
-    .eq('recipient_id', receiverId)
-    .select()
-    .single()
+  try {
+    const { data, error } = await supabase
+      .from('friend_requests')
+      .update({ status: 'rejected' })
+      .eq('sender_id', senderId)
+      .eq('recipient_id', receiverId)
+      .select()
+      .single()
 
-  if (error) throw error
-  return data
+    if (error) throw handleSupabaseError(error, 'friend request rejection')
+    return data
+  } catch (error) {
+    logDev('Error in rejectFriendRequest:', error)
+    throw error
+  }
 }

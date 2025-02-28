@@ -1,31 +1,38 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { supabase } from '../supabase'
+import { defaultQueryOptions, handleSupabaseError, logDev } from './utils'
 
 export async function getUserInvitations(userId: number) {
-  console.log('getUserInvitations', userId)
-  const { data, error } = await supabase
-    .from('activity_invitations')
-    .select(
-      `
-      *,
-      sender:users!sender_id(
-        id,
-        first_name
-      ),
-      activity:activities!activity_id(
-        id
+  logDev('getUserInvitations', userId)
+
+  try {
+    // Select only necessary fields
+    const { data, error } = await supabase
+      .from('activity_invitations')
+      .select(
+        `
+        id, created_at, updated_at, status,
+        sender:users!sender_id(
+          id,
+          first_name
+        ),
+        activity:activities!activity_id(
+          id
+        )
+      `,
       )
-    `,
-    )
-    .eq('receiver_id', userId)
-    .eq('status', 'pending')
-    .order('created_at', { ascending: false })
+      .eq('receiver_id', userId)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false })
 
-  if (error) throw error
+    if (error) throw handleSupabaseError(error, 'invitations')
 
-  console.log('data', data)
-  return data
+    return data || []
+  } catch (error) {
+    logDev('Error in getUserInvitations:', error)
+    throw error
+  }
 }
 
 export const useUserInvitations = (userId: number) => {
@@ -34,8 +41,7 @@ export const useUserInvitations = (userId: number) => {
   const query = useQuery({
     queryKey: ['userInvitations', userId],
     queryFn: () => getUserInvitations(userId),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    ...defaultQueryOptions,
   })
 
   useEffect(() => {
@@ -50,18 +56,10 @@ export const useUserInvitations = (userId: number) => {
           filter: `receiver_id=eq.${userId}`,
         },
         async payload => {
-          if (payload.eventType === 'INSERT') {
-            queryClient.setQueryData(
-              ['userInvitations', userId],
-              (oldData = []) => [...oldData, payload.new],
-            )
-          } else if (payload.eventType === 'DELETE') {
-            queryClient.setQueryData(
-              ['userInvitations', userId],
-              (oldData = []) =>
-                oldData.filter(invitation => invitation.id !== payload.old.id),
-            )
-          }
+          // Use query invalidation instead of manual cache manipulation
+          queryClient.invalidateQueries({
+            queryKey: ['userInvitations', userId],
+          })
         },
       )
       .subscribe()
@@ -75,53 +73,80 @@ export const useUserInvitations = (userId: number) => {
 }
 
 export const acceptActivityInvitation = async (invitationId: number) => {
-  console.log('acceptActivityInvitation', invitationId)
+  logDev('acceptActivityInvitation', invitationId)
 
-  // D'abord, récupérer l'invitation
-  const { data: invitation, error: fetchError } = await supabase
-    .from('activity_invitations')
-    .select('*')
-    .eq('id', invitationId)
-    .single()
+  try {
+    // Use RPC to handle transaction on the server side
+    const { data, error } = await supabase.rpc('accept_activity_invitation', {
+      invitation_id: invitationId,
+    })
 
-  if (fetchError) throw fetchError
-  if (!invitation) throw new Error('Invitation not found')
+    if (error) throw handleSupabaseError(error, 'invitation')
+    return data
+  } catch (error) {
+    // If the RPC doesn't exist yet, fall back to client-side implementation
+    logDev('Falling back to client implementation:', error)
 
-  console.log('fetched invitation', invitation)
+    return await acceptInvitationClientSide(invitationId)
+  }
+}
 
-  // Mettre à jour le statut
-  const { error: updateError } = await supabase
-    .from('activity_invitations')
-    .update({ status: 'accepted' })
-    .eq('id', invitationId)
+// Fallback implementation if server-side function isn't available
+const acceptInvitationClientSide = async (invitationId: number) => {
+  try {
+    // First, retrieve the invitation
+    const { data: invitation, error: fetchError } = await supabase
+      .from('activity_invitations')
+      .select('*')
+      .eq('id', invitationId)
+      .single()
 
-  if (updateError) throw updateError
+    if (fetchError) throw handleSupabaseError(fetchError, 'invitation')
+    if (!invitation) throw new Error('Invitation not found')
 
-  // Ajouter l'utilisateur à l'activité
-  const { error: userActivityError } = await supabase
-    .from('user_activities')
-    .insert([
-      {
-        user_id: invitation.receiver_id,
-        activity_id: invitation.activity_id,
-      },
-    ])
+    // Update status
+    const { error: updateError } = await supabase
+      .from('activity_invitations')
+      .update({ status: 'accepted' })
+      .eq('id', invitationId)
 
-  if (userActivityError) throw userActivityError
+    if (updateError) throw handleSupabaseError(updateError, 'invitation status')
 
-  return invitation
+    // Add user to activity
+    const { error: userActivityError } = await supabase
+      .from('user_activities')
+      .insert([
+        {
+          user_id: invitation.receiver_id,
+          activity_id: invitation.activity_id,
+        },
+      ])
+
+    if (userActivityError)
+      throw handleSupabaseError(userActivityError, 'user activity')
+
+    return invitation
+  } catch (error) {
+    logDev('Error in acceptInvitationClientSide:', error)
+    throw error
+  }
 }
 
 export const rejectActivityInvitation = async (invitationId: number) => {
-  const { data, error } = await supabase
-    .from('activity_invitations')
-    .update({ status: 'rejected' })
-    .eq('id', invitationId)
-    .select()
-    .single()
+  try {
+    const { data, error } = await supabase
+      .from('activity_invitations')
+      .update({ status: 'rejected' })
+      .eq('id', invitationId)
+      .select()
+      .single()
 
-  if (error) throw error
-  return data
+    if (error) throw handleSupabaseError(error, 'invitation')
+    return data
+  } catch (error) {
+    logDev('Error in rejectActivityInvitation:', error)
+    throw error
+  }
 }
 
 export const sendActivityInvitation = async (invitation: {
@@ -129,36 +154,45 @@ export const sendActivityInvitation = async (invitation: {
   receiverId: number
   activityId: number
 }) => {
-  if (invitation.senderId === invitation.receiverId) {
-    throw new Error('Sender and receiver cannot be the same')
+  try {
+    if (invitation.senderId === invitation.receiverId) {
+      throw new Error('Sender and receiver cannot be the same')
+    }
+
+    // Check if invitation already exists
+    const { data: existingRequest, error: requestError } = await supabase
+      .from('activity_invitations')
+      .select('id')
+      .eq('sender_id', invitation.senderId)
+      .eq('receiver_id', invitation.receiverId)
+      .eq('activity_id', invitation.activityId)
+      .maybeSingle()
+
+    if (requestError)
+      throw handleSupabaseError(requestError, 'invitation check')
+
+    if (existingRequest) {
+      throw new Error('Invitation already sent')
+    }
+
+    // Insert new invitation
+    const { data, error } = await supabase
+      .from('activity_invitations')
+      .insert([
+        {
+          sender_id: invitation.senderId,
+          receiver_id: invitation.receiverId,
+          activity_id: invitation.activityId,
+          status: 'pending',
+        },
+      ])
+      .select()
+      .single()
+
+    if (error) throw handleSupabaseError(error, 'invitation creation')
+    return data
+  } catch (error) {
+    logDev('Error in sendActivityInvitation:', error)
+    throw error
   }
-
-  // Vérifier si une demande d'invitation a déjà été envoyée
-  const { data: existingRequest, error: requestError } = await supabase
-    .from('activity_invitations')
-    .select('*')
-    .eq('sender_id', invitation.senderId)
-    .eq('receiver_id', invitation.receiverId)
-    .eq('activity_id', invitation.activityId)
-    .single()
-
-  if (existingRequest) {
-    throw new Error('Invitation already sent')
-  }
-
-  const { data, error } = await supabase
-    .from('activity_invitations')
-    .insert([
-      {
-        sender_id: invitation.senderId,
-        receiver_id: invitation.receiverId,
-        activity_id: invitation.activityId,
-        status: 'pending',
-      },
-    ])
-    .select()
-    .single()
-
-  if (error) throw error
-  return data
 }
