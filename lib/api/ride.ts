@@ -3,6 +3,12 @@ import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
 import { ActivityListingInterface } from './types/interfaces'
+import {
+  defaultQueryOptions,
+  formatDate,
+  handleSupabaseError,
+  logDev,
+} from './utils'
 
 export const getPaginatedActivities = async (
   page: number = 0,
@@ -12,8 +18,9 @@ export const getPaginatedActivities = async (
     const from = page * pageSize
     const to = from + pageSize - 1
 
-    console.log(`Fetching activities from ${from} to ${to}`)
+    logDev(`Fetching activities from ${from} to ${to}`)
 
+    // Only select fields we actually need
     const { data, error, count } = await supabase
       .from('activities')
       .select('id, place, date, duration, created_at, updated_at, visibility', {
@@ -24,42 +31,26 @@ export const getPaginatedActivities = async (
       .eq('visibility', ActivityVisibility.PUBLIC)
 
     if (error) {
-      console.error('Supabase error:', error)
-      throw new Error(`Failed to fetch activities: ${error.message}`)
+      throw handleSupabaseError(error, 'activities')
     }
 
-    console.log('Query parameters:', {
-      from,
-      to,
-      visibility: ActivityVisibility.PUBLIC,
-    })
-    console.log('Raw response:', { data, count, error })
-
-    if (!data) {
-      console.warn('No data returned from Supabase')
+    if (!data || data.length === 0) {
       return {
         activities: [],
         totalCount: 0,
         hasMore: false,
       }
-    } else {
-      console.log('Data fetched successfully')
-      console.log(data)
     }
 
-    // Ajouter les images pour chaque activité
+    // Traiter les images individuellement avec Edge Functions
     const activitiesWithImages = await Promise.all(
-      data?.map(async activity => ({
+      data.map(async activity => ({
         ...activity,
-        image: (await getRideImageUrl(activity.id.toString())) || '',
-        date: activity.date ? new Date(activity.date) : new Date(),
-        created_at: activity.created_at
-          ? new Date(activity.created_at)
-          : new Date(),
-        updated_at: activity.updated_at
-          ? new Date(activity.updated_at)
-          : new Date(),
-      })) || [],
+        image: await getRideImageUrl(activity.id.toString()),
+        date: formatDate(activity.date),
+        created_at: formatDate(activity.created_at),
+        updated_at: formatDate(activity.updated_at),
+      })),
     )
 
     return {
@@ -68,7 +59,7 @@ export const getPaginatedActivities = async (
       hasMore: (count || 0) > to + 1,
     }
   } catch (error) {
-    console.error('Error in getPaginatedActivities:', error)
+    logDev('Error in getPaginatedActivities:', error)
     throw error
   }
 }
@@ -82,93 +73,133 @@ export const usePaginatedActivities = (pageSize: number = 5) => {
       return allPages.length
     },
     initialPageParam: 0,
+    ...defaultQueryOptions,
   })
 }
 
-export const getActivityById = async (id: number) => {
-  const { data, error } = await supabase
-    .from('activities')
-    .select(
-      `
-      *,
-      creator:creator_id (
-        id,
-        first_name,
-        last_name,
-        created_at,
-        updated_at      
-      ),
-      steps (
-        id,
-        place,
-        estimated_hour,
-        created_at,
-        updated_at
-      ),
-      user_activities (
-        user:user_id (
-          id,
-          first_name,
-          last_name,
-          place,
-          created_at,
-          updated_at
-        )
-      )
-    `,
-    )
-    .eq('id', id)
-    .single()
-
-  if (error) throw error
-
-  // Transform dates and add image
-  const transformedData = {
-    ...data,
-    image: await getRideImageUrl(data.id.toString()),
-    date: data.date ? new Date(data.date) : new Date(),
-    created_at: data.created_at ? new Date(data.created_at) : new Date(),
-    updated_at: data.updated_at ? new Date(data.updated_at) : new Date(),
-    // Add creator info
-    creator: data.creator
-      ? {
-          ...data.creator,
-          created_at: data.creator.created_at
-            ? new Date(data.creator.created_at)
-            : new Date(),
-          updated_at: data.creator.updated_at
-            ? new Date(data.creator.updated_at)
-            : new Date(),
-        }
-      : null,
-    // Flatten participants array and get their images
-    participants: await Promise.all(
-      data.user_activities?.map(async ua => ({
-        ...ua.user,
-        // image: (await getRideImageUrl(ua.user.id.toString())) || '',
-        created_at: ua.user.created_at
-          ? new Date(ua.user.created_at)
-          : new Date(),
-        updated_at: ua.user.updated_at
-          ? new Date(ua.user.updated_at)
-          : new Date(),
-      })) || [],
-    ),
-    // Transform dates in steps
-    steps:
-      data.steps?.map(step => ({
-        ...step,
-        created_at: step.created_at ? new Date(step.created_at) : new Date(),
-        updated_at: step.updated_at ? new Date(step.updated_at) : new Date(),
-      })) || [],
+// Définir des types corrects pour les entités
+interface ActivityDetails {
+  id: number
+  place: string
+  date: string
+  duration: string
+  created_at: string
+  updated_at: string
+  visibility: string
+  type: string
+  creator?: {
+    id: number
+    first_name: string
+    last_name: string
+    created_at: string
+    updated_at: string
   }
+  steps?: Array<{
+    id: number
+    place: string
+    estimated_hour: string
+    created_at: string
+    updated_at: string
+  }>
+  user_activities?: Array<{
+    user: {
+      id: number
+      first_name: string
+      last_name: string
+      place: string
+      created_at: string
+      updated_at: string
+    }
+  }>
+}
 
-  return { data: transformedData, error: null }
+export const getActivityById = async (id: number) => {
+  try {
+    // Only select necessary fields including creator_id
+    const { data: activity, error } = await supabase
+      .from('activities')
+      .select(
+        `
+        id, place, date, duration, created_at, updated_at, visibility, type, creator_id
+      `,
+      )
+      .eq('id', id)
+      .single()
+
+    if (error) throw handleSupabaseError(error, 'activity')
+
+    // Get creator information if creator_id exists
+    let creator = null
+    if (activity.creator_id) {
+      const { data: creatorData } = await supabase
+        .from('users')
+        .select('id, first_name, last_name, created_at, updated_at')
+        .eq('id', activity.creator_id)
+        .maybeSingle()
+
+      creator = creatorData
+    }
+
+    // Get steps
+    const { data: steps } = await supabase
+      .from('steps')
+      .select('id, place, estimated_hour, created_at, updated_at')
+      .eq('activity_id', id)
+
+    // Get participants
+    const { data: userActivities } = await supabase
+      .from('user_activities')
+      .select('user_id')
+      .eq('activity_id', id)
+
+    // Get user details for participants
+    const userIds = userActivities?.map(ua => ua.user_id) || []
+    const { data: participants } = await supabase
+      .from('users')
+      .select('id, first_name, last_name, place, created_at, updated_at')
+      .in('id', userIds.length > 0 ? userIds : [-1]) // Use -1 if no users to avoid empty array error
+
+    // Transform dates and add image
+    const transformedData = {
+      ...activity,
+      image: await getRideImageUrl(activity.id.toString()),
+      date: formatDate(activity.date),
+      created_at: formatDate(activity.created_at),
+      updated_at: formatDate(activity.updated_at),
+      // Add creator info
+      creator: creator
+        ? {
+            ...creator,
+            created_at: formatDate(creator.created_at),
+            updated_at: formatDate(creator.updated_at),
+          }
+        : null,
+      // Add participants
+      participants: (participants || []).map(user => ({
+        ...user,
+        image: '', // Vous pouvez ajouter la récupération d'images ici si nécessaire
+        created_at: formatDate(user.created_at),
+        updated_at: formatDate(user.updated_at),
+      })),
+      // Transform dates in steps
+      steps: (steps || []).map(step => ({
+        ...step,
+        created_at: formatDate(step.created_at),
+        updated_at: formatDate(step.updated_at),
+      })),
+    }
+
+    return { data: transformedData, error: null }
+  } catch (error) {
+    logDev('Error in getActivityById:', error)
+    throw error
+  }
 }
 
 export const useActivityById = (id: number) => {
   return useQuery({
     queryKey: ['activity', id],
     queryFn: () => getActivityById(id),
+    ...defaultQueryOptions,
   })
 }

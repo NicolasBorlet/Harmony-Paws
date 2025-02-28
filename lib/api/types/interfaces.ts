@@ -149,6 +149,10 @@ export type DogDetailsResponse = {
 export interface DogBehavior extends BaseEntity {
   dog_id: number
   behavior_id: number
+  behavior: {
+    id: number
+    name: string
+  }
 }
 
 export interface ActivityListingInterface extends BaseEntity {
@@ -179,4 +183,15 @@ export interface ModuleInterface extends BaseEntity {
   is_purchased: boolean
   progress: number
   image?: string
+}
+
+export interface DogUpdateInterface {
+  id: number
+  name?: string
+  description?: string
+  dominance?: DogDominance
+  sex?: DogSex
+  age?: number
+  breed_id?: number
+  owner_id?: number
 }
