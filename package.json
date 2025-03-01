@@ -36,7 +36,7 @@
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/vector-icons": "^14.0.2",
     "@gorhom/bottom-sheet": "^5",
-    "@legendapp/state": "beta",
+    "@legendapp/state": "^3.0.0-beta.29",
     "@react-native-community/datetimepicker": "8.2.0",
     "@react-native-segmented-control/segmented-control": "2.5.4",
     "@react-navigation/drawer": "^7.0.4",
