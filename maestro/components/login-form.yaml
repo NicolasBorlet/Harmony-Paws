@@ -1,0 +1,14 @@
+# Composant réutilisable pour tester le formulaire de connexion
+# Ce composant peut être utilisé dans d'autres flows
+
+# Remplir le formulaire de connexion avec des identifiants valides
+- tapOn:
+    id: "email-input"
+- clearText
+- inputText: "${email}"
+- tapOn:
+    id: "password-input"
+- clearText
+- inputText: "${password}"
+- tapOn: "Se connecter"
+- wait: 2000

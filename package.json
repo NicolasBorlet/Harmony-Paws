@@ -20,7 +20,10 @@
     "lint": "expo lint",
     "format": "prettier --write \"**/*.{ts, tsx, js, jsx, md, mdx, css, yaml, ym?}\"",
     "check": "prettier --check \"**/*.{ts, tsx, js, jsx,md, mdx, css, yaml, ym?}\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "maestro:all": "bash scripts/run-all-maestro-tests.sh",
+    "maestro:essential": "bash scripts/run-maestro-tests.sh",
+    "maestro:flow": "maestro test"
   },
   "lint-staged": {
     "*.{fjs, jsx,ts, tsx}": [
