@@ -1,0 +1,14 @@
+# Composant réutilisable pour tester le formulaire d'inscription
+# Ce composant peut être utilisé dans d'autres flows
+
+# Remplir le formulaire d'inscription avec des identifiants valides
+- tapOn:
+    id: "email-input"
+- clearText
+- inputText: "${email}"
+- tapOn:
+    id: "password-input"
+- clearText
+- inputText: "${password}"
+- tapOn: "S'inscrire"
+- wait: 2000
