@@ -117,5 +117,6 @@
   "allModulesNotCompleted": "All modules not completed",
   "lesson": "Lesson",
   "materialNeeded": "Material needed",
-  "noMaterialNeeded": "No material needed"
+  "noMaterialNeeded": "No material needed",
+  "nextLesson": "Next lesson"
 }
