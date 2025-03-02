@@ -77,7 +77,7 @@ export default function Lesson() {
           <BodySemiBold>Étape {step?.order}</BodySemiBold>
           <View style={styles.stepItem}>
             <ExtraSmallMedium color={Colors.grey[800]}>
-              {step.content}
+              {step?.content}
             </ExtraSmallMedium>
           </View>
         </Block>
