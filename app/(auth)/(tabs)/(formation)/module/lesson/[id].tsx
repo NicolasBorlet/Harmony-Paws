@@ -2,12 +2,14 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
 import { StandardButton } from '@/components/ui/button'
+import Loader from '@/components/ui/loader'
 import {
   BodyMedium,
   BodySemiBold,
   ExtraSmallMedium,
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useCountOfStepsByLessonId, useStepById } from '@/lib/api/lesson'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useVideoPlayer, VideoView } from 'expo-video'
 import { useEffect } from 'react'
@@ -22,6 +24,9 @@ export default function Lesson() {
   const insets = useSafeAreaInsets()
   const { id } = useLocalSearchParams()
 
+  const { data: step, isLoading, isError } = useStepById(Number(id))
+  const { data: countOfSteps } = useCountOfStepsByLessonId(Number(id))
+
   const player = useVideoPlayer(videoSource, player => {
     player.loop = true
     player.play()
@@ -33,7 +38,12 @@ export default function Lesson() {
 
   useEffect(() => {
     console.log('lesson id', id)
-  }, [id])
+    console.log('lesson steps', step)
+    console.log('count of steps', countOfSteps)
+  }, [id, step, countOfSteps])
+
+  if (isLoading) return <Loader />
+  if (isError) return <View></View>
 
   return (
     <SafeAreaView
@@ -54,9 +64,9 @@ export default function Lesson() {
           allowsPictureInPicture
         />
         <Block row gap={12} justify='center' flex={0}>
-          <View style={styles.step}></View>
-          <View style={styles.step}></View>
-          <View style={styles.step}></View>
+          {Array.from({ length: countOfSteps?.count ?? 0 }).map((_, index) => (
+            <View style={styles.step} key={index}></View>
+          ))}
         </Block>
         <Block
           style={{
@@ -64,11 +74,10 @@ export default function Lesson() {
           }}
           gap={16}
         >
-          <BodySemiBold>Étape 1</BodySemiBold>
+          <BodySemiBold>Étape {step?.order}</BodySemiBold>
           <View style={styles.stepItem}>
             <ExtraSmallMedium color={Colors.grey[800]}>
-              Lorem ipsum dolor sit amet consectetur. Velit ac vitae phasellus
-              pharetra urna eu est nec fermentum. Ac at tristique etiam neque.
+              {step.content}
             </ExtraSmallMedium>
           </View>
         </Block>
