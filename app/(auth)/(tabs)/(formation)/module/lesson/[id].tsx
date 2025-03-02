@@ -1,8 +1,8 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
+import { LessonSkeleton } from '@/components/skeletons/skeletons'
 import { StandardButton } from '@/components/ui/button'
-import Loader from '@/components/ui/loader'
 import {
   BodyMedium,
   BodySemiBold,
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useCountOfStepsByLessonId, useStepById } from '@/lib/api/lesson'
+import * as Burnt from 'burnt'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useVideoPlayer, VideoView } from 'expo-video'
 import { useEffect } from 'react'
@@ -42,8 +43,17 @@ export default function Lesson() {
     console.log('count of steps', countOfSteps)
   }, [id, step, countOfSteps])
 
-  if (isLoading) return <Loader />
-  if (isError) return <View></View>
+  if (isLoading) return <LessonSkeleton />
+  if (isError) {
+    router.back()
+    Burnt.toast({
+      title: 'Erreur',
+      preset: 'error',
+      message:
+        'Une erreur est survenue. Veuillez réessayer ou contacter le support.',
+      haptic: 'error',
+    })
+  }
 
   return (
     <SafeAreaView
