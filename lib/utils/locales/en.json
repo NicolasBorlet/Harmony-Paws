@@ -119,5 +119,6 @@
   "materialNeeded": "Material needed",
   "noMaterialNeeded": "No material needed",
   "nextStep": "Next step",
-  "nextLesson": "Next lesson"
+  "nextLesson": "Next lesson",
+  "backToCourse": "Back to course"
 }

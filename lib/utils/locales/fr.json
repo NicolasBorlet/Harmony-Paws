@@ -119,5 +119,6 @@
   "materialNeeded": "Matériel nécessaire",
   "noMaterialNeeded": "Pas de matériel nécessaire",
   "nextStep": "Étape suivante",
-  "nextLesson": "Leçon suivante"
+  "nextLesson": "Leçon suivante",
+  "backToCourse": "Retour au parcours"
 }
