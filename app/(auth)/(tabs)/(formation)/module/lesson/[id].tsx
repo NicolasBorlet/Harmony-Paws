@@ -8,7 +8,9 @@ import {
   ExtraSmallMedium,
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { router, useLocalSearchParams } from 'expo-router'
 import { useVideoPlayer, VideoView } from 'expo-video'
+import { useEffect } from 'react'
 import { SafeAreaView, StyleSheet, View } from 'react-native'
 import { useEvent } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -18,6 +20,7 @@ const videoSource =
 
 export default function Lesson() {
   const insets = useSafeAreaInsets()
+  const { id } = useLocalSearchParams()
 
   const player = useVideoPlayer(videoSource, player => {
     player.loop = true
@@ -27,6 +30,10 @@ export default function Lesson() {
   const { isPlaying } = useEvent(player, 'playingChange', {
     isPlaying: player.playing,
   })
+
+  useEffect(() => {
+    console.log('lesson id', id)
+  }, [id])
 
   return (
     <SafeAreaView
@@ -67,8 +74,12 @@ export default function Lesson() {
         </Block>
       </Block>
       <View style={styles.buttonContainer}>
-        <StandardButton>
-          <BodyMedium color='#fff'>{i18n.t('nextLesson')}</BodyMedium>
+        <StandardButton
+          onPress={() => {
+            router.push(`/(formation)/module/lesson/${Number(id) + 1}`)
+          }}
+        >
+          <BodyMedium color='#fff'>{i18n.t('nextStep')}</BodyMedium>
         </StandardButton>
       </View>
     </SafeAreaView>
