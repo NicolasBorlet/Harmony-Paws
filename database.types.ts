@@ -412,6 +412,41 @@ export type Database = {
           },
         ]
       }
+      lesson_steps: {
+        Row: {
+          created_at: string | null
+          id: number
+          lesson_id: number | null
+          order: number | null
+          title: string
+          content: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          lesson_id?: number | null
+          order?: number | null
+          title?: string
+          content?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          lesson_id?: number | null
+          order?: number | null
+          title?: string
+          content?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'lesson_steps_lesson_id_lessons_id_fk'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       materials: {
         Row: {
           created_at: string | null
