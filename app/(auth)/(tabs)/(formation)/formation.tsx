@@ -2,10 +2,9 @@ import { i18n } from '@/app/_layout'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'
-import UserFormationListing from '@/components/formationListing/user-formation-listing'
 import Divider from '@/components/ui/divider'
 import { useStripe } from '@stripe/stripe-react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedScrollHandler,
@@ -43,6 +42,15 @@ export default function Formation() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const scrollY = useSharedValue(0)
+
+  // Log le montage du composant
+  useEffect(() => {
+    console.log('Formation component mounted')
+
+    return () => {
+      console.log('Formation component unmounted')
+    }
+  }, [])
 
   // useEffect(() => {
   //   async function initialize() {
@@ -217,6 +225,8 @@ export default function Formation() {
     },
   })
 
+  console.log('Formation component render')
+
   return (
     <View
       style={[
@@ -234,16 +244,16 @@ export default function Formation() {
       >
         <View style={{ gap: 16 }}>
           <Divider />
-          <View style={{ gap: 16 }}>
+          {/* <View style={{ gap: 16 }}>
             <BodyTitle title={i18n.t('yourFormations')} />
             <UserFormationListing />
           </View>
-          <Divider />
-          <View style={{ gap: 16 }}>
-            <BodyTitle title={i18n.t('formationForYou')} />
-            {/* <FormationListing /> */}
-          </View>
-          <Divider />
+          <Divider /> */}
+          {/* <View style={{ gap: 16 }}>
+            <BodyTitle title={i18n.t('formationForYou')} /> */}
+          {/* <FormationListing /> */}
+          {/* </View> */}
+          {/* <Divider /> */}
           <View style={{ gap: 16 }}>
             <BodyTitle title={i18n.t('allFormations')} />
             <FormationListing />
