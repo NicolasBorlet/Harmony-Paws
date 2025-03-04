@@ -10,14 +10,14 @@ export default function Back({
   onPress,
   backgroundColor,
   color,
-  // top,
+  top,
 }: {
   position?: string
   left?: string
   onPress?: () => void
   backgroundColor?: string
   color?: string
-  // top?: number
+  top?: number
 }) {
   const insets = useSafeAreaInsets()
 
@@ -28,7 +28,13 @@ export default function Back({
       left={left}
       style={{
         marginTop:
-          position === 'relative' ? 0 : Platform.OS === 'ios' ? insets.top : 24,
+          top !== undefined
+            ? top
+            : position === 'relative'
+              ? 0
+              : Platform.OS === 'ios'
+                ? insets.top
+                : 0,
       }}
       backgroundColor={backgroundColor}
     >
