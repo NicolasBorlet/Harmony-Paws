@@ -25,6 +25,7 @@ import React, { useLayoutEffect, useState } from 'react'
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   View,
 } from 'react-native'
@@ -180,6 +181,7 @@ export default function FirstStep() {
                 <Back
                   position='relative'
                   left='0'
+                  top={Platform.OS === 'android' ? 32 : undefined}
                   backgroundColor='white'
                   color='black'
                 />
@@ -217,7 +219,8 @@ export default function FirstStep() {
         style={[
           styles.buttonContainer,
           {
-            bottom: insets.bottom,
+            bottom:
+              Platform.OS === 'android' ? insets.bottom + 32 : insets.bottom,
           },
         ]}
       >
