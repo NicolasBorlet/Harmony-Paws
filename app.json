@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.konylepanini.harmony-paws"
+      "bundleIdentifier": "com.konylepanini.harmony-paws",
+      "config": {
+        "googleMapsApiKey": "${EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +27,12 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.ACCESS_MEDIA_LOCATION"
       ],
-      "package": "com.konylepanini.harmonypaws"
+      "package": "com.konylepanini.harmonypaws",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBLUp3jJaGR1RwxaNT8x-YN4ApygDwv1EA"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
