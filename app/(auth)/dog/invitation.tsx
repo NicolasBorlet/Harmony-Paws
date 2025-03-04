@@ -8,7 +8,7 @@ import {
   SpecialTitle,
 } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import { TextInput, View } from 'react-native'
+import { Platform, TextInput, View } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const dogs = [
@@ -25,7 +25,7 @@ export default function DogInvitation() {
         paddingHorizontal: 20,
         paddingTop: 32,
         flex: 1,
-        paddingBottom: insets.bottom,
+        paddingBottom: Platform.OS === 'android' ? 32 : insets.bottom,
         gap: 48,
       }}
     >
@@ -105,10 +105,10 @@ export default function DogInvitation() {
           </View>
         </View>
         <View style={{ width: '100%', alignItems: 'center', gap: 16 }}>
-          <StandardButton onPress={() => { }}>
+          <StandardButton onPress={() => {}}>
             <BodyMedium color='#fff'>Envoyer le message</BodyMedium>
           </StandardButton>
-          <UnderlinedButton onPress={() => { }}>
+          <UnderlinedButton onPress={() => {}}>
             <BodyMedium
               color='#000000'
               style={{ textDecorationLine: 'underline' }}
