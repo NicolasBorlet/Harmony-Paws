@@ -20,7 +20,7 @@ import { Colors } from '@/constants/Colors'
 import { useActivityById } from '@/lib/api/ride'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -41,11 +41,12 @@ export default function RideDetails() {
     buttonAnimation()
   }, [])
 
-
-  const estimatedStartHour = activity?.date ? new Date(activity.date).toLocaleTimeString('fr-FR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  }) : '--'
+  const estimatedStartHour = activity?.date
+    ? new Date(activity.date).toLocaleTimeString('fr-FR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    : '--'
 
   const buttonAnimation = () => {
     bottomPosition.value = withSpring(insets.bottom + 16, {
@@ -73,7 +74,14 @@ export default function RideDetails() {
     <>
       <Back />
       <ParallaxScrollView headerImage={activity.image || ''}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 72,
+            },
+          ]}
+        >
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>{activity.place}</CardTitle>
           </View>
@@ -89,19 +97,25 @@ export default function RideDetails() {
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('start')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>{estimatedStartHour}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {estimatedStartHour}
+                </BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('duration')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>{activity.duration}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {activity.duration}
+                </BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('activities')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>{activity.type}</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {activity.type}
+                </BodyBold>
               </GridItemBackground>
             </Block>
           </View>
@@ -109,7 +123,9 @@ export default function RideDetails() {
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('rideCreator')} />
             {activity.creator_id && (
-              <Pressable onPress={() => router.push(`/user/${activity.creator_id}`)}>
+              <Pressable
+                onPress={() => router.push(`/user/${activity.creator_id}`)}
+              >
                 <MasterDogCardComponent masterData={activity.creator} />
               </Pressable>
             )}

@@ -56,7 +56,6 @@ export default function Lesson() {
         paddingHorizontal: 20,
         paddingTop: 32,
         gap: 32,
-        gap: 32,
         flex: 1,
         paddingBottom: insets.bottom,
       }}
@@ -104,34 +103,6 @@ export default function Lesson() {
     </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  video: {
-    width: '100%',
-    height: 250,
-  },
-  controlsContainer: {
-    padding: 10,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 16,
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: 20,
-  },
-  step: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.orange[500],
-  },
-  stepItem: {
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: `${Colors.purple[500]}1A`,
-  },
-})
 
 const styles = StyleSheet.create({
   video: {
