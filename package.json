@@ -16,6 +16,7 @@
     "prebuild:ios": "expo prebuild --platform ios",
     "prebuild:android": "expo prebuild --platform android",
     "rid": "expo run:ios --device",
+    "rad": "expo run:android --device",
     "lint": "expo lint",
     "format": "prettier --write \"**/*.{ts, tsx, js, jsx, md, mdx, css, yaml, ym?}\"",
     "check": "prettier --check \"**/*.{ts, tsx, js, jsx,md, mdx, css, yaml, ym?}\"",

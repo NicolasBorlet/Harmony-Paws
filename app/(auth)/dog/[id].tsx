@@ -17,7 +17,7 @@ import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { useDogDetails } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -76,7 +76,14 @@ export default function DogDetails() {
     <>
       <Back />
       <ParallaxScrollView headerImage={data?.image || ''}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 72,
+            },
+          ]}
+        >
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>
               {data.name}, {data.age} ans
