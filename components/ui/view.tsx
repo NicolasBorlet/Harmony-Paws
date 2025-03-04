@@ -1,4 +1,5 @@
 import { Colors } from '@/constants/Colors'
+import { Platform } from 'react-native'
 import styled from 'styled-components/native'
 
 const GridItem = styled.View`
@@ -18,13 +19,16 @@ const GridItemBackground = styled.View<{ selected?: boolean }>`
   padding-vertical: 20px;
   padding-horizontal: 24px;
   border-radius: 10px;
-  background-color: ${({ selected }) =>
+  background-color: ${({ selected }: { selected?: boolean }) =>
     selected ? '#FDE6D7' : 'rgba(102, 51, 153, 0.1)'};
-  shadow-color: #000;
-  shadow-offset: 0px 4px;
-  shadow-opacity: 0.15;
-  shadow-radius: 6.3px;
-  elevation: 4;
+  ${Platform.select({
+    ios: `
+      shadow-color: #000;
+      shadow-offset: 0px 3px;
+      shadow-opacity: 0.15;
+      shadow-radius: 6.3px;
+    `,
+  })}
 `
 const RouteItemView = styled.View<{ even?: boolean }>`
   display: flex;
