@@ -10,6 +10,10 @@ export const Purple = '#663399'
 
 export const Colors = {
   white: '#FFFFFF',
+  black: '#000000',
+  pink: {
+    500: '#EE74AA',
+  },
   zinc: {
     50: '#FAFAFA',
     100: '#F4F4F5',

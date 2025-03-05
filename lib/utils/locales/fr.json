@@ -120,5 +120,7 @@
   "noMaterialNeeded": "Pas de matériel nécessaire",
   "nextStep": "Étape suivante",
   "nextLesson": "Leçon suivante",
-  "backToCourse": "Retour au parcours"
+  "backToCourse": "Retour au parcours",
+  "healthRecord": "Carnet de santé",
+  "healthRecordDescription": "Choissisez votre compagnon pour découvrir toutes ses informations de santé, centralisé en 1 seule application."
 }
