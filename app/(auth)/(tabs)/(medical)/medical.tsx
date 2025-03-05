@@ -49,8 +49,10 @@ const initialDogs = [
 
 const CARD_WIDTH = 250 // Largeur de la carte
 const CARD_HEIGHT = 260 // Hauteur de la carte
+const CARD_GAP = 32 // Espacement entre les cartes
 const SCALE_FACTOR = 1.1 // Facteur d'échelle maximum pour la carte active
 const CONTAINER_HEIGHT = CARD_HEIGHT * SCALE_FACTOR + 64 // Hauteur du conteneur avec espace pour l'ombre
+const ITEM_TOTAL_WIDTH = CARD_WIDTH + CARD_GAP // Largeur totale d'un item avec son gap
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 export default function Medical() {
@@ -68,7 +70,7 @@ export default function Medical() {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x
-    const index = Math.round(scrollPosition / CARD_WIDTH)
+    const index = Math.round(scrollPosition / ITEM_TOTAL_WIDTH)
     if (index !== activeIndex) {
       setActiveIndex(index)
       const updatedDogs = dogs.map((dog, i) => ({
@@ -122,25 +124,24 @@ export default function Medical() {
           renderItem={({ item }) => (
             <View
               style={{
-                width: CARD_WIDTH,
+                width: CARD_WIDTH + CARD_GAP,
                 height: CONTAINER_HEIGHT,
                 justifyContent: 'center',
                 alignItems: 'center',
-                paddingHorizontal: 8, // Ajouter un padding horizontal pour l'ombre
-                paddingVertical: 8, // Ajouter un padding vertical pour l'ombre
+                paddingHorizontal: CARD_GAP / 2,
+                paddingVertical: 8,
               }}
             >
               <DogCard dog={item} active={item.active} />
             </View>
           )}
-          estimatedItemSize={CARD_WIDTH}
+          estimatedItemSize={ITEM_TOTAL_WIDTH}
           showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
+          snapToInterval={ITEM_TOTAL_WIDTH}
           decelerationRate='fast'
           contentContainerStyle={{
-            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
+            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
           }}
-          ItemSeparatorComponent={() => <View style={{ width: 24 }} />}
         />
         <View style={styles.buttonContainer}>
           <StandardButton width='140'>
