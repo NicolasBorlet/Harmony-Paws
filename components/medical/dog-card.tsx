@@ -2,8 +2,15 @@ import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { StyleSheet, View } from 'react-native'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated'
 import { Small, SpecialTitle_3 } from '../ui/text'
+
+const SCALE_ACTIVE = 1.1
+const SCALE_INACTIVE = 1
 
 export default function DogCard({
   dog,
@@ -14,31 +21,30 @@ export default function DogCard({
 }) {
   const overlayStyle = useAnimatedStyle(() => {
     return {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      backgroundColor: Colors.pink[500],
+      ...styles.overlayStyle,
       opacity: withTiming(active ? 0 : 0.6, {
         duration: 300,
       }),
     }
   }, [active])
 
+  const cardStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: withSpring(active ? SCALE_ACTIVE : SCALE_INACTIVE, {
+            damping: 15,
+            stiffness: 100,
+          }),
+        },
+      ],
+    }
+  }, [active])
+
   return (
-    <View style={[styles.container]}>
+    <Animated.View style={[styles.container, cardStyle]}>
       <Image source={dog.image} style={styles.image} />
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: 24,
-          paddingVertical: 12,
-        }}
-      >
+      <View style={styles.contentContainer}>
         <SpecialTitle_3 color={Colors.pink[500]}>{dog.name}</SpecialTitle_3>
         <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
           <Ionicons
@@ -50,7 +56,7 @@ export default function DogCard({
         </View>
       </View>
       <Animated.View style={overlayStyle} />
-    </View>
+    </Animated.View>
   )
 }
 
@@ -59,10 +65,40 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     overflow: 'hidden',
-    boxShadow: '0px 3px 6.3px 0px rgba(0, 0, 0, 0.15)',
+    width: 240,
+    height: 220,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 6.3,
+    elevation: 4,
+    display: 'flex',
+    flexDirection: 'column',
   },
   image: {
     width: '100%',
-    height: 210,
+    height: 140,
+  },
+  contentContainer: {
+    height: 80,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: 'white',
+    zIndex: 1,
+  },
+  overlayStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.pink[500],
+    zIndex: 0,
   },
 })

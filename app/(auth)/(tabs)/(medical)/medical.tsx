@@ -47,7 +47,10 @@ const initialDogs = [
   },
 ]
 
-const CARD_WIDTH = 280 // Largeur de la carte + marge
+const CARD_WIDTH = 240 // Réduire la largeur de la carte
+const CARD_HEIGHT = 220 // Réduire la hauteur de base de la carte
+const SCALE_FACTOR = 1.1 // Facteur d'échelle maximum pour la carte active
+const CONTAINER_HEIGHT = CARD_HEIGHT * SCALE_FACTOR + 100 // Augmenter la marge pour plus d'espace
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 export default function Medical() {
@@ -96,7 +99,9 @@ export default function Medical() {
         },
       ]}
     >
-      <MedicalHeader scrollY={scrollY} />
+      <View style={{ paddingHorizontal: 16 }}>
+        <MedicalHeader scrollY={scrollY} />
+      </View>
       <Animated.ScrollView
         onScroll={scrollHandler}
         scrollEventThrottle={16}
@@ -115,7 +120,14 @@ export default function Medical() {
           scrollEventThrottle={16}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={{ width: CARD_WIDTH }}>
+            <View
+              style={{
+                width: CARD_WIDTH,
+                height: CONTAINER_HEIGHT,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               <DogCard dog={item} active={item.active} />
             </View>
           )}
@@ -129,8 +141,8 @@ export default function Medical() {
           ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
         />
         <View style={styles.buttonContainer}>
-          <StandardButton width={140}>
-            <Body color={Colors.white}>Choisir</Body>
+          <StandardButton width='140'>
+            <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
           </StandardButton>
         </View>
       </Animated.ScrollView>
