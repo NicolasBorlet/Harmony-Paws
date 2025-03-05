@@ -46,7 +46,9 @@ const initialDogs = [
   },
 ]
 
-const CARD_WIDTH = 280 // Largeur de la carte + marge
+const CARD_WIDTH = 280 // Largeur de base de la carte
+const CARD_SPACING = 16 // Espacement entre les cartes
+const TOTAL_CARD_WIDTH = CARD_WIDTH + CARD_SPACING // Largeur totale incluant l'espacement
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 export default function Medical() {
@@ -64,7 +66,7 @@ export default function Medical() {
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x
-    const index = Math.round(scrollPosition / CARD_WIDTH)
+    const index = Math.round(scrollPosition / TOTAL_CARD_WIDTH)
     if (index !== activeIndex) {
       setActiveIndex(index)
       const updatedDogs = dogs.map((dog, i) => ({
@@ -106,27 +108,28 @@ export default function Medical() {
             {i18n.t('healthRecordDescription')}
           </ExtraSmall>
         </View>
-        <FlashList
-          ref={flashListRef}
-          data={dogs}
-          horizontal
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={{ width: CARD_WIDTH }}>
-              <DogCard dog={item} active={item.active} />
-            </View>
-          )}
-          estimatedItemSize={CARD_WIDTH}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={CARD_WIDTH}
-          decelerationRate='fast'
-          contentContainerStyle={{
-            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
-          }}
-          ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
-        />
+        <View style={styles.listContainer}>
+          <FlashList
+            ref={flashListRef}
+            data={dogs}
+            horizontal
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.cardContainer}>
+                <DogCard dog={item} active={item.active} />
+              </View>
+            )}
+            estimatedItemSize={TOTAL_CARD_WIDTH}
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={TOTAL_CARD_WIDTH}
+            decelerationRate='fast'
+            contentContainerStyle={{
+              paddingHorizontal: (SCREEN_WIDTH - TOTAL_CARD_WIDTH) / 2,
+            }}
+          />
+        </View>
       </Animated.ScrollView>
     </View>
   )
@@ -136,5 +139,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  listContainer: {
+    height: 340,
+    overflow: 'visible',
+  },
+  cardContainer: {
+    width: TOTAL_CARD_WIDTH,
+    overflow: 'visible',
   },
 })
