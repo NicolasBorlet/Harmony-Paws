@@ -47,10 +47,10 @@ const initialDogs = [
   },
 ]
 
-const CARD_WIDTH = 240 // Réduire la largeur de la carte
-const CARD_HEIGHT = 220 // Réduire la hauteur de base de la carte
+const CARD_WIDTH = 250 // Largeur de la carte
+const CARD_HEIGHT = 260 // Hauteur de la carte
 const SCALE_FACTOR = 1.1 // Facteur d'échelle maximum pour la carte active
-const CONTAINER_HEIGHT = CARD_HEIGHT * SCALE_FACTOR + 100 // Augmenter la marge pour plus d'espace
+const CONTAINER_HEIGHT = CARD_HEIGHT * SCALE_FACTOR + 64 // Hauteur du conteneur avec espace pour l'ombre
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
 export default function Medical() {
@@ -126,6 +126,8 @@ export default function Medical() {
                 height: CONTAINER_HEIGHT,
                 justifyContent: 'center',
                 alignItems: 'center',
+                paddingHorizontal: 8, // Ajouter un padding horizontal pour l'ombre
+                paddingVertical: 8, // Ajouter un padding vertical pour l'ombre
               }}
             >
               <DogCard dog={item} active={item.active} />
@@ -138,7 +140,7 @@ export default function Medical() {
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
           }}
-          ItemSeparatorComponent={() => <View style={{ width: 32 }} />}
+          ItemSeparatorComponent={() => <View style={{ width: 24 }} />}
         />
         <View style={styles.buttonContainer}>
           <StandardButton width='140'>
