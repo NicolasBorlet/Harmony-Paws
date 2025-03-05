@@ -1,9 +1,15 @@
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import { StyleSheet, View } from 'react-native'
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { StyleSheet } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated'
 import { Small, SpecialTitle_3 } from '../ui/text'
+
+const CARD_WIDTH = 280 // Largeur de la carte
 
 export default function DogCard({
   dog,
@@ -12,8 +18,27 @@ export default function DogCard({
   dog: any
   active: boolean
 }) {
-  const overlayStyle = useAnimatedStyle(() => {
-    return {
+  const containerStyle = useAnimatedStyle(
+    () => ({
+      transform: [
+        {
+          scale: withSpring(active ? 1.1 : 1, {
+            damping: 15,
+            stiffness: 100,
+          }),
+        },
+      ],
+      backgroundColor: 'white',
+      borderRadius: 20,
+      overflow: 'hidden',
+      width: '100%',
+      height: '100%',
+    }),
+    [active],
+  )
+
+  const overlayStyle = useAnimatedStyle(
+    () => ({
       position: 'absolute',
       top: 0,
       left: 0,
@@ -23,46 +48,61 @@ export default function DogCard({
       opacity: withTiming(active ? 0 : 0.6, {
         duration: 300,
       }),
-    }
-  }, [active])
+    }),
+    [active],
+  )
 
   return (
-    <View style={[styles.container]}>
-      <Image source={dog.image} style={styles.image} />
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingHorizontal: 24,
-          paddingVertical: 12,
-        }}
+    <Animated.View style={styles.wrapper}>
+      <Animated.View
+        style={[
+          containerStyle,
+          {
+            boxShadow: '0px 0px 3px 0px rgba(0, 0, 0, 0.15)',
+          },
+        ]}
       >
-        <SpecialTitle_3 color={Colors.pink[500]}>{dog.name}</SpecialTitle_3>
-        <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-          <Ionicons
-            name={dog.gender === 'male' ? 'male' : 'female'}
-            size={20}
-            color={Colors.black}
-          />
-          <Small color={Colors.black}>{dog.age} ans</Small>
-        </View>
-      </View>
-      <Animated.View style={overlayStyle} />
-    </View>
+        <Image source={dog.image} style={styles.image} />
+        <Animated.View style={styles.contentContainer}>
+          <SpecialTitle_3 color={Colors.pink[500]}>{dog.name}</SpecialTitle_3>
+          <Animated.View style={styles.infoContainer}>
+            <Ionicons
+              name={dog.gender === 'male' ? 'male' : 'female'}
+              size={20}
+              color={Colors.black}
+            />
+            <Small color={Colors.black}>{dog.age} ans</Small>
+          </Animated.View>
+        </Animated.View>
+        <Animated.View style={overlayStyle} />
+      </Animated.View>
+    </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    overflow: 'hidden',
-    boxShadow: '0px 3px 6.3px 0px rgba(0, 0, 0, 0.15)',
+  wrapper: {
+    width: CARD_WIDTH,
+    height: 280, // Ajustez cette valeur selon la hauteur de votre carte
+    padding: 16, // Espace pour l'animation de scale
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
     width: '100%',
     height: 210,
+  },
+  contentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+  },
+  infoContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10,
   },
 })
