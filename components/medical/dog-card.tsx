@@ -2,6 +2,7 @@ import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { StyleSheet, View } from 'react-native'
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Small, SpecialTitle_3 } from '../ui/text'
 
 export default function DogCard({
@@ -11,6 +12,20 @@ export default function DogCard({
   dog: any
   active: boolean
 }) {
+  const overlayStyle = useAnimatedStyle(() => {
+    return {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: Colors.pink[500],
+      opacity: withTiming(active ? 0 : 0.6, {
+        duration: 300,
+      }),
+    }
+  }, [active])
+
   return (
     <View style={[styles.container]}>
       <Image source={dog.image} style={styles.image} />
@@ -34,19 +49,7 @@ export default function DogCard({
           <Small color={Colors.black}>{dog.age} ans</Small>
         </View>
       </View>
-      {!active && (
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: Colors.pink[500],
-            opacity: 0.6,
-          }}
-        />
-      )}
+      <Animated.View style={overlayStyle} />
     </View>
   )
 }
