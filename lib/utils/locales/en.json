@@ -120,5 +120,7 @@
   "noMaterialNeeded": "No material needed",
   "nextStep": "Next step",
   "nextLesson": "Next lesson",
-  "backToCourse": "Back to course"
+  "backToCourse": "Back to course",
+  "healthRecord": "Health record",
+  "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application."
 }
