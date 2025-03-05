@@ -38,6 +38,7 @@ export default function DogCard({
           }),
         },
       ],
+      zIndex: active ? 1 : 0,
     }
   }, [active])
 
@@ -64,26 +65,29 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     borderRadius: 20,
-    overflow: 'hidden',
+    overflow: 'visible',
     width: 240,
     height: 220,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
-    shadowOpacity: 0.15,
-    shadowRadius: 6.3,
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
     elevation: 4,
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
   },
   image: {
     width: '100%',
-    height: 140,
+    height: 170,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   contentContainer: {
-    height: 80,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -91,6 +95,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: 'white',
     zIndex: 1,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   overlayStyle: {
     position: 'absolute',
@@ -100,5 +106,6 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.pink[500],
     zIndex: 0,
+    borderRadius: 20,
   },
 })

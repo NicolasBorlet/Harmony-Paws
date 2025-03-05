@@ -138,7 +138,7 @@ export default function Medical() {
           contentContainerStyle={{
             paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH) / 2,
           }}
-          ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+          ItemSeparatorComponent={() => <View style={{ width: 32 }} />}
         />
         <View style={styles.buttonContainer}>
           <StandardButton width='140'>
