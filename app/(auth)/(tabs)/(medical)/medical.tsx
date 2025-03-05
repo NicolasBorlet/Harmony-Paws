@@ -1,7 +1,8 @@
 import { i18n } from '@/app/_layout'
 import DogCard from '@/components/medical/dog-card'
 import MedicalHeader from '@/components/medical/medical-header'
-import { ExtraSmall } from '@/components/ui/text'
+import { StandardButton } from '@/components/ui/button'
+import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { FlashList } from '@shopify/flash-list'
 import { useEffect, useRef, useState } from 'react'
@@ -127,6 +128,9 @@ export default function Medical() {
           }}
           ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
         />
+        <StandardButton>
+          <Body color={Colors.white}>Choisir</Body>
+        </StandardButton>
       </Animated.ScrollView>
     </View>
   )
