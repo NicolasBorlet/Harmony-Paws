@@ -20,7 +20,7 @@ export default function MedicalHeader({ scrollY }: { scrollY: any }) {
           />
         </>
       }
-      title={i18n.t('healthRecord')}
+      title={i18n.t('medical.healthRecord')}
     />
   )
 }

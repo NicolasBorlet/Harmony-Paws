@@ -121,6 +121,11 @@
   "nextStep": "Next step",
   "nextLesson": "Next lesson",
   "backToCourse": "Back to course",
-  "healthRecord": "Health record",
-  "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application."
+  "medical": {
+    "healthRecord": "Health record",
+    "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application."
+  },
+  "global": {
+    "choose": "Choose"
+  }
 }
