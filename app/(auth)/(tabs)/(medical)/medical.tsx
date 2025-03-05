@@ -128,9 +128,11 @@ export default function Medical() {
           }}
           ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
         />
-        <StandardButton>
-          <Body color={Colors.white}>Choisir</Body>
-        </StandardButton>
+        <View style={styles.buttonContainer}>
+          <StandardButton width={140}>
+            <Body color={Colors.white}>Choisir</Body>
+          </StandardButton>
+        </View>
       </Animated.ScrollView>
     </View>
   )
@@ -140,5 +142,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  buttonContainer: {
+    padding: 16,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
