@@ -18,7 +18,7 @@ export default function HealthRecord() {
 
   return (
     <View style={styles.container}>
-      <Back position='relative' top={insets.top} />
+      <Back position='relative' top={insets.top} left='0' />
       <Body>Health Record</Body>
     </View>
   )
@@ -28,5 +28,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
+    paddingHorizontal: 16,
   },
 })
