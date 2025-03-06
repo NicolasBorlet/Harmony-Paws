@@ -51,8 +51,9 @@ export default function HealthRecord() {
   return (
     <ScrollView style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
-      <Block gap={16}>
+      <Block gap={32}>
         <InformationCard
+          type='list'
           cardTitle='Vaccines'
           cardIcon={
             <MaterialIcons
@@ -64,6 +65,7 @@ export default function HealthRecord() {
           data={vaccines}
         />
         <InformationCard
+          type='list'
           cardTitle='Documents'
           cardIcon={
             <MaterialIcons
