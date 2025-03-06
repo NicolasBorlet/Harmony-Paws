@@ -9,20 +9,16 @@ import { DogListingInterface } from '@/lib/api/types'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
-
 import { useEffect, useRef, useState } from 'react'
 import {
-  Animated,
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
   View,
 } from 'react-native'
-import {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from 'react-native-reanimated'
+import { ScrollView } from 'react-native-gesture-handler'
+import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const CARD_WIDTH = 250 // Largeur de la carte
@@ -42,12 +38,6 @@ export default function Medical() {
 
   const user = user$.get()
   const { data: userDogs } = useDogsFromUserId(user?.id)
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: event => {
-      scrollY.value = event.contentOffset.y
-    },
-  })
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x
@@ -99,9 +89,11 @@ export default function Medical() {
       <View style={{ paddingHorizontal: 16 }}>
         <MedicalHeader scrollY={scrollY} />
       </View>
-      <Animated.ScrollView
-        onScroll={scrollHandler}
-        scrollEventThrottle={16}
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        onScroll={event => {
+          scrollY.value = event.nativeEvent.contentOffset.y
+        }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ padding: 16, paddingTop: 0 }}>
@@ -150,7 +142,7 @@ export default function Medical() {
             <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
           </StandardButton>
         </View>
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   )
 }
@@ -159,6 +151,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  scrollView: {
+    paddingHorizontal: 16,
+    gap: 32,
+    paddingBottom: 24,
   },
   buttonContainer: {
     padding: 16,
