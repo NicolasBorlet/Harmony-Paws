@@ -1,10 +1,11 @@
 import Back from '@/components/back-button'
+import Block from '@/components/grid/Block'
 import InformationCard from '@/components/medical/information-card'
 import { Colors } from '@/constants/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useLocalSearchParams, usePathname } from 'expo-router'
 import { useEffect } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const vaccines = [
@@ -50,7 +51,7 @@ export default function HealthRecord() {
   return (
     <ScrollView style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
-      <View style={{ gap: 16 }}>
+      <Block gap={16}>
         <InformationCard
           cardTitle='Vaccines'
           cardIcon={
@@ -73,7 +74,7 @@ export default function HealthRecord() {
           }
           data={documents}
         />
-      </View>
+      </Block>
     </ScrollView>
   )
 }
