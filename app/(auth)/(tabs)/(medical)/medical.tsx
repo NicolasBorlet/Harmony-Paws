@@ -107,37 +107,44 @@ export default function Medical() {
             {i18n.t('medical.healthRecordDescription')}
           </ExtraSmall>
         </View>
-        <FlashList
-          ref={flashListRef}
-          data={dogs}
-          horizontal
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({ item }: { item: DogListingInterface }) => (
-            <View
-              style={{
-                width: CARD_WIDTH + CARD_GAP,
-                height: CONTAINER_HEIGHT,
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingHorizontal: CARD_GAP / 2,
-                paddingVertical: 8,
-              }}
-            >
-              <DogCard dog={item} active={item.active} />
-            </View>
-          )}
-          estimatedItemSize={ITEM_TOTAL_WIDTH}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={ITEM_TOTAL_WIDTH}
-          decelerationRate='fast'
-          contentContainerStyle={{
-            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
-          }}
-        />
+        <View style={{ height: CONTAINER_HEIGHT }}>
+          <FlashList
+            ref={flashListRef}
+            data={dogs}
+            horizontal
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }: { item: DogListingInterface }) => (
+              <View
+                style={{
+                  width: CARD_WIDTH + CARD_GAP,
+                  height: CONTAINER_HEIGHT,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingHorizontal: CARD_GAP / 2,
+                  paddingVertical: 8,
+                }}
+              >
+                <DogCard dog={item} active={item.active} />
+              </View>
+            )}
+            estimatedItemSize={ITEM_TOTAL_WIDTH}
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={ITEM_TOTAL_WIDTH}
+            decelerationRate='fast'
+            contentContainerStyle={{
+              paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
+            }}
+          />
+        </View>
         <View style={styles.buttonContainer}>
-          <StandardButton width='140'>
+          <StandardButton
+            width='140'
+            onPress={() => {
+              console.log('dog id', dogs[activeIndex].id)
+            }}
+          >
             <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
           </StandardButton>
         </View>
