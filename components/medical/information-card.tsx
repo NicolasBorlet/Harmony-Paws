@@ -2,7 +2,7 @@ import { Colors } from '@/constants/Colors'
 import { AntDesign } from '@expo/vector-icons'
 import { View } from 'react-native'
 import Block from '../grid/Block'
-import { ExtraSmallBold, ExtraSmallMedium } from '../ui/text'
+import { ExtraSmallBold, ExtraSmallMedium, SpecialTitle } from '../ui/text'
 
 export default function InformationCard({
   type,
@@ -61,6 +61,11 @@ export default function InformationCard({
             </View>
           ))}
         </>
+      )}
+      {type === 'item' && (
+        <View>
+          <SpecialTitle color={Colors.pink[500]}>{data}</SpecialTitle>
+        </View>
       )}
     </Block>
   )

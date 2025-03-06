@@ -2,7 +2,7 @@ import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
 import InformationCard from '@/components/medical/information-card'
 import { Colors } from '@/constants/Colors'
-import { MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
 import { useLocalSearchParams, usePathname } from 'expo-router'
 import { useEffect } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
@@ -38,6 +38,9 @@ const documents = [
   },
 ]
 
+const size = 60
+const weight = 40
+
 export default function HealthRecord() {
   const { id } = useLocalSearchParams()
   const pathname = usePathname()
@@ -52,6 +55,32 @@ export default function HealthRecord() {
     <ScrollView style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
       <Block gap={32}>
+        <Block row gap={32}>
+          <InformationCard
+            type='item'
+            cardTitle='Taille'
+            cardIcon={
+              <MaterialIcons
+                name='height'
+                size={24}
+                color={Colors.purple[500]}
+              />
+            }
+            data={size}
+          />
+          <InformationCard
+            type='item'
+            cardTitle='Poids'
+            cardIcon={
+              <FontAwesome6
+                name='weight-hanging'
+                size={24}
+                color={Colors.purple[500]}
+              />
+            }
+            data={weight}
+          />
+        </Block>
         <InformationCard
           type='list'
           cardTitle='Vaccines'
