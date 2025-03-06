@@ -126,6 +126,11 @@
     "healthRecordDescription": "Choisissez votre compagnon pour découvrir toutes ses informations de santé, centralisé en 1 seule application."
   },
   "global": {
-    "choose": "Choisir"
+    "choose": "Choisir",
+    "birthday": "Anniversaire"
+  },
+  "dog": {
+    "breed": "Race",
+    "sex": "Sexe"
   }
 }
