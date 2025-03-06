@@ -5,7 +5,7 @@ import { StandardButton } from '@/components/ui/button'
 import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
-import { Dog } from '@/lib/api/types'
+import { DogListingInterface } from '@/lib/api/types'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
 import { useEffect, useRef, useState } from 'react'
@@ -23,33 +23,6 @@ import {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const initialDogs = [
-  {
-    id: 1,
-    name: 'Taico',
-    age: 3,
-    gender: 'male',
-    image: 'https://picsum.photos/200/300',
-    active: true,
-  },
-  {
-    id: 2,
-    name: 'Taico',
-    age: 3,
-    gender: 'male',
-    image: 'https://picsum.photos/200/300',
-    active: false,
-  },
-  {
-    id: 3,
-    name: 'Taico',
-    age: 3,
-    gender: 'male',
-    image: 'https://picsum.photos/200/300',
-    active: false,
-  },
-]
-
 const CARD_WIDTH = 250 // Largeur de la carte
 const CARD_HEIGHT = 260 // Hauteur de la carte
 const CARD_GAP = 32 // Espacement entre les cartes
@@ -62,8 +35,8 @@ export default function Medical() {
   const scrollY = useSharedValue(0)
   const insets = useSafeAreaInsets()
   const [activeIndex, setActiveIndex] = useState(0)
-  const [dogs, setDogs] = useState(initialDogs)
-  const flashListRef = useRef<FlashList<(typeof dogs)[0]>>(null)
+  const [dogs, setDogs] = useState<DogListingInterface[]>([])
+  const flashListRef = useRef<FlashList<DogListingInterface>>(null)
 
   const user = user$.get()
   const { data: userDogs } = useDogsFromUserId(user?.id)
@@ -79,7 +52,7 @@ export default function Medical() {
     const index = Math.round(scrollPosition / ITEM_TOTAL_WIDTH)
     if (index !== activeIndex) {
       setActiveIndex(index)
-      const updatedDogs = dogs.map((dog, i) => ({
+      const updatedDogs = dogs.map((dog: DogListingInterface, i: number) => ({
         ...dog,
         active: i === index,
       }))
@@ -101,10 +74,12 @@ export default function Medical() {
   useEffect(() => {
     if (userDogs) {
       console.log('userDogs', userDogs)
-      const updatedDogs = userDogs.map(dog => ({
-        ...dog,
-        active: false,
-      }))
+      const updatedDogs = userDogs.map(
+        (dog: DogListingInterface, index: number) => ({
+          ...dog,
+          active: index === 0,
+        }),
+      )
       console.log('updatedDogs', updatedDogs)
       setDogs(updatedDogs)
     }
@@ -134,12 +109,12 @@ export default function Medical() {
         </View>
         <FlashList
           ref={flashListRef}
-          data={userDogs ?? []}
+          data={dogs}
           horizontal
           onScroll={handleScroll}
           scrollEventThrottle={16}
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item }: { item: Dog }) => (
+          renderItem={({ item }: { item: DogListingInterface }) => (
             <View
               style={{
                 width: CARD_WIDTH + CARD_GAP,
