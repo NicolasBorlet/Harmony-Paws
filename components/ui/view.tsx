@@ -16,8 +16,8 @@ const GridItemBackground = styled.View<{ selected?: boolean }>`
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding-vertical: 20px;
-  padding-horizontal: 24px;
+  padding-vertical: 10px;
+  padding-horizontal: 12px;
   border-radius: 10px;
   background-color: ${({ selected }: { selected?: boolean }) =>
     selected ? '#FDE6D7' : 'rgba(102, 51, 153, 0.1)'};
