@@ -5,10 +5,12 @@ import Block from '../grid/Block'
 import { ExtraSmallBold, ExtraSmallMedium } from '../ui/text'
 
 export default function InformationCard({
+  type,
   cardTitle,
   cardIcon,
   data,
 }: {
+  type: 'list' | 'item' | 'graph'
   cardTitle: string
   cardIcon: React.ReactNode
   data: {
@@ -41,19 +43,25 @@ export default function InformationCard({
         </View>
         <AntDesign name='right' size={12} color={Colors.purple[500]} />
       </View>
-      {data.map((item, index) => (
-        <View style={{ gap: 8 }} key={index}>
-          <View style={{ flexDirection: 'row', gap: 4 }}>
-            <ExtraSmallBold color={Colors.pink[500]}>
-              {item.title}
-            </ExtraSmallBold>
-            <ExtraSmallMedium color={Colors.purple[500]}>-</ExtraSmallMedium>
-            <ExtraSmallMedium color={Colors.purple[500]}>
-              {item.date}
-            </ExtraSmallMedium>
-          </View>
-        </View>
-      ))}
+      {type === 'list' && (
+        <>
+          {data.map((item, index) => (
+            <View style={{ gap: 8 }} key={index}>
+              <View style={{ flexDirection: 'row', gap: 4 }}>
+                <ExtraSmallBold color={Colors.pink[500]}>
+                  {item.title}
+                </ExtraSmallBold>
+                <ExtraSmallMedium color={Colors.purple[500]}>
+                  -
+                </ExtraSmallMedium>
+                <ExtraSmallMedium color={Colors.purple[500]}>
+                  {item.date}
+                </ExtraSmallMedium>
+              </View>
+            </View>
+          ))}
+        </>
+      )}
     </Block>
   )
 }
