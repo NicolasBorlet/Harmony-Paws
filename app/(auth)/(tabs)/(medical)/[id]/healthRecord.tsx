@@ -1,11 +1,35 @@
 import Back from '@/components/back-button'
-import { ExtraSmallBold, ExtraSmallMedium } from '@/components/ui/text'
+import InformationCard from '@/components/medical/information-card'
 import { Colors } from '@/constants/Colors'
-import { AntDesign, MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 import { useLocalSearchParams, usePathname } from 'expo-router'
 import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+const vaccines = [
+  {
+    icon: (
+      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
+    ),
+    title: 'Vaccines',
+    date: '12 février 2025 (première injection)',
+  },
+  {
+    icon: (
+      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
+    ),
+    title: 'Vaccines',
+    date: '12 février 2025 (première injection)',
+  },
+  {
+    icon: (
+      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
+    ),
+    title: 'Vaccines',
+    date: '12 février 2025 (première injection)',
+  },
+]
 
 export default function HealthRecord() {
   const { id } = useLocalSearchParams()
@@ -20,43 +44,18 @@ export default function HealthRecord() {
   return (
     <View style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
-      <View
-        style={{
-          boxShadow: '0px 0px 13px 0px rgba(0, 0, 0, 0.1)',
-          borderRadius: 10,
-          paddingHorizontal: 12,
-          paddingVertical: 16,
-          gap: 12,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <View style={{ flexDirection: 'row', gap: 12, alignItems: 'center' }}>
+      <View style={{ gap: 16 }}>
+        <InformationCard
+          cardTitle='Vaccines'
+          cardIcon={
             <MaterialIcons
               name='vaccines'
               size={24}
               color={Colors.purple[500]}
             />
-            <ExtraSmallBold color={Colors.purple[500]}>Vaccines</ExtraSmallBold>
-          </View>
-          <AntDesign name='right' size={12} color={Colors.purple[500]} />
-        </View>
-        <View style={{ gap: 8 }}>
-          <View style={{ flexDirection: 'row', gap: 4 }}>
-            <ExtraSmallBold color={Colors.pink[500]}>
-              La toux des chenils
-            </ExtraSmallBold>
-            <ExtraSmallMedium color={Colors.purple[500]}>-</ExtraSmallMedium>
-            <ExtraSmallMedium color={Colors.purple[500]}>
-              12 février 2025 (première injection)
-            </ExtraSmallMedium>
-          </View>
-        </View>
+          }
+          data={vaccines}
+        />
       </View>
     </View>
   )
