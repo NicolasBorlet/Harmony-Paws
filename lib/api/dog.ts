@@ -23,7 +23,7 @@ export const getDogsFromUserId = async (userId: string) => {
     // Select only needed fields
     const { data, error } = await supabase
       .from('dogs')
-      .select('id, created_at, updated_at')
+      .select('id, created_at, updated_at, name, age, sex')
       .eq('owner_id', userId)
 
     if (error) throw handleSupabaseError(error, 'dogs')

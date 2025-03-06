@@ -1,4 +1,5 @@
 import { Colors } from '@/constants/Colors'
+import { Dog } from '@/lib/api/types'
 import { Ionicons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { StyleSheet, View } from 'react-native'
@@ -16,7 +17,7 @@ export default function DogCard({
   dog,
   active,
 }: {
-  dog: any
+  dog: Dog
   active: boolean
 }) {
   const overlayStyle = useAnimatedStyle(() => {
@@ -49,7 +50,7 @@ export default function DogCard({
         <SpecialTitle_3 color={Colors.pink[500]}>{dog.name}</SpecialTitle_3>
         <View style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
           <Ionicons
-            name={dog.gender === 'male' ? 'male' : 'female'}
+            name={dog.sex === 'male' ? 'male' : 'female'}
             size={20}
             color={Colors.black}
           />

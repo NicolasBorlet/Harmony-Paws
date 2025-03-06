@@ -4,6 +4,9 @@ import MedicalHeader from '@/components/medical/medical-header'
 import { StandardButton } from '@/components/ui/button'
 import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useDogsFromUserId } from '@/lib/api/dog'
+import { Dog } from '@/lib/api/types'
+import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
 import { useEffect, useRef, useState } from 'react'
 import {
@@ -62,6 +65,9 @@ export default function Medical() {
   const [dogs, setDogs] = useState(initialDogs)
   const flashListRef = useRef<FlashList<(typeof dogs)[0]>>(null)
 
+  const user = user$.get()
+  const { data: userDogs } = useDogsFromUserId(user?.id)
+
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: event => {
       scrollY.value = event.contentOffset.y
@@ -92,6 +98,18 @@ export default function Medical() {
     }
   }, [])
 
+  useEffect(() => {
+    if (userDogs) {
+      console.log('userDogs', userDogs)
+      const updatedDogs = userDogs.map(dog => ({
+        ...dog,
+        active: false,
+      }))
+      console.log('updatedDogs', updatedDogs)
+      setDogs(updatedDogs)
+    }
+  }, [userDogs])
+
   return (
     <View
       style={[
@@ -116,12 +134,12 @@ export default function Medical() {
         </View>
         <FlashList
           ref={flashListRef}
-          data={dogs}
+          data={userDogs ?? []}
           horizontal
           onScroll={handleScroll}
           scrollEventThrottle={16}
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: Dog }) => (
             <View
               style={{
                 width: CARD_WIDTH + CARD_GAP,
