@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/Colors'
 import { AntDesign } from '@expo/vector-icons'
 import { View } from 'react-native'
+import Block from '../grid/Block'
 import { ExtraSmallBold, ExtraSmallMedium } from '../ui/text'
 
 export default function InformationCard({
@@ -16,7 +17,7 @@ export default function InformationCard({
   }[]
 }) {
   return (
-    <View
+    <Block
       style={{
         boxShadow: '0px 0px 13px 0px rgba(0, 0, 0, 0.1)',
         borderRadius: 10,
@@ -53,6 +54,6 @@ export default function InformationCard({
           </View>
         </View>
       ))}
-    </View>
+    </Block>
   )
 }
