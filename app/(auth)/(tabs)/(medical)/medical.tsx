@@ -8,6 +8,8 @@ import { useDogsFromUserId } from '@/lib/api/dog'
 import { DogListingInterface } from '@/lib/api/types'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
+import { router } from 'expo-router'
+
 import { useEffect, useRef, useState } from 'react'
 import {
   Animated,
@@ -107,7 +109,7 @@ export default function Medical() {
             {i18n.t('medical.healthRecordDescription')}
           </ExtraSmall>
         </View>
-        <View style={{ height: CONTAINER_HEIGHT }}>
+        <View style={{ height: CONTAINER_HEIGHT, width: SCREEN_WIDTH }}>
           <FlashList
             ref={flashListRef}
             data={dogs}
@@ -129,7 +131,7 @@ export default function Medical() {
                 <DogCard dog={item} active={item.active} />
               </View>
             )}
-            estimatedItemSize={ITEM_TOTAL_WIDTH}
+            estimatedItemSize={5}
             showsHorizontalScrollIndicator={false}
             snapToInterval={ITEM_TOTAL_WIDTH}
             decelerationRate='fast'
@@ -142,7 +144,7 @@ export default function Medical() {
           <StandardButton
             width='140'
             onPress={() => {
-              console.log('dog id', dogs[activeIndex].id)
+              router.push(`/${dogs[activeIndex].id}`)
             }}
           >
             <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
