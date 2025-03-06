@@ -109,9 +109,9 @@ export default function Medical() {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ padding: 16 }}>
+        <View style={{ padding: 16, paddingTop: 0 }}>
           <ExtraSmall color={Colors.black}>
-            {i18n.t('healthRecordDescription')}
+            {i18n.t('medical.healthRecordDescription')}
           </ExtraSmall>
         </View>
         <FlashList

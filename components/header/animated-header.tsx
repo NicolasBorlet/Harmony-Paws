@@ -1,4 +1,3 @@
-import { i18n } from '@/app/_layout'
 import { ReactElement } from 'react'
 import { View } from 'react-native'
 import Animated, {
@@ -15,12 +14,14 @@ export default function AnimatedHeader({
   title,
   subtitle,
   dogName,
+  distance = 32,
 }: {
   scrollY: any
   icons: ReactElement
   title: string
   subtitle?: string
   dogName?: string
+  distance?: number
 }) {
   const headerOpacity = useDerivedValue(() => {
     return interpolate(scrollY.value, [0, 50], [0, 1], 'clamp')
@@ -93,9 +94,9 @@ export default function AnimatedHeader({
         >
           <Animated.View style={headerOpacityStyle}>
             <SpecialTitle>
-              {i18n.t(`${title}`)} {dogName}
+              {title} {dogName}
             </SpecialTitle>
-            {subtitle && <Body>{i18n.t(`${subtitle}`)}</Body>}
+            {subtitle && <Body>{subtitle}</Body>}
           </Animated.View>
           <View
             style={{
@@ -110,9 +111,9 @@ export default function AnimatedHeader({
         </View>
         <Animated.View style={[titleOpacityStyle, { paddingBottom: 32 }]}>
           <SpecialTitle>
-            {i18n.t(`${title}`)} {dogName}
+            {title} {dogName}
           </SpecialTitle>
-          {subtitle && <Body>{i18n.t(`${subtitle}`)}</Body>}
+          {subtitle && <Body>{subtitle}</Body>}
         </Animated.View>
       </Animated.View>
     </>
