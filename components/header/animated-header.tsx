@@ -24,23 +24,23 @@ export default function AnimatedHeader({
   distance?: number
 }) {
   const headerOpacity = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 10], [0, 1], 'clamp')
+    return interpolate(scrollY.value, [0, 50], [0, 1], 'clamp')
   })
 
   const titleOpacity = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 10], [1, 0], 'clamp')
+    return interpolate(scrollY.value, [0, 50], [1, 0], 'clamp')
   })
 
   const titleOpacityY = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 10], [0, -75], 'clamp')
+    return scrollY.value > 50 ? -75 : 0
   })
 
   const titleY = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 10], [75, 0], 'clamp')
+    return scrollY.value > 50 ? 0 : 75
   })
 
   const animatedHeaderHeight = useDerivedValue(() => {
-    return interpolate(scrollY.value, [0, 10], [130, 50], 'clamp')
+    return scrollY.value > 70 ? 50 : 130
   })
 
   const animatedStyles = useAnimatedStyle(() => {
@@ -82,7 +82,14 @@ export default function AnimatedHeader({
 
   return (
     <>
-      <Animated.View style={animatedStyles}>
+      <Animated.View
+        style={[
+          animatedStyles,
+          {
+            // backgroundColor: 'red',
+          },
+        ]}
+      >
         <View
           style={{
             display: 'flex',
