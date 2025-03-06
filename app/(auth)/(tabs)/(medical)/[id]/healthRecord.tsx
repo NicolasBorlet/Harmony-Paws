@@ -4,30 +4,36 @@ import { Colors } from '@/constants/Colors'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useLocalSearchParams, usePathname } from 'expo-router'
 import { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const vaccines = [
   {
-    icon: (
-      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
-    ),
     title: 'Vaccines',
     date: '12 février 2025 (première injection)',
   },
   {
-    icon: (
-      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
-    ),
     title: 'Vaccines',
     date: '12 février 2025 (première injection)',
   },
   {
-    icon: (
-      <MaterialIcons name='vaccines' size={24} color={Colors.purple[500]} />
-    ),
     title: 'Vaccines',
     date: '12 février 2025 (première injection)',
+  },
+]
+
+const documents = [
+  {
+    title: 'Ordonnance',
+    date: '20 février 2025',
+  },
+  {
+    title: 'Facture',
+    date: '20 février 2025',
+  },
+  {
+    title: 'Remboursement',
+    date: '20 février 2025',
   },
 ]
 
@@ -42,7 +48,7 @@ export default function HealthRecord() {
   }, [id])
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
       <View style={{ gap: 16 }}>
         <InformationCard
@@ -56,8 +62,19 @@ export default function HealthRecord() {
           }
           data={vaccines}
         />
+        <InformationCard
+          cardTitle='Documents'
+          cardIcon={
+            <MaterialIcons
+              name='file-present'
+              size={24}
+              color={Colors.purple[500]}
+            />
+          }
+          data={documents}
+        />
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

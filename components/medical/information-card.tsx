@@ -11,7 +11,6 @@ export default function InformationCard({
   cardTitle: string
   cardIcon: React.ReactNode
   data: {
-    icon: React.ReactNode
     title: string
     date: string
   }[]
