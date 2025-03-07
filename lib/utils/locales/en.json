@@ -136,5 +136,8 @@
   "dog": {
     "breed": "Breed",
     "sex": "Sex"
+  },
+  "documents": {
+    "myDocuments": "My documents"
   }
 }
