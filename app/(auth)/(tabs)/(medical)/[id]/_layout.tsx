@@ -7,7 +7,8 @@ export default function HealthRecordLayout() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name='health-record' />
+      <Stack.Screen name='healthRecord' />
+      <Stack.Screen name='height' />
     </Stack>
   )
 }
