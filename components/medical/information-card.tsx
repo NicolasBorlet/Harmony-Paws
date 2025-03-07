@@ -1,23 +1,28 @@
 import { Colors } from '@/constants/Colors'
 import { AntDesign } from '@expo/vector-icons'
+import React from 'react'
 import { View } from 'react-native'
 import Block from '../grid/Block'
 import { ExtraSmallBold, ExtraSmallMedium, SpecialTitle } from '../ui/text'
+
+type ListItem = {
+  title: string
+  date: string
+}
+
+type InformationCardProps = {
+  type: 'list' | 'item' | 'graph'
+  cardTitle: string
+  cardIcon: React.ReactNode
+  data: string | ListItem[] | undefined
+}
 
 export default function InformationCard({
   type,
   cardTitle,
   cardIcon,
   data,
-}: {
-  type: 'list' | 'item' | 'graph'
-  cardTitle: string
-  cardIcon: React.ReactNode
-  data: {
-    title: string
-    date: string
-  }[]
-}) {
+}: InformationCardProps) {
   return (
     <Block
       style={{
@@ -43,7 +48,7 @@ export default function InformationCard({
         </View>
         <AntDesign name='right' size={12} color={Colors.purple[500]} />
       </View>
-      {type === 'list' && (
+      {type === 'list' && Array.isArray(data) && (
         <>
           {data.map((item, index) => (
             <View style={{ gap: 8 }} key={index}>
@@ -64,7 +69,7 @@ export default function InformationCard({
       )}
       {type === 'item' && (
         <View>
-          <SpecialTitle color={Colors.pink[500]}>{data}</SpecialTitle>
+          <SpecialTitle color={Colors.pink[500]}>{data as string}</SpecialTitle>
         </View>
       )}
     </Block>

@@ -3,11 +3,11 @@ import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
 import HealthRecordHeader from '@/components/medical/health-record-header'
 import InformationCard from '@/components/medical/information-card'
+import Loader from '@/components/ui/loader'
 import { BodyBold, ExtraSmallSemiBold } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
-import { useDogMeasurements } from '@/lib/api/dog'
-import { useDogVaccinations } from '@/lib/api/vaccination'
+import { useDogHealthData } from '@/lib/api/dog'
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
 import { usePathname } from 'expo-router'
 import { useEffect } from 'react'
@@ -34,18 +34,18 @@ export default function HealthRecord() {
   const pathname = usePathname()
   const dogId = pathname[1]
 
-  const { data: vaccinations } = useDogVaccinations(dogId, 3)
-  const { data: measurements } = useDogMeasurements(dogId, 1)
+  const { data: healthData, isLoading } = useDogHealthData(dogId)
 
   const insets = useSafeAreaInsets()
   const scrollY = useSharedValue(0)
 
   useEffect(() => {
-    // console.log('dogId', dogId)
+    console.log('healthData', healthData)
+  }, [healthData])
 
-    console.log('vaccinations', vaccinations)
-    console.log('measurements', measurements)
-  }, [dogId, vaccinations, measurements])
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <View style={styles.container}>
@@ -55,7 +55,7 @@ export default function HealthRecord() {
           paddingHorizontal: 16,
         }}
       >
-        <HealthRecordHeader scrollY={scrollY} />
+        <HealthRecordHeader scrollY={scrollY} dogName={healthData?.dog.name} />
       </View>
       <ScrollView
         onScroll={event => {
@@ -80,13 +80,17 @@ export default function HealthRecord() {
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('dog.breed')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>Chien</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {healthData?.dog.breed?.name || 'Non spécifié'}
+                </BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
                   {i18n.t('dog.sex')}
                 </ExtraSmallSemiBold>
-                <BodyBold color={Colors.light.secondary}>Mâle</BodyBold>
+                <BodyBold color={Colors.light.secondary}>
+                  {healthData?.dog.sex === 'male' ? 'Mâle' : 'Femelle'}
+                </BodyBold>
               </GridItemBackground>
               <GridItemBackground>
                 <ExtraSmallSemiBold color='rgba(102, 51, 153, 0.7)'>
@@ -106,7 +110,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={measurements?.[0]?.height}
+                data={healthData?.measurements[0]?.height}
               />
               <InformationCard
                 type='item'
@@ -118,7 +122,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={measurements?.[0]?.weight}
+                data={healthData?.measurements[0]?.weight}
               />
             </Block>
             <InformationCard
@@ -131,22 +135,10 @@ export default function HealthRecord() {
                   color={Colors.purple[500]}
                 />
               }
-              data={vaccinations?.map(vaccination => ({
+              data={healthData?.vaccinations.map(vaccination => ({
                 title: vaccination.vaccine_name,
                 date: vaccination.date_administered,
               }))}
-            />
-            {/* <InformationCard
-              type='list'
-              cardTitle='Documents'
-              cardIcon={
-                <MaterialIcons
-                  name='file-present'
-                  size={24}
-                  color={Colors.purple[500]}
-                />
-              }
-              data={documents}
             />
             <InformationCard
               type='list'
@@ -159,7 +151,7 @@ export default function HealthRecord() {
                 />
               }
               data={documents}
-            /> */}
+            />
           </Block>
         </View>
       </ScrollView>
