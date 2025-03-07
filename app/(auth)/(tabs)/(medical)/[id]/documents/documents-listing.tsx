@@ -15,7 +15,7 @@ export default function Documents() {
 
   return (
     <View style={styles.container}>
-      <Back position='relative' top={insets.top} left='0' />-
+      <Back position='relative' top={insets.top} left='0' />
       <BodyBold
         style={{
           textAlign: 'center',

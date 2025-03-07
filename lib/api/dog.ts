@@ -353,20 +353,54 @@ type DogDocument = {
   url: string
 }
 
+type StorageFile = {
+  name: string
+  created_at: string
+  url: string
+}
+
+type GetDogDocumentsResponse = {
+  files: StorageFile[]
+}
+
 const getDogDocuments = async (dogId: string, limit?: number) => {
   try {
-    const { data, error } = await supabase.functions.invoke(
-      'get-dog-documents',
-      {
-        body: { dogId },
-      },
-    )
+    // 1. Récupérer les documents depuis la base de données
+    const { data: dbDocuments, error: dbError } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('created_at', { ascending: false })
 
-    if (error) throw handleSupabaseError(error, 'dog documents')
+    if (dbError) throw handleSupabaseError(dbError, 'dog documents')
 
-    let documents = data.files as DogDocument[]
+    // 2. Récupérer les URLs depuis le storage via la fonction Edge
+    const { data: storageData, error: storageError } =
+      await supabase.functions.invoke<GetDogDocumentsResponse>(
+        'get-dog-documents',
+        {
+          body: { dogId },
+        },
+      )
 
-    // Apply limit if specified
+    if (storageError)
+      throw handleSupabaseError(storageError, 'dog documents storage')
+
+    // 3. Combiner les informations
+    let documents = dbDocuments.map(doc => {
+      const storageFile = storageData?.files.find(
+        (f: StorageFile) => f.name === doc.file_name,
+      )
+      return {
+        id: doc.id,
+        name: doc.file_name,
+        type: doc.document_type,
+        created_at: formatDate(doc.created_at),
+        url: storageFile?.url || '',
+      }
+    })
+
+    // 4. Appliquer la limite si spécifiée
     if (limit && limit > 0) {
       documents = documents.slice(0, limit)
     }
