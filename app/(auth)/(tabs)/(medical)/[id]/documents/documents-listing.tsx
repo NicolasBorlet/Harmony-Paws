@@ -1,5 +1,7 @@
+import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
-import { Body } from '@/components/ui/text'
+import Divider from '@/components/ui/divider'
+import { Body, BodyBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogDocuments } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -13,7 +15,16 @@ export default function Documents() {
 
   return (
     <View style={styles.container}>
-      <Back position='relative' top={insets.top} left='0' />
+      <Back position='relative' top={insets.top} left='0' />-
+      <BodyBold
+        style={{
+          textAlign: 'center',
+          marginTop: 8,
+        }}
+      >
+        {i18n.t('documents.myDocuments')}
+      </BodyBold>
+      <Divider spacing={32} />
       {documents?.map(document => (
         <Pressable
           key={document.name}
