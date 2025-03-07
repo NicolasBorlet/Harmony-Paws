@@ -15,21 +15,6 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const vaccines = [
-  {
-    title: 'La toux des chenils',
-    date: '12 février 2025 (première injection)',
-  },
-  {
-    title: 'La rage',
-    date: '22 janvier 2025',
-  },
-  {
-    title: 'La leptospirose',
-    date: '11 janvier 2025',
-  },
-]
-
 const documents = [
   {
     title: 'Ordonnance',
@@ -44,9 +29,6 @@ const documents = [
     date: '20 février 2025',
   },
 ]
-
-const size = 60
-const weight = 40
 
 export default function HealthRecord() {
   const pathname = usePathname()
@@ -149,9 +131,12 @@ export default function HealthRecord() {
                   color={Colors.purple[500]}
                 />
               }
-              data={vaccines}
+              data={vaccinations?.map(vaccination => ({
+                title: vaccination.vaccine_name,
+                date: vaccination.date_administered,
+              }))}
             />
-            <InformationCard
+            {/* <InformationCard
               type='list'
               cardTitle='Documents'
               cardIcon={
@@ -174,7 +159,7 @@ export default function HealthRecord() {
                 />
               }
               data={documents}
-            />
+            /> */}
           </Block>
         </View>
       </ScrollView>
