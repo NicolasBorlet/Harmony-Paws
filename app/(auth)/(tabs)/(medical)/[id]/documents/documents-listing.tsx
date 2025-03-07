@@ -1,7 +1,8 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
+import ItemListing from '@/components/document/item-listing'
 import Divider from '@/components/ui/divider'
-import { Body, BodyBold } from '@/components/ui/text'
+import { BodyBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogDocuments } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
@@ -41,7 +42,7 @@ export default function Documents() {
                 })
           }}
         >
-          <Body>{document.name}</Body>
+          <ItemListing item={document} />
         </Pressable>
       ))}
     </View>
