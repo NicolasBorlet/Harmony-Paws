@@ -9,7 +9,7 @@ import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogHealthData } from '@/lib/api/dog'
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
-import { usePathname } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
 import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
@@ -31,8 +31,8 @@ const documents = [
 ]
 
 export default function HealthRecord() {
-  const pathname = usePathname()
-  const dogId = pathname[1]
+  const { id } = useLocalSearchParams()
+  const dogId = id as string
 
   const { data: healthData, isLoading } = useDogHealthData(dogId)
 
@@ -55,7 +55,10 @@ export default function HealthRecord() {
           paddingHorizontal: 16,
         }}
       >
-        <HealthRecordHeader scrollY={scrollY} dogName={healthData?.dog.name} />
+        <HealthRecordHeader
+          scrollY={scrollY}
+          dogName={healthData?.dog.name || ''}
+        />
       </View>
       <ScrollView
         onScroll={event => {
@@ -110,7 +113,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={healthData?.measurements[0]?.height}
+                data={healthData?.measurements[0]?.height?.toString() || '0'}
                 href='/(auth)/(tabs)/(medical)/[id]/height'
               />
               <InformationCard
@@ -123,7 +126,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={healthData?.measurements[0]?.weight}
+                data={healthData?.measurements[0]?.weight?.toString() || '0'}
               />
             </Block>
             <InformationCard
@@ -137,8 +140,8 @@ export default function HealthRecord() {
                 />
               }
               data={healthData?.vaccinations.map(vaccination => ({
-                title: vaccination.vaccine_name,
-                date: vaccination.date_administered,
+                title: vaccination.vaccine_name || 'Vaccin non spécifié',
+                date: vaccination.date_administered || 'Date non spécifiée',
               }))}
             />
             <InformationCard
