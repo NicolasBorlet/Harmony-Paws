@@ -4,7 +4,13 @@ import { router } from 'expo-router'
 import AnimatedHeader from '../header/animated-header'
 import RoundedIconLink from '../rounded-icon-link'
 
-export default function HealthRecordHeader({ scrollY }: { scrollY: any }) {
+export default function HealthRecordHeader({
+  scrollY,
+  dogName,
+}: {
+  scrollY: any
+  dogName: string
+}) {
   return (
     <AnimatedHeader
       scrollY={scrollY}
@@ -27,7 +33,7 @@ export default function HealthRecordHeader({ scrollY }: { scrollY: any }) {
           />
         </>
       }
-      title='Test'
+      title={dogName}
     />
   )
 }

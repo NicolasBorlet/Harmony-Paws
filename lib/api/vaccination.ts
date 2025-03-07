@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
 import { defaultQueryOptions, handleSupabaseError, logDev } from './utils'
 
-type Vaccination = Database['public']['Tables']['vaccinations']['Row']
+export type Vaccination = Database['public']['Tables']['vaccinations']['Row']
 
 const getDogVaccinations = async (dogId: string, limit?: number) => {
   console.log('dogId', dogId)

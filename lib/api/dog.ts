@@ -15,6 +15,7 @@ import {
   handleSupabaseError,
   logDev,
 } from './utils'
+import { Vaccination } from './vaccination'
 
 export const getDogsFromUserId = async (userId: string) => {
   logDev('Fetching dogs for userId:', userId)
@@ -328,6 +329,80 @@ export const useDogMeasurements = (dogId: string, limit?: number) => {
   return useQuery({
     queryKey: ['dog_measurements', dogId, limit],
     queryFn: () => getDogMeasurements(dogId, limit),
+    ...defaultQueryOptions,
+  })
+}
+
+type DogHealthData = {
+  dog: {
+    id: number
+    name: string
+    sex: string | null
+    breed: {
+      name: string
+    } | null
+  }
+  measurements: DogMeasurement[]
+  vaccinations: Vaccination[]
+}
+
+const getDogHealthData = async (dogId: string) => {
+  try {
+    // Get dog details with breed
+    const { data: dogData, error: dogError } = await supabase
+      .from('dogs')
+      .select(
+        `
+        id,
+        name,
+        sex,
+        breed:breed_id (
+          name
+        )
+      `,
+      )
+      .eq('id', dogId)
+      .single()
+
+    if (dogError) throw handleSupabaseError(dogError, 'dog')
+
+    // Get measurements
+    const { data: measurementsData, error: measurementsError } = await supabase
+      .from('dog_measurements')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date', { ascending: false })
+      .limit(1)
+
+    if (measurementsError)
+      throw handleSupabaseError(measurementsError, 'dog measurements')
+
+    // Get vaccinations
+    const { data: vaccinationsData, error: vaccinationsError } = await supabase
+      .from('vaccinations')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date_administered', { ascending: false })
+      .limit(3)
+
+    if (vaccinationsError)
+      throw handleSupabaseError(vaccinationsError, 'dog vaccinations')
+
+    return {
+      dog: dogData,
+      measurements: measurementsData || [],
+      vaccinations: vaccinationsData || [],
+    } as unknown as DogHealthData
+  } catch (error) {
+    logDev('Error in getDogHealthData:', error)
+    throw error
+  }
+}
+
+export const useDogHealthData = (dogId: string) => {
+  return useQuery({
+    queryKey: ['dog_health_data', dogId],
+    queryFn: () => getDogHealthData(dogId),
     ...defaultQueryOptions,
   })
 }
