@@ -2,6 +2,7 @@ import { ReactElement } from 'react'
 import { View } from 'react-native'
 import Animated, {
   interpolate,
+  SharedValue,
   useAnimatedStyle,
   useDerivedValue,
   withSpring,
@@ -16,7 +17,7 @@ export default function AnimatedHeader({
   dogName,
   distance = 32,
 }: {
-  scrollY: any
+  scrollY: SharedValue<number>
   icons: ReactElement
   title: string
   subtitle?: string
@@ -32,23 +33,20 @@ export default function AnimatedHeader({
   })
 
   const titleOpacityY = useDerivedValue(() => {
-    return scrollY.value > 50 ? -75 : 0
+    return interpolate(scrollY.value, [0, 50], [0, -75], 'clamp')
   })
 
   const titleY = useDerivedValue(() => {
-    return scrollY.value > 50 ? 0 : 75
+    return interpolate(scrollY.value, [0, 50], [75, 0], 'clamp')
   })
 
   const animatedHeaderHeight = useDerivedValue(() => {
-    return scrollY.value > 70 ? 50 : 130
+    return interpolate(scrollY.value, [0, 70], [130, 50], 'clamp')
   })
 
   const animatedStyles = useAnimatedStyle(() => {
     return {
-      height: withSpring(animatedHeaderHeight.value, {
-        damping: 15,
-        stiffness: 100,
-      }),
+      height: animatedHeaderHeight.value,
     }
   })
 

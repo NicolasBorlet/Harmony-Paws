@@ -6,8 +6,10 @@ import InformationCard from '@/components/medical/information-card'
 import { BodyBold, ExtraSmallSemiBold } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
+import { useDogMeasurements } from '@/lib/api/dog'
+import { useDogVaccinations } from '@/lib/api/vaccination'
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
-import { useLocalSearchParams, usePathname } from 'expo-router'
+import { usePathname } from 'expo-router'
 import { useEffect } from 'react'
 import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
@@ -47,15 +49,21 @@ const size = 60
 const weight = 40
 
 export default function HealthRecord() {
-  const { id } = useLocalSearchParams()
   const pathname = usePathname()
+  const dogId = pathname[1]
+
+  const { data: vaccinations } = useDogVaccinations(dogId, 3)
+  const { data: measurements } = useDogMeasurements(dogId, 1)
+
   const insets = useSafeAreaInsets()
   const scrollY = useSharedValue(0)
 
   useEffect(() => {
-    console.log('id', id)
-    console.log('pathname', pathname)
-  }, [id])
+    // console.log('dogId', dogId)
+
+    console.log('vaccinations', vaccinations)
+    console.log('measurements', measurements)
+  }, [dogId, vaccinations, measurements])
 
   return (
     <View style={styles.container}>
@@ -116,7 +124,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={size}
+                data={measurements?.[0]?.height}
               />
               <InformationCard
                 type='item'
@@ -128,7 +136,7 @@ export default function HealthRecord() {
                     color={Colors.purple[500]}
                   />
                 }
-                data={weight}
+                data={measurements?.[0]?.weight}
               />
             </Block>
             <InformationCard

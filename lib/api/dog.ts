@@ -298,3 +298,36 @@ export const uploadDogImage = async (dogId: number, imageUri: string) => {
     throw error
   }
 }
+
+type DogMeasurement = Database['public']['Tables']['dog_measurements']['Row']
+
+const getDogMeasurements = async (dogId: string, limit?: number) => {
+  console.log('dogId', dogId)
+  try {
+    let query = supabase
+      .from('dog_measurements')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date', { ascending: false })
+
+    if (limit && limit > 0) {
+      query = query.limit(limit)
+    }
+
+    const { data, error } = await query
+
+    if (error) throw handleSupabaseError(error, 'dog measurements')
+    return data as DogMeasurement[]
+  } catch (error) {
+    logDev('Error in getDogMeasurements:', error)
+    throw error
+  }
+}
+
+export const useDogMeasurements = (dogId: string, limit?: number) => {
+  return useQuery({
+    queryKey: ['dog_measurements', dogId, limit],
+    queryFn: () => getDogMeasurements(dogId, limit),
+    ...defaultQueryOptions,
+  })
+}
