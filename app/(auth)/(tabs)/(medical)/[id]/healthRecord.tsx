@@ -15,21 +15,6 @@ import { Platform, ScrollView, StyleSheet, View } from 'react-native'
 import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-const documents = [
-  {
-    title: 'Ordonnance',
-    date: '20 février 2025',
-  },
-  {
-    title: 'Facture',
-    date: '20 février 2025',
-  },
-  {
-    title: 'Remboursement',
-    date: '20 février 2025',
-  },
-]
-
 export default function HealthRecord() {
   const { id } = useLocalSearchParams()
   const dogId = id as string
@@ -156,7 +141,10 @@ export default function HealthRecord() {
                   color={Colors.purple[500]}
                 />
               }
-              data={documents}
+              data={healthData?.documents.map(document => ({
+                title: document.name,
+                date: document.created_at,
+              }))}
               href='/(auth)/(tabs)/(medical)/[id]/documents'
             />
           </Block>

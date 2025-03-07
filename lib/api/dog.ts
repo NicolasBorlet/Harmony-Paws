@@ -344,6 +344,46 @@ type DogHealthData = {
   }
   measurements: DogMeasurement[]
   vaccinations: Vaccination[]
+  documents: DogDocument[]
+}
+
+type DogDocument = {
+  name: string
+  created_at: string
+  url: string
+}
+
+const getDogDocuments = async (dogId: string, limit?: number) => {
+  try {
+    const { data, error } = await supabase.functions.invoke(
+      'get-dog-documents',
+      {
+        body: { dogId },
+      },
+    )
+
+    if (error) throw handleSupabaseError(error, 'dog documents')
+
+    let documents = data.files as DogDocument[]
+
+    // Apply limit if specified
+    if (limit && limit > 0) {
+      documents = documents.slice(0, limit)
+    }
+
+    return documents
+  } catch (error) {
+    logDev('Error in getDogDocuments:', error)
+    throw error
+  }
+}
+
+export const useDogDocuments = (dogId: string, limit?: number) => {
+  return useQuery({
+    queryKey: ['dog_documents', dogId, limit],
+    queryFn: () => getDogDocuments(dogId, limit),
+    ...defaultQueryOptions,
+  })
 }
 
 const getDogHealthData = async (dogId: string) => {
@@ -388,10 +428,14 @@ const getDogHealthData = async (dogId: string) => {
     if (vaccinationsError)
       throw handleSupabaseError(vaccinationsError, 'dog vaccinations')
 
+    // Get documents
+    const documents = await getDogDocuments(dogId, 3)
+
     return {
       dog: dogData,
       measurements: measurementsData || [],
       vaccinations: vaccinationsData || [],
+      documents: documents || [],
     } as unknown as DogHealthData
   } catch (error) {
     logDev('Error in getDogHealthData:', error)
