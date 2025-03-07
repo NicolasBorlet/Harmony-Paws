@@ -23,7 +23,7 @@ export default function Documents() {
               : router.push({
                   pathname: '/(auth)/(tabs)/(medical)/[id]/documents/[id]',
                   params: {
-                    id: params.id,
+                    id: params.id as string,
                     documentName: document.name,
                     documentUrl: document.url,
                   },
