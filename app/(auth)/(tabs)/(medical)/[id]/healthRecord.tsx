@@ -105,7 +105,7 @@ export default function HealthRecord() {
             <Block row gap={32}>
               <InformationCard
                 type='item'
-                cardTitle='Taille'
+                cardTitle={i18n.t('medical.height')}
                 cardIcon={
                   <MaterialIcons
                     name='height'
@@ -118,7 +118,7 @@ export default function HealthRecord() {
               />
               <InformationCard
                 type='item'
-                cardTitle='Poids'
+                cardTitle={i18n.t('medical.weight')}
                 cardIcon={
                   <FontAwesome6
                     name='weight-hanging'
@@ -127,11 +127,12 @@ export default function HealthRecord() {
                   />
                 }
                 data={healthData?.measurements[0]?.weight?.toString() || '0'}
+                href='/(auth)/(tabs)/(medical)/[id]/weight'
               />
             </Block>
             <InformationCard
               type='list'
-              cardTitle='Vaccines'
+              cardTitle={i18n.t('medical.vaccines')}
               cardIcon={
                 <MaterialIcons
                   name='vaccines'
@@ -143,10 +144,11 @@ export default function HealthRecord() {
                 title: vaccination.vaccine_name || 'Vaccin non spécifié',
                 date: vaccination.date_administered || 'Date non spécifiée',
               }))}
+              href='/(auth)/(tabs)/(medical)/[id]/vaccines'
             />
             <InformationCard
               type='list'
-              cardTitle='Documents'
+              cardTitle={i18n.t('medical.documents')}
               cardIcon={
                 <MaterialIcons
                   name='file-present'
@@ -155,6 +157,7 @@ export default function HealthRecord() {
                 />
               }
               data={documents}
+              href='/(auth)/(tabs)/(medical)/[id]/documents'
             />
           </Block>
         </View>

@@ -123,7 +123,11 @@
   "backToCourse": "Back to course",
   "medical": {
     "healthRecord": "Health record",
-    "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application."
+    "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application.",
+    "documents": "Documents",
+    "vaccines": "Vaccines",
+    "weight": "Weight",
+    "height": "Height"
   },
   "global": {
     "choose": "Choose",
