@@ -73,7 +73,7 @@ export default function InformationCard({
                     -
                   </ExtraSmallMedium>
                   <ExtraSmallMedium color={Colors.purple[500]}>
-                    {item.date}
+                    {new Date(item.date).toLocaleDateString('fr-FR')}
                   </ExtraSmallMedium>
                 </View>
               </View>
