@@ -136,7 +136,7 @@ export default function Medical() {
           <StandardButton
             width='140'
             onPress={() => {
-              router.push(`/${dogs[activeIndex].id}`)
+              router.push(`/${dogs[activeIndex].id}/healthRecord`)
             }}
           >
             <Body color={Colors.white}>{i18n.t('global.choose')}</Body>

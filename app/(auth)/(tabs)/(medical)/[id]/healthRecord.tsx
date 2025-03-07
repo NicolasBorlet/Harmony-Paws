@@ -111,6 +111,7 @@ export default function HealthRecord() {
                   />
                 }
                 data={healthData?.measurements[0]?.height}
+                href='/(auth)/(tabs)/(medical)/[id]/height'
               />
               <InformationCard
                 type='item'
