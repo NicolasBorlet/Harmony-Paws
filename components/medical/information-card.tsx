@@ -17,6 +17,7 @@ type InformationCardProps = {
   cardIcon: React.ReactNode
   data: string | ListItem[] | undefined
   href?: Route
+  params?: Record<string, string>
 }
 
 export default function InformationCard({
@@ -25,12 +26,17 @@ export default function InformationCard({
   cardIcon,
   data,
   href,
+  params,
 }: InformationCardProps) {
   return (
     <Pressable
       onPress={() => {
         if (href) {
-          router.push(href)
+          console.log('Navigation params:', params)
+          router.push({
+            pathname: href,
+            params,
+          } as any)
         }
       }}
       style={{
