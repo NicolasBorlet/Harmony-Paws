@@ -145,7 +145,8 @@ export default function HealthRecord() {
                 title: document.name,
                 date: document.created_at,
               }))}
-              href='/(auth)/(tabs)/(medical)/[id]/documents'
+              href='/(auth)/(tabs)/(medical)/[id]/documents/documents-listing'
+              params={{ id: dogId }}
             />
           </Block>
         </View>

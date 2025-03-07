@@ -136,6 +136,7 @@ export default function Medical() {
           <StandardButton
             width='140'
             onPress={() => {
+              // console.log('dogs[activeIndex].id', dogs[activeIndex].id)
               router.push(`/${dogs[activeIndex].id}/healthRecord`)
             }}
           >
