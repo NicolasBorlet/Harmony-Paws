@@ -226,6 +226,8 @@ export type Database = {
           dog_id: number
           file_name: string | null
           id: number
+          place: string | null
+          reason: string | null
         }
         Insert: {
           created_at?: string
@@ -233,6 +235,8 @@ export type Database = {
           dog_id: number
           file_name?: string | null
           id?: number
+          place?: string | null
+          reason?: string | null
         }
         Update: {
           created_at?: string
@@ -240,6 +244,8 @@ export type Database = {
           dog_id?: number
           file_name?: string | null
           id?: number
+          place?: string | null
+          reason?: string | null
         }
         Relationships: [
           {

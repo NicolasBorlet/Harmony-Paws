@@ -351,6 +351,8 @@ type DogDocument = {
   name: string
   created_at: string
   url: string
+  place: string
+  reason: string
 }
 
 type StorageFile = {
@@ -395,6 +397,8 @@ const getDogDocuments = async (dogId: string, limit?: number) => {
         id: doc.id,
         name: doc.file_name,
         type: doc.document_type,
+        place: doc.place,
+        reason: doc.reason,
         created_at: formatDate(doc.created_at),
         url: storageFile?.url || '',
       }

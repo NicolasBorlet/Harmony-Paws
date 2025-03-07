@@ -138,6 +138,8 @@
     "sex": "Sexe"
   },
   "documents": {
-    "myDocuments": "Mes documents"
+    "myDocuments": "Mes documents",
+    "prescription": "Ordonnance",
+    "facture": "Facture"
   }
 }
