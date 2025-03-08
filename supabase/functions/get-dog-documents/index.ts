@@ -1,6 +1,15 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+interface StorageFile {
+  name: string
+  created_at: string
+  id?: string
+  last_accessed_at?: string
+  metadata?: Record<string, any>
+  updated_at?: string
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
@@ -28,22 +37,37 @@ serve(async req => {
     )
 
     // List files in the documents folder for this dog
+    const currentDate = new Date()
+    const startOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1,
+    ).toISOString()
+    const endOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0,
+    ).toISOString()
+
     const { data: files, error } = await supabaseClient.storage
       .from('dogs')
-      .list(`${dogId}/documents/`)
+      .list(`${dogId}/documents/`, {
+        sortBy: { column: 'created_at', order: 'desc' },
+        filter: {
+          created_at: {
+            gte: startOfMonth,
+            lte: endOfMonth,
+          },
+        },
+      })
 
     if (error) {
       throw error
     }
 
-    // Sort files by created_at in descending order
-    const sortedFiles = files.sort((a, b) => {
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    })
-
     // Get signed URLs for each file
     const filesWithUrls = await Promise.all(
-      sortedFiles.map(async file => {
+      files.map(async (file: StorageFile) => {
         const { data: signedUrl } = await supabaseClient.storage
           .from('dogs')
           .createSignedUrl(`${dogId}/documents/${file.name}`, 3600) // URL valid for 1 hour

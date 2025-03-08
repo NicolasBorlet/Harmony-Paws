@@ -373,6 +373,7 @@ const getDogDocuments = async (dogId: string, limit?: number) => {
       .select('*')
       .eq('dog_id', dogId)
       .order('created_at', { ascending: false })
+      .lte('created_at', new Date().toISOString())
 
     if (dbError) throw handleSupabaseError(dbError, 'dog documents')
 
