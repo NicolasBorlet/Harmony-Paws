@@ -15,6 +15,10 @@ export default function Documents() {
   const params = useLocalSearchParams()
   const { data: documents } = useDogDocuments(params.id as string)
 
+  const currentDate = new Date()
+  const currentMonth = currentDate.getMonth()
+  const currentYear = currentDate.getFullYear()
+
   return (
     <View style={styles.container}>
       <Back position='relative' top={insets.top} left='0' />
@@ -43,7 +47,9 @@ export default function Documents() {
             flex: 1,
           }}
         >
-          <SpecialTitle_3>Mars 2025</SpecialTitle_3>
+          <SpecialTitle_3>
+            {i18n.t(`months.${currentMonth}`)} {currentYear}
+          </SpecialTitle_3>
           <Entypo name='chevron-down' size={16} color={Colors.purple[500]} />
         </View>
         <Pressable
