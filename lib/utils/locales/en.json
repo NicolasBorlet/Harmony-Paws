@@ -132,7 +132,9 @@
   "global": {
     "choose": "Choose",
     "birthday": "Birthday",
-    "informations": "Informations"
+    "informations": "Informations",
+    "share": "Share",
+    "download": "Download"
   },
   "dog": {
     "breed": "Breed",
