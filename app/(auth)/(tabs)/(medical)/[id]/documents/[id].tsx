@@ -2,6 +2,7 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { BodyBold, ExtraSmall, SmallBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useLocalSearchParams } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -29,12 +30,43 @@ export default function Document() {
             {i18n.t('global.informations')}
           </SmallBold>
           <View style={{ gap: 4 }}>
-            <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 4,
+                alignItems: 'center',
+              }}
+            >
+              <View
+                style={{
+                  borderWidth: 1,
+                  borderColor: Colors.purple[500],
+                  borderRadius: 100,
+                  padding: 2,
+                }}
+              >
+                <AntDesign
+                  name='question'
+                  size={12}
+                  color={Colors.purple[500]}
+                />
+              </View>
               <ExtraSmall color={Colors.purple[500]}>
                 {params.reason}
               </ExtraSmall>
             </View>
-            <View>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 4,
+                alignItems: 'center',
+              }}
+            >
+              <MaterialCommunityIcons
+                name='map-marker-outline'
+                size={18}
+                color={Colors.purple[500]}
+              />
               <ExtraSmall color={Colors.purple[500]}>{params.place}</ExtraSmall>
             </View>
           </View>
