@@ -131,7 +131,8 @@
   },
   "global": {
     "choose": "Choisir",
-    "birthday": "Anniversaire"
+    "birthday": "Anniversaire",
+    "informations": "Informations"
   },
   "dog": {
     "breed": "Race",
