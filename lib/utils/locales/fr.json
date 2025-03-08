@@ -132,7 +132,9 @@
   "global": {
     "choose": "Choisir",
     "birthday": "Anniversaire",
-    "informations": "Informations"
+    "informations": "Informations",
+    "share": "Partager",
+    "download": "Télécharger"
   },
   "dog": {
     "breed": "Race",

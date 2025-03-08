@@ -1,10 +1,11 @@
 import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
-import { BodyBold, ExtraSmall, SmallBold } from '@/components/ui/text'
+import { StandardButton } from '@/components/ui/button'
+import { Body, BodyBold, ExtraSmall, SmallBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useLocalSearchParams } from 'expo-router'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, Share, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { WebView } from 'react-native-webview'
 
@@ -13,7 +14,7 @@ export default function Document() {
   const insets = useSafeAreaInsets()
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Back position='relative' top={insets.top} left='16' />
       <BodyBold
         style={{
@@ -29,7 +30,7 @@ export default function Document() {
           <SmallBold color={Colors.purple[500]}>
             {i18n.t('global.informations')}
           </SmallBold>
-          <View style={{ gap: 4 }}>
+          <View style={{ gap: 10 }}>
             <View
               style={{
                 flexDirection: 'row',
@@ -82,8 +83,19 @@ export default function Document() {
             }}
           />
         </View>
+        <View style={{ paddingTop: 32 }}>
+          <StandardButton
+            onPress={() => {
+              Share.share({
+                url: params.documentUrl as string,
+              })
+            }}
+          >
+            <Body color={Colors.white}>{i18n.t('global.share')}</Body>
+          </StandardButton>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -105,6 +117,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 12,
     overflow: 'hidden',
+    boxShadow: '0px 0px 10px 0px rgba(0, 0, 0, 0.1)',
   },
   browserButton: {
     padding: 16,
@@ -115,5 +128,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 32,
     gap: 12,
+    boxShadow: '0px 0px 10px 0px rgba(0, 0, 0, 0.1)',
   },
 })
