@@ -425,6 +425,31 @@ export const useDogDocuments = (dogId: string, limit?: number) => {
   })
 }
 
+export const getDogDocument = async (dogId: string, documentId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('id', documentId)
+      .eq('dog_id', dogId)
+      .single()
+
+    if (error) throw handleSupabaseError(error, 'dog document')
+    return data
+  } catch (error) {
+    logDev('Error in getDogDocument:', error)
+    throw error
+  }
+}
+
+export const useDogDocument = (dogId: string, documentId: string) => {
+  return useQuery({
+    queryKey: ['dog_document', dogId, documentId],
+    queryFn: () => getDogDocument(dogId, documentId),
+    ...defaultQueryOptions,
+  })
+}
+
 const getDogHealthData = async (dogId: string) => {
   try {
     // Get dog details with breed

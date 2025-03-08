@@ -79,6 +79,8 @@ export default function Documents() {
                     id: params.id as string,
                     documentName: document.name,
                     documentUrl: document.url,
+                    reason: document.reason,
+                    place: document.place,
                   },
                 })
           }}

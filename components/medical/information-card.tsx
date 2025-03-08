@@ -32,7 +32,6 @@ export default function InformationCard({
     <Pressable
       onPress={() => {
         if (href) {
-          console.log('Navigation params:', params)
           router.push({
             pathname: href,
             params,
