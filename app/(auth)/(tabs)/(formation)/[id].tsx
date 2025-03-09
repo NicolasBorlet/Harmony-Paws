@@ -118,7 +118,7 @@ export default function FormationDetails() {
                         }}
                       >
                         <BodyBold color={Colors.light.secondary}>
-                          {i18n.t('completeFormation')}
+                          {i18n.t('formation.completeFormation')}
                         </BodyBold>
                         <View
                           style={{

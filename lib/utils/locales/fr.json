@@ -3,22 +3,11 @@
   "hisDogs": "Ses chiens",
   "joinDescription": "Contactez la propriétaire pour organiser une rencontre entre",
   "joinPlaceholder": "Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?",
-  "notifications": "Notifications",
-  "lastDays": "Derniers jours",
-  "friendRequest": "Souhaite être amie avec vous",
-  "rideCreation": "A créé une nouvelle balade",
-  "rideRequest": "Souhaite faire une balade avec vous",
-  "noNotifications": "Aucune notification",
   "online": "En ligne",
   "disconect": "Déconnecté",
   "disconected": "Se déconnecter",
-  "search": "Rechercher",
   "sendMessageToStart": "Envoyez un message pour commencer une conversation.",
   "about": "À propos",
-  "completeFormation": "Formation complète",
-  "accountCreated": "Ton compte est cree !",
-  "createDogProfile": "Créer le profil de mon chien",
-  "skipStep": "Passer cette étape",
   "continue": "Continuer",
   "calm": "Calme",
   "active": "Actif",
@@ -95,7 +84,8 @@
     "yourFormations": "Vos formations",
     "forYou": "Pour vous",
     "allFormations": "Toutes nos formations",
-    "advice": "Avis"
+    "advice": "Avis",
+    "completeFormation": "Formation complète"
   },
   "module": {
     "materialNeeded": "Matériel nécessaire",
@@ -173,5 +163,13 @@
     "9": "Octobre",
     "10": "Novembre",
     "11": "Décembre"
+  },
+  "notification": {
+    "notifications": "Notifications",
+    "lastDays": "Derniers jours",
+    "friendRequest": "Souhaite être amie avec vous",
+    "rideCreation": "A créé une nouvelle balade",
+    "rideRequest": "Souhaite faire une balade avec vous",
+    "noNotifications": "Aucune notification"
   }
 }
