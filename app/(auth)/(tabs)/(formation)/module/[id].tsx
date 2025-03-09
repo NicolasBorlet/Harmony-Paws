@@ -49,7 +49,7 @@ export default function Module() {
             <Body>{data?.description}</Body>
             <View style={styles.content}>
               <Divider />
-              <BodyTitle title={i18n.t('materialNeeded')} />
+              <BodyTitle title={i18n.t('module.materialNeeded')} />
               {data?.materials && data.materials.length > 0 ? (
                 <Block row wrap='wrap' gapHorizontal={32} gapVertical={16}>
                   {data.materials.map((material, index) => (
@@ -57,12 +57,12 @@ export default function Module() {
                   ))}
                 </Block>
               ) : (
-                <Body>{i18n.t('noMaterialNeeded')}</Body>
+                <Body>{i18n.t('module.noMaterialNeeded')}</Body>
               )}
             </View>
             <View style={styles.content}>
               <Divider />
-              <BodyTitle title={i18n.t('lesson')} />
+              <BodyTitle title={i18n.t('module.lessons')} />
               <View style={styles.lessonContainer}>
                 {data?.lessons.map((lesson, index) => {
                   const lessonItemStyle =
@@ -193,9 +193,9 @@ export default function Module() {
         <View style={styles.buttonContainer}>
           <StandardButton
             disabled={!data?.lessons.every(l => l.progress_percentage === 100)}
-            disabledText={i18n.t('allModulesNotCompleted')}
+            disabledText={i18n.t('module.allModulesNotCompleted')}
           >
-            <BodyMedium color='#fff'>{i18n.t('nextModule')}</BodyMedium>
+            <BodyMedium color='#fff'>{i18n.t('module.nextModule')}</BodyMedium>
           </StandardButton>
         </View>
       </StandardScrollView>

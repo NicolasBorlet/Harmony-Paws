@@ -1,7 +1,4 @@
 {
-  "welcome": "Hi",
-  "timeToRide": "Is it time to ride?",
-  "dogs": "Dogs",
   "myDogs": "My dogs",
   "hisDogs": "His dogs",
   "ride": "Rides",
@@ -44,8 +41,6 @@
   "participants": "Participants",
   "about": "About",
   "advice": "Advice",
-  "formation": "Formation",
-  "formations": "Formations",
   "completeFormation": "Complete formation",
   "accountCreated": "Your account is created!",
   "createDogProfile": "Create my dog profile",
@@ -112,14 +107,16 @@
   "dogName": "What is the name of your dog?",
   "dogAge": "What is the age of your dog?",
   "dogBehavior": "Your dog is:",
-  "nextModule": "Next module",
-  "allModulesNotCompleted": "All modules not completed",
-  "lesson": "Lesson",
-  "materialNeeded": "Material needed",
-  "noMaterialNeeded": "No material needed",
-  "nextStep": "Next step",
-  "nextLesson": "Next lesson",
   "backToCourse": "Back to course",
+  "global": {
+    "choose": "Choose",
+    "birthday": "Birthday",
+    "informations": "Informations",
+    "share": "Share",
+    "download": "Download",
+    "dogs": "Dogs",
+    "rides": "Rides"
+  },
   "tabbar": {
     "home": "Home",
     "formation": "Formation",
@@ -127,8 +124,28 @@
     "profile": "Profile"
   },
   "home": {
-    "home": "Home",
+    "welcome": "Hi",
     "timeToRide": "Is it time to ride?"
+  },
+  "formation": {
+    "formation": "Formation",
+    "yourFormations": "Your formations",
+    "forYou": "For you",
+    "allFormations": "All formations",
+    "nextModule": "Next module"
+  },
+  "module": {
+    "nextModule": "Next module",
+    "allModulesNotCompleted": "All modules not completed",
+    "materialNeeded": "Material needed",
+    "noMaterialNeeded": "No material needed",
+    "nextStep": "Next step",
+    "nextLesson": "Next lesson",
+    "lessons": "Lessons"
+  },
+  "lesson": {
+    "lesson": "Lesson",
+    "nextStep": "Next step"
   },
   "medical": {
     "healthRecord": "Health record",
@@ -137,13 +154,6 @@
     "vaccines": "Vaccines",
     "weight": "Weight",
     "height": "Height"
-  },
-  "global": {
-    "choose": "Choose",
-    "birthday": "Birthday",
-    "informations": "Informations",
-    "share": "Share",
-    "download": "Download"
   },
   "dog": {
     "breed": "Breed",
