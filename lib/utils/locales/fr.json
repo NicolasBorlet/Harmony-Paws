@@ -1,5 +1,4 @@
 {
-  "home": "Accueil",
   "welcome": "Salut",
   "timeToRide": "C'est le moment de se balader ?",
   "dogs": "Chiens",
@@ -121,6 +120,16 @@
   "nextStep": "Étape suivante",
   "nextLesson": "Leçon suivante",
   "backToCourse": "Retour au parcours",
+  "tabbar": {
+    "home": "Accueil",
+    "formation": "Formation",
+    "medical": "Médical",
+    "profile": "Profil"
+  },
+  "home": {
+    "home": "Accueil",
+    "timeToRide": "C'est le moment de se balader ?"
+  },
   "medical": {
     "healthRecord": "Carnet de santé",
     "healthRecordDescription": "Choisissez votre compagnon pour découvrir toutes ses informations de santé, centralisé en 1 seule application.",

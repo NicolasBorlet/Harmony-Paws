@@ -69,7 +69,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(home)'
         options={{
-          title: `${i18n.t('home')}`,
+          title: `${i18n.t('tabbar.home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <PawFocused /> : <Paw />,
         }}
@@ -77,7 +77,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(formation)'
         options={{
-          title: 'Formation',
+          title: `${i18n.t('tabbar.formation')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <FormationFocused /> : <Formation />,
         }}
@@ -85,7 +85,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(medical)'
         options={{
-          title: 'Medical',
+          title: `${i18n.t('tabbar.medical')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <BoneFocused /> : <Bone />,
         }}
@@ -93,7 +93,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(account)'
         options={{
-          title: 'Account',
+          title: `${i18n.t('tabbar.profile')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? (
               <View
@@ -114,7 +114,7 @@ export default function TabLayout() {
                     style={{ width: 21, height: 21 }}
                   />
                 ) : ( */}
-                <Feather name='user' size={16} color={Colors.light.primary} />
+                <Feather name='user' size={21} color={Colors.light.primary} />
                 {/* )} */}
               </View>
             ) : (

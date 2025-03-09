@@ -1,27 +1,28 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import AnimatedHeader from "../header/animated-header";
-import RoundedIconLink from "../rounded-icon-link";
+import { i18n } from '@/app/_layout'
+import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import AnimatedHeader from '../header/animated-header'
+import RoundedIconLink from '../rounded-icon-link'
 
 export default function HomeHeader({ scrollY }: { scrollY: any }) {
   return (
     <AnimatedHeader
-      scrollY={scrollY} 
+      scrollY={scrollY}
       icons={
         <>
           <RoundedIconLink
             icon={<Ionicons name='notifications' size={20} color='white' />}
             onPress={() => router.push('/notifications')}
           />
-            <RoundedIconLink
-              icon={<Ionicons name='chatbubble' size={20} color='white' />}
-              onPress={() => router.push('/messages')}
-            />
+          <RoundedIconLink
+            icon={<Ionicons name='chatbubble' size={20} color='white' />}
+            onPress={() => router.push('/messages')}
+          />
         </>
       }
       title='welcome'
       dogName='Taico'
-      subtitle='timeToRide'
+      subtitle={i18n.t('home.timeToRide')}
     />
   )
 }

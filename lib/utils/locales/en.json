@@ -1,5 +1,4 @@
 {
-  "home": "Home",
   "welcome": "Hi",
   "timeToRide": "Is it time to ride?",
   "dogs": "Dogs",
@@ -121,6 +120,16 @@
   "nextStep": "Next step",
   "nextLesson": "Next lesson",
   "backToCourse": "Back to course",
+  "tabbar": {
+    "home": "Home",
+    "formation": "Formation",
+    "medical": "Medical",
+    "profile": "Profile"
+  },
+  "home": {
+    "home": "Home",
+    "timeToRide": "Is it time to ride?"
+  },
   "medical": {
     "healthRecord": "Health record",
     "healthRecordDescription": "Choose your companion to discover all their health information, centralized in 1 single application.",

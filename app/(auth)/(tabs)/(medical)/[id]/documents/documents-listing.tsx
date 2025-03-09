@@ -81,6 +81,8 @@ export default function Documents() {
                     documentUrl: document.url,
                     reason: document.reason,
                     place: document.place,
+                    type: document.type,
+                    created_at: document.created_at.toLocaleDateString('fr-FR'),
                   },
                 })
           }}
