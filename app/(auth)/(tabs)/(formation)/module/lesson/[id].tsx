@@ -97,7 +97,7 @@ export default function Lesson() {
             }
           }}
         >
-          <BodyMedium color='#fff'>{i18n.t('nextStep')}</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('lesson.nextStep')}</BodyMedium>
         </StandardButton>
       </View>
     </SafeAreaView>

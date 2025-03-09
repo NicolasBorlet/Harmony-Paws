@@ -20,7 +20,7 @@ export default function HomeHeader({ scrollY }: { scrollY: any }) {
           />
         </>
       }
-      title='welcome'
+      title={i18n.t('home.welcome')}
       dogName='Taico'
       subtitle={i18n.t('home.timeToRide')}
     />

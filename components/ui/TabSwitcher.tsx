@@ -1,42 +1,48 @@
-import { translations } from '@/lib/utils/translations';
-import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withSpring
-} from 'react-native-reanimated';
-
+import { i18n } from '@/app/_layout'
+import { Ionicons } from '@expo/vector-icons'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 
 type Tab = {
-  id: 'dog' | 'ride';
-  icon: keyof typeof Ionicons.glyphMap;
-  label: string;
-};
+  id: 'dog' | 'ride'
+  icon: keyof typeof Ionicons.glyphMap
+  label: string
+}
 
 type Props = {
-  selectedTab: 'dog' | 'ride';
-  onTabChange: (tab: 'dog' | 'ride') => void;
-  language: 'en' | 'fr';
-};
+  selectedTab: 'dog' | 'ride'
+  onTabChange: (tab: 'dog' | 'ride') => void
+  language: 'en' | 'fr'
+}
 
-export default function TabSwitcher({ selectedTab, onTabChange, language }: Props) {
+export default function TabSwitcher({
+  selectedTab,
+  onTabChange,
+  language,
+}: Props) {
   const TABS: Tab[] = [
-    { id: 'dog', icon: 'paw', label: translations[language].dogs },
-    { id: 'ride', icon: 'car-sport', label: translations[language].ride }
-  ];
+    { id: 'dog', icon: 'paw', label: i18n.t('global.dogs') },
+    {
+      id: 'ride',
+      icon: 'car-sport',
+      label: i18n.t('global.rides'),
+    },
+  ]
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{
-        translateX: withSpring(selectedTab === 'dog' ? 0 : 96.5)
-      }]
-    };
-  });
+      transform: [
+        {
+          translateX: withSpring(selectedTab === 'dog' ? 0 : 96.5),
+        },
+      ],
+    }
+  })
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.selector, animatedStyle]} />
-      {TABS.map((tab) => (
+      {TABS.map(tab => (
         <Pressable
           key={tab.id}
           style={styles.tab}
@@ -47,16 +53,18 @@ export default function TabSwitcher({ selectedTab, onTabChange, language }: Prop
             size={24}
             color={selectedTab === tab.id ? '#fff' : '#F7A400'}
           />
-          <Text style={[
-            styles.label,
-            { color: selectedTab === tab.id ? '#fff' : '#F7A400' }
-          ]}>
+          <Text
+            style={[
+              styles.label,
+              { color: selectedTab === tab.id ? '#fff' : '#F7A400' },
+            ]}
+          >
             {tab.label}
           </Text>
         </Pressable>
       ))}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -86,5 +94,5 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 10,
     fontFamily: 'Montserrat_600SemiBold',
-  }
-});
+  },
+})
