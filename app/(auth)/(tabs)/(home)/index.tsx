@@ -76,7 +76,7 @@ export default function HomeScreen() {
         )}
       </View>
       <MapButton onPress={() => router.push('/map')}>
-        <Small>{i18n.t('map')}</Small>
+        <Small>{i18n.t('global.map')}</Small>
         <Ionicons name='map' size={18} color='white' />
       </MapButton>
       <FilterComponent
