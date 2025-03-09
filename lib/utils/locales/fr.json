@@ -1,10 +1,6 @@
 {
-  "welcome": "Salut",
-  "timeToRide": "C'est le moment de se balader ?",
-  "dogs": "Chiens",
   "myDogs": "Mes chiens",
   "hisDogs": "Ses chiens",
-  "ride": "Balades",
   "map": "Carte",
   "year": "An",
   "years": "ans",
@@ -44,7 +40,6 @@
   "participants": "Participants",
   "about": "À propos",
   "advice": "Avis",
-  "formation": "Formation",
   "formations": "Formations",
   "completeFormation": "Formation complète",
   "accountCreated": "Ton compte est cree !",
@@ -112,14 +107,18 @@
   "dogName": "Quel est le prénom de votre chien ?",
   "dogAge": "Quel est l'âge de votre chien ?",
   "dogBehavior": "Votre chien est :",
-  "nextModule": "Module suivant",
-  "allModulesNotCompleted": "Tous les modules n'ont pas été complétés",
-  "lesson": "Leçon",
-  "materialNeeded": "Matériel nécessaire",
-  "noMaterialNeeded": "Pas de matériel nécessaire",
   "nextStep": "Étape suivante",
   "nextLesson": "Leçon suivante",
   "backToCourse": "Retour au parcours",
+  "global": {
+    "choose": "Choisir",
+    "birthday": "Anniversaire",
+    "informations": "Informations",
+    "share": "Partager",
+    "download": "Télécharger",
+    "dogs": "Chiens",
+    "rides": "Balades"
+  },
   "tabbar": {
     "home": "Accueil",
     "formation": "Formation",
@@ -127,8 +126,25 @@
     "profile": "Profil"
   },
   "home": {
-    "home": "Accueil",
+    "welcome": "Salut",
     "timeToRide": "C'est le moment de se balader ?"
+  },
+  "formation": {
+    "formation": "Formation",
+    "yourFormations": "Vos formations",
+    "forYou": "Pour vous",
+    "allFormations": "Toutes nos formations"
+  },
+  "module": {
+    "materialNeeded": "Matériel nécessaire",
+    "noMaterialNeeded": "Pas de matériel nécessaire",
+    "allModulesNotCompleted": "Tous les modules n'ont pas été complétés",
+    "nextModule": "Module suivant",
+    "lessons": "Leçons"
+  },
+  "lesson": {
+    "lesson": "Leçon",
+    "nextStep": "Étape suivante"
   },
   "medical": {
     "healthRecord": "Carnet de santé",
@@ -137,13 +153,6 @@
     "vaccines": "Vaccins",
     "weight": "Poids",
     "height": "Taille"
-  },
-  "global": {
-    "choose": "Choisir",
-    "birthday": "Anniversaire",
-    "informations": "Informations",
-    "share": "Partager",
-    "download": "Télécharger"
   },
   "dog": {
     "breed": "Race",
