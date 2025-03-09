@@ -21,9 +21,10 @@ export default function Document() {
           textAlign: 'center',
           marginTop: 8,
           marginBottom: 32,
+          textTransform: 'capitalize',
         }}
       >
-        {params.documentName}
+        {params.type} - {params.created_at}
       </BodyBold>
       <View style={styles.contentContainer}>
         <View style={styles.informationsContainer}>

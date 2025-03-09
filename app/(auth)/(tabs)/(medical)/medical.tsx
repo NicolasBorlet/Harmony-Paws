@@ -2,6 +2,7 @@ import { i18n } from '@/app/_layout'
 import DogCard from '@/components/medical/dog-card'
 import MedicalHeader from '@/components/medical/medical-header'
 import { StandardButton } from '@/components/ui/button'
+import Loader from '@/components/ui/loader'
 import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
@@ -37,7 +38,7 @@ export default function Medical() {
   const flashListRef = useRef<FlashList<DogListingInterface>>(null)
 
   const user = user$.get()
-  const { data: userDogs } = useDogsFromUserId(user?.id)
+  const { data: userDogs, isLoading } = useDogsFromUserId(user?.id)
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const scrollPosition = event.nativeEvent.contentOffset.x
@@ -77,6 +78,10 @@ export default function Medical() {
     }
   }, [userDogs])
 
+  if (isLoading) {
+    return <Loader />
+  }
+
   return (
     <View
       style={[
@@ -96,12 +101,17 @@ export default function Medical() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ padding: 16, paddingTop: 0 }}>
+        <View style={{ paddingHorizontal: 16 }}>
           <ExtraSmall color={Colors.black}>
             {i18n.t('medical.healthRecordDescription')}
           </ExtraSmall>
         </View>
-        <View style={{ height: CONTAINER_HEIGHT, width: SCREEN_WIDTH }}>
+        <View
+          style={{
+            height: CONTAINER_HEIGHT,
+            width: SCREEN_WIDTH,
+          }}
+        >
           <FlashList
             ref={flashListRef}
             data={dogs}
@@ -136,7 +146,6 @@ export default function Medical() {
           <StandardButton
             width='140'
             onPress={() => {
-              // console.log('dogs[activeIndex].id', dogs[activeIndex].id)
               router.push(`/${dogs[activeIndex].id}/healthRecord`)
             }}
           >
@@ -154,7 +163,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   scrollView: {
-    paddingHorizontal: 16,
     gap: 32,
     paddingBottom: 24,
   },
