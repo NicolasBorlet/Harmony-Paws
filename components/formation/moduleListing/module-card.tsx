@@ -48,7 +48,9 @@ export default function ModuleCard({ module }: ModuleCardProps) {
             gap: 6,
           }}
         >
-          <ExtraSmallBold color='#979898'>{i18n.t('training')}</ExtraSmallBold>
+          <ExtraSmallBold color='#979898'>
+            {i18n.t('module.training')}
+          </ExtraSmallBold>
           <BodyBold>{module.name}</BodyBold>
         </View>
       </View>

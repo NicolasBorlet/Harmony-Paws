@@ -187,11 +187,11 @@ export default function FirstStep() {
                 />
               )}
               <ParagraphMedium color='white'>
-                {i18n.t('step')} 1/2
+                {i18n.t('global.step')} 1/2
               </ParagraphMedium>
 
               <SpecialTitle_3 color='white'>
-                {i18n.t('wouldLikeKnowPet')}
+                {i18n.t('dogCreation.wouldLikeKnowPet')}
               </SpecialTitle_3>
             </View>
           </View>
@@ -232,7 +232,7 @@ export default function FirstStep() {
             (!isFormValid || isSubmitting) && styles.buttonDisabled,
           ]}
         >
-          <BodyMedium color='#fff'>{i18n.t('continue')}</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('global.continue')}</BodyMedium>
         </StandardButton>
       </View>
     </KeyboardAvoidingView>
