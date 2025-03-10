@@ -19,7 +19,7 @@ const AuthContext = React.createContext<{
 }>({
   signIn: async () => null,
   signUp: async () => null,
-  signOut: async () => { },
+  signOut: async () => {},
   session: null,
   isLoading: false,
 })
@@ -43,7 +43,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     console.log('SessionProvider')
     console.log(session)
-    if (session && session.user.email && session.user.id && session.user.last_sign_in_at) {
+    if (
+      session &&
+      session.user.email &&
+      session.user.id &&
+      session.user.last_sign_in_at
+    ) {
       // Update session observable when session changes
       session$.set({
         id: session.user.id,
@@ -68,9 +73,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       if (session) {
+        console.log('Checking onboarding status...')
         const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+        console.log('hasCompletedOnboarding:', hasCompletedOnboarding)
         if (!hasCompletedOnboarding) {
-          router.replace('/(auth)/onboarding')
+          console.log('Redirecting to onboarding...')
+          router.replace('/(auth)/onboarding/ride-onboarding')
         }
       }
       setIsLoading(false)
@@ -79,8 +87,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       if (session) {
+        console.log('Auth state changed, checking onboarding...')
         const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
+        console.log('hasCompletedOnboarding:', hasCompletedOnboarding)
         if (!hasCompletedOnboarding) {
+          console.log('Redirecting to onboarding...')
           router.replace('/(auth)/onboarding')
         }
       }
@@ -88,10 +99,13 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const handleOnboarding = useCallback(() => {
+    console.log('handleOnboarding')
     const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
     if (hasCompletedOnboarding) {
+      console.log('hasCompletedOnboarding', hasCompletedOnboarding)
       router.replace('/(auth)/(tabs)/(home)')
     } else {
+      console.log('has not completed onboarding')
       router.replace('/(auth)/onboarding')
     }
   }, [])
@@ -107,7 +121,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
       // Verify user exists in DB
       const userData = await verifyUserInDB(data.session.user.id)
-      
+
       // Update user$ observable
       user$.set(userData)
 
@@ -123,7 +137,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = useCallback(async (email: string, password: string) => {
     try {
-      const { data: { session, user }, error } = await supabase.auth.signUp({
+      const {
+        data: { session, user },
+        error,
+      } = await supabase.auth.signUp({
         email,
         password,
       })
@@ -160,7 +177,5 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     signUp,
   }
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
