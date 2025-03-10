@@ -119,6 +119,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: HEADER_HEIGHT,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     zIndex: 1,
   },
 })
