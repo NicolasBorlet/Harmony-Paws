@@ -1,45 +1,4 @@
 {
-  "myDogs": "Mes chiens",
-  "hisDogs": "Ses chiens",
-  "joinDescription": "Contactez la propriétaire pour organiser une rencontre entre",
-  "joinPlaceholder": "Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?",
-  "online": "En ligne",
-  "disconect": "Déconnecté",
-  "disconected": "Se déconnecter",
-  "sendMessageToStart": "Envoyez un message pour commencer une conversation.",
-  "about": "À propos",
-  "continue": "Continuer",
-  "calm": "Calme",
-  "active": "Actif",
-  "aggressive": "Aggressif",
-  "ending": "Terminer",
-  "editProfile": "Modifier mon profil",
-  "shareProfile": "Partager mon profil",
-  "friends": "Amis",
-  "favorites": "Favoris",
-  "createdRides": "Les balades créées",
-  "completedFormations": "Les formations passées",
-  "completedActivities": "Les activités réalisées",
-  "meetings": "Mes rencontres",
-  "myBones": "Mes os",
-  "hisMate": "Son compagnon",
-  "account": "Compte",
-  "noNextRide": "Aucune prochaine balade de prévue.",
-  "noDescriptionFor": "Aucune description pour",
-  "addFriend": "Ajouter en amie",
-  "write": "Écrire",
-  "request_accepted": "Demande acceptée",
-  "request_rejected": "Demande refusée",
-  "you_are_now_friends": "Vous êtes désormais amis",
-  "ride_request_accepted": "Demande de balade acceptée",
-  "ride_request_accepted_message": "On se balade ensemble !",
-  "training": "Entrainement",
-  "step": "Étape",
-  "steps": "Étapes",
-  "wouldLikeKnowPet": "Nous aimerions connaitre votre animal",
-  "nextStep": "Étape suivante",
-  "nextLesson": "Leçon suivante",
-  "backToCourse": "Retour au parcours",
   "global": {
     "choose": "Choisir",
     "birthday": "Anniversaire",
@@ -57,13 +16,33 @@
     "male": "Mâle",
     "female": "Femelle",
     "map": "Carte",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "about": "À propos",
+    "step": "Étape",
+    "error": "Erreur",
+    "noDescriptionFor": "Aucune description pour",
+    "continue": "Continuer",
+    "disconected": "Se déconnecter"
   },
   "tabbar": {
     "home": "Accueil",
     "formation": "Formation",
     "medical": "Médical",
     "profile": "Profil"
+  },
+  "account": {
+    "logout": "Se déconnecter",
+    "account": "Compte",
+    "editProfile": "Modifier mon profil",
+    "shareProfile": "Partager mon profil",
+    "myDogs": "Mes chiens",
+    "friends": "Amis",
+    "favorites": "Favoris",
+    "createdRides": "Les balades créées",
+    "completedFormations": "Les formations passées",
+    "completedActivities": "Les activités réalisées",
+    "meetings": "Mes rencontres",
+    "myBones": "Mes os"
   },
   "auth": {
     "login": "Connexion",
@@ -94,7 +73,8 @@
     "noMaterialNeeded": "Pas de matériel nécessaire",
     "allModulesNotCompleted": "Tous les modules n'ont pas été complétés",
     "nextModule": "Module suivant",
-    "lessons": "Leçons"
+    "lessons": "Leçons",
+    "training": "Entrainement"
   },
   "lesson": {
     "lesson": "Leçon",
@@ -128,7 +108,8 @@
     "dogBehaviorQuestion": "Votre chien est :",
     "dogAddPhoto": "Ajouter une photo de votre chien",
     "addDogAge": "Ajouter l'âge de votre chien",
-    "addDogBreed": "Sélectionner sa race"
+    "addDogBreed": "Sélectionner sa race",
+    "wouldLikeKnowPet": "Nous aimerions connaitre votre animal"
   },
   "ride": {
     "start": "Départ",
@@ -137,7 +118,9 @@
     "joinTheRide": "Rejoindre la balade",
     "route": "Parcours",
     "participants": "Participants",
-    "activities": "Activités"
+    "activities": "Activités",
+    "joinPlaceholder": "Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?",
+    "joinDescription": "Contactez la propriétaire pour organiser une rencontre entre"
   },
   "discussion": {
     "message": "Message",
@@ -145,7 +128,13 @@
     "newMessage": "Nouvelle conversation",
     "createGroupDiscussion": "Créer une discussion de groupe",
     "sugest": "Suggestions",
-    "noMessages": "Aucun message"
+    "noMessages": "Aucun message",
+    "sendMessageToStart": "Envoyez un message pour commencer une conversation."
+  },
+  "profile": {
+    "addFriend": "Ajouter en amie",
+    "write": "Écrire",
+    "hisDogs": "Ses chiens"
   },
   "documents": {
     "myDocuments": "Mes documents",
@@ -172,6 +161,12 @@
     "friendRequest": "Souhaite être amie avec vous",
     "rideCreation": "A créé une nouvelle balade",
     "rideRequest": "Souhaite faire une balade avec vous",
-    "noNotifications": "Aucune notification"
+    "noNotifications": "Aucune notification",
+    "request_accepted": "Demande acceptée",
+    "request_rejected": "Demande refusée",
+    "you_are_now_friends": "Vous êtes désormais amis",
+    "ride_request_accepted": "Demande de balade acceptée",
+    "ride_request_accepted_message": "On se balade ensemble !",
+    "error_accepting_ride": "Erreur lors de l'acceptation de la demande de balade"
   }
 }

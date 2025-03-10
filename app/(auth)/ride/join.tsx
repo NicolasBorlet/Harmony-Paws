@@ -79,7 +79,9 @@ export default function DogInvitation() {
             style={{ width: 'auto', height: 1, backgroundColor: '#DFDFDF' }}
           />
           <View style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <SmallMedium color='#000'>{i18n.t('joinDescription')}</SmallMedium>
+            <SmallMedium color='#000'>
+              {i18n.t('ride.joinDescription')}
+            </SmallMedium>
             <View
               style={{
                 padding: 10,
@@ -88,7 +90,7 @@ export default function DogInvitation() {
               }}
             >
               <TextInput
-                placeholder={i18n.t('joinPlaceholder')}
+                placeholder={i18n.t('ride.joinPlaceholder')}
                 placeholderTextColor={Colors.light.secondary}
                 style={{
                   color: Colors.light.secondary,
@@ -105,10 +107,10 @@ export default function DogInvitation() {
           </View>
         </View>
         <View style={{ width: '100%', alignItems: 'center', gap: 16 }}>
-          <StandardButton onPress={() => { }}>
+          <StandardButton onPress={() => {}}>
             <BodyMedium color='#fff'>Envoyer le message</BodyMedium>
           </StandardButton>
-          <UnderlinedButton onPress={() => { }}>
+          <UnderlinedButton onPress={() => {}}>
             <BodyMedium
               color='#000000'
               style={{ textDecorationLine: 'underline' }}
