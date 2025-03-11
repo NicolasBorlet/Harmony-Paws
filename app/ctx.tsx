@@ -73,11 +73,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       if (session) {
-        console.log('Checking onboarding status...')
         const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
-        console.log('hasCompletedOnboarding:', hasCompletedOnboarding)
         if (!hasCompletedOnboarding) {
-          console.log('Redirecting to onboarding...')
           router.replace('/(auth)/onboarding/ride-onboarding')
         }
       }
@@ -87,11 +84,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       if (session) {
-        console.log('Auth state changed, checking onboarding...')
         const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
-        console.log('hasCompletedOnboarding:', hasCompletedOnboarding)
         if (!hasCompletedOnboarding) {
-          console.log('Redirecting to onboarding...')
           router.replace('/(auth)/onboarding')
         }
       }
@@ -99,13 +93,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const handleOnboarding = useCallback(() => {
-    console.log('handleOnboarding')
     const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
     if (hasCompletedOnboarding) {
-      console.log('hasCompletedOnboarding', hasCompletedOnboarding)
       router.replace('/(auth)/(tabs)/(home)')
     } else {
-      console.log('has not completed onboarding')
       router.replace('/(auth)/onboarding')
     }
   }, [])

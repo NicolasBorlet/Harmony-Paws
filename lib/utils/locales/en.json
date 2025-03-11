@@ -22,7 +22,9 @@
     "error": "Error",
     "noDescriptionFor": "No description for",
     "continue": "Continue",
-    "disconected": "Disconnect"
+    "disconected": "Disconnect",
+    "formations": "Formations",
+    "skip": "Skip"
   },
   "tabbar": {
     "home": "Home",
@@ -65,7 +67,8 @@
     "yourFormations": "Your formations",
     "forYou": "For you",
     "allFormations": "All formations",
-    "nextModule": "Next module"
+    "advice": "Advice",
+    "completeFormation": "Complete formation"
   },
   "module": {
     "nextModule": "Next module",
@@ -74,7 +77,8 @@
     "noMaterialNeeded": "No material needed",
     "nextStep": "Next step",
     "nextLesson": "Next lesson",
-    "lessons": "Lessons"
+    "lessons": "Lessons",
+    "training": "Training"
   },
   "lesson": {
     "lesson": "Lesson",
@@ -168,5 +172,10 @@
     "ride_request_accepted": "Ride request accepted",
     "ride_request_accepted_message": "Let's ride together!",
     "error_accepting_ride": "Error accepting ride request"
+  },
+  "onboarding": {
+    "onboardingRide": "Discover the best walking routes and meet other dogs!",
+    "onboardingFormation": "Enjoy lifetime access. Train and learn at your own pace with online education courses.",
+    "onboardingMedical": "Track and manage your dog's health easily with their digital health record."
   }
 }
