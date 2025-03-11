@@ -4,6 +4,7 @@ import GroupRide from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
 import { ParagraphMedium, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { router } from 'expo-router'
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -14,7 +15,7 @@ export default function RideCreation() {
     <View
       style={[
         styles.container,
-        { paddingTop: Platform.OS === 'ios' ? insets.top : 32 },
+        { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
       ]}
     >
       <Back position='relative' />
@@ -23,7 +24,10 @@ export default function RideCreation() {
       </SpecialTitle>
       <View style={styles.content}>
         <View style={styles.rideTypeContainer}>
-          <TouchableOpacity style={styles.rideType}>
+          <TouchableOpacity
+            style={styles.rideType}
+            onPress={() => router.push('/ride-creation/alone-ride')}
+          >
             <AloneRide />
             <ParagraphMedium
               color={Colors.purple[500]}
@@ -32,7 +36,10 @@ export default function RideCreation() {
               {i18n.t('rideCreation.aloneRide')}
             </ParagraphMedium>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rideType}>
+          <TouchableOpacity
+            style={styles.rideType}
+            onPress={() => router.push('/ride-creation/group-ride')}
+          >
             <GroupRide />
             <ParagraphMedium
               color={Colors.purple[500]}
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: '50%',
-    transform: [{ translateY: -60 }],
+    transform: [{ translateY: -120 }],
     paddingHorizontal: 20,
     alignItems: 'center',
   },
