@@ -3,12 +3,11 @@ import ParallaxScrollViewOnboarding from '@/components/scrollview/parallax-scrol
 import { StandardButton } from '@/components/ui/button'
 import { Body, ParagraphMedium, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import { useRouter } from 'expo-router'
+import { router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
 
 export default function RideOnboarding() {
-  const router = useRouter()
   const storage = new MMKV()
 
   return (
