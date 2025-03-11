@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated'
 
 import { Image } from 'expo-image'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useBottomTabOverflow } from '../ui/TabBarBackground'
 import { NavigationTitleExtraBold } from '../ui/text'
 
@@ -30,6 +31,8 @@ export default function ParallaxScrollView({
   paddingHorizontal = 16,
   title,
 }: Props) {
+  const insets = useSafeAreaInsets()
+
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
   const bottom = useBottomTabOverflow()
@@ -74,11 +77,18 @@ export default function ParallaxScrollView({
           )}
         </Animated.View>
         {headerImage && (
-          <View style={styles.imageContainer}>
+          <View
+            style={[
+              styles.imageContainer,
+              {
+                paddingTop: insets.top,
+              },
+            ]}
+          >
             <Image
               style={styles.image}
               source={headerImage}
-              contentFit='cover'
+              contentFit='contain'
               transition={1000}
               placeholder={{ blurhash }}
             />
@@ -110,8 +120,8 @@ const styles = StyleSheet.create({
     marginTop: -32,
   },
   image: {
-    width: 350,
-    height: 541,
+    width: '100%',
+    height: '100%',
   },
   imageContainer: {
     position: 'absolute',
