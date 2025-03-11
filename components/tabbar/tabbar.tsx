@@ -42,7 +42,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
       </View>
 
       <PlatformPressable
-        onPress={() => router.push('/ride/creation')}
+        onPress={() => router.push('/creation')}
         style={[
           {
             backgroundColor: Colors.light.primary,

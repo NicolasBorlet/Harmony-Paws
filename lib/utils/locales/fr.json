@@ -125,6 +125,11 @@
     "joinPlaceholder": "Bonjour, j'habite proche de ..., j'ai l'habitude de me balader dans le parc ... . Quelles sont vos habitudes à vous et votre loulou ?",
     "joinDescription": "Contactez la propriétaire pour organiser une rencontre entre"
   },
+  "rideCreation": {
+    "newRide": "Une nouvelle balade ?",
+    "aloneRide": "Balade seul",
+    "groupRide": "Balade en groupe"
+  },
   "discussion": {
     "message": "Message",
     "messages": "Messages",
