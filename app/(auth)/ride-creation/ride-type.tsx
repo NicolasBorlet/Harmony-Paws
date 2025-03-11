@@ -1,3 +1,4 @@
+import { i18n } from '@/app/_layout'
 import AloneRide from '@/assets/svg/ride/alone-ride'
 import GroupRide from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
@@ -5,7 +6,6 @@ import { ParagraphMedium, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { i18n } from '../_layout'
 
 export default function RideCreation() {
   const insets = useSafeAreaInsets()
@@ -18,10 +18,10 @@ export default function RideCreation() {
       ]}
     >
       <Back position='relative' />
+      <SpecialTitle style={{ textAlign: 'center', paddingHorizontal: 20 }}>
+        {i18n.t('rideCreation.newRide')}
+      </SpecialTitle>
       <View style={styles.content}>
-        <SpecialTitle style={{ textAlign: 'center' }}>
-          {i18n.t('rideCreation.newRide')}
-        </SpecialTitle>
         <View style={styles.rideTypeContainer}>
           <TouchableOpacity style={styles.rideType}>
             <AloneRide />
@@ -54,14 +54,18 @@ const styles = StyleSheet.create({
     gap: 48,
   },
   content: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: '50%',
+    transform: [{ translateY: -60 }],
     paddingHorizontal: 20,
     alignItems: 'center',
-    maxWidth: 300,
-    marginHorizontal: 'auto',
   },
   rideTypeContainer: {
     flexDirection: 'column',
     gap: 20,
+    alignItems: 'center',
   },
   rideType: {
     backgroundColor: `${Colors.purple[500]}1A`,
