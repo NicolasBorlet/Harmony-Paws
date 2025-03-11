@@ -127,6 +127,11 @@
     "joinPlaceholder": "Hello, I live near ..., I usually walk in the park ... . What are your habits with you and your dog?",
     "joinDescription": "Contact the owner to organize a meeting between"
   },
+  "rideCreation": {
+    "newRide": "New ride ?",
+    "aloneRide": "Alone ride",
+    "groupRide": "Group ride"
+  },
   "discussion": {
     "message": "Message",
     "messages": "Messages",
