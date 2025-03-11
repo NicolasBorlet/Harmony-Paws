@@ -7,6 +7,8 @@
     "download": "Télécharger",
     "dogs": "Chiens",
     "rides": "Balades",
+    "formations": "Formations",
+    "medical": "Santé",
     "weDontKnowMoreAbout": "Nous n'en savons pas plus sur",
     "accept": "Accepter",
     "refuse": "Refuser",
@@ -22,7 +24,8 @@
     "error": "Erreur",
     "noDescriptionFor": "Aucune description pour",
     "continue": "Continuer",
-    "disconected": "Se déconnecter"
+    "disconected": "Se déconnecter",
+    "skip": "Passer"
   },
   "tabbar": {
     "home": "Accueil",
@@ -168,5 +171,10 @@
     "ride_request_accepted": "Demande de balade acceptée",
     "ride_request_accepted_message": "On se balade ensemble !",
     "error_accepting_ride": "Erreur lors de l'acceptation de la demande de balade"
+  },
+  "onboarding": {
+    "onboardingRide": "Découvrez les meilleurs itinéraires de promenade et rencontrez d'autres chiens !",
+    "onboardingFormation": "Profitez de l'accès à vie. Formez-vous et apprenez à votre rythme avec des cours sur l'éducation en ligne.",
+    "onboardingMedical": "Suivez et gérez la santé de votre chien en toute simplicité avec son carnet de santé numérique."
   }
 }

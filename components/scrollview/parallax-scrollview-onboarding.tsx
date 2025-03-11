@@ -90,7 +90,6 @@ export default function ParallaxScrollView({
               source={headerImage}
               contentFit='contain'
               transition={1000}
-              placeholder={{ blurhash }}
             />
           </View>
         )}

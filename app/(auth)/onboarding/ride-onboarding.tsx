@@ -1,10 +1,16 @@
+import { i18n } from '@/app/_layout'
 import ParallaxScrollViewOnboarding from '@/components/scrollview/parallax-scrollview-onboarding'
 import { StandardButton } from '@/components/ui/button'
 import { Body, ParagraphMedium, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useRouter } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
 
 export default function RideOnboarding() {
+  const router = useRouter()
+  const storage = new MMKV()
+
   return (
     <ParallaxScrollViewOnboarding
       backgroundColor={Colors.purple[500]}
@@ -12,15 +18,27 @@ export default function RideOnboarding() {
       children={
         <View style={styles.container}>
           <View style={styles.content}>
-            <SpecialTitle>Ride with us</SpecialTitle>
-            <ParagraphMedium>Skip and continue to the app</ParagraphMedium>
+            <SpecialTitle style={{ textAlign: 'center' }}>
+              {i18n.t('global.rides')}
+            </SpecialTitle>
+            <ParagraphMedium style={{ textAlign: 'center' }}>
+              {i18n.t('onboarding.onboardingRide')}
+            </ParagraphMedium>
           </View>
           <View style={styles.buttonContainer}>
-            <StandardButton>
-              <Body>Skip</Body>
+            <StandardButton
+              onPress={() => router.push('/onboarding/formation-onboarding')}
+            >
+              <Body color={Colors.white}>{i18n.t('global.continue')}</Body>
             </StandardButton>
-            <StandardButton>
-              <Body>Skip</Body>
+            <StandardButton
+              outlined
+              onPress={() => {
+                storage.set('onBoarding', true)
+                router.replace('/(auth)/(tabs)/(home)')
+              }}
+            >
+              <Body color={Colors.orange[500]}>{i18n.t('global.skip')}</Body>
             </StandardButton>
           </View>
         </View>
@@ -31,7 +49,7 @@ export default function RideOnboarding() {
 
 const styles = StyleSheet.create({
   container: {
-    textAlign: 'center',
+    gap: 48,
     justifyContent: 'space-between',
   },
   buttonContainer: {
@@ -42,5 +60,6 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 20,
+    alignItems: 'center',
   },
 })
