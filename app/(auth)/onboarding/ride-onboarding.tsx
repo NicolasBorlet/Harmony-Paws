@@ -1,6 +1,6 @@
 import ParallaxScrollViewOnboarding from '@/components/scrollview/parallax-scrollview-onboarding'
 import { StandardButton } from '@/components/ui/button'
-import { Body } from '@/components/ui/text'
+import { Body, ParagraphMedium, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { StyleSheet, View } from 'react-native'
 
@@ -11,7 +11,10 @@ export default function RideOnboarding() {
       headerImage={require('@/assets/images/onboarding-dog-1.png')}
       children={
         <View style={styles.container}>
-          <View></View>
+          <View style={styles.content}>
+            <SpecialTitle>Ride with us</SpecialTitle>
+            <ParagraphMedium>Skip and continue to the app</ParagraphMedium>
+          </View>
           <View style={styles.buttonContainer}>
             <StandardButton>
               <Body>Skip</Body>
@@ -28,13 +31,16 @@ export default function RideOnboarding() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    textAlign: 'center',
     justifyContent: 'space-between',
   },
   buttonContainer: {
-    gap: 16,
+    gap: 8,
   },
   button: {
     flex: 1,
+  },
+  content: {
+    gap: 20,
   },
 })
