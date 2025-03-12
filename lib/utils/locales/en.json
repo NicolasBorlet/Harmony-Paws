@@ -130,7 +130,16 @@
   "rideCreation": {
     "newRide": "New ride ?",
     "aloneRide": "Alone ride",
-    "groupRide": "Group ride"
+    "groupRide": "Group ride",
+    "rideLocation": "Ride location",
+    "rideLocationPlaceholder": "Enter your destination",
+    "rideType": "Ride type",
+    "rideDifficulty": "Ride difficulty",
+    "rideDuration": "Ride duration",
+    "forest": "Forest",
+    "city": "City",
+    "beach": "Beach",
+    "park": "Park"
   },
   "discussion": {
     "message": "Message",
