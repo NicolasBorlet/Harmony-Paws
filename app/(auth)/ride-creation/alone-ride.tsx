@@ -4,9 +4,22 @@ import Back from '@/components/back-button'
 import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import Animated, {
+  Easing,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+// Créer un composant animé personnalisé basé sur Pressable
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+// Définir la couleur active
+const ACTIVE_COLOR = '#F7A400'
 
 export default function AloneRide() {
   enum ActivityType {
@@ -20,6 +33,70 @@ export default function AloneRide() {
 
   const [location, setLocation] = useState<string>('')
   const [type, setType] = useState<ActivityType>(ActivityType.PARK)
+
+  // Créer des objets pour les valeurs d'animation de chaque type d'activité
+  const animationValues = {
+    [ActivityType.PARK]: useSharedValue(1),
+    [ActivityType.FOREST]: useSharedValue(0),
+    [ActivityType.CITY]: useSharedValue(0),
+    [ActivityType.BEACH]: useSharedValue(0),
+  }
+
+  // Mettre à jour les animations lorsque le type change
+  useEffect(() => {
+    // Réinitialiser toutes les animations
+    Object.values(ActivityType).forEach(activityType => {
+      animationValues[activityType].value = withTiming(
+        activityType === type ? 1 : 0,
+        {
+          duration: 300,
+          easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        },
+      )
+    })
+  }, [type])
+
+  const getAnimatedStyle = (activityType: ActivityType) => {
+    return useAnimatedStyle(() => {
+      const fillProgress = animationValues[activityType].value
+
+      // Utilisation de interpolateColor pour une transition fluide entre blanc et la couleur active
+      const backgroundColor = interpolateColor(
+        fillProgress,
+        [0, 1],
+        ['white', ACTIVE_COLOR],
+      )
+
+      return {
+        backgroundColor,
+        borderWidth: 1,
+        borderColor: ACTIVE_COLOR,
+        borderRadius: 999,
+        paddingHorizontal: 20,
+        paddingVertical: 6,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }
+    })
+  }
+
+  // Fonction pour créer un style de texte animé pour chaque bouton
+  const getAnimatedTextStyle = (activityType: ActivityType) => {
+    return useAnimatedStyle(() => {
+      const fillProgress = animationValues[activityType].value
+
+      // Utilisation de interpolateColor pour une transition fluide de la couleur du texte
+      const textColor = interpolateColor(
+        fillProgress,
+        [0, 1],
+        [ACTIVE_COLOR, 'white'],
+      )
+
+      return {
+        color: textColor,
+      }
+    })
+  }
 
   return (
     <View
@@ -58,28 +135,20 @@ export default function AloneRide() {
           </BodyMedium>
           <View style={{ flexDirection: 'row', gap: 16 }}>
             {Object.values(ActivityType).map(activityType => (
-              <View>
-                <Pressable
-                  key={activityType}
+              <View key={activityType}>
+                <AnimatedPressable
                   onPress={() => setType(activityType)}
-                  style={{
-                    backgroundColor:
-                      type === activityType ? Colors.orange[500] : 'white',
-                    borderWidth: 1,
-                    borderColor: Colors.orange[500],
-                    borderRadius: 999,
-                    paddingHorizontal: 16,
-                    paddingVertical: 6,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
+                  style={getAnimatedStyle(activityType)}
                 >
-                  <ParagraphMedium
-                    color={type === activityType ? 'white' : Colors.orange[500]}
+                  <Animated.Text
+                    style={[
+                      { fontFamily: 'Montserrat_500Medium', fontSize: 14 },
+                      getAnimatedTextStyle(activityType),
+                    ]}
                   >
                     {i18n.t(`rideCreation.${activityType}`)}
-                  </ParagraphMedium>
-                </Pressable>
+                  </Animated.Text>
+                </AnimatedPressable>
               </View>
             ))}
           </View>
