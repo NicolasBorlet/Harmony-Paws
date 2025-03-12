@@ -20,9 +20,13 @@ export default function RideCreation() {
       ]}
     >
       <Back position='relative' />
-      <SpecialTitle style={{ textAlign: 'center', paddingHorizontal: 20 }}>
-        {i18n.t('rideCreation.newRide')}
-      </SpecialTitle>
+      <View style={{ alignSelf: 'center' }}>
+        <SpecialTitle
+          style={{ textAlign: 'center', paddingHorizontal: 20, maxWidth: 300 }}
+        >
+          {i18n.t('rideCreation.newRide')}
+        </SpecialTitle>
+      </View>
       <View style={styles.content}>
         <View style={styles.rideTypeContainer}>
           <TouchableOpacity
@@ -51,7 +55,27 @@ export default function RideCreation() {
           </TouchableOpacity>
         </View>
       </View>
-      <PawPath />
+      <View
+        style={{
+          position: 'absolute',
+          top: -32,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <PawPath />
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          transform: [{ scaleX: -1 }],
+        }}
+      >
+        <PawPath />
+      </View>
     </View>
   )
 }
@@ -67,7 +91,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: '50%',
-    transform: [{ translateY: -120 }],
+    transform: [{ translateY: -60 }],
     paddingHorizontal: 20,
     alignItems: 'center',
   },
