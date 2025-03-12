@@ -19,7 +19,10 @@ export default function AuthLayout() {
       <Stack.Screen name='completion' options={{ presentation: 'modal' }} />
       <Stack.Screen name='onboarding' />
       <Stack.Screen name='profile-creation' />
-      <Stack.Screen name='creation' />
+      <Stack.Screen
+        name='ride-creation'
+        options={{ presentation: 'containedModal' }}
+      />
     </Stack>
   )
 }
