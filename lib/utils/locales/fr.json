@@ -128,7 +128,9 @@
   "rideCreation": {
     "newRide": "Une nouvelle balade ?",
     "aloneRide": "Balade seul",
-    "groupRide": "Balade en groupe"
+    "groupRide": "Balade en groupe",
+    "rideLocation": "Lieu de la balade",
+    "rideLocationPlaceholder": "Entrez votre destination"
   },
   "discussion": {
     "message": "Message",
