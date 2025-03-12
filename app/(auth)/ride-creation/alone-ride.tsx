@@ -28,6 +28,7 @@ export default function AloneRide() {
           </ParagraphMedium>
         </View>
       </View>
+      <View style={styles.content}></View>
     </View>
   )
 }
@@ -49,8 +50,14 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   rideTypeContainer: {
+    marginTop: 20,
+    marginBottom: 48,
     flexDirection: 'column',
     gap: 20,
     alignItems: 'center',
+  },
+  content: {
+    flex: 1,
+    backgroundColor: 'red',
   },
 })

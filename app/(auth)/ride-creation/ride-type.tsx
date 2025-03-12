@@ -1,5 +1,6 @@
 import { i18n } from '@/app/_layout'
 import AloneRide from '@/assets/svg/ride/alone-ride'
+import PawPath from '@/assets/svg/ride/creation/path'
 import GroupRide from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
 import { ParagraphMedium, SpecialTitle } from '@/components/ui/text'
@@ -50,6 +51,7 @@ export default function RideCreation() {
           </TouchableOpacity>
         </View>
       </View>
+      <PawPath />
     </View>
   )
 }
