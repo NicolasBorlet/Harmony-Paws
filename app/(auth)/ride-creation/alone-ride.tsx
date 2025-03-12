@@ -5,13 +5,21 @@ import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { useState } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AloneRide() {
+  enum ActivityType {
+    PARK = 'park',
+    FOREST = 'forest',
+    CITY = 'city',
+    BEACH = 'beach',
+  }
+
   const insets = useSafeAreaInsets()
 
   const [location, setLocation] = useState<string>('')
+  const [type, setType] = useState<ActivityType>(ActivityType.PARK)
 
   return (
     <View
@@ -44,6 +52,48 @@ export default function AloneRide() {
             placeholderTextColor={Colors.grey[500]}
           />
         </View>
+        <View style={styles.inputContainer}>
+          <BodyMedium color={Colors.black}>
+            {i18n.t('rideCreation.rideType')}
+          </BodyMedium>
+          <View style={{ flexDirection: 'row', gap: 16 }}>
+            {Object.values(ActivityType).map(activityType => (
+              <View>
+                <Pressable
+                  key={activityType}
+                  onPress={() => setType(activityType)}
+                  style={{
+                    backgroundColor:
+                      type === activityType ? Colors.orange[500] : 'white',
+                    borderWidth: 1,
+                    borderColor: Colors.orange[500],
+                    borderRadius: 999,
+                    paddingHorizontal: 16,
+                    paddingVertical: 6,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <ParagraphMedium
+                    color={type === activityType ? 'white' : Colors.orange[500]}
+                  >
+                    {i18n.t(`rideCreation.${activityType}`)}
+                  </ParagraphMedium>
+                </Pressable>
+              </View>
+            ))}
+          </View>
+        </View>
+        <View style={styles.inputContainer}>
+          <BodyMedium color={Colors.black}>
+            {i18n.t('rideCreation.rideDifficulty')}
+          </BodyMedium>
+        </View>
+        <View style={styles.inputContainer}>
+          <BodyMedium color={Colors.black}>
+            {i18n.t('rideCreation.rideDuration')}
+          </BodyMedium>
+        </View>
       </View>
     </View>
   )
@@ -75,6 +125,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 16,
+    gap: 32,
   },
   inputContainer: {
     gap: 12,

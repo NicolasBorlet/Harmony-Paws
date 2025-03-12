@@ -130,7 +130,14 @@
     "aloneRide": "Balade seul",
     "groupRide": "Balade en groupe",
     "rideLocation": "Lieu de la balade",
-    "rideLocationPlaceholder": "Entrez votre destination"
+    "rideLocationPlaceholder": "Entrez votre destination",
+    "rideType": "Le type de balade",
+    "rideDifficulty": "La difficulté de la balade",
+    "rideDuration": "La durée de la balade",
+    "forest": "Forêt",
+    "city": "Ville",
+    "beach": "Plage",
+    "park": "Parc"
   },
   "discussion": {
     "message": "Message",
