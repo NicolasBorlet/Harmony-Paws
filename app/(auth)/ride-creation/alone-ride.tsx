@@ -1,13 +1,17 @@
 import { i18n } from '@/app/_layout'
 import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import Back from '@/components/back-button'
-import { ParagraphMedium } from '@/components/ui/text'
+import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
+import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
+import { useState } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function AloneRide() {
   const insets = useSafeAreaInsets()
+
+  const [location, setLocation] = useState<string>('')
 
   return (
     <View
@@ -28,7 +32,19 @@ export default function AloneRide() {
           </ParagraphMedium>
         </View>
       </View>
-      <View style={styles.content}></View>
+      <View style={styles.content}>
+        <View style={styles.inputContainer}>
+          <BodyMedium color={Colors.black}>
+            {i18n.t('rideCreation.rideLocation')}
+          </BodyMedium>
+          <CustomTextInput
+            placeholder={i18n.t('rideCreation.rideLocationPlaceholder')}
+            value={location}
+            onChangeText={setLocation}
+            placeholderTextColor={Colors.grey[500]}
+          />
+        </View>
+      </View>
     </View>
   )
 }
@@ -58,6 +74,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    backgroundColor: 'red',
+    paddingHorizontal: 16,
+  },
+  inputContainer: {
+    gap: 12,
   },
 })
