@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     gap: 48,
   },
   content: {
+    zIndex: 1,
     position: 'absolute',
     left: 0,
     right: 0,
