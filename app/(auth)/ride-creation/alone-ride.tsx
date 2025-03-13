@@ -4,7 +4,7 @@ import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { StandardButton } from '@/components/ui/button'
-import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
+import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
@@ -155,12 +155,12 @@ export default function AloneRide() {
       <View style={styles.rideTypeContainer}>
         <View style={styles.rideType}>
           <AloneRideIcon />
-          <ParagraphMedium
+          <ParagraphSemiBold
             color={Colors.purple[500]}
             style={{ textAlign: 'center' }}
           >
             {i18n.t('rideCreation.aloneRide')}
-          </ParagraphMedium>
+          </ParagraphSemiBold>
         </View>
       </View>
       <View style={styles.content}>
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   rideType: {
-    backgroundColor: `${Colors.purple[500]}1A`,
+    backgroundColor: '#F0EBF5',
     width: 175,
     height: 120,
     borderRadius: 10,

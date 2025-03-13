@@ -3,7 +3,7 @@ import AloneRide from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import GroupRide from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
-import { ParagraphMedium, SpecialTitle } from '@/components/ui/text'
+import { ParagraphSemiBold, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { router } from 'expo-router'
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -34,24 +34,24 @@ export default function RideCreation() {
             onPress={() => router.push('/ride-creation/alone-ride')}
           >
             <AloneRide />
-            <ParagraphMedium
+            <ParagraphSemiBold
               color={Colors.purple[500]}
               style={{ textAlign: 'center' }}
             >
               {i18n.t('rideCreation.aloneRide')}
-            </ParagraphMedium>
+            </ParagraphSemiBold>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.rideType}
             onPress={() => router.push('/ride-creation/group-ride')}
           >
             <GroupRide />
-            <ParagraphMedium
+            <ParagraphSemiBold
               color={Colors.purple[500]}
               style={{ textAlign: 'center' }}
             >
               {i18n.t('rideCreation.groupRide')}
-            </ParagraphMedium>
+            </ParagraphSemiBold>
           </TouchableOpacity>
         </View>
       </View>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rideType: {
-    backgroundColor: `${Colors.purple[500]}1A`,
+    backgroundColor: '#F0EBF5',
     width: 175,
     height: 120,
     borderRadius: 10,
