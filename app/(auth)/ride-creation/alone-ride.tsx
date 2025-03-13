@@ -1,12 +1,18 @@
 import { i18n } from '@/app/_layout'
 import AloneRideIcon from '@/assets/svg/ride/alone-ride'
+import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
-import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
+import {
+  BodyMedium,
+  ExtraSmallMedium,
+  ParagraphMedium,
+} from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
+import { Entypo } from '@expo/vector-icons'
 import { useEffect, useState } from 'react'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, TextInput, View } from 'react-native'
 import Animated, {
   Easing,
   interpolateColor,
@@ -42,6 +48,7 @@ export default function AloneRide() {
     [ActivityType.CITY]: useSharedValue(0),
     [ActivityType.BEACH]: useSharedValue(0),
   }
+  const [duration, setDuration] = useState<string>('1h00')
 
   // Mettre à jour les animations lorsque le type change
   useEffect(() => {
@@ -107,6 +114,16 @@ export default function AloneRide() {
       ]}
     >
       <Back position='relative' />
+      <View
+        style={{
+          position: 'absolute',
+          top: -132,
+          left: 0,
+          right: 0,
+        }}
+      >
+        <PawPath />
+      </View>
       <View style={styles.rideTypeContainer}>
         <View style={styles.rideType}>
           <AloneRideIcon />
@@ -164,6 +181,48 @@ export default function AloneRide() {
           <BodyMedium color={Colors.black}>
             {i18n.t('rideCreation.rideDuration')}
           </BodyMedium>
+          <View
+            style={{
+              borderRadius: 10,
+              backgroundColor: '#f5f5f5',
+              paddingVertical: 16,
+              paddingHorizontal: 20,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <TextInput
+              placeholder={i18n.t('rideCreation.rideDurationPlaceholder')}
+              value={duration}
+              style={{
+                fontSize: 16,
+                fontFamily: 'Montserrat_500Medium',
+                color: Colors.grey[900],
+                width: '80%',
+              }}
+              onChangeText={setDuration}
+              placeholderTextColor={Colors.grey[500]}
+            />
+            <Pressable
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 8,
+              }}
+            >
+              <ExtraSmallMedium color={Colors.grey[500]}>
+                {duration}
+              </ExtraSmallMedium>
+              <View>
+                <Entypo name='chevron-up' size={8} color='black' />
+                <Entypo name='chevron-down' size={8} color='black' />
+              </View>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
