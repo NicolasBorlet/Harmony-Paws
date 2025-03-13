@@ -25,7 +25,8 @@
     "noDescriptionFor": "Aucune description pour",
     "continue": "Continuer",
     "disconected": "Se déconnecter",
-    "skip": "Passer"
+    "skip": "Passer",
+    "validate": "Valider"
   },
   "tabbar": {
     "home": "Accueil",

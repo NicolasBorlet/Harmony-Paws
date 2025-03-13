@@ -3,18 +3,20 @@ import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
+import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
 import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
+  withSpring,
   withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -104,9 +106,37 @@ export default function AloneRide() {
     })
   }
 
+  const bottomPosition = useSharedValue(-100)
+  const opacity = useSharedValue(0)
+
+  const buttonAnimation = () => {
+    // Animate the button to slide up
+    bottomPosition.value = withSpring(insets.bottom + 16, {
+      damping: 20,
+      stiffness: 90,
+    })
+
+    // Animate the button opacity
+    opacity.value = withSpring(1, {
+      damping: 20,
+      stiffness: 90,
+    })
+  }
+
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      bottom: bottomPosition.value,
+      opacity: opacity.value,
+    }
+  })
+
+  useEffect(() => {
+    buttonAnimation()
+  }, [])
+
   return (
-    <View
-      style={[
+    <ScrollView
+      contentContainerStyle={[
         styles.container,
         { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
       ]}
@@ -219,7 +249,12 @@ export default function AloneRide() {
           )}
         </View>
       </View>
-    </View>
+      <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+        <StandardButton>
+          <BodyMedium color='#fff'>{i18n.t('global.validate')}</BodyMedium>
+        </StandardButton>
+      </Animated.View>
+    </ScrollView>
   )
 }
 
@@ -261,5 +296,11 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'white',
     zIndex: 1000,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: 20,
   },
 })
