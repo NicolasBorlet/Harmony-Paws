@@ -1,6 +1,7 @@
 import { i18n } from '@/app/_layout'
 import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import Back from '@/components/back-button'
+import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
@@ -133,7 +134,7 @@ export default function AloneRide() {
           <BodyMedium color={Colors.black}>
             {i18n.t('rideCreation.rideType')}
           </BodyMedium>
-          <View style={{ flexDirection: 'row', gap: 16 }}>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
             {Object.values(ActivityType).map(activityType => (
               <View key={activityType}>
                 <AnimatedPressable
@@ -157,6 +158,7 @@ export default function AloneRide() {
           <BodyMedium color={Colors.black}>
             {i18n.t('rideCreation.rideDifficulty')}
           </BodyMedium>
+          <RideCheckbox />
         </View>
         <View style={styles.inputContainer}>
           <BodyMedium color={Colors.black}>
