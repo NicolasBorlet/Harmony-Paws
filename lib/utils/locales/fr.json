@@ -137,7 +137,8 @@
     "forest": "Forêt",
     "city": "Ville",
     "beach": "Plage",
-    "park": "Parc"
+    "park": "Parc",
+    "rideDurationPlaceholder": "Durée de la balade"
   },
   "discussion": {
     "message": "Message",
