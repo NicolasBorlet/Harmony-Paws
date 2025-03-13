@@ -3,16 +3,13 @@ import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
-import {
-  BodyMedium,
-  ExtraSmallMedium,
-  ParagraphMedium,
-} from '@/components/ui/text'
+import { BodyMedium, ParagraphMedium } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
+import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
-import { Platform, Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
   interpolateColor,
@@ -49,6 +46,7 @@ export default function AloneRide() {
     [ActivityType.BEACH]: useSharedValue(0),
   }
   const [duration, setDuration] = useState<string>('1h00')
+  const [showPicker, setShowPicker] = useState(false)
 
   // Mettre à jour les animations lorsque le type change
   useEffect(() => {
@@ -181,7 +179,8 @@ export default function AloneRide() {
           <BodyMedium color={Colors.black}>
             {i18n.t('rideCreation.rideDuration')}
           </BodyMedium>
-          <View
+          <Pressable
+            onPress={() => setShowPicker(true)}
             style={{
               borderRadius: 10,
               backgroundColor: '#f5f5f5',
@@ -193,36 +192,31 @@ export default function AloneRide() {
               justifyContent: 'space-between',
             }}
           >
-            <TextInput
-              placeholder={i18n.t('rideCreation.rideDurationPlaceholder')}
-              value={duration}
-              style={{
-                fontSize: 16,
-                fontFamily: 'Montserrat_500Medium',
-                color: Colors.grey[900],
-                width: '80%',
-              }}
-              onChangeText={setDuration}
-              placeholderTextColor={Colors.grey[500]}
-            />
-            <Pressable
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 8,
-              }}
-            >
-              <ExtraSmallMedium color={Colors.grey[500]}>
-                {duration}
-              </ExtraSmallMedium>
-              <View>
-                <Entypo name='chevron-up' size={8} color='black' />
-                <Entypo name='chevron-down' size={8} color='black' />
-              </View>
-            </Pressable>
-          </View>
+            <BodyMedium>{duration}</BodyMedium>
+
+            <View style={{ gap: 4 }}>
+              <Entypo name='chevron-up' size={8} color={Colors.grey[500]} />
+              <Entypo name='chevron-down' size={8} color={Colors.grey[500]} />
+            </View>
+          </Pressable>
+
+          {showPicker && (
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={duration}
+                onValueChange={itemValue => {
+                  setDuration(itemValue)
+                  setShowPicker(false)
+                }}
+              >
+                <Picker.Item label='30min' value='0h30' />
+                <Picker.Item label='1h' value='1h00' />
+                <Picker.Item label='1h30' value='1h30' />
+                <Picker.Item label='2h' value='2h00' />
+                {/* Ajoutez d'autres durées selon vos besoins */}
+              </Picker>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -259,5 +253,13 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     gap: 12,
+  },
+  pickerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    zIndex: 1000,
   },
 })
