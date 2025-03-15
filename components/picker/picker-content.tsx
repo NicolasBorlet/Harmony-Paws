@@ -62,6 +62,8 @@ const PickerContent: React.FC<PickerContentProps> = ({
           return [...setupDateColumns(), ...setupTimeColumns()]
         case 'birthday':
           return setupBirthdayColumns()
+        case 'duration':
+          return setupDurationColumns()
         case 'custom':
           return customColumns || []
         default:
@@ -142,6 +144,35 @@ const PickerContent: React.FC<PickerContentProps> = ({
     })
   }
 
+  const setupDurationColumns = (): PickerColumnType[] => {
+    // Heures (0-10)
+    const hours: PickerItemType[] = []
+    for (let h = 0; h <= 10; h++) {
+      const label = h === 1 ? '1 heure' : `${h} heures`
+      hours.push({ label, value: h })
+    }
+
+    // Minutes (0, 15, 30, 45)
+    const minutes: PickerItemType[] = []
+    const minuteValues = [0, 15, 30, 45]
+
+    minuteValues.forEach(m => {
+      const label =
+        m === 0
+          ? '0 minute'
+          : m === 15
+            ? '15 minutes'
+            : m === 30
+              ? '30 minutes'
+              : '45 minutes'
+      minutes.push({ label, value: m })
+    })
+
+    return [{ items: hours }, { items: minutes }]
+  }
+
+  // PickerContent.tsx - Correction
+
   const initializeSelectedIndices = (cols: PickerColumnType[]) => {
     let defaultValue: Date
 
@@ -158,50 +189,142 @@ const PickerContent: React.FC<PickerContentProps> = ({
       case 'date':
       case 'birthday':
         indices = [
-          cols[0].items.findIndex(
-            item => item.value === defaultValue.getFullYear(),
-          ) || 0,
-          cols[1].items.findIndex(
-            item => item.value === defaultValue.getMonth() + 1,
-          ) || 0,
-          cols[2].items.findIndex(
-            item => item.value === defaultValue.getDate(),
-          ) || 0,
+          Math.max(
+            0,
+            cols[0].items.findIndex(
+              item => item.value === defaultValue.getFullYear(),
+            ),
+          ),
+          Math.max(
+            0,
+            cols[1].items.findIndex(
+              item => item.value === defaultValue.getMonth() + 1,
+            ),
+          ),
+          Math.max(
+            0,
+            cols[2].items.findIndex(
+              item => item.value === defaultValue.getDate(),
+            ),
+          ),
         ]
         break
 
       case 'time':
         indices = [
-          cols[0].items.findIndex(
-            item => item.value === defaultValue.getHours(),
-          ) || 0,
-          cols[1].items.findIndex(
-            item => item.value === defaultValue.getMinutes(),
-          ) || 0,
+          Math.max(
+            0,
+            cols[0].items.findIndex(
+              item => item.value === defaultValue.getHours(),
+            ),
+          ),
+          Math.max(
+            0,
+            cols[1].items.findIndex(
+              item => item.value === defaultValue.getMinutes(),
+            ),
+          ),
         ]
         break
 
       case 'datetime':
         indices = [
-          cols[0].items.findIndex(
-            item => item.value === defaultValue.getFullYear(),
-          ) || 0,
-          cols[1].items.findIndex(
-            item => item.value === defaultValue.getMonth() + 1,
-          ) || 0,
-          cols[2].items.findIndex(
-            item => item.value === defaultValue.getDate(),
-          ) || 0,
-          cols[3].items.findIndex(
-            item => item.value === defaultValue.getHours(),
-          ) || 0,
-          cols[4].items.findIndex(
-            item => item.value === defaultValue.getMinutes(),
-          ) || 0,
+          Math.max(
+            0,
+            cols[0].items.findIndex(
+              item => item.value === defaultValue.getFullYear(),
+            ),
+          ),
+          Math.max(
+            0,
+            cols[1].items.findIndex(
+              item => item.value === defaultValue.getMonth() + 1,
+            ),
+          ),
+          Math.max(
+            0,
+            cols[2].items.findIndex(
+              item => item.value === defaultValue.getDate(),
+            ),
+          ),
+          Math.max(
+            0,
+            cols[3].items.findIndex(
+              item => item.value === defaultValue.getHours(),
+            ),
+          ),
+          Math.max(
+            0,
+            cols[4].items.findIndex(
+              item => item.value === defaultValue.getMinutes(),
+            ),
+          ),
         ]
         break
 
+      case 'duration':
+        if (
+          initialValue &&
+          typeof initialValue === 'object' &&
+          'hours' in initialValue &&
+          'minutes' in initialValue
+        ) {
+          // Si initialValue est un objet DurationValue
+          const durationValue = initialValue as any
+          const hourIndex = Math.max(
+            0,
+            cols[0].items.findIndex(item => item.value === durationValue.hours),
+          )
+          const minuteIndex = Math.max(
+            0,
+            cols[1].items.findIndex(
+              item => item.value === durationValue.minutes,
+            ),
+          )
+          indices = [hourIndex, minuteIndex]
+        } else if (typeof initialValue === 'number') {
+          // Si initialValue est un nombre de minutes total
+          const hours = Math.floor(Number(initialValue) / 60)
+          const minutes = Number(initialValue) % 60
+
+          // Trouver l'indice le plus proche pour les minutes
+          const minuteValues = cols[1].items.map(item => Number(item.value))
+          let closestMinuteValue = minuteValues[0]
+          let minDiff = Math.abs(minutes - minuteValues[0])
+
+          for (let i = 1; i < minuteValues.length; i++) {
+            const diff = Math.abs(minutes - minuteValues[i])
+            if (diff < minDiff) {
+              minDiff = diff
+              closestMinuteValue = minuteValues[i]
+            }
+          }
+
+          const hourIndex = Math.max(
+            0,
+            cols[0].items.findIndex(
+              item =>
+                item.value ===
+                Math.min(
+                  Number(cols[0].items[cols[0].items.length - 1].value),
+                  hours,
+                ),
+            ),
+          )
+          const minuteIndex = Math.max(
+            0,
+            cols[1].items.findIndex(item => item.value === closestMinuteValue),
+          )
+
+          indices = [hourIndex, minuteIndex]
+        } else {
+          // Valeur par défaut : 0h 0m
+          indices = [0, 0]
+        }
+        break
+
       case 'custom':
+      default:
         // Pour un picker personnalisé, commencer avec tous les premiers éléments
         indices = cols.map(() => 0)
         break
@@ -287,6 +410,17 @@ const PickerContent: React.FC<PickerContentProps> = ({
           Number(hours),
           Number(minutes),
         )
+        break
+      }
+      case 'duration': {
+        const [hours, minutes] = selectedValues
+        const totalMinutes = Number(hours) * 60 + Number(minutes)
+
+        result = {
+          hours: Number(hours),
+          minutes: Number(minutes),
+          totalMinutes,
+        }
         break
       }
       case 'custom':
