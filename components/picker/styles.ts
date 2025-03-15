@@ -1,4 +1,5 @@
 // styles.ts
+import { Colors } from '@/constants/Colors'
 import { StyleSheet } from 'react-native'
 
 export const ITEM_HEIGHT = 44
@@ -59,17 +60,23 @@ export default StyleSheet.create({
     borderRadius: 8,
   },
   confirmButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: Colors.orange[500],
+    borderWidth: 1,
+    borderColor: Colors.orange[500],
   },
   confirmText: {
     color: 'white',
+    fontFamily: 'Montserrat_700Bold',
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#F2F2F2',
+    // backgroundColor: '#F2F2F2',
+    borderWidth: 1,
+    borderColor: Colors.orange[500],
   },
   cancelText: {
-    color: '#007AFF',
+    color: Colors.orange[500],
+    fontFamily: 'Montserrat_400Regular',
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
