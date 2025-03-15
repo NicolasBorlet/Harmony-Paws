@@ -135,126 +135,133 @@ export default function AloneRide() {
   }, [])
 
   return (
-    <ScrollView
-      contentContainerStyle={[
-        styles.container,
-        { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
-      ]}
-    >
-      <Back position='relative' />
-      <View
-        style={{
-          position: 'absolute',
-          top: -132,
-          left: 0,
-          right: 0,
-        }}
+    <>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
+        ]}
       >
-        <PawPath />
-      </View>
-      <View style={styles.rideTypeContainer}>
-        <View style={styles.rideType}>
-          <AloneRideIcon />
-          <ParagraphSemiBold
-            color={Colors.purple[500]}
-            style={{ textAlign: 'center' }}
-          >
-            {i18n.t('rideCreation.aloneRide')}
-          </ParagraphSemiBold>
+        <Back position='relative' />
+        <View
+          style={{
+            position: 'absolute',
+            top: -132,
+            left: 0,
+            right: 0,
+          }}
+        >
+          <PawPath />
         </View>
-      </View>
-      <View style={styles.content}>
-        <View style={styles.inputContainer}>
-          <BodyMedium color={Colors.black}>
-            {i18n.t('rideCreation.rideLocation')}
-          </BodyMedium>
-          <CustomTextInput
-            placeholder={i18n.t('rideCreation.rideLocationPlaceholder')}
-            value={location}
-            onChangeText={setLocation}
-            placeholderTextColor={Colors.grey[500]}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <BodyMedium color={Colors.black}>
-            {i18n.t('rideCreation.rideType')}
-          </BodyMedium>
-          <View style={{ flexDirection: 'row', gap: 12 }}>
-            {Object.values(ActivityType).map(activityType => (
-              <View key={activityType}>
-                <AnimatedPressable
-                  onPress={() => setType(activityType)}
-                  style={getAnimatedStyle(activityType)}
-                >
-                  <Animated.Text
-                    style={[
-                      { fontFamily: 'Montserrat_500Medium', fontSize: 14 },
-                      getAnimatedTextStyle(activityType),
-                    ]}
-                  >
-                    {i18n.t(`rideCreation.${activityType}`)}
-                  </Animated.Text>
-                </AnimatedPressable>
-              </View>
-            ))}
+        <View style={styles.rideTypeContainer}>
+          <View style={styles.rideType}>
+            <AloneRideIcon />
+            <ParagraphSemiBold
+              color={Colors.purple[500]}
+              style={{ textAlign: 'center' }}
+            >
+              {i18n.t('rideCreation.aloneRide')}
+            </ParagraphSemiBold>
           </View>
         </View>
-        <View style={styles.inputContainer}>
-          <BodyMedium color={Colors.black}>
-            {i18n.t('rideCreation.rideDifficulty')}
-          </BodyMedium>
-          <RideCheckbox />
-        </View>
-        <View style={styles.inputContainer}>
-          <BodyMedium color={Colors.black}>
-            {i18n.t('rideCreation.rideDuration')}
-          </BodyMedium>
-          <Pressable
-            onPress={() => setShowPicker(true)}
-            style={{
-              borderRadius: 10,
-              backgroundColor: '#f5f5f5',
-              paddingVertical: 16,
-              paddingHorizontal: 20,
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <BodyMedium>{duration}</BodyMedium>
-
-            <View style={{ gap: 4 }}>
-              <Entypo name='chevron-up' size={8} color={Colors.grey[500]} />
-              <Entypo name='chevron-down' size={8} color={Colors.grey[500]} />
+        <View style={styles.content}>
+          <View style={styles.inputContainer}>
+            <BodyMedium color={Colors.black}>
+              {i18n.t('rideCreation.rideLocation')}
+            </BodyMedium>
+            <CustomTextInput
+              placeholder={i18n.t('rideCreation.rideLocationPlaceholder')}
+              value={location}
+              onChangeText={setLocation}
+              placeholderTextColor={Colors.grey[500]}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <BodyMedium color={Colors.black}>
+              {i18n.t('rideCreation.rideType')}
+            </BodyMedium>
+            <View style={{ flexDirection: 'row', gap: 12 }}>
+              {Object.values(ActivityType).map(activityType => (
+                <View key={activityType}>
+                  <AnimatedPressable
+                    onPress={() => setType(activityType)}
+                    style={getAnimatedStyle(activityType)}
+                  >
+                    <Animated.Text
+                      style={[
+                        { fontFamily: 'Montserrat_500Medium', fontSize: 14 },
+                        getAnimatedTextStyle(activityType),
+                      ]}
+                    >
+                      {i18n.t(`rideCreation.${activityType}`)}
+                    </Animated.Text>
+                  </AnimatedPressable>
+                </View>
+              ))}
             </View>
-          </Pressable>
+          </View>
+          <View style={styles.inputContainer}>
+            <BodyMedium color={Colors.black}>
+              {i18n.t('rideCreation.rideDifficulty')}
+            </BodyMedium>
+            <RideCheckbox
+              values={[1, 2, 3, 4, 5]}
+              onChange={() => {}}
+              activeColor={Colors.orange[500]}
+              inactiveColor={Colors.grey[500]}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <BodyMedium color={Colors.black}>
+              {i18n.t('rideCreation.rideDuration')}
+            </BodyMedium>
+            <Pressable
+              onPress={() => setShowPicker(true)}
+              style={{
+                borderRadius: 10,
+                backgroundColor: '#f5f5f5',
+                paddingVertical: 16,
+                paddingHorizontal: 20,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <BodyMedium>{duration}</BodyMedium>
 
-          {showPicker && (
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={duration}
-                onValueChange={itemValue => {
-                  setDuration(itemValue)
-                  setShowPicker(false)
-                }}
-              >
-                <Picker.Item label='30min' value='0h30' />
-                <Picker.Item label='1h' value='1h00' />
-                <Picker.Item label='1h30' value='1h30' />
-                <Picker.Item label='2h' value='2h00' />
-                {/* Ajoutez d'autres durées selon vos besoins */}
-              </Picker>
-            </View>
-          )}
+              <View style={{ gap: 4 }}>
+                <Entypo name='chevron-up' size={8} color={Colors.grey[500]} />
+                <Entypo name='chevron-down' size={8} color={Colors.grey[500]} />
+              </View>
+            </Pressable>
+
+            {showPicker && (
+              <View style={styles.pickerContainer}>
+                <Picker
+                  selectedValue={duration}
+                  onValueChange={itemValue => {
+                    setDuration(itemValue)
+                    setShowPicker(false)
+                  }}
+                >
+                  <Picker.Item label='30min' value='0h30' />
+                  <Picker.Item label='1h' value='1h00' />
+                  <Picker.Item label='1h30' value='1h30' />
+                  <Picker.Item label='2h' value='2h00' />
+                  {/* Ajoutez d'autres durées selon vos besoins */}
+                </Picker>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </ScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton>
           <BodyMedium color='#fff'>{i18n.t('global.validate')}</BodyMedium>
         </StandardButton>
       </Animated.View>
-    </ScrollView>
+    </>
   )
 }
 
@@ -285,6 +292,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     gap: 32,
+    paddingBottom: 100,
   },
   inputContainer: {
     gap: 12,

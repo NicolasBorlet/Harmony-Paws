@@ -3,23 +3,35 @@ import { Colors } from '@/constants/Colors'
 import { useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 
-export default function RideCheckbox() {
-  const [selectedAge, setSelectedAge] = useState<number | null>(null)
+interface RideCheckboxProps {
+  values: number[]
+  onChange: (value: number) => void
+  activeColor?: string
+  inactiveColor?: string
+  numberOfItems?: number
+}
 
-  // Création d'un tableau d'âges de 1 à 5
-  const ages = Array.from({ length: 5 }, (_, index) => index + 1)
+export default function RideCheckbox({
+  values,
+  onChange,
+  activeColor = Colors.orange[500],
+  inactiveColor = '#979898',
+  numberOfItems,
+}: RideCheckboxProps) {
+  const [selectedValue, setSelectedValue] = useState<number | null>(null)
 
-  const handleAgeChange = (age: number) => {
-    setSelectedAge(age)
+  const handleValueChange = (value: number) => {
+    setSelectedValue(value)
+    onChange(value)
   }
 
   const renderRideDifficultyItem = ({ item }: { item: number }) => (
     <StandardCheckbox
       label={item.toString()}
-      checked={selectedAge === item}
-      onPress={() => handleAgeChange(item)}
-      activeColor={Colors.orange[500]}
-      inactiveColor='#979898'
+      checked={selectedValue === item}
+      onPress={() => handleValueChange(item)}
+      activeColor={activeColor}
+      inactiveColor={inactiveColor}
       opacity={1}
       hasIcon={false}
       height={50}
@@ -27,12 +39,14 @@ export default function RideCheckbox() {
     />
   )
 
+  const data = numberOfItems ? values.slice(0, numberOfItems) : values
+
   return (
     <View style={styles.container}>
       <FlatList
         horizontal
         scrollEnabled={false}
-        data={ages}
+        data={data}
         renderItem={renderRideDifficultyItem}
         keyExtractor={item => item.toString()}
         showsHorizontalScrollIndicator={false}
