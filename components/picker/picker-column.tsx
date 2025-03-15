@@ -1,13 +1,5 @@
-// PickerColumn.tsx
-import React, { useEffect } from 'react'
-import { Text, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import Animated, {
-  runOnJS,
-  useAnimatedScrollHandler,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import React, { useEffect, useRef, useState } from 'react'
+import { FlatList, Text, View } from 'react-native'
 import styles, { ITEM_HEIGHT } from './styles'
 import { PickerItemType } from './types'
 
@@ -26,61 +18,68 @@ const PickerColumn: React.FC<PickerColumnProps> = ({
   itemStyle,
   keyExtractor = item => item.value.toString(),
 }) => {
-  const flatListRef = React.useRef<FlatList>(null)
-  const scrollY = useSharedValue(0)
+  const flatListRef = useRef<FlatList>(null)
+  const [internalSelectedIndex, setInternalSelectedIndex] =
+    useState(selectedIndex)
 
-  // Initialiser le scroll position selon l'index sélectionné
+  // Synchroniser l'index interne avec l'index fourni en prop
   useEffect(() => {
-    if (flatListRef.current) {
-      flatListRef.current.scrollToIndex({
-        index: selectedIndex,
-        animated: false,
-      })
+    setInternalSelectedIndex(selectedIndex)
+  }, [selectedIndex])
+
+  // Positionner la liste lors du chargement initial et des changements d'items
+  useEffect(() => {
+    if (selectedIndex >= 0 && flatListRef.current) {
+      // Utilisation d'un timeout léger pour s'assurer que le composant est prêt
+      setTimeout(() => {
+        if (flatListRef.current) {
+          flatListRef.current.scrollToOffset({
+            offset: selectedIndex * ITEM_HEIGHT,
+            animated: false,
+          })
+        }
+      }, 10)
     }
   }, [selectedIndex, items])
 
-  const handleValueChange = (index: number) => {
-    if (index >= 0 && index < items.length) {
-      onValueChange(items[index].value, index)
+  // Gestion du scroll terminé (soit par drag ou par momentum)
+  const handleScrollEnd = event => {
+    const offsetY = event.nativeEvent.contentOffset.y
+
+    // Le calcul de l'index est crucial pour éviter le décalage
+    // Diviser exactement par ITEM_HEIGHT et arrondir au plus proche
+    const index = Math.round(offsetY / ITEM_HEIGHT)
+
+    // Assurons-nous que l'index est dans les limites
+    const normalizedIndex = Math.max(0, Math.min(items.length - 1, index))
+
+    if (normalizedIndex !== internalSelectedIndex) {
+      // Mettre à jour l'état interne
+      setInternalSelectedIndex(normalizedIndex)
+
+      // Informer le parent du changement
+      if (items[normalizedIndex]) {
+        onValueChange(items[normalizedIndex].value, normalizedIndex)
+      }
+    }
+
+    // Assurer un alignement parfait
+    const targetOffset = normalizedIndex * ITEM_HEIGHT
+    if (Math.abs(targetOffset - offsetY) > 1) {
+      // Seulement si nécessaire
+      flatListRef.current?.scrollToOffset({
+        offset: targetOffset,
+        animated: true,
+      })
     }
   }
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: event => {
-      scrollY.value = event.contentOffset.y
-    },
-    onEndDrag: event => {
-      const index = Math.round(event.contentOffset.y / ITEM_HEIGHT)
-      // S'assurer que l'index est dans les limites
-      const normalizedIndex = Math.max(0, Math.min(items.length - 1, index))
-
-      // Aligner parfaitement sur l'élément
-      const targetY = normalizedIndex * ITEM_HEIGHT
-      scrollY.value = withTiming(targetY, { duration: 150 })
-
-      if (flatListRef.current) {
-        flatListRef.current.scrollToOffset({
-          offset: targetY,
-          animated: true,
-        })
-      }
-
-      // Notifier le changement de valeur
-      runOnJS(handleValueChange)(normalizedIndex)
-    },
-  })
-
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: PickerItemType
-    index: number
-  }) => {
-    const isSelected = index === selectedIndex
+  // Rendu de chaque item
+  const renderItem = ({ item, index }) => {
+    const isSelected = index === internalSelectedIndex
 
     return (
-      <View style={[styles.item]}>
+      <View style={styles.item}>
         <Text style={[isSelected && styles.selectedItem, itemStyle]}>
           {item.label}
         </Text>
@@ -88,11 +87,22 @@ const PickerColumn: React.FC<PickerColumnProps> = ({
     )
   }
 
+  // Espacement supérieur et inférieur pour centrer l'élément sélectionné
+  // Important: ajuster la taille des composants d'espacement pour corriger le décalage
+  const HeaderComponent = () => <View style={{ height: ITEM_HEIGHT * 2 }} />
+  const FooterComponent = () => <View style={{ height: ITEM_HEIGHT * 2 }} />
+
   return (
     <View style={styles.column}>
-      <View style={styles.selectionIndicator} />
+      {/* Indicateur de sélection centré verticalement */}
+      <View
+        style={[
+          styles.selectionIndicator,
+          { top: '50%', marginTop: -ITEM_HEIGHT / 2 },
+        ]}
+      />
 
-      <Animated.FlatList
+      <FlatList
         ref={flatListRef}
         data={items}
         renderItem={renderItem}
@@ -100,14 +110,15 @@ const PickerColumn: React.FC<PickerColumnProps> = ({
         snapToInterval={ITEM_HEIGHT}
         decelerationRate='fast'
         showsVerticalScrollIndicator={false}
-        onScroll={scrollHandler}
+        onMomentumScrollEnd={handleScrollEnd}
+        onScrollEndDrag={handleScrollEnd}
         getItemLayout={(_, index) => ({
           length: ITEM_HEIGHT,
           offset: ITEM_HEIGHT * index,
           index,
         })}
-        ListHeaderComponent={() => <View style={{ height: ITEM_HEIGHT * 2 }} />}
-        ListFooterComponent={() => <View style={{ height: ITEM_HEIGHT * 2 }} />}
+        ListHeaderComponent={HeaderComponent}
+        ListFooterComponent={FooterComponent}
       />
     </View>
   )

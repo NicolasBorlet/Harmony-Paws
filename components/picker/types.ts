@@ -12,7 +12,13 @@ export type PickerColumnType = {
   keyExtractor?: (item: PickerItemType) => string
 }
 
-export type PickerType = 'date' | 'time' | 'datetime' | 'birthday' | 'custom'
+export type PickerType =
+  | 'date'
+  | 'time'
+  | 'datetime'
+  | 'birthday'
+  | 'duration'
+  | 'custom'
 
 export interface CustomPickerProps {
   isVisible: boolean
@@ -39,4 +45,11 @@ export interface CustomPickerProps {
   footerComponent?: ReactNode
   confirmText?: string
   cancelText?: string
+}
+
+// Vous pouvez aussi ajouter un type spécifique pour la valeur de retour du duration picker
+export interface DurationValue {
+  hours: number
+  minutes: number
+  totalMinutes: number // Pour faciliter les calculs
 }

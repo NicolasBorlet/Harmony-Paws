@@ -3,6 +3,7 @@ import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
 import CustomPicker from '@/components/picker'
+import { DurationValue } from '@/components/picker/types'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
@@ -49,13 +50,12 @@ export default function AloneRide() {
 
   const [location, setLocation] = useState<string>('')
   const [type, setType] = useState<ActivityType>(ActivityType.PARK)
-  const [isDatePickerVisible, setDatePickerVisible] = useState(false)
-  const [isTimePickerVisible, setTimePickerVisible] = useState(false)
-  const [isCustomPickerVisible, setCustomPickerVisible] = useState(false)
-
-  const [selectedDate, setSelectedDate] = useState(new Date())
-  const [selectedTime, setSelectedTime] = useState(new Date())
-  const [selectedOptions, setSelectedOptions] = useState<any[]>([])
+  const [isDurationPickerVisible, setDurationPickerVisible] = useState(false)
+  const [selectedDuration, setSelectedDuration] = useState<DurationValue>({
+    hours: 1,
+    minutes: 30,
+    totalMinutes: 90,
+  })
 
   // Créer des objets pour les valeurs d'animation de chaque type d'activité
   const animationValues = {
@@ -65,7 +65,6 @@ export default function AloneRide() {
     [ActivityType.BEACH]: useSharedValue(0),
   }
   const [duration, setDuration] = useState<string>('1h00')
-  const [showPicker, setShowPicker] = useState(false)
 
   // Mettre à jour les animations lorsque le type change
   useEffect(() => {
@@ -233,7 +232,7 @@ export default function AloneRide() {
               {i18n.t('rideCreation.rideDuration')}
             </BodyMedium>
             <Pressable
-              onPress={() => setTimePickerVisible(true)}
+              onPress={() => setDurationPickerVisible(true)}
               style={{
                 borderRadius: 10,
                 backgroundColor: '#f5f5f5',
@@ -253,17 +252,18 @@ export default function AloneRide() {
               </View>
             </Pressable>
 
-            {/* Time Picker */}
+            {/* Duration Picker */}
             <CustomPicker
-              isVisible={isTimePickerVisible}
-              onClose={() => setTimePickerVisible(false)}
-              onConfirm={time => setSelectedTime(time)}
-              type='time'
-              initialValue={selectedTime}
+              isVisible={isDurationPickerVisible}
+              onClose={() => setDurationPickerVisible(false)}
+              onConfirm={duration => setDuration(duration)}
+              type='duration'
+              initialValue={duration}
               // Personnalisation de l'apparence
               confirmText='OK'
               cancelText='Annuler'
               confirmButtonStyle={{ backgroundColor: '#4CAF50' }}
+              columns={customColumns}
             />
           </View>
         </View>
