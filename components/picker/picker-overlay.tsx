@@ -1,9 +1,10 @@
 // PickerOverlay.tsx
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, TouchableWithoutFeedback, View } from 'react-native'
 import Animated, {
   Extrapolate,
   interpolate,
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -24,9 +25,20 @@ const PickerOverlay: React.FC<PickerOverlayProps> = ({
   overlayStyle,
 }) => {
   const animatedValue = useSharedValue(0)
+  const [modalVisible, setModalVisible] = useState(isVisible)
 
   useEffect(() => {
-    animatedValue.value = withTiming(isVisible ? 1 : 0, { duration: 300 })
+    if (isVisible) {
+      setModalVisible(true)
+      animatedValue.value = withTiming(1, { duration: 300 })
+    } else {
+      // Animation de sortie
+      animatedValue.value = withTiming(0, { duration: 300 }, finished => {
+        if (finished) {
+          runOnJS(setModalVisible)(false)
+        }
+      })
+    }
   }, [isVisible])
 
   const overlayAnimatedStyle = useAnimatedStyle(() => {
@@ -48,9 +60,13 @@ const PickerOverlay: React.FC<PickerOverlayProps> = ({
     }
   })
 
+  const handleClose = () => {
+    onClose()
+  }
+
   return (
     <Modal
-      visible={isVisible}
+      visible={modalVisible}
       transparent
       animationType='none'
       statusBarTranslucent
@@ -58,7 +74,7 @@ const PickerOverlay: React.FC<PickerOverlayProps> = ({
       <Animated.View
         style={[styles.overlay, overlayAnimatedStyle, overlayStyle]}
       >
-        <TouchableWithoutFeedback onPress={onClose}>
+        <TouchableWithoutFeedback onPress={handleClose}>
           <View style={{ flex: 1 }} />
         </TouchableWithoutFeedback>
 
