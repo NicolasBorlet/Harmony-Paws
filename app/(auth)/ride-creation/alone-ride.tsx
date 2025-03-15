@@ -2,13 +2,14 @@ import { i18n } from '@/app/_layout'
 import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
+import CustomPicker from '@/components/picker'
+import { DurationValue } from '@/components/picker/types'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
-import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import Animated, {
@@ -20,6 +21,16 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+const customColumns = [
+  {
+    items: [
+      { label: 'Petit', value: 'small' },
+      { label: 'Moyen', value: 'medium' },
+      { label: 'Grand', value: 'large' },
+    ],
+  },
+]
 
 // Créer un composant animé personnalisé basé sur Pressable
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -39,6 +50,12 @@ export default function AloneRide() {
 
   const [location, setLocation] = useState<string>('')
   const [type, setType] = useState<ActivityType>(ActivityType.PARK)
+  const [isDurationPickerVisible, setDurationPickerVisible] = useState(false)
+  const [selectedDuration, setSelectedDuration] = useState<DurationValue>({
+    hours: 1,
+    minutes: 30,
+    totalMinutes: 90,
+  })
 
   // Créer des objets pour les valeurs d'animation de chaque type d'activité
   const animationValues = {
@@ -48,7 +65,6 @@ export default function AloneRide() {
     [ActivityType.BEACH]: useSharedValue(0),
   }
   const [duration, setDuration] = useState<string>('1h00')
-  const [showPicker, setShowPicker] = useState(false)
 
   // Mettre à jour les animations lorsque le type change
   useEffect(() => {
@@ -216,7 +232,7 @@ export default function AloneRide() {
               {i18n.t('rideCreation.rideDuration')}
             </BodyMedium>
             <Pressable
-              onPress={() => setShowPicker(true)}
+              onPress={() => setDurationPickerVisible(true)}
               style={{
                 borderRadius: 10,
                 backgroundColor: '#f5f5f5',
@@ -236,23 +252,21 @@ export default function AloneRide() {
               </View>
             </Pressable>
 
-            {showPicker && (
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={duration}
-                  onValueChange={itemValue => {
-                    setDuration(itemValue)
-                    setShowPicker(false)
-                  }}
-                >
-                  <Picker.Item label='30min' value='0h30' />
-                  <Picker.Item label='1h' value='1h00' />
-                  <Picker.Item label='1h30' value='1h30' />
-                  <Picker.Item label='2h' value='2h00' />
-                  {/* Ajoutez d'autres durées selon vos besoins */}
-                </Picker>
-              </View>
-            )}
+            {/* Duration Picker */}
+            <CustomPicker
+              isVisible={isDurationPickerVisible}
+              onClose={() => setDurationPickerVisible(false)}
+              onConfirm={(durationValue: DurationValue) => {
+                // Formatage de la durée en chaîne de caractères
+                const formattedDuration = `${durationValue.hours}h${durationValue.minutes.toString().padStart(2, '0')}`
+                setDuration(formattedDuration)
+              }}
+              type='duration'
+              initialValue={selectedDuration}
+              confirmText='OK'
+              cancelText='Annuler'
+              columns={customColumns}
+            />
           </View>
         </View>
       </ScrollView>
