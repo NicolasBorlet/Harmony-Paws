@@ -2,13 +2,13 @@ import { i18n } from '@/app/_layout'
 import AloneRideIcon from '@/assets/svg/ride/alone-ride'
 import PawPath from '@/assets/svg/ride/creation/path'
 import Back from '@/components/back-button'
+import CustomPicker from '@/components/picker'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
-import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import Animated, {
@@ -20,6 +20,16 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+const customColumns = [
+  {
+    items: [
+      { label: 'Petit', value: 'small' },
+      { label: 'Moyen', value: 'medium' },
+      { label: 'Grand', value: 'large' },
+    ],
+  },
+]
 
 // Créer un composant animé personnalisé basé sur Pressable
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -39,6 +49,13 @@ export default function AloneRide() {
 
   const [location, setLocation] = useState<string>('')
   const [type, setType] = useState<ActivityType>(ActivityType.PARK)
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false)
+  const [isTimePickerVisible, setTimePickerVisible] = useState(false)
+  const [isCustomPickerVisible, setCustomPickerVisible] = useState(false)
+
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [selectedTime, setSelectedTime] = useState(new Date())
+  const [selectedOptions, setSelectedOptions] = useState<any[]>([])
 
   // Créer des objets pour les valeurs d'animation de chaque type d'activité
   const animationValues = {
@@ -216,7 +233,7 @@ export default function AloneRide() {
               {i18n.t('rideCreation.rideDuration')}
             </BodyMedium>
             <Pressable
-              onPress={() => setShowPicker(true)}
+              onPress={() => setTimePickerVisible(true)}
               style={{
                 borderRadius: 10,
                 backgroundColor: '#f5f5f5',
@@ -236,23 +253,18 @@ export default function AloneRide() {
               </View>
             </Pressable>
 
-            {showPicker && (
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={duration}
-                  onValueChange={itemValue => {
-                    setDuration(itemValue)
-                    setShowPicker(false)
-                  }}
-                >
-                  <Picker.Item label='30min' value='0h30' />
-                  <Picker.Item label='1h' value='1h00' />
-                  <Picker.Item label='1h30' value='1h30' />
-                  <Picker.Item label='2h' value='2h00' />
-                  {/* Ajoutez d'autres durées selon vos besoins */}
-                </Picker>
-              </View>
-            )}
+            {/* Time Picker */}
+            <CustomPicker
+              isVisible={isTimePickerVisible}
+              onClose={() => setTimePickerVisible(false)}
+              onConfirm={time => setSelectedTime(time)}
+              type='time'
+              initialValue={selectedTime}
+              // Personnalisation de l'apparence
+              confirmText='OK'
+              cancelText='Annuler'
+              confirmButtonStyle={{ backgroundColor: '#4CAF50' }}
+            />
           </View>
         </View>
       </ScrollView>
