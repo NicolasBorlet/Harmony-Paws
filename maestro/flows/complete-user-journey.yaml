@@ -1,0 +1,96 @@
+appId: com.konylepanini.harmony-paws
+---
+# Flow complet simulant un parcours utilisateur de bout en bout
+- launchApp
+- assertVisible: 'Welcome!'
+
+# Étape 1: Inscription d'un nouvel utilisateur
+- tapOn: "Pas encore de compte ?"
+- assertVisible: "Inscription"
+- runFlow:
+    file: "../components/signup-form.yaml"
+    env:
+      email: "journey_test@example.com"
+      password: "password123"
+
+# Étape 2: Finaliser l'onboarding
+- assertVisible: "Bienvenue"
+- tapOn: "Commencer"
+
+# Étape 3: Compléter le profil utilisateur
+- assertVisible: "Votre profil"
+- tapOn:
+    id: "name-input"
+- inputText: "Jean Dupont"
+- tapOn:
+    id: "phone-input"
+- inputText: "0612345678"
+- tapOn:
+    id: "address-input"
+- inputText: "123 Rue de Paris"
+- tapOn: "Enregistrer"
+- wait: 1000
+
+# Étape 4: Ajouter un chien
+- assertVisible: "Vous n'avez pas encore de chien"
+- tapOn: "Ajouter un chien"
+- assertVisible: "Nouveau profil de chien"
+
+# Remplissage du formulaire d'ajout de chien
+- tapOn:
+    id: "dog-name-input"
+- inputText: "Max"
+- tapOn:
+    id: "dog-breed-input"
+- inputText: "Berger Allemand"
+- tapOn:
+    id: "dog-age-input"
+- inputText: "2"
+- tapOn:
+    id: "dog-weight-input"
+- inputText: "30"
+- tapOn: "Mâle"
+- tapOn: "Sociable"
+- tapOn: "Énergique"
+- tapOn: "Enregistrer"
+- wait: 2000
+
+# Étape 5: Vérifier que le chien est bien ajouté
+- assertVisible: "Max"
+- assertVisible: "Berger Allemand"
+
+# Étape 6: Rechercher une promenade
+- tapOn: "Accueil"
+- assertVisible: "Accueil"
+- tapOn: "Promenades"
+- assertVisible: "Promenades disponibles"
+
+# Filtrer les promenades
+- tapOn: "Filtrer"
+- tapOn: "Distance"
+- tapOn: "1-5 km"
+- tapOn: "Date"
+- tapOn: "Aujourd'hui"
+- tapOn: "Appliquer"
+
+# Sélectionner une promenade
+- tapOn:
+    text: "Promenade au parc"
+- assertVisible: "Détails de la promenade"
+
+# Réserver la promenade
+- tapOn: "Réserver"
+- assertVisible: "Choisir un chien"
+- tapOn: "Max"
+- tapOn: "Confirmer"
+- assertVisible: "Réservation confirmée"
+
+# Vérifier la liste des réservations
+- tapOn: "Mes réservations"
+- assertVisible: "Promenade au parc"
+- assertVisible: "Max"
+
+# Étape 7: Se déconnecter
+- tapOn: "Profil"
+- tapOn: "Déconnexion"
+- assertVisible: "Connexion"
