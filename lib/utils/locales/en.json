@@ -25,7 +25,8 @@
     "continue": "Continue",
     "disconected": "Disconnect",
     "formations": "Formations",
-    "skip": "Skip"
+    "skip": "Skip",
+    "validate": "Validate"
   },
   "tabbar": {
     "home": "Home",
