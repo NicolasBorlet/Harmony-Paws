@@ -262,7 +262,6 @@ export default function AloneRide() {
               // Personnalisation de l'apparence
               confirmText='OK'
               cancelText='Annuler'
-              confirmButtonStyle={{ backgroundColor: '#4CAF50' }}
               columns={customColumns}
             />
           </View>
