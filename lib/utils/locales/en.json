@@ -139,7 +139,8 @@
     "forest": "Forest",
     "city": "City",
     "beach": "Beach",
-    "park": "Park"
+    "park": "Park",
+    "rideParticipantsNumber": "Ride participants number"
   },
   "discussion": {
     "message": "Message",
