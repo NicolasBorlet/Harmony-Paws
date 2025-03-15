@@ -256,10 +256,13 @@ export default function AloneRide() {
             <CustomPicker
               isVisible={isDurationPickerVisible}
               onClose={() => setDurationPickerVisible(false)}
-              onConfirm={duration => setDuration(duration)}
+              onConfirm={(durationValue: DurationValue) => {
+                // Formatage de la durée en chaîne de caractères
+                const formattedDuration = `${durationValue.hours}h${durationValue.minutes.toString().padStart(2, '0')}`
+                setDuration(formattedDuration)
+              }}
               type='duration'
-              initialValue={duration}
-              // Personnalisation de l'apparence
+              initialValue={selectedDuration}
               confirmText='OK'
               cancelText='Annuler'
               columns={customColumns}
