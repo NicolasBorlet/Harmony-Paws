@@ -139,7 +139,8 @@
     "city": "Ville",
     "beach": "Plage",
     "park": "Parc",
-    "rideDurationPlaceholder": "Durée de la balade"
+    "rideDurationPlaceholder": "Durée de la balade",
+    "rideParticipantsNumber": "Nombre de participants"
   },
   "discussion": {
     "message": "Message",
