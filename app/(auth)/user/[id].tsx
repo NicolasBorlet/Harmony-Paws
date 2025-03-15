@@ -101,23 +101,23 @@ export default function UserScreen() {
           <SmallMedium color='#000'>
             {user?.description
               ? user?.description
-              : i18n.t('noDescriptionFor') + ' ' + user?.first_name}
+              : i18n.t('global.noDescriptionFor') + ' ' + user?.first_name}
           </SmallMedium>
           <View style={styles.buttonContainer}>
             <View style={{ flex: 1 }}>
               <StandardButton onPress={handleAddFriend}>
-                <Small color='#fff'>{i18n.t('addFriend')}</Small>
+                <Small color='#fff'>{i18n.t('profile.addFriend')}</Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
-                <Small color='#F7A400'>{i18n.t('write')}</Small>
+                <Small color='#F7A400'>{i18n.t('profile.write')}</Small>
               </StandardButton>
             </View>
           </View>
         </View>
         <View style={styles.container}>
-          <BodyTitle title={i18n.t('hisDogs')} />
+          <BodyTitle title={i18n.t('profile.hisDogs')} />
           <View style={{ height: 60 }}>
             <FlashList
               data={dogs}

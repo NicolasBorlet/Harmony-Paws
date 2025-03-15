@@ -72,14 +72,14 @@ export default function AccountScreen() {
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color={Colors.light.primary}>
-                  {i18n.t('editProfile')}
+                  {i18n.t('account.editProfile')}
                 </Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color={Colors.light.primary}>
-                  {i18n.t('shareProfile')}
+                  {i18n.t('account.shareProfile')}
                 </Small>
               </StandardButton>
             </View>
@@ -91,7 +91,7 @@ export default function AccountScreen() {
             gap: 24,
           }}
         >
-          <BodyTitle title={i18n.t('myDogs')} />
+          <BodyTitle title={i18n.t('account.myDogs')} />
           <FlashList
             data={dogs}
             horizontal
@@ -135,12 +135,12 @@ export default function AccountScreen() {
           <Block row gap={12}>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary}>
-                {i18n.t('friends')}
+                {i18n.t('account.friends')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
               <BodyBold color={Colors.light.secondary}>
-                {i18n.t('favorites')}
+                {i18n.t('account.favorites')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -152,7 +152,7 @@ export default function AccountScreen() {
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('createdRides')}
+                {i18n.t('account.createdRides')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
@@ -162,29 +162,7 @@ export default function AccountScreen() {
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('completedFormations')}
-              </BodyBold>
-            </GridItemBackground>
-          </Block>
-          <Block row gap={12}>
-            <GridItemBackground>
-              <BodyBold
-                color={Colors.light.secondary}
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                {i18n.t('completedActivities')}
-              </BodyBold>
-            </GridItemBackground>
-            <GridItemBackground>
-              <BodyBold
-                color={Colors.light.secondary}
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                {i18n.t('meetings')}
+                {i18n.t('account.completedFormations')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -196,7 +174,7 @@ export default function AccountScreen() {
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('myBones')}
+                {i18n.t('account.completedActivities')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
@@ -206,7 +184,29 @@ export default function AccountScreen() {
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('myBones')}
+                {i18n.t('account.meetings')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={12}>
+            <GridItemBackground>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {i18n.t('account.myBones')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {i18n.t('account.myBones')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -225,7 +225,7 @@ export default function AccountScreen() {
           }}
           color='#FF0000'
         >
-          <Body color='white'>{i18n.t('disconected')}</Body>
+          <Body color='white'>{i18n.t('global.disconected')}</Body>
         </StandardButton>
 
         <View style={styles.verticallySpaced}>

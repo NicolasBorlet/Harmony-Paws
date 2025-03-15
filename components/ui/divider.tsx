@@ -1,7 +1,16 @@
-import { View } from "react-native";
+import { View } from 'react-native'
 
-const Divider = () => {
-  return <View style={{ height: 1, backgroundColor: '#C5C3C3' }} />;
-};
+interface DividerProps {
+  spacing?: number
+  color?: string
+}
 
-export default Divider;
+const Divider = ({ color = '#C5C3C3', spacing = 0 }: DividerProps) => {
+  return (
+    <View
+      style={{ height: 1, backgroundColor: color, marginVertical: spacing }}
+    />
+  )
+}
+
+export default Divider

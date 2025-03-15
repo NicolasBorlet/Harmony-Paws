@@ -17,7 +17,7 @@ import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { useDogDetails } from '@/lib/api/dog'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -76,7 +76,14 @@ export default function DogDetails() {
     <>
       <Back />
       <ParallaxScrollView headerImage={data?.image || ''}>
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            {
+              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 72,
+            },
+          ]}
+        >
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>
               {data.name}, {data.age} ans
@@ -109,14 +116,15 @@ export default function DogDetails() {
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title={`${i18n.t('aboutOf')} ${data.name}`} />
+            <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
             <Body>
-              {data.description || i18n.t('weDontKnowMoreAbout')} {data.name}.
+              {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
+              {data.name}.
             </Body>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('behavior')} />
+            <BodyTitle title={i18n.t('dog.behavior')} />
             <Block
               flex={0}
               row
@@ -133,13 +141,13 @@ export default function DogDetails() {
                   </GridItem>
                 ))
               ) : (
-                <Body>{i18n.t('noBehavior')}</Body>
+                <Body>{i18n.t('global.noBehavior')}</Body>
               )}
             </Block>
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('myMaster')} />
+            <BodyTitle title={i18n.t('dog.myMaster')} />
             <Pressable
               onPress={() =>
                 router.push({
@@ -159,15 +167,15 @@ export default function DogDetails() {
           </View>
           <Divider />
           <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('nextRide')} />
-            <Body>{i18n.t('noNextRide')}</Body>
+            <BodyTitle title={i18n.t('dog.nextRide')} />
+            <Body>{i18n.t('dog.noNextRide')}</Body>
             {/* <RideItemListing rideCardData={data.nextRide} /> */}
           </View>
         </View>
       </ParallaxScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
         <StandardButton onPress={() => router.push('/dog/invitation')}>
-          <BodyMedium color='#fff'>{i18n.t('rideInvitation')}</BodyMedium>
+          <BodyMedium color='#fff'>{i18n.t('dog.rideInvitation')}</BodyMedium>
         </StandardButton>
       </Animated.View>
     </>

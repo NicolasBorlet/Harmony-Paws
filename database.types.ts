@@ -53,6 +53,58 @@ export type Database = {
           },
         ]
       }
+      activity_invitations: {
+        Row: {
+          activity_id: number
+          created_at: string
+          id: number
+          receiver_id: number
+          sender_id: number
+          status: Database['public']['Enums']['friend_request_status'] | null
+          updated_at: string | null
+        }
+        Insert: {
+          activity_id: number
+          created_at?: string
+          id?: number
+          receiver_id: number
+          sender_id: number
+          status?: Database['public']['Enums']['friend_request_status'] | null
+          updated_at?: string | null
+        }
+        Update: {
+          activity_id?: number
+          created_at?: string
+          id?: number
+          receiver_id?: number
+          sender_id?: number
+          status?: Database['public']['Enums']['friend_request_status'] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'activity_invitations_activity_id_fkey'
+            columns: ['activity_id']
+            isOneToOne: true
+            referencedRelation: 'activities'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'activity_invitations_receiver_id_fkey'
+            columns: ['receiver_id']
+            isOneToOne: true
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'activity_invitations_sender_id_fkey'
+            columns: ['sender_id']
+            isOneToOne: true
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       behavior: {
         Row: {
           created_at: string | null
@@ -167,6 +219,44 @@ export type Database = {
         }
         Relationships: []
       }
+      documents: {
+        Row: {
+          created_at: string
+          document_type: Database['public']['Enums']['document_type']
+          dog_id: number
+          file_name: string | null
+          id: number
+          place: string | null
+          reason: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_type: Database['public']['Enums']['document_type']
+          dog_id: number
+          file_name?: string | null
+          id?: number
+          place?: string | null
+          reason?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_type?: Database['public']['Enums']['document_type']
+          dog_id?: number
+          file_name?: string | null
+          id?: number
+          place?: string | null
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'documents_dog_id_fkey'
+            columns: ['dog_id']
+            isOneToOne: false
+            referencedRelation: 'dogs'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       dog_behaviors: {
         Row: {
           behavior_id: number | null
@@ -191,7 +281,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'dog_behaviors_behavior_id_behavior_id_fk'
+            foreignKeyName: 'dog_behaviors_behavior_id_fkey'
             columns: ['behavior_id']
             isOneToOne: false
             referencedRelation: 'behavior'
@@ -199,6 +289,41 @@ export type Database = {
           },
           {
             foreignKeyName: 'dog_behaviors_dog_id_dogs_id_fk'
+            columns: ['dog_id']
+            isOneToOne: false
+            referencedRelation: 'dogs'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      dog_measurements: {
+        Row: {
+          created_at: string
+          date: string
+          dog_id: number
+          height: number | null
+          id: number
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          dog_id: number
+          height?: number | null
+          id?: number
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          dog_id?: number
+          height?: number | null
+          id?: number
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'dog_measurements_dog_id_fkey'
             columns: ['dog_id']
             isOneToOne: false
             referencedRelation: 'dogs'
@@ -268,9 +393,11 @@ export type Database = {
           description: string | null
           duration: number | null
           id: number
+          name: string | null
           participant_limit: number | null
           place: string | null
           price: number | null
+          stripe_item_id: number | null
           updated_at: string | null
         }
         Insert: {
@@ -280,9 +407,11 @@ export type Database = {
           description?: string | null
           duration?: number | null
           id?: number
+          name?: string | null
           participant_limit?: number | null
           place?: string | null
           price?: number | null
+          stripe_item_id?: number | null
           updated_at?: string | null
         }
         Update: {
@@ -292,9 +421,11 @@ export type Database = {
           description?: string | null
           duration?: number | null
           id?: number
+          name?: string | null
           participant_limit?: number | null
           place?: string | null
           price?: number | null
+          stripe_item_id?: number | null
           updated_at?: string | null
         }
         Relationships: []
@@ -305,21 +436,24 @@ export type Database = {
           id: number
           recipient_id: number
           sender_id: number
-          status: Database['public']['Enums']['friend_request_status']
+          status: Database['public']['Enums']['friend_request_status'] | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string
           id?: number
           recipient_id: number
           sender_id: number
-          status: Database['public']['Enums']['friend_request_status']
+          status?: Database['public']['Enums']['friend_request_status'] | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string
           id?: number
           recipient_id?: number
           sender_id?: number
-          status: Database['public']['Enums']['friend_request_status']
+          status?: Database['public']['Enums']['friend_request_status'] | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -338,73 +472,63 @@ export type Database = {
           },
         ]
       }
-      module_materials: {
+      lesson_steps: {
         Row: {
-          created_at: string | null
+          content: string | null
+          created_at: string
           id: number
-          module_id: number
-          material_id: number
-          updated_at: string | null
+          lesson_id: number
+          order: number
         }
         Insert: {
-          created_at?: string | null
+          content?: string | null
+          created_at?: string
           id?: number
-          module_id: number
-          material_id: number
-          updated_at?: string | null
+          lesson_id: number
+          order: number
         }
         Update: {
-          created_at?: string | null
+          content?: string | null
+          created_at?: string
           id?: number
-          module_id?: number
-          material_id?: number
-          updated_at?: string | null
+          lesson_id?: number
+          order?: number
         }
         Relationships: [
           {
-            foreignKeyName: 'module_materials_module_id_modules_id_fk'
-            columns: ['module_id']
+            foreignKeyName: 'lesson_steps_lesson_id_fkey'
+            columns: ['lesson_id']
             isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'module_materials_material_id_materials_id_fk'
-            columns: ['material_id']
-            isOneToOne: false
-            referencedRelation: 'materials'
+            referencedRelation: 'lessons'
             referencedColumns: ['id']
           },
         ]
       }
       lessons: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          module_id: number | null
-          name: string
+          module_id: number
           order: number | null
-          updated_at: string | null
+          title: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          module_id?: number | null
-          title: string
+          module_id: number
           order?: number | null
-          updated_at?: string | null
+          title: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          module_id?: number | null
-          title?: string
+          module_id?: number
           order?: number | null
-          updated_at?: string | null
+          title?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'lessons_module_id_modules_id_fk'
+            foreignKeyName: 'lessons_module_id_fkey'
             columns: ['module_id']
             isOneToOne: false
             referencedRelation: 'modules'
@@ -414,47 +538,21 @@ export type Database = {
       }
       materials: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
           name: string
-          updated_at: string | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           name: string
-          updated_at?: string | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
           name?: string
-          updated_at?: string | null
         }
         Relationships: []
-      }
-      medical_form: {
-        Row: {
-          dog_id: number | null
-          id: number
-        }
-        Insert: {
-          dog_id?: number | null
-          id?: number
-        }
-        Update: {
-          dog_id?: number | null
-          id?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'medical_form_dog_id_dogs_id_fk'
-            columns: ['dog_id']
-            isOneToOne: false
-            referencedRelation: 'dogs'
-            referencedColumns: ['id']
-          },
-        ]
       }
       messages: {
         Row: {
@@ -498,43 +596,76 @@ export type Database = {
           },
         ]
       }
-      modules: {
+      module_materials: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          formation_id: number | null
-          name: string
-          description: string | null
-          duration: number | null
-          price: number | null
-          stripe_item_id: string | null
-          updated_at: string | null
+          material_id: number | null
+          module_id: number | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          formation_id?: number | null
-          name: string
-          description?: string | null
-          duration?: number | null
-          price?: number | null
-          stripe_item_id?: string | null
-          updated_at?: string | null
+          material_id?: number | null
+          module_id?: number | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          formation_id?: number | null
-          name?: string
-          description?: string | null
-          duration?: number | null
-          price?: number | null
-          stripe_item_id?: string | null
-          updated_at?: string | null
+          material_id?: number | null
+          module_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: 'modules_formation_id_formations_id_fk'
+            foreignKeyName: 'lesson_materials_material_id_fkey'
+            columns: ['material_id']
+            isOneToOne: false
+            referencedRelation: 'materials'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'module_materials_module_id_fkey'
+            columns: ['module_id']
+            isOneToOne: false
+            referencedRelation: 'modules'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          created_at: string
+          description: string | null
+          duration: string | null
+          formation_id: number
+          id: number
+          name: string
+          price: number | null
+          stripe_item_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          formation_id: number
+          id?: number
+          name: string
+          price?: number | null
+          stripe_item_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          formation_id?: number
+          id?: number
+          name?: string
+          price?: number | null
+          stripe_item_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'modules_formation_id_fkey'
             columns: ['formation_id']
             isOneToOne: false
             referencedRelation: 'formations'
@@ -586,36 +717,6 @@ export type Database = {
             referencedColumns: ['id']
           },
         ]
-      }
-      purchases: {
-        Row: {
-          created_at: string | null
-          id: string
-          payment_intent_id: string
-          price_id: string
-          product_id: string
-          status: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          payment_intent_id: string
-          price_id: string
-          product_id: string
-          status: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          payment_intent_id?: string
-          price_id?: string
-          product_id?: string
-          status?: string
-          user_id?: string | null
-        }
-        Relationships: []
       }
       roles: {
         Row: {
@@ -712,89 +813,61 @@ export type Database = {
           },
         ]
       }
-      activity_invitations: {
+      user_progress: {
         Row: {
-          created_at: string | null
-          id: number
-          updated_at: string | null
-          sender_id: number | null
-          receiver_id: number | null
-          activity_id: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          updated_at?: string | null
-          sender_id?: number | null
-          receiver_id?: number | null
-          activity_id?: number | null
-          status: Database['public']['Enums']['activity_invitation_status']
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          updated_at?: string | null
-          sender_id?: number | null
-          receiver_id?: number | null
-          activity_id?: number | null
-          status: Database['public']['Enums']['activity_invitation_status']
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'activity_invitations_sender_id_users_id_fk'
-            columns: ['sender_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'activity_invitations_receiver_id_users_id_fk'
-            columns: ['receiver_id']
-            isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'activity_invitations_activity_id_activities_id_fk'
-            columns: ['activity_id']
-            isOneToOne: false
-            referencedRelation: 'activities'
-            referencedColumns: ['id']
-          },
-        ]
-      }
-      user_formations: {
-        Row: {
-          created_at: string | null
+          content_type: Database['public']['Enums']['content_type'] | null
+          created_at: string
           formation_id: number | null
           id: number
-          updated_at: string | null
+          lesson_id: number | null
+          module_id: number | null
+          progress_percentage: number | null
           user_id: number | null
         }
         Insert: {
-          created_at?: string | null
+          content_type?: Database['public']['Enums']['content_type'] | null
+          created_at?: string
           formation_id?: number | null
           id?: number
-          updated_at?: string | null
+          lesson_id?: number | null
+          module_id?: number | null
+          progress_percentage?: number | null
           user_id?: number | null
         }
         Update: {
-          created_at?: string | null
+          content_type?: Database['public']['Enums']['content_type'] | null
+          created_at?: string
           formation_id?: number | null
           id?: number
-          updated_at?: string | null
+          lesson_id?: number | null
+          module_id?: number | null
+          progress_percentage?: number | null
           user_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: 'user_formations_formation_id_formations_id_fk'
+            foreignKeyName: 'user_progress_formation_id_fkey'
             columns: ['formation_id']
             isOneToOne: false
             referencedRelation: 'formations'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'user_formations_user_id_users_id_fk'
+            foreignKeyName: 'user_progress_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_module_id_fkey'
+            columns: ['module_id']
+            isOneToOne: false
+            referencedRelation: 'modules'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_progress_user_id_fkey'
             columns: ['user_id']
             isOneToOne: false
             referencedRelation: 'users'
@@ -804,30 +877,53 @@ export type Database = {
       }
       user_purchases: {
         Row: {
-          created_at: string | null
+          content_type: Database['public']['Enums']['content_type'] | null
+          created_at: string
           formation_id: number | null
           id: number
-          updated_at: string | null
+          module_id: number | null
+          stripe_purchase_id: number | null
           user_id: number | null
         }
         Insert: {
-          created_at?: string | null
+          content_type?: Database['public']['Enums']['content_type'] | null
+          created_at?: string
           formation_id?: number | null
           id?: number
-          updated_at?: string | null
+          module_id?: number | null
+          stripe_purchase_id?: number | null
           user_id?: number | null
         }
         Update: {
-          created_at?: string | null
+          content_type?: Database['public']['Enums']['content_type'] | null
+          created_at?: string
           formation_id?: number | null
           id?: number
-          updated_at?: string | null
+          module_id?: number | null
+          stripe_purchase_id?: number | null
           user_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: 'user_purchases_formation_id_formations_id_fk'
+            foreignKeyName: 'user_purchases_formation_id_fkey'
             columns: ['formation_id']
+            isOneToOne: false
+            referencedRelation: 'formations'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_purchases_module_id_fkey'
+            columns: ['module_id']
+            isOneToOne: false
+            referencedRelation: 'modules'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_purchases_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -836,6 +932,7 @@ export type Database = {
           age: number | null
           created_at: string | null
           description: string | null
+          expo_push_token: string | null
           first_name: string | null
           id: number
           last_name: string | null
@@ -849,6 +946,7 @@ export type Database = {
           age?: number | null
           created_at?: string | null
           description?: string | null
+          expo_push_token?: string | null
           first_name?: string | null
           id?: number
           last_name?: string | null
@@ -862,6 +960,7 @@ export type Database = {
           age?: number | null
           created_at?: string | null
           description?: string | null
+          expo_push_token?: string | null
           first_name?: string | null
           id?: number
           last_name?: string | null
@@ -881,64 +980,37 @@ export type Database = {
           },
         ]
       }
-      user_progress: {
+      vaccinations: {
         Row: {
-          created_at: string | null
+          created_at: string
+          date_administered: string | null
+          dog_id: number | null
           id: number
-          updated_at: string | null
-          user_id: number | null
-          module_id: number | null
-          formation_id: number | null
-          lesson_id: number | null
-          progress_percentage: number | null
+          next_due_date: string | null
+          vaccine_name: string | null
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
+          date_administered?: string | null
+          dog_id?: number | null
           id?: number
-          updated_at?: string | null
-          user_id?: number | null
-          module_id?: number | null
-          formation_id?: number | null
-          lesson_id?: number | null
-          progress_percentage?: number | null
+          next_due_date?: string | null
+          vaccine_name?: string | null
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
+          date_administered?: string | null
+          dog_id?: number | null
           id?: number
-          updated_at?: string | null
-          user_id?: number | null
-          module_id?: number | null
-          formation_id?: number | null
-          lesson_id?: number | null
-          progress_percentage?: number | null
+          next_due_date?: string | null
+          vaccine_name?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'user_progress_user_id_users_id_fk'
-            columns: ['user_id']
+            foreignKeyName: 'vaccinations_dog_id_fkey'
+            columns: ['dog_id']
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_progress_module_id_modules_id_fk'
-            columns: ['module_id']
-            isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_progress_formation_id_formations_id_fk'
-            columns: ['formation_id']
-            isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
-          },
-          {
-            foreignKeyName: 'user_progress_lesson_id_lessons_id_fk'
-            columns: ['lesson_id']
-            isOneToOne: false
-            referencedRelation: 'lessons'
+            referencedRelation: 'dogs'
             referencedColumns: ['id']
           },
         ]
@@ -953,10 +1025,11 @@ export type Database = {
     Enums: {
       activity_type: 'forest' | 'city' | 'plage'
       activity_visibility: 'private' | 'public'
+      content_type: 'formation' | 'module' | 'lesson'
+      document_type: 'invoice' | 'prescription'
       dog_dominance: 'neutral' | 'dominant' | 'dominated'
       dog_sex: 'male' | 'female'
-      friend_request_status: 'pending' | 'accepted' | 'rejected'
-      activity_invitation_status: 'pending' | 'accepted' | 'rejected'
+      friend_request_status: 'accepted' | 'refused' | 'pending'
     }
     CompositeTypes: {
       [_ in never]: never

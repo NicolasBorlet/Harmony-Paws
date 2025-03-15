@@ -48,17 +48,17 @@ export default function NotificationItem({
       queryClient.invalidateQueries(['userInvitations', userData.id])
 
       Burnt.toast({
-        title: i18n.t('ride_request_accepted'),
+        title: i18n.t('notification.ride_request_accepted'),
         preset: 'done',
-        message: i18n.t('ride_request_accepted_message'),
+        message: i18n.t('notification.ride_request_accepted_message'),
         haptic: 'success',
       })
     } catch (error) {
       console.error('Error accepting ride request:', error)
       Burnt.toast({
-        title: i18n.t('error'),
+        title: i18n.t('global.error'),
         preset: 'error',
-        message: i18n.t('error_accepting_ride'),
+        message: i18n.t('notification.error_accepting_ride'),
         haptic: 'error',
       })
     }
@@ -67,7 +67,7 @@ export default function NotificationItem({
   const handleRejectFriendRequest = async () => {
     await rejectFriendRequest(notificationData.sender_id, userData.id)
     Burnt.toast({
-      title: i18n.t('request_rejected'),
+      title: i18n.t('notification.request_rejected'),
       preset: 'error',
       haptic: 'error',
     })
@@ -97,11 +97,11 @@ export default function NotificationItem({
         <SmallMedium color='#979898'>
           <>
             {notificationData.type === 'friend_request' &&
-              `${i18n.t('friendRequest')}`}
+              `${i18n.t('notification.friendRequest')}`}
             {notificationData.type === 'new_friend_ride' &&
-              `${i18n.t('rideCreation')}`}
+              `${i18n.t('notification.rideCreation')}`}
             {notificationData.type === 'new_ride_request' &&
-              `${i18n.t('rideRequest')}`}
+              `${i18n.t('notification.rideRequest')}`}
           </>
         </SmallMedium>
       </View>
@@ -116,10 +116,10 @@ export default function NotificationItem({
           }}
         >
           <SmallButton onPress={handleAcceptFriendRequest}>
-            <Small color='#fff'>{i18n.t('accept')}</Small>
+            <Small color='#fff'>{i18n.t('global.accept')}</Small>
           </SmallButton>
           <SmallButtonOutlined onPress={handleRejectFriendRequest}>
-            <Small color='#F7A400'>{i18n.t('refuse')}</Small>
+            <Small color='#F7A400'>{i18n.t('global.refuse')}</Small>
           </SmallButtonOutlined>
         </View>
       )}
@@ -127,7 +127,7 @@ export default function NotificationItem({
       {notificationData.type === 'new_ride_request' && (
         <View style={{ width: 100 }}>
           <SmallButton onPress={handleAcceptRideRequest}>
-            <Small color='#fff'>{i18n.t('accept')}</Small>
+            <Small color='#fff'>{i18n.t('notification.accept')}</Small>
           </SmallButton>
         </View>
       )}

@@ -5,12 +5,14 @@ const SpecialTitle = styled.Text<{ color?: string }>`
   font-size: 24px;
   color: ${props => props.color || Purple};
   font-family: RoundsBlack;
+  text-transform: uppercase;
 `
 
 const SpecialTitle_3 = styled.Text<{ color?: string }>`
   font-size: 22px;
   color: ${props => props.color || Purple};
   font-family: RoundsBlack;
+  text-transform: uppercase;
 `
 
 const OnBoardingTitle = styled.Text<{ color?: string }>`
