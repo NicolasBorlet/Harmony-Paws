@@ -1,0 +1,11 @@
+appId: "com.konylepanini.harmony-paws"
+
+---
+
+- tapOn: "Formation"
+- tapOn:
+    point: "75%,50%"
+- tapOn: "Faire le beau"
+- "scroll"
+- tapOn: "Introduction"
+- tapOn: "Next step"
