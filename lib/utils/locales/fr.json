@@ -192,5 +192,8 @@
     "onboardingRide": "Découvrez les meilleurs itinéraires de promenade et rencontrez d'autres chiens !",
     "onboardingFormation": "Profitez de l'accès à vie. Formez-vous et apprenez à votre rythme avec des cours sur l'éducation en ligne.",
     "onboardingMedical": "Suivez et gérez la santé de votre chien en toute simplicité avec son carnet de santé numérique."
+  },
+  "height": {
+    "heightTracking": "Suivi de la taille"
   }
 }
