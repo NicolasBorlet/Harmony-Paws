@@ -2,6 +2,7 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { BodyBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useFont } from '@shopify/react-native-skia'
 import { ScrollView, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { CartesianChart, Line } from 'victory-native'
@@ -17,6 +18,7 @@ const DATA = [
 
 export default function Height() {
   const insets = useSafeAreaInsets()
+  const font = useFont('Montserrat_500Medium', 12)
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -38,14 +40,22 @@ export default function Height() {
             height: 300,
           }}
         >
-          <CartesianChart data={DATA} xKey='x' yKeys={['y']}>
+          <CartesianChart
+            data={DATA}
+            xKey='x'
+            yKeys={['y']}
+            axisOptions={{
+              font: font,
+            }}
+          >
             {({ points }) => (
               //👇 pass a PointsArray to the Line component, as well as options.
               <Line
                 points={points.y}
-                color='red'
-                strokeWidth={3}
+                color={Colors.purple[500]}
+                strokeWidth={2}
                 animate={{ type: 'timing', duration: 300 }}
+                curveType='natural'
               />
             )}
           </CartesianChart>
