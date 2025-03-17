@@ -46,9 +46,15 @@ const PickerContent: React.FC<PickerContentProps> = ({
   containerStyle,
   headerStyle,
 }) => {
-  // État pour stocker les colonnes et valeurs sélectionnées
+  // Add a new state to track the current value
+  const [currentValue, setCurrentValue] = useState(initialValue)
   const [columns, setColumns] = useState<PickerColumnType[]>([])
   const [selectedIndices, setSelectedIndices] = useState<number[]>([])
+
+  useEffect(() => {
+    // Update currentValue when initialValue changes
+    setCurrentValue(initialValue)
+  }, [initialValue])
 
   useEffect(() => {
     // Configurer les colonnes selon le type
@@ -73,10 +79,9 @@ const PickerContent: React.FC<PickerContentProps> = ({
 
     const cols = setupColumns()
     setColumns(cols)
-
-    // Initialiser les indices sélectionnés
-    initializeSelectedIndices(cols)
-  }, [type, initialValue, minDate, maxDate, customColumns])
+    // Use currentValue instead of initialValue
+    initializeSelectedIndices(cols, currentValue)
+  }, [type, currentValue, minDate, maxDate, customColumns])
 
   // Configurations pour différents types de pickers
   const setupDateColumns = (): PickerColumnType[] => {
@@ -173,12 +178,11 @@ const PickerContent: React.FC<PickerContentProps> = ({
 
   // PickerContent.tsx - Correction
 
-  const initializeSelectedIndices = (cols: PickerColumnType[]) => {
+  const initializeSelectedIndices = (cols: PickerColumnType[], value: any) => {
     let defaultValue: Date
 
-    if (initialValue) {
-      defaultValue =
-        initialValue instanceof Date ? initialValue : new Date(initialValue)
+    if (value) {
+      defaultValue = value instanceof Date ? value : new Date(value)
     } else {
       defaultValue = new Date()
     }
@@ -264,13 +268,13 @@ const PickerContent: React.FC<PickerContentProps> = ({
 
       case 'duration':
         if (
-          initialValue &&
-          typeof initialValue === 'object' &&
-          'hours' in initialValue &&
-          'minutes' in initialValue
+          value &&
+          typeof value === 'object' &&
+          'hours' in value &&
+          'minutes' in value
         ) {
-          // Si initialValue est un objet DurationValue
-          const durationValue = initialValue as any
+          // Si value est un objet DurationValue
+          const durationValue = value as any
           const hourIndex = Math.max(
             0,
             cols[0].items.findIndex(item => item.value === durationValue.hours),
@@ -282,10 +286,10 @@ const PickerContent: React.FC<PickerContentProps> = ({
             ),
           )
           indices = [hourIndex, minuteIndex]
-        } else if (typeof initialValue === 'number') {
-          // Si initialValue est un nombre de minutes total
-          const hours = Math.floor(Number(initialValue) / 60)
-          const minutes = Number(initialValue) % 60
+        } else if (typeof value === 'number') {
+          // Si value est un nombre de minutes total
+          const hours = Math.floor(Number(value) / 60)
+          const minutes = Number(value) % 60
 
           // Trouver l'indice le plus proche pour les minutes
           const minuteValues = cols[1].items.map(item => Number(item.value))
@@ -429,6 +433,8 @@ const PickerContent: React.FC<PickerContentProps> = ({
         break
     }
 
+    // Update currentValue before calling onConfirm
+    setCurrentValue(result)
     onConfirm(result)
   }
 
