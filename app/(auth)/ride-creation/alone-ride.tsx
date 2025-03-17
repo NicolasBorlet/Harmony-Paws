@@ -151,12 +151,16 @@ export default function AloneRide() {
   }, [])
 
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView
         contentContainerStyle={[
           styles.container,
           { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
         ]}
+        contentInset={{
+          bottom: Platform.OS === 'ios' ? insets.bottom + 32 : 48,
+        }}
+        showsVerticalScrollIndicator={false}
       >
         <Back position='relative' />
         <View
@@ -277,14 +281,13 @@ export default function AloneRide() {
           <BodyMedium color='#fff'>{i18n.t('global.validate')}</BodyMedium>
         </StandardButton>
       </Animated.View>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   rideType: {
     backgroundColor: '#F0EBF5',

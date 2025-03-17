@@ -2,13 +2,14 @@ import { i18n } from '@/app/_layout'
 import PawPath from '@/assets/svg/ride/creation/path'
 import GroupRideIcon from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
+import CustomPicker from '@/components/picker'
+import { DurationValue } from '@/components/picker/types'
 import RideCheckbox from '@/components/ride/creation/ride-checkbox'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
 import { Entypo } from '@expo/vector-icons'
-import { Picker } from '@react-native-picker/picker'
 import { useEffect, useState } from 'react'
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import Animated, {
@@ -48,7 +49,12 @@ export default function GroupRide() {
     [ActivityType.BEACH]: useSharedValue(0),
   }
   const [duration, setDuration] = useState<string>('1h00')
-  const [showPicker, setShowPicker] = useState(false)
+  const [isDurationPickerVisible, setDurationPickerVisible] = useState(false)
+  const [selectedDuration, setSelectedDuration] = useState<DurationValue>({
+    hours: 1,
+    minutes: 0,
+    totalMinutes: 60,
+  })
 
   // Mettre à jour les animations lorsque le type change
   useEffect(() => {
@@ -135,12 +141,16 @@ export default function GroupRide() {
   }, [])
 
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView
         contentContainerStyle={[
           styles.container,
           { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
         ]}
+        contentInset={{
+          bottom: Platform.OS === 'ios' ? insets.bottom + 32 : 48,
+        }}
+        showsVerticalScrollIndicator={false}
       >
         <Back position='relative' />
         <View
@@ -216,7 +226,7 @@ export default function GroupRide() {
               {i18n.t('rideCreation.rideDuration')}
             </BodyMedium>
             <Pressable
-              onPress={() => setShowPicker(true)}
+              onPress={() => setDurationPickerVisible(true)}
               style={{
                 borderRadius: 10,
                 backgroundColor: '#f5f5f5',
@@ -235,26 +245,21 @@ export default function GroupRide() {
                 <Entypo name='chevron-down' size={8} color={Colors.grey[500]} />
               </View>
             </Pressable>
-
-            {showPicker && (
-              <View style={styles.pickerContainer}>
-                <Picker
-                  selectedValue={duration}
-                  onValueChange={itemValue => {
-                    setDuration(itemValue)
-                    setShowPicker(false)
-                  }}
-                >
-                  <Picker.Item label='30min' value='0h30' />
-                  <Picker.Item label='1h' value='1h00' />
-                  <Picker.Item label='1h30' value='1h30' />
-                  <Picker.Item label='2h' value='2h00' />
-                  {/* Ajoutez d'autres durées selon vos besoins */}
-                </Picker>
-              </View>
-            )}
           </View>
-          <View style={styles.inputContainer}>
+          <CustomPicker
+            isVisible={isDurationPickerVisible}
+            onClose={() => setDurationPickerVisible(false)}
+            onConfirm={(durationValue: DurationValue) => {
+              setSelectedDuration(durationValue)
+              const formattedDuration = `${durationValue.hours}h${durationValue.minutes.toString().padStart(2, '0')}`
+              setDuration(formattedDuration)
+            }}
+            type='duration'
+            initialValue={selectedDuration}
+            confirmText='OK'
+            cancelText='Annuler'
+          />
+          <View style={[styles.inputContainer]}>
             <BodyMedium color={Colors.black}>
               {i18n.t('rideCreation.rideParticipantsNumber')}
             </BodyMedium>
@@ -267,19 +272,20 @@ export default function GroupRide() {
           </View>
         </View>
       </ScrollView>
-      <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+      <Animated.View
+        style={[styles.buttonContainer, animatedStyles, { zIndex: 1000 }]}
+      >
         <StandardButton>
           <BodyMedium color='#fff'>{i18n.t('global.validate')}</BodyMedium>
         </StandardButton>
       </Animated.View>
-    </>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'white',
+    flexGrow: 1,
   },
   rideType: {
     backgroundColor: '#F0EBF5',
@@ -317,8 +323,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    width: '100%',
-    alignSelf: 'center',
+    bottom: 0,
+    left: 0,
+    right: 0,
     paddingHorizontal: 20,
   },
 })
