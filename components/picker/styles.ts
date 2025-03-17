@@ -44,8 +44,8 @@ export default StyleSheet.create({
     width: '100%',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#DDDDDD',
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    borderColor: Colors.orange[500],
+    backgroundColor: 'rgba(247, 164, 0, 0.05)', // Changed from Colors.orange[500]
   },
   footer: {
     flexDirection: 'row',

@@ -257,6 +257,8 @@ export default function AloneRide() {
               isVisible={isDurationPickerVisible}
               onClose={() => setDurationPickerVisible(false)}
               onConfirm={(durationValue: DurationValue) => {
+                // Mettre à jour selectedDuration avec la nouvelle valeur
+                setSelectedDuration(durationValue)
                 // Formatage de la durée en chaîne de caractères
                 const formattedDuration = `${durationValue.hours}h${durationValue.minutes.toString().padStart(2, '0')}`
                 setDuration(formattedDuration)
