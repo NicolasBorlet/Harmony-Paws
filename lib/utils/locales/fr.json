@@ -26,7 +26,8 @@
     "continue": "Continuer",
     "disconected": "Se déconnecter",
     "skip": "Passer",
-    "validate": "Valider"
+    "validate": "Valider",
+    "history": "Historique"
   },
   "tabbar": {
     "home": "Accueil",
