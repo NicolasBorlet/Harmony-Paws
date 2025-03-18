@@ -2,6 +2,7 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { BodyBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { useFont } from '@shopify/react-native-skia'
 import { ScrollView, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -18,7 +19,7 @@ const DATA = [
 
 export default function Height() {
   const insets = useSafeAreaInsets()
-  const font = useFont('Montserrat_500Medium', 12)
+  const font = useFont(Montserrat_400Regular, 12)
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
