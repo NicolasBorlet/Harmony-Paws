@@ -224,9 +224,21 @@ const UnderlinedButton = styled.Pressable<ButtonProps>`
   text-decoration: underline;
 `
 
+const FullRoundedButton = styled.Pressable<ButtonProps>`
+  background-color: ${(props: ButtonProps) =>
+    props.backgroundColor || Colors.orange[500]};
+  border-radius: 1000px;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export {
   AnimatedStandardButton,
   BackButton,
+  FullRoundedButton,
   MapButton,
   SmallButton,
   SmallButtonOutlined,
