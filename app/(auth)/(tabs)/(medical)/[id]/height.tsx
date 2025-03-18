@@ -11,12 +11,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { CartesianChart, Line, useChartPressState } from 'victory-native'
 
 const DATA = [
-  { x: 1, y: 2 },
-  { x: 2, y: 3 },
-  { x: 3, y: 5 },
-  { x: 4, y: 7 },
-  { x: 5, y: 11 },
-  { x: 6, y: 13 },
+  { x: 1, y1: 2, y2: 1 },
+  { x: 2, y1: 3, y2: 2 },
+  { x: 3, y1: 5, y2: 7 },
+  { x: 4, y1: 7, y2: 9 },
+  { x: 5, y1: 11, y2: 11 },
+  { x: 6, y1: 13, y2: 13 },
 ]
 
 export default function Height() {
@@ -49,7 +49,7 @@ export default function Height() {
             <CartesianChart
               data={DATA}
               xKey='x'
-              yKeys={['y']}
+              yKeys={['y1', 'y2']}
               axisOptions={{
                 font: font,
               }}
@@ -58,8 +58,15 @@ export default function Height() {
                 <>
                   {/* Pass a PointsArray to the Line component, as well as options */}
                   <Line
-                    points={points.y}
+                    points={points.y1}
                     color={Colors.purple[500]}
+                    strokeWidth={2}
+                    animate={{ type: 'timing', duration: 300 }}
+                    curveType='natural'
+                  />
+                  <Line
+                    points={points.y2}
+                    color={Colors.orange[500]}
                     strokeWidth={2}
                     animate={{ type: 'timing', duration: 300 }}
                     curveType='natural'
