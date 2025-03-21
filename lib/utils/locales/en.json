@@ -194,5 +194,8 @@
     "onboardingRide": "Discover the best walking routes and meet other dogs!",
     "onboardingFormation": "Enjoy lifetime access. Train and learn at your own pace with online education courses.",
     "onboardingMedical": "Track and manage your dog's health easily with their digital health record."
+  },
+  "height": {
+    "heightTracking": "Height tracking"
   }
 }

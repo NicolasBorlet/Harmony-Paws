@@ -1,0 +1,6 @@
+- tapOn: "Email"
+- inputText: "nicolas.borlet7@gmail.com"
+- tapOn: "retour"
+- tapOn: "Mot de passe"
+- inputText: "Nicolas.73600"
+- tapOn: "Se connecter"
