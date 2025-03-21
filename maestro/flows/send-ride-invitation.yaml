@@ -1,0 +1,5 @@
+- tapOn:
+    point: "50%,55%"
+- "scroll"
+- tapOn: "On se balade ?"
+- tapOn: "Envoyer sans message"

@@ -67,13 +67,11 @@ export default function Signup() {
           >
             <CustomTextInput
               placeholder={i18n.t('auth.email')}
-              value={email}
               onChangeText={setEmail}
               placeholderTextColor='#696969'
             />
             <CustomTextInput
               placeholder={i18n.t('auth.password')}
-              value={password}
               onChangeText={setPassword}
               placeholderTextColor='#696969'
               secureTextEntry

@@ -1,0 +1,7 @@
+- tapOn: ""
+- tapOn: "Balade à Hautecour Bonjour ! Vous allez bien ?"
+- tapOn:
+    id: "Message"
+- inputText: "Bonjour!"
+- tapOn: "send"
+- assertVisible: "Bonjour!"
