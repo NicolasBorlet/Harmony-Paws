@@ -7,7 +7,7 @@ export default function DogAgeSection() {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Body color='black'>{i18n.t('dogAge')}</Body>
+        <Body color='black'>{i18n.t('dogCreation.dogAgeQuestion')}</Body>
       </View>
       <AgeCheckbox />
     </View>

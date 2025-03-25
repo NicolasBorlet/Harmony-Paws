@@ -1,3 +1,9 @@
+appId: com.konylepanini.harmony-paws
+---
+- runFlow:
+    file: ../components/login.yaml
+
+# Le reste de vos commandes de test pour l'envoi de message
 - tapOn: ""
 - tapOn: "Balade à Hautecour Bonjour ! Vous allez bien ?"
 - tapOn:

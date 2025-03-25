@@ -2,7 +2,7 @@ import { i18n } from '@/app/_layout'
 import { Body } from '@/components/ui/text'
 import { Database } from '@/database.types'
 import { storage } from '@/lib/utils/storage'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import DogBehaviorCheckbox from './behavior-checkbox'
 
@@ -15,31 +15,34 @@ interface Props {
 export default function DogBehaviorSection({ behaviors }: Props) {
   const [selectedBehaviors, setSelectedBehaviors] = useState<number[]>([])
 
-  const handleBehaviorToggle = (behaviorId: number) => {
-    setSelectedBehaviors(prev => {
-      const newSelected = prev.includes(behaviorId)
-        ? prev.filter(id => id !== behaviorId)
-        : [...prev, behaviorId]
+  const handleBehaviorToggle = useCallback(
+    (behaviorId: number) => {
+      setSelectedBehaviors(prev => {
+        const newSelected = prev.includes(behaviorId)
+          ? prev.filter(id => id !== behaviorId)
+          : [...prev, behaviorId]
 
-      const existingData = storage.getString('dog')
-      const dogData = existingData ? JSON.parse(existingData) : {}
+        const existingData = storage.getString('dog')
+        const dogData = existingData ? JSON.parse(existingData) : {}
 
-      storage.set(
-        'dog',
-        JSON.stringify({
-          ...dogData,
-          behavior_ids: newSelected,
-        }),
-      )
+        storage.set(
+          'dog',
+          JSON.stringify({
+            ...dogData,
+            behavior_ids: newSelected,
+          }),
+        )
 
-      return newSelected
-    })
-  }
+        return newSelected
+      })
+    },
+    [selectedBehaviors],
+  )
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Body>{i18n.t('dogBehavior')}</Body>
+        <Body>{i18n.t('dogCreation.dogBehaviorQuestion')}</Body>
       </View>
       <FlatList
         data={behaviors}

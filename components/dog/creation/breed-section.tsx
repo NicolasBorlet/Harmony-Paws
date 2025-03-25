@@ -4,7 +4,7 @@ import { Body } from '@/components/ui/text'
 import { Database } from '@/database.types'
 import { IOption } from '@/lib/utils/drop-down'
 import { storage } from '@/lib/utils/storage'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 type Breed = Database['public']['Tables']['breeds']['Row']
@@ -16,22 +16,25 @@ interface Props {
 export default function DogBreedSection({ breeds }: Props) {
   const [selectedBreed, setSelectedBreed] = useState<Breed | null>(null)
 
-  const handleBreedSelect = (option: IOption) => {
-    const breed = breeds?.find(b => b.id.toString() === option.value)
-    if (!breed) return
+  const handleBreedSelect = useCallback(
+    (option: IOption) => {
+      const breed = breeds?.find(b => b.id.toString() === option.value)
+      if (!breed) return
 
-    setSelectedBreed(breed)
-    const existingData = storage.getString('dog')
-    const dogData = existingData ? JSON.parse(existingData) : {}
+      setSelectedBreed(breed)
+      const existingData = storage.getString('dog')
+      const dogData = existingData ? JSON.parse(existingData) : {}
 
-    storage.set(
-      'dog',
-      JSON.stringify({
-        ...dogData,
-        breed_id: breed.id,
-      }),
-    )
-  }
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...dogData,
+          breed_id: breed.id,
+        }),
+      )
+    },
+    [breeds],
+  )
 
   const breedOptions =
     breeds?.map(breed => ({
@@ -42,10 +45,10 @@ export default function DogBreedSection({ breeds }: Props) {
 
   return (
     <View style={styles.container}>
-      <Body color='black'>{i18n.t('dogBreedQuestion')}</Body>
+      <Body color='black'>{i18n.t('dogCreation.dogBreedQuestion')}</Body>
       <Dropdown
         options={breedOptions}
-        placeholder={i18n.t('addDogBreed')}
+        placeholder={i18n.t('dogCreation.addDogBreed')}
         onSelect={handleBreedSelect}
       />
     </View>

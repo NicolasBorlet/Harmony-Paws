@@ -1,0 +1,8 @@
+appId: com.konylepanini.harmony-paws
+
+---
+- launchApp:
+    clearState: true
+    stopApp: true
+
+- assertVisible: "Harmony Paws"

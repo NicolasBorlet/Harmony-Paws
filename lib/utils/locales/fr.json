@@ -106,6 +106,7 @@
   },
   "dogCreation": {
     "whatIsYourDogName": "Quel est le nom de votre chien ?",
+    "dogNameQuestion": "Quel est le nom de votre chien ?",
     "addDogName": "Ajouter le nom de votre chien",
     "dogSexQuestion": "Votre chien est un male ou une femelle ?",
     "dogBreedQuestion": "Quel est la race de votre chien ?",
