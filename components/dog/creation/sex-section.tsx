@@ -6,7 +6,7 @@ import SexCheckbox from './sex-checkbox'
 export default function SexSection() {
   return (
     <View style={styles.container}>
-      <Body color='black'>{i18n.t('yourDogIs')}</Body>
+      <Body color='black'>{i18n.t('dogCreation.dogSexQuestion')}</Body>
       <SexCheckbox />
     </View>
   )

@@ -23,9 +23,9 @@ export default function DogNameSection() {
 
   return (
     <View style={styles.container}>
-      <Body color='black'>{i18n.t('dogName')}</Body>
+      <Body color='black'>{i18n.t('dogCreation.dogNameQuestion')}</Body>
       <TextInput
-        placeholder={i18n.t('addDogName')}
+        placeholder={i18n.t('dogCreation.addDogName')}
         placeholderTextColor='#696969'
         style={styles.input}
         value={dogName}

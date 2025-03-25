@@ -18,7 +18,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
@@ -94,65 +93,46 @@ export default function Medical() {
       <View style={{ paddingHorizontal: 16 }}>
         <MedicalHeader scrollY={scrollY} />
       </View>
-      <ScrollView
-        contentContainerStyle={styles.scrollView}
-        onScroll={event => {
-          scrollY.value = event.nativeEvent.contentOffset.y
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={{ paddingHorizontal: 16 }}>
-          <ExtraSmall color={Colors.black}>
-            {i18n.t('medical.healthRecordDescription')}
-          </ExtraSmall>
-        </View>
-        <View
-          style={{
-            height: CONTAINER_HEIGHT,
-            width: SCREEN_WIDTH,
+
+      <View style={{ paddingHorizontal: 16 }}>
+        <ExtraSmall color={Colors.black}>
+          {i18n.t('medical.healthRecordDescription')}
+        </ExtraSmall>
+      </View>
+
+      <View style={styles.flashListContainer}>
+        <FlashList
+          ref={flashListRef}
+          data={dogs}
+          horizontal
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          keyExtractor={item => item.id.toString()}
+          estimatedItemSize={CARD_WIDTH}
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={ITEM_TOTAL_WIDTH}
+          decelerationRate='fast'
+          contentContainerStyle={{
+            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
+          }}
+          renderItem={({ item }: { item: DogListingInterface }) => (
+            <View style={styles.cardContainer}>
+              <DogCard dog={item} active={item.active} />
+            </View>
+          )}
+        />
+      </View>
+
+      <View style={styles.buttonContainer}>
+        <StandardButton
+          width='140'
+          onPress={() => {
+            router.push(`/${dogs[activeIndex].id}/healthRecord`)
           }}
         >
-          <FlashList
-            ref={flashListRef}
-            data={dogs}
-            horizontal
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item }: { item: DogListingInterface }) => (
-              <View
-                style={{
-                  width: CARD_WIDTH + CARD_GAP,
-                  height: CONTAINER_HEIGHT,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: CARD_GAP / 2,
-                  paddingVertical: 8,
-                }}
-              >
-                <DogCard dog={item} active={item.active} />
-              </View>
-            )}
-            estimatedItemSize={5}
-            showsHorizontalScrollIndicator={false}
-            snapToInterval={ITEM_TOTAL_WIDTH}
-            decelerationRate='fast'
-            contentContainerStyle={{
-              paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
-            }}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <StandardButton
-            width='140'
-            onPress={() => {
-              router.push(`/${dogs[activeIndex].id}/healthRecord`)
-            }}
-          >
-            <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
-          </StandardButton>
-        </View>
-      </ScrollView>
+          <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
+        </StandardButton>
+      </View>
     </View>
   )
 }
@@ -162,9 +142,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  scrollView: {
-    gap: 32,
-    paddingBottom: 24,
+  flashListContainer: {
+    height: CONTAINER_HEIGHT,
+    width: SCREEN_WIDTH,
+    marginVertical: 32,
+  },
+  cardContainer: {
+    width: CARD_WIDTH + CARD_GAP,
+    height: CONTAINER_HEIGHT,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: CARD_GAP / 2,
   },
   buttonContainer: {
     padding: 16,

@@ -3,44 +3,47 @@ import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
 import { Purple } from '@/constants/Colors'
 import { storage } from '@/lib/utils/storage'
 import Foundation from '@expo/vector-icons/build/Foundation'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function SexCheckbox() {
   const [maleChecked, setMaleChecked] = useState(false)
   const [femaleChecked, setFemaleChecked] = useState(false)
 
-  const handleSexCheckbox = (isMale: boolean) => {
-    const existingData = storage.getString('dog')
-    const dogData = existingData ? JSON.parse(existingData) : {}
+  const handleSexCheckbox = useCallback(
+    (isMale: boolean) => {
+      const existingData = storage.getString('dog')
+      const dogData = existingData ? JSON.parse(existingData) : {}
 
-    if (isMale) {
-      setMaleChecked(true)
-      setFemaleChecked(false)
-      storage.set(
-        'dog',
-        JSON.stringify({
-          ...dogData,
-          sex: isMale ? 'male' : 'female',
-        }),
-      )
-    } else {
-      setMaleChecked(false)
-      setFemaleChecked(true)
-      storage.set(
-        'dog',
-        JSON.stringify({
-          ...dogData,
-          sex: isMale ? 'male' : 'female',
-        }),
-      )
-    }
-  }
+      if (isMale) {
+        setMaleChecked(true)
+        setFemaleChecked(false)
+        storage.set(
+          'dog',
+          JSON.stringify({
+            ...dogData,
+            sex: isMale ? 'male' : 'female',
+          }),
+        )
+      } else {
+        setMaleChecked(false)
+        setFemaleChecked(true)
+        storage.set(
+          'dog',
+          JSON.stringify({
+            ...dogData,
+            sex: isMale ? 'male' : 'female',
+          }),
+        )
+      }
+    },
+    [maleChecked, femaleChecked],
+  )
 
   return (
     <View style={styles.listContainer}>
       <StandardCheckbox
-        label={i18n.t('male')}
+        label={i18n.t('global.male')}
         checked={maleChecked}
         onPress={() => handleSexCheckbox(true)}
         inactiveColor='#979898'
@@ -55,7 +58,7 @@ export default function SexCheckbox() {
         }
       />
       <StandardCheckbox
-        label={i18n.t('female')}
+        label={i18n.t('global.female')}
         checked={femaleChecked}
         onPress={() => handleSexCheckbox(false)}
         inactiveColor='#979898'

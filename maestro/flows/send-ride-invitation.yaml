@@ -1,3 +1,9 @@
+appId: com.konylepanini.harmony-paws
+---
+- runFlow:
+    file: ../components/login.yaml
+
+# Le reste de vos commandes de test pour l'invitation
 - tapOn:
     point: "50%,55%"
 - "scroll"
