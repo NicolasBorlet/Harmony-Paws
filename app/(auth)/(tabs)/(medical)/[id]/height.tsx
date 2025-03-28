@@ -2,54 +2,59 @@ import { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import { FullRoundedButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
-import { BodyBold, BodySemiBold } from '@/components/ui/text'
+import Loader from '@/components/ui/loader'
+import { Body, BodyBold, BodySemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { useMeasurementsByDogId } from '@/lib/api/measurement'
 import { transformDataForGraph } from '@/lib/utils/graphData'
 import { Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { AntDesign } from '@expo/vector-icons'
 import { Circle, useFont } from '@shopify/react-native-skia'
-import React, { useMemo } from 'react'
+import { useLocalSearchParams, usePathname } from 'expo-router'
+import React, { useEffect, useMemo } from 'react'
 import { Pressable, ScrollView, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import type { SharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { CartesianChart, Line, useChartPressState } from 'victory-native'
-
-const dbData = [
-  {
-    id: 1,
-    height: 5,
-    weight: 100,
-    date: 1717027200, // Mai 2024
-  },
-  {
-    id: 2,
-    height: 12,
-    weight: 100,
-    date: 1719705600, // Juin 2024
-  },
-  {
-    id: 3,
-    height: 15,
-    weight: 100,
-    date: 1722384000, // Juillet 2024
-  },
-]
 
 // Définir le type pour les couleurs d'année
 type YearKey = 'y1' | 'y2' | 'y3'
 
 export default function Height() {
+  const { id } = useLocalSearchParams()
+  const path = usePathname()
   const insets = useSafeAreaInsets()
   const font = useFont(Montserrat_400Regular, 12)
   const { state, isActive } = useChartPressState({ x: 0, y: { highTmp: 0 } })
+
+  console.log('path and id', path, id)
+
+  const { data: heightMeasurements, isLoading } = useMeasurementsByDogId('3')
+
   const YEAR = useMemo(() => {
+    if (!heightMeasurements?.length) return [new Date().getFullYear()]
     const years = [
-      ...new Set(dbData.map(item => new Date(item.date * 1000).getFullYear())),
+      ...new Set(
+        heightMeasurements.map(item => new Date(item.date).getFullYear()),
+      ),
     ]
     return years.sort((a, b) => a - b)
-  }, [dbData])
-  const formattedData = useMemo(() => transformDataForGraph(dbData), [dbData])
-  const [selectedYears, setSelectedYears] = React.useState<number[]>([YEAR[0]])
+  }, [heightMeasurements])
+
+  const formattedData = useMemo(() => {
+    if (!heightMeasurements?.length) return []
+    return transformDataForGraph(heightMeasurements)
+  }, [heightMeasurements])
+
+  const [selectedYears, setSelectedYears] = React.useState<number[]>([])
+
+  // Initialize selected years when YEAR changes
+  useEffect(() => {
+    if (YEAR.length > 0 && selectedYears.length === 0) {
+      setSelectedYears([YEAR[0]])
+    }
+  }, [YEAR])
 
   const handleYearSelect = (year: number) => {
     if (selectedYears.includes(year)) {
@@ -73,6 +78,16 @@ export default function Height() {
     }),
     [],
   )
+
+  useEffect(() => {
+    console.log('heightMeasurements', heightMeasurements)
+    console.log(
+      'transformDataForGraph',
+      transformDataForGraph(heightMeasurements),
+    )
+  }, [heightMeasurements])
+
+  if (isLoading) return <Loader />
 
   return (
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
@@ -145,11 +160,11 @@ export default function Height() {
           <BodySemiBold color={Colors.purple[500]}>
             {i18n.t('global.history')}
           </BodySemiBold>
-          <FullRoundedButton>
-            <AntDesign name='plus' size={16} color='white' />
+          <FullRoundedButton height={48} width={48}>
+            <AntDesign name='plus' size={20} color='white' />
           </FullRoundedButton>
         </View>
-        <View style={{ flexDirection: 'row', gap: 12 }}>
+        <View style={{ flexDirection: 'row', gap: 12, marginBottom: 24 }}>
           {YEAR.map(year => (
             <Pressable
               key={year}
@@ -177,6 +192,32 @@ export default function Height() {
             </Pressable>
           ))}
         </View>
+        <FlatList
+          data={heightMeasurements}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 12,
+                padding: 8,
+                backgroundColor: `${Colors.pink[500]}3A`,
+                borderRadius: 8,
+                justifyContent: 'space-between',
+              }}
+            >
+              <Body>
+                {new Date(item.date).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </Body>
+              <BodyBold>{item.height} cm</BodyBold>
+            </View>
+          )}
+          keyExtractor={item => item.date}
+          ItemSeparatorComponent={() => <View style={{ height: 8 }} />}
+        />
       </ScrollView>
     </View>
   )
