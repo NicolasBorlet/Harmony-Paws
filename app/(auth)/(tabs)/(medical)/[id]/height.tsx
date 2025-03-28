@@ -46,7 +46,7 @@ export default function Height() {
     }
   }
 
-  const yKeysToUse = [] as string[]
+  const yKeysToUse = [] as ('y1' | 'y2')[]
   if (selectedYears.includes(YEAR[0])) yKeysToUse.push('y1')
   if (selectedYears.includes(YEAR[1])) yKeysToUse.push('y2')
 
@@ -123,13 +123,25 @@ export default function Height() {
         </View>
         <View style={{ flexDirection: 'row', gap: 12 }}>
           {YEAR.map(year => (
-            <Pressable key={year} onPress={() => handleYearSelect(year)}>
+            <Pressable
+              key={year}
+              onPress={() => handleYearSelect(year)}
+              style={[
+                styles.yearSelector,
+                {
+                  backgroundColor: selectedYears.includes(year)
+                    ? Colors.pink[500]
+                    : Colors.white,
+                  borderWidth: selectedYears.includes(year) ? 1 : 1,
+                  borderColor: Colors.pink[500],
+                },
+              ]}
+            >
               <BodyBold
                 style={{
                   color: selectedYears.includes(year)
-                    ? Colors.purple[500]
-                    : Colors.black,
-                  paddingVertical: 8,
+                    ? Colors.white
+                    : Colors.pink[500],
                 }}
               >
                 {year}
@@ -150,5 +162,10 @@ const styles = {
   container: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  yearSelector: {
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    borderRadius: 100,
   },
 }

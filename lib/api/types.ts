@@ -13,3 +13,15 @@ export interface Dog {
 export interface DogListingInterface extends Dog {
   active?: boolean
 }
+
+export enum ActivityVisibility {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+}
+
+export interface Ride {
+  id: number
+  name: string
+  image: string
+  description: string
+}
