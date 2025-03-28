@@ -11,15 +11,63 @@ import { Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { AntDesign } from '@expo/vector-icons'
 import { Circle, useFont } from '@shopify/react-native-skia'
 import { useLocalSearchParams, usePathname } from 'expo-router'
-import React, { useEffect, useMemo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { Pressable, ScrollView, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import type { SharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { CartesianChart, Line, useChartPressState } from 'victory-native'
 
-// Définir le type pour les couleurs d'année
-type YearKey = 'y1' | 'y2' | 'y3'
+// Ajouter une interface pour les mesures
+interface HeightMeasurement {
+  id: number
+  height: number | null
+  date: string
+}
+
+// Modifier le type YearKey pour inclure toutes les années possibles
+type YearKey = 'y1' | 'y2' | 'y3' | 'y4'
+
+// Déplacer ces constantes en dehors du composant
+const yearColors: Record<YearKey, string> = {
+  y1: Colors.purple[500],
+  y2: Colors.orange[500],
+  y3: Colors.pink[500],
+  y4: Colors.green[500],
+}
+
+// Créer un composant séparé pour le sélecteur d'années
+const YearSelector = memo(
+  ({
+    year,
+    isSelected,
+    onSelect,
+  }: {
+    year: number
+    isSelected: boolean
+    onSelect: (year: number) => void
+  }) => (
+    <Pressable
+      onPress={() => onSelect(year)}
+      style={[
+        styles.yearSelector,
+        {
+          backgroundColor: isSelected ? Colors.pink[500] : Colors.white,
+          borderWidth: 1,
+          borderColor: Colors.pink[500],
+        },
+      ]}
+    >
+      <BodyBold
+        style={{
+          color: isSelected ? Colors.white : Colors.pink[500],
+        }}
+      >
+        {year}
+      </BodyBold>
+    </Pressable>
+  ),
+)
 
 export default function Height() {
   const { id } = useLocalSearchParams()
@@ -30,7 +78,11 @@ export default function Height() {
 
   console.log('path and id', path, id)
 
-  const { data: heightMeasurements, isLoading } = useMeasurementsByDogId('3')
+  const {
+    data: heightMeasurements,
+    isLoading,
+    error,
+  } = useMeasurementsByDogId('3')
 
   const YEAR = useMemo(() => {
     if (!heightMeasurements?.length) return [new Date().getFullYear()]
@@ -56,36 +108,30 @@ export default function Height() {
     }
   }, [YEAR])
 
-  const handleYearSelect = (year: number) => {
-    if (selectedYears.includes(year)) {
-      if (selectedYears.length > 1) {
-        setSelectedYears(selectedYears.filter(y => y !== year))
-      }
-    } else {
-      setSelectedYears([...selectedYears, year])
-    }
-  }
+  // Utiliser useCallback pour les fonctions
+  const handleYearSelect = useCallback((year: number) => {
+    setSelectedYears(prev =>
+      prev.includes(year)
+        ? prev.length > 1
+          ? prev.filter(y => y !== year)
+          : prev
+        : [...prev, year],
+    )
+  }, [])
 
   const yKeysToUse = useMemo(() => {
     return selectedYears.map((_, index) => `y${index + 1}` as const)
   }, [selectedYears])
 
-  const yearColors: Record<YearKey, string> = useMemo(
-    () => ({
-      y1: Colors.purple[500],
-      y2: Colors.orange[500],
-      y3: Colors.pink[500],
-    }),
-    [],
-  )
-
-  useEffect(() => {
-    console.log('heightMeasurements', heightMeasurements)
-    console.log(
-      'transformDataForGraph',
-      transformDataForGraph(heightMeasurements),
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <BodyBold style={{ textAlign: 'center' }}>
+          {i18n.t('global.error')}
+        </BodyBold>
+      </View>
     )
-  }, [heightMeasurements])
+  }
 
   if (isLoading) return <Loader />
 
@@ -166,30 +212,12 @@ export default function Height() {
         </View>
         <View style={{ flexDirection: 'row', gap: 12, marginBottom: 24 }}>
           {YEAR.map(year => (
-            <Pressable
+            <YearSelector
               key={year}
-              onPress={() => handleYearSelect(year)}
-              style={[
-                styles.yearSelector,
-                {
-                  backgroundColor: selectedYears.includes(year)
-                    ? Colors.pink[500]
-                    : Colors.white,
-                  borderWidth: selectedYears.includes(year) ? 1 : 1,
-                  borderColor: Colors.pink[500],
-                },
-              ]}
-            >
-              <BodyBold
-                style={{
-                  color: selectedYears.includes(year)
-                    ? Colors.white
-                    : Colors.pink[500],
-                }}
-              >
-                {year}
-              </BodyBold>
-            </Pressable>
+              year={year}
+              isSelected={selectedYears.includes(year)}
+              onSelect={handleYearSelect}
+            />
           ))}
         </View>
         <FlatList
