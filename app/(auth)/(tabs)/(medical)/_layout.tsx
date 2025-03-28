@@ -8,6 +8,7 @@ export default function MedicalLayout() {
       }}
     >
       <Stack.Screen name='medical' />
+      <Stack.Screen name='[id]' />
     </Stack>
   )
 }

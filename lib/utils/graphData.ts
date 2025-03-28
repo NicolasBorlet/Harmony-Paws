@@ -1,18 +1,21 @@
 // Fonction pour transformer dbData en format graphique
 export const transformDataForGraph = (
-  dbData: Array<{ height: number; date: number }>,
+  dbData: Array<{ height: number | null; date: string }>,
 ) => {
-  // Transformer directement les données en format graphique
-  const graphData = dbData.map(item => {
-    const date = new Date(item.date * 1000)
+  if (!dbData) return []
 
-    return {
-      x: date.getTime(), // Utiliser le timestamp en millisecondes pour l'axe x
-      y1: item.height,
-      year1: date.getFullYear(),
-    }
-  })
+  // Filter out entries with null height and transform data
+  const graphData = dbData
+    .filter(item => item.height !== null)
+    .map(item => {
+      const date = new Date(item.date)
+      return {
+        x: date.getTime(),
+        y1: item.height as number,
+        year1: date.getFullYear(),
+      }
+    })
 
-  // Trier les données par date
+  // Sort data by date
   return graphData.sort((a, b) => a.x - b.x)
 }
