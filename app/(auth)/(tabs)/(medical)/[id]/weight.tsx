@@ -6,9 +6,11 @@ import Loader from '@/components/ui/loader'
 import { Body, BodyBold, BodySemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useWeightMeasurementsByDogId } from '@/lib/api/measurement'
+import { dogMedical$ } from '@/lib/observables/dog-medical-observable'
 import { transformDataForGraph } from '@/lib/utils/graphData'
 import { Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { AntDesign } from '@expo/vector-icons'
+import { useObservable } from '@legendapp/state/react'
 import { Circle, useFont } from '@shopify/react-native-skia'
 import { useLocalSearchParams } from 'expo-router'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
@@ -66,6 +68,7 @@ const YearSelector = memo(
 )
 
 export default function Weight() {
+  const selectedDogId = useObservable(dogMedical$.selectedDogId)
   const { id } = useLocalSearchParams()
   const insets = useSafeAreaInsets()
   const font = useFont(Montserrat_400Regular, 12)
@@ -75,7 +78,7 @@ export default function Weight() {
     data: weightMeasurements,
     isLoading,
     error,
-  } = useWeightMeasurementsByDogId('3')
+  } = useWeightMeasurementsByDogId(selectedDogId.get() || id?.toString() || '')
 
   const YEAR = useMemo(() => {
     if (!weightMeasurements?.length) return [new Date().getFullYear()]

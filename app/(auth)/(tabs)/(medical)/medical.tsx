@@ -7,6 +7,7 @@ import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
 import { DogListingInterface } from '@/lib/api/types'
+import { dogMedical$ } from '@/lib/observables/dog-medical-observable'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
@@ -127,7 +128,9 @@ export default function Medical() {
         <StandardButton
           width='140'
           onPress={() => {
+            console.log('dogs[activeIndex]', dogs[activeIndex])
             router.push(`/${dogs[activeIndex].id}/healthRecord`)
+            dogMedical$.selectedDogId.set(dogs[activeIndex].id.toString())
           }}
         >
           <Body color={Colors.white}>{i18n.t('global.choose')}</Body>

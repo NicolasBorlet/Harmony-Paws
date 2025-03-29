@@ -6,9 +6,11 @@ import Loader from '@/components/ui/loader'
 import { Body, BodyBold, BodySemiBold } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useMeasurementsByDogId } from '@/lib/api/measurement'
+import { dogMedical$ } from '@/lib/observables/dog-medical-observable'
 import { transformDataForGraph } from '@/lib/utils/graphData'
 import { Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { AntDesign } from '@expo/vector-icons'
+import { useObservable } from '@legendapp/state/react'
 import { Circle, useFont } from '@shopify/react-native-skia'
 import { useLocalSearchParams, usePathname } from 'expo-router'
 import React, { memo, useCallback, useEffect, useMemo } from 'react'
@@ -70,6 +72,7 @@ const YearSelector = memo(
 )
 
 export default function Height() {
+  const selectedDogId = useObservable(dogMedical$.selectedDogId)
   const { id } = useLocalSearchParams()
   const path = usePathname()
   const insets = useSafeAreaInsets()
@@ -82,7 +85,7 @@ export default function Height() {
     data: heightMeasurements,
     isLoading,
     error,
-  } = useMeasurementsByDogId('3')
+  } = useMeasurementsByDogId(selectedDogId.get() || id?.toString() || '')
 
   const YEAR = useMemo(() => {
     if (!heightMeasurements?.length) return [new Date().getFullYear()]
