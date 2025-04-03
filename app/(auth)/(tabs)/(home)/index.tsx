@@ -3,6 +3,7 @@ import DogListing from '@/components/dogListing/dog-listing'
 import FilterComponent from '@/components/filter/filter-component'
 import HomeHeader from '@/components/home/home-header'
 import RideListing from '@/components/rideListing/ride-listing'
+import { HomeSkeleton } from '@/components/skeletons/home-skeleton'
 import { MapButton } from '@/components/ui/button'
 import TabSwitcher from '@/components/ui/TabSwitcher'
 import { Small } from '@/components/ui/text'
@@ -35,6 +36,13 @@ export default function HomeScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     setSelectedTab(tab)
   }, [])
+
+  // Simuler un état de chargement pour le test du skeleton
+  const isLoading = false // À remplacer par votre état de chargement réel
+
+  if (isLoading) {
+    return <HomeSkeleton />
+  }
 
   return (
     <GestureHandlerRootView

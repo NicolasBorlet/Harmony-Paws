@@ -165,7 +165,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
+    width: 75,
   },
   firstTab: {
     paddingLeft: 0,

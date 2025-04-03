@@ -4,6 +4,7 @@ import DogAgeSection from '@/components/dog/creation/age-section'
 import DogBehaviorSection from '@/components/dog/creation/behavior-section'
 import DogBreedSection from '@/components/dog/creation/breed-section'
 import DogNameSection from '@/components/dog/creation/dog-name-section'
+import DominanceSection from '@/components/dog/creation/dominance-section'
 import ImageSelector from '@/components/dog/creation/image-selector'
 import SexSection from '@/components/dog/creation/sex-section'
 import ParallaxScrollViewText from '@/components/parallax-scrollview-text'
@@ -46,18 +47,17 @@ export default function FirstStep() {
     const userData = user$.get()
     console.log('Current user from user$:', userData)
 
-    // Accéder à l'objet utilisateur dans la structure imbriquée
     if (userData && typeof userData === 'object') {
-      // Trouver l'ID numérique (la clé)
       const userId = Object.keys(userData)[0]
-      // Accéder à l'objet utilisateur
       const user = userData[userId]
 
       if (user && user.id) {
         console.log('Setting dog owner_id with:', user.id)
+        const currentDog = JSON.parse(storage.getString('dog') || '{}')
         storage.set(
           'dog',
           JSON.stringify({
+            ...currentDog,
             owner_id: user.id,
           }),
         )
@@ -81,6 +81,7 @@ export default function FirstStep() {
       'age',
       'breed_id',
       'behavior_ids',
+      'dominance',
     ]
 
     // Vérifier que tous les champs requis existent et ne sont pas vides
@@ -104,10 +105,12 @@ export default function FirstStep() {
   }
 
   const handleCreateDog = async () => {
-    const dogData = getCurrentDogData()
+    let dogData = getCurrentDogData()
+    dogData.owner_id = user$.get()?.id
+
+    console.log('dogData', dogData)
 
     if (!validateDogData(dogData)) {
-      // Vous pouvez ajouter ici une alerte ou un message d'erreur
       Burnt.toast({
         title: 'Erreur',
         preset: 'error',
@@ -122,6 +125,8 @@ export default function FirstStep() {
 
       // Récupérer les données du storage
       const { image, behavior_ids, ...dogInfo } = dogData
+
+      console.log('dogInfo', dogInfo)
 
       // Créer le chien
       const [newDog] = await createDog(dogInfo)
@@ -141,15 +146,20 @@ export default function FirstStep() {
 
       // Rediriger vers la page suivante
       Burnt.toast({
-        title: 'Chien créé avec succès',
+        title: i18n.t('dogCreation.dogCreationSuccess'),
         preset: 'done',
-        message: 'Votre chien a été créé avec succès',
+        message: i18n.t('dogCreation.yourDogIsCreated'),
         haptic: 'success',
       })
       router.replace(`/(auth)/profile-creation`)
     } catch (error) {
       console.error('Error creating dog:', error)
-      // Ici vous pourriez ajouter une gestion d'erreur UI
+      Burnt.toast({
+        title: i18n.t('dogCreation.dogCreationError'),
+        preset: 'error',
+        message: i18n.t('dogCreation.dogCreationErrorDescription'),
+        haptic: 'error',
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -210,6 +220,8 @@ export default function FirstStep() {
           <DogAgeSection />
           {/** Dog breed container */}
           <DogBreedSection breeds={breeds} />
+          {/** Dog dominance container */}
+          <DominanceSection />
           {/** Dog behavior container */}
           <DogBehaviorSection behaviors={behaviors} />
           {/** Button container */}

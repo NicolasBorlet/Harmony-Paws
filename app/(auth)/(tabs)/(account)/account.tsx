@@ -16,7 +16,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import * as Burnt from 'burnt'
 import { router } from 'expo-router'
-import { Button, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
 import { useSharedValue } from 'react-native-reanimated'
@@ -133,19 +133,19 @@ export default function AccountScreen() {
           }}
         >
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold color={Colors.light.secondary}>
                 {i18n.t('account.friends')}
               </BodyBold>
             </GridItemBackground>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold color={Colors.light.secondary}>
                 {i18n.t('account.favorites')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
@@ -155,7 +155,7 @@ export default function AccountScreen() {
                 {i18n.t('account.createdRides')}
               </BodyBold>
             </GridItemBackground>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
@@ -167,7 +167,7 @@ export default function AccountScreen() {
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
@@ -177,7 +177,7 @@ export default function AccountScreen() {
                 {i18n.t('account.completedActivities')}
               </BodyBold>
             </GridItemBackground>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
@@ -189,7 +189,7 @@ export default function AccountScreen() {
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
@@ -226,17 +226,6 @@ export default function AccountScreen() {
           color='#FF0000'
         >
           <Body color='white'>{i18n.t('global.disconected')}</Body>
-        </StandardButton>
-
-        <View style={styles.verticallySpaced}>
-          <Button
-            title='Remove onBoarding'
-            onPress={() => storage.set('onBoarding', false)}
-          />
-        </View>
-
-        <StandardButton onPress={handleToast}>
-          <Body color='white'>Toast</Body>
         </StandardButton>
       </ScrollView>
     </View>

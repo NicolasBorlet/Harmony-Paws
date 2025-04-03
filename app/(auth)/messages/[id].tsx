@@ -13,26 +13,30 @@ import {
   Composer,
   GiftedChat,
   InputToolbar,
-  Send
+  Send,
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function MessageDetail() {
-  const { id } = useLocalSearchParams();
-  const { title } = useGlobalSearchParams();
-  const userData = user$.get();
-  
+  const { id } = useLocalSearchParams()
+  const { title } = useGlobalSearchParams()
+  const userData = user$.get()
+
   const insets = useSafeAreaInsets()
-  const { data: messages, isLoading, error } = useConversationMessages(id as string);
+  const {
+    data: messages,
+    isLoading,
+    error,
+  } = useConversationMessages(id as string)
 
   const [inputText, setInputText] = useState('')
 
   const queryClient = useQueryClient()
-  
+
   const sendMessageMutation = useMutation({
-    mutationFn: (content: string) => 
+    mutationFn: (content: string) =>
       sendMessage(id as string, content, userData?.id || ''),
-    onSuccess: (newMessage) => {
+    onSuccess: newMessage => {
       setInputText('')
     },
   })
@@ -80,17 +84,17 @@ export default function MessageDetail() {
     return (
       <View
         style={{
-          backgroundColor: isUser ? Colors.light.primary : 'white',
+          backgroundColor: isUser ? Colors.orange[500] : Colors.purple[500],
           borderRadius: 10,
+          borderBottomRightRadius: isUser ? 0 : 10,
+          borderBottomLeftRadius: isUser ? 10 : 0,
           borderWidth: isUser ? 0 : 1,
           borderColor: Colors.light.secondary,
           padding: 12,
           maxWidth: '80%',
         }}
       >
-        <Small color={isUser ? 'white' : Colors.light.secondary}>
-          {props.currentMessage.text}
-        </Small>
+        <Small color={Colors.white}>{props.currentMessage.text}</Small>
       </View>
     )
   }
@@ -136,7 +140,9 @@ export default function MessageDetail() {
           </View>
         </View>
       </View>
-      {isLoading ? <LoaderComponent /> : (
+      {isLoading ? (
+        <LoaderComponent />
+      ) : (
         <GiftedChat
           inverted={false}
           messages={messages}

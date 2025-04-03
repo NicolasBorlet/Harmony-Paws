@@ -1,14 +1,24 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
 import { ActivityListingInterface } from './types/interfaces'
 import {
+  defaultMutationOptions,
   defaultQueryOptions,
   formatDate,
   handleSupabaseError,
   logDev,
 } from './utils'
+
+interface ActivityInterface {
+  place: string | null
+  date: string
+  duration: string | null
+  visibility: 'public' | 'private'
+  type: 'forest' | 'city' | 'plage'
+  creator_id?: number | null
+}
 
 export const getPaginatedActivities = async (
   page: number = 0,
@@ -75,42 +85,6 @@ export const usePaginatedActivities = (pageSize: number = 5) => {
     initialPageParam: 0,
     ...defaultQueryOptions,
   })
-}
-
-// Définir des types corrects pour les entités
-interface ActivityDetails {
-  id: number
-  place: string
-  date: string
-  duration: string
-  created_at: string
-  updated_at: string
-  visibility: string
-  type: string
-  creator?: {
-    id: number
-    first_name: string
-    last_name: string
-    created_at: string
-    updated_at: string
-  }
-  steps?: Array<{
-    id: number
-    place: string
-    estimated_hour: string
-    created_at: string
-    updated_at: string
-  }>
-  user_activities?: Array<{
-    user: {
-      id: number
-      first_name: string
-      last_name: string
-      place: string
-      created_at: string
-      updated_at: string
-    }
-  }>
 }
 
 export const getActivityById = async (id: number) => {
@@ -201,5 +175,18 @@ export const useActivityById = (id: number) => {
     queryKey: ['activity', id],
     queryFn: () => getActivityById(id),
     ...defaultQueryOptions,
+  })
+}
+
+export const createActivity = async (activity: ActivityInterface) => {
+  const { data, error } = await supabase.from('activities').insert(activity)
+  if (error) throw handleSupabaseError(error, 'activity')
+  return data
+}
+
+export const useCreateActivity = () => {
+  return useMutation({
+    mutationFn: createActivity,
+    ...defaultMutationOptions,
   })
 }

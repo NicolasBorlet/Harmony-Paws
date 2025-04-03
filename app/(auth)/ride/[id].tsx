@@ -3,10 +3,10 @@ import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
-import LoaderComponent from '@/components/loader'
 import ParallaxScrollView from '@/components/parallax-scrollview'
 import ParticipantListing from '@/components/ride/participant-listing'
 import RouteListing from '@/components/ride/route-listing'
+import { RideDetailsSkeleton } from '@/components/skeletons/ride-details-skeleton'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import {
@@ -67,7 +67,7 @@ export default function RideDetails() {
     }
   })
 
-  if (isLoading) return <LoaderComponent />
+  if (isLoading) return <RideDetailsSkeleton />
   if (error || !activity) return <BodyMedium>Error</BodyMedium>
 
   return (

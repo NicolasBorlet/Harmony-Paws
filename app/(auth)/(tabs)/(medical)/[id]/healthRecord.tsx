@@ -3,7 +3,7 @@ import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
 import HealthRecordHeader from '@/components/medical/health-record-header'
 import InformationCard from '@/components/medical/information-card'
-import Loader from '@/components/ui/loader'
+import { HealthRecordSkeleton } from '@/components/skeletons/health-record-skeleton'
 import { BodyBold, ExtraSmallSemiBold } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
@@ -29,7 +29,7 @@ export default function HealthRecord() {
   }, [healthData])
 
   if (isLoading) {
-    return <Loader />
+    return <HealthRecordSkeleton />
   }
 
   return (

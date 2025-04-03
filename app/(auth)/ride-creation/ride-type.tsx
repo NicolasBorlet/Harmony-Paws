@@ -5,6 +5,7 @@ import GroupRide from '@/assets/svg/ride/group-ride'
 import Back from '@/components/back-button'
 import { ParagraphSemiBold, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
+import { Entypo } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -19,7 +20,10 @@ export default function RideCreation() {
         { paddingTop: Platform.OS === 'ios' ? insets.top : 0 },
       ]}
     >
-      <Back position='relative' />
+      <Back
+        position='relative'
+        icon={<Entypo name='cross' size={18} color={Colors.white} />}
+      />
       <View style={{ alignSelf: 'center' }}>
         <SpecialTitle
           style={{ textAlign: 'center', paddingHorizontal: 20, maxWidth: 300 }}

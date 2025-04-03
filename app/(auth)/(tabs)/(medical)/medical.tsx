@@ -1,8 +1,8 @@
 import { i18n } from '@/app/_layout'
 import DogCard from '@/components/medical/dog-card'
 import MedicalHeader from '@/components/medical/medical-header'
+import { MedicalSkeleton } from '@/components/skeletons/medical-skeleton'
 import { StandardButton } from '@/components/ui/button'
-import Loader from '@/components/ui/loader'
 import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
@@ -53,17 +53,6 @@ export default function Medical() {
     }
   }
 
-  // Centrer l'élément actif au montage
-  useEffect(() => {
-    if (flashListRef.current) {
-      flashListRef.current.scrollToIndex({
-        index: activeIndex,
-        animated: true,
-        viewPosition: 0.5,
-      })
-    }
-  }, [])
-
   useEffect(() => {
     if (userDogs) {
       console.log('userDogs', userDogs)
@@ -79,7 +68,7 @@ export default function Medical() {
   }, [userDogs])
 
   if (isLoading) {
-    return <Loader />
+    return <MedicalSkeleton />
   }
 
   return (
@@ -101,41 +90,47 @@ export default function Medical() {
         </ExtraSmall>
       </View>
 
-      <View style={styles.flashListContainer}>
-        <FlashList
-          ref={flashListRef}
-          data={dogs}
-          horizontal
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-          keyExtractor={item => item.id.toString()}
-          estimatedItemSize={CARD_WIDTH}
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={ITEM_TOTAL_WIDTH}
-          decelerationRate='fast'
-          contentContainerStyle={{
-            paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
-          }}
-          renderItem={({ item }: { item: DogListingInterface }) => (
-            <View style={styles.cardContainer}>
-              <DogCard dog={item} active={item.active} />
-            </View>
-          )}
-        />
+      <View style={styles.externalContainer}>
+        {dogs.length > 0 && (
+          <View style={styles.flashListContainer}>
+            <FlashList
+              ref={flashListRef}
+              data={dogs}
+              horizontal
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+              keyExtractor={item => item.id.toString()}
+              estimatedItemSize={CARD_WIDTH}
+              showsHorizontalScrollIndicator={false}
+              snapToInterval={ITEM_TOTAL_WIDTH}
+              decelerationRate='fast'
+              contentContainerStyle={{
+                paddingHorizontal: (SCREEN_WIDTH - CARD_WIDTH - CARD_GAP) / 2,
+              }}
+              renderItem={({ item }: { item: DogListingInterface }) => (
+                <View style={styles.cardContainer}>
+                  <DogCard dog={item} active={item.active || false} />
+                </View>
+              )}
+            />
+          </View>
+        )}
       </View>
 
-      <View style={styles.buttonContainer}>
-        <StandardButton
-          width='140'
-          onPress={() => {
-            console.log('dogs[activeIndex]', dogs[activeIndex])
-            router.push(`/${dogs[activeIndex].id}/healthRecord`)
-            dogMedical$.selectedDogId.set(dogs[activeIndex].id.toString())
-          }}
-        >
-          <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
-        </StandardButton>
-      </View>
+      {dogs.length > 0 && (
+        <View style={styles.buttonContainer}>
+          <StandardButton
+            width='140'
+            onPress={() => {
+              console.log('dogs[activeIndex]', dogs[activeIndex])
+              router.push(`/${dogs[activeIndex].id}/healthRecord`)
+              dogMedical$.selectedDogId.set(dogs[activeIndex].id.toString())
+            }}
+          >
+            <Body color={Colors.white}>{i18n.t('global.choose')}</Body>
+          </StandardButton>
+        </View>
+      )}
     </View>
   )
 }
@@ -145,9 +140,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  flashListContainer: {
-    height: CONTAINER_HEIGHT,
+  externalContainer: {
+    height: CONTAINER_HEIGHT + 64,
     width: SCREEN_WIDTH,
+  },
+  flashListContainer: {
+    width: SCREEN_WIDTH,
+    height: CONTAINER_HEIGHT,
     marginVertical: 32,
   },
   cardContainer: {

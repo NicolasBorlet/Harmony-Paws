@@ -54,3 +54,12 @@ export const defaultQueryOptions = {
   refetchOnMount: false,
   staleTime: 5 * 60 * 1000, // 5 minutes
 }
+
+/**
+ * Common mutation options for React Query
+ */
+export const defaultMutationOptions = {
+  onError: (error: any) => {
+    logDev('Mutation Error:', error)
+  },
+}

@@ -1,11 +1,10 @@
 import { i18n } from '@/app/_layout'
-import Dropdown from '@/components/dropdown/animated-dropdown'
+import CustomPicker from '@/components/picker'
 import { Body } from '@/components/ui/text'
 import { Database } from '@/database.types'
-import { IOption } from '@/lib/utils/drop-down'
 import { storage } from '@/lib/utils/storage'
 import { useCallback, useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 
 type Breed = Database['public']['Tables']['breeds']['Row']
 
@@ -15,42 +14,68 @@ interface Props {
 
 export default function DogBreedSection({ breeds }: Props) {
   const [selectedBreed, setSelectedBreed] = useState<Breed | null>(null)
+  const [isPickerVisible, setIsPickerVisible] = useState(false)
 
   const handleBreedSelect = useCallback(
-    (option: IOption) => {
-      const breed = breeds?.find(b => b.id.toString() === option.value)
+    (values: any[]) => {
+      console.log('Selected values:', values)
+      const selectedValue = values[0]
+      console.log('Selected value:', selectedValue)
+
+      const breed = breeds?.find(b => b.id.toString() === selectedValue)
+      console.log('Found breed:', breed)
+
       if (!breed) return
 
       setSelectedBreed(breed)
       const existingData = storage.getString('dog')
-      const dogData = existingData ? JSON.parse(existingData) : {}
+      console.log('Existing data:', existingData)
 
-      storage.set(
-        'dog',
-        JSON.stringify({
-          ...dogData,
-          breed_id: breed.id,
-        }),
-      )
+      const dogData = existingData ? JSON.parse(existingData) : {}
+      console.log('Parsed dog data:', dogData)
+
+      const updatedData = {
+        ...dogData,
+        breed_id: breed.id,
+      }
+      console.log('Updated data:', updatedData)
+
+      storage.set('dog', JSON.stringify(updatedData))
+      setIsPickerVisible(false)
     },
     [breeds],
   )
 
-  const breedOptions =
-    breeds?.map(breed => ({
-      id: breed.id.toString(),
-      label: breed.name,
-      value: breed.id.toString(),
-    })) || []
+  const breedColumns = [
+    {
+      items:
+        breeds?.map(breed => ({
+          label: breed.name,
+          value: breed.id.toString(),
+        })) || [],
+    },
+  ]
 
   return (
     <View style={styles.container}>
       <Body color='black'>{i18n.t('dogCreation.dogBreedQuestion')}</Body>
-      <Dropdown
-        options={breedOptions}
-        placeholder={i18n.t('dogCreation.addDogBreed')}
-        onSelect={handleBreedSelect}
+      <CustomPicker
+        isVisible={isPickerVisible}
+        onClose={() => setIsPickerVisible(false)}
+        onConfirm={handleBreedSelect}
+        type='custom'
+        initialValue={selectedBreed?.id.toString()}
+        columns={breedColumns}
+        confirmText='OK'
+        cancelText='Annuler'
       />
+      <Pressable style={styles.input} onPress={() => setIsPickerVisible(true)}>
+        <Body color='#696969'>
+          {selectedBreed
+            ? selectedBreed.name
+            : i18n.t('dogCreation.addDogBreed')}
+        </Body>
+      </Pressable>
     </View>
   )
 }

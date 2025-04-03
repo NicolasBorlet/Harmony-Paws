@@ -6,10 +6,13 @@ import { StyleSheet, View } from 'react-native'
 import { DogCard } from '../ui/card'
 import { CardTitle } from '../ui/text'
 
-const blurhash =
-  'L6Pj0^jE.AyE_3t7t7R**0o#DgR4'
+const blurhash = 'L6Pj0^jE.AyE_3t7t7R**0o#DgR4'
 
-const DogItemListing = memo(function DogItemListing({ dog }: { dog: DogListingInterface }) {
+const DogItemListing = memo(function DogItemListing({
+  dog,
+}: {
+  dog: DogListingInterface
+}) {
   const genderIcon = useMemo(() => {
     if (dog.sex === 'male') {
       return (

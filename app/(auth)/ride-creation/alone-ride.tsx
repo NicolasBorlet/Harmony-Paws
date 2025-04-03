@@ -9,7 +9,11 @@ import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, ParagraphSemiBold } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
 import { Colors } from '@/constants/Colors'
+import { useCreateActivity } from '@/lib/api/ride'
+import { user$ } from '@/lib/observables/session-observable'
 import { Entypo } from '@expo/vector-icons'
+import * as Burnt from 'burnt'
+import { router } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 import Animated, {
@@ -39,6 +43,9 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const ACTIVE_COLOR = '#F7A400'
 
 export default function AloneRide() {
+  const createActivity = useCreateActivity()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   enum ActivityType {
     PARK = 'park',
     FOREST = 'forest',
@@ -47,6 +54,7 @@ export default function AloneRide() {
   }
 
   const insets = useSafeAreaInsets()
+  const user = user$.get()
 
   const [location, setLocation] = useState<string>('')
   const [type, setType] = useState<ActivityType>(ActivityType.PARK)
@@ -149,6 +157,42 @@ export default function AloneRide() {
   useEffect(() => {
     buttonAnimation()
   }, [])
+
+  const handleCreateActivity = async () => {
+    if (!location || !type || !duration || !user?.id) return
+
+    setIsSubmitting(true)
+    try {
+      // Convert the activity type to match the database enum
+      const activityType = type.toLowerCase() as 'forest' | 'city' | 'plage'
+
+      // Create the activity object
+      const activityData = {
+        place: location,
+        date: new Date().toISOString(), // You might want to add a date picker later
+        duration: duration,
+        visibility: 'public' as const,
+        type: activityType,
+        creator_id: user.id,
+      }
+
+      console.log('Activity data:', activityData)
+
+      await createActivity.mutateAsync(activityData)
+      Burnt.toast({
+        title: i18n.t('global.success'),
+        preset: 'done',
+        message: i18n.t('rideCreation.rideCreationSuccess'),
+        haptic: 'success',
+      })
+      router.replace('/(auth)/(tabs)/(home)')
+    } catch (error) {
+      console.error('Error creating activity:', error)
+      // You might want to show an error message to the user here
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -277,8 +321,15 @@ export default function AloneRide() {
         </View>
       </ScrollView>
       <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-        <StandardButton>
-          <BodyMedium color='#fff'>{i18n.t('global.validate')}</BodyMedium>
+        <StandardButton
+          onPress={handleCreateActivity}
+          disabled={isSubmitting || !location || !type || !duration}
+        >
+          <BodyMedium color='#fff'>
+            {isSubmitting
+              ? i18n.t('global.loading')
+              : i18n.t('global.validate')}
+          </BodyMedium>
         </StandardButton>
       </Animated.View>
     </View>
