@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
@@ -8,8 +9,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 
-export const useSkeletonAnimation = () => {
+export const useSkeletonAnimation = (onFadeOut?: () => void) => {
   const opacity = useSharedValue(0.3)
+  const fadeOutOpacity = useSharedValue(1)
 
   useEffect(() => {
     // Démarrer l'animation immédiatement
@@ -23,13 +25,23 @@ export const useSkeletonAnimation = () => {
     )
   }, [])
 
-  return useAnimatedStyle(() => ({
-    opacity: opacity.value,
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value * fadeOutOpacity.value,
   }))
+
+  const fadeOut = () => {
+    fadeOutOpacity.value = withTiming(0, { duration: 300 }, finished => {
+      if (finished && onFadeOut) {
+        runOnJS(onFadeOut)()
+      }
+    })
+  }
+
+  return { animatedStyle, fadeOut }
 }
 
 export const CardSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.card, animatedStyle]}>
@@ -53,7 +65,7 @@ export const CardSkeleton = () => {
 }
 
 export const SimpleCardSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.simpleCard, animatedStyle]}>
@@ -67,7 +79,7 @@ export const SimpleCardSkeleton = () => {
 }
 
 export const RideItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.rideCard, animatedStyle]}>
@@ -87,7 +99,7 @@ export const RideItemSkeleton = () => {
 }
 
 export const DogItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.dogCard, animatedStyle]}>
@@ -101,7 +113,7 @@ export const DogItemSkeleton = () => {
 }
 
 export const ChatItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={animatedStyle}>
@@ -121,7 +133,7 @@ export const ChatItemSkeleton = () => {
 }
 
 export const FormationItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.formationItem, animatedStyle]}>
@@ -135,7 +147,7 @@ export const FormationItemSkeleton = () => {
 }
 
 export const ModuleItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.simpleCard, animatedStyle]}>
@@ -149,19 +161,19 @@ export const ModuleItemSkeleton = () => {
 }
 
 export const BlockSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return <Animated.View style={[styles.block, animatedStyle]} />
 }
 
 export const StepSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return <Animated.View style={[styles.step, animatedStyle]} />
 }
 
 export const ContentSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View

@@ -27,7 +27,9 @@
     "disconected": "Se déconnecter",
     "skip": "Passer",
     "validate": "Valider",
-    "history": "Historique"
+    "history": "Historique",
+    "loading": "Chargement...",
+    "success": "Succès"
   },
   "tabbar": {
     "home": "Accueil",
@@ -71,7 +73,8 @@
     "forYou": "Pour vous",
     "allFormations": "Toutes nos formations",
     "advice": "Avis",
-    "completeFormation": "Formation complète"
+    "completeFormation": "Formation complète",
+    "noFormations": "Aucune formation trouvée"
   },
   "module": {
     "materialNeeded": "Matériel nécessaire",
@@ -105,6 +108,10 @@
     "rideInvitation": "On se balade ?"
   },
   "dogCreation": {
+    "dominance": "Dominance",
+    "dominant": "Dominant",
+    "neutral": "Neutre",
+    "dominated": "Dominé",
     "whatIsYourDogName": "Quel est le nom de votre chien ?",
     "dogNameQuestion": "Quel est le nom de votre chien ?",
     "addDogName": "Ajouter le nom de votre chien",
@@ -115,7 +122,11 @@
     "dogAddPhoto": "Ajouter une photo de votre chien",
     "addDogAge": "Ajouter l'âge de votre chien",
     "addDogBreed": "Sélectionner sa race",
-    "wouldLikeKnowPet": "Nous aimerions connaitre votre animal"
+    "wouldLikeKnowPet": "Nous aimerions connaitre votre animal",
+    "dogCreationSuccess": "Chien créé avec succès",
+    "yourDogIsCreated": "Votre chien a été ajouté avec succès",
+    "dogCreationError": "Erreur lors de la création du chien",
+    "dogCreationErrorDescription": "Veuillez réessayer ou contacter l'assistance"
   },
   "ride": {
     "start": "Départ",
@@ -141,7 +152,8 @@
     "city": "Ville",
     "beach": "Plage",
     "park": "Parc",
-    "rideParticipantsNumber": "Nombre de participants"
+    "rideParticipantsNumber": "Nombre de participants",
+    "rideCreationSuccess": "Balade créée avec succès"
   },
   "discussion": {
     "message": "Message",

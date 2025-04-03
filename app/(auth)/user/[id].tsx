@@ -6,25 +6,20 @@ import { RoundedImage } from '@/components/ui/image'
 import { CardTitle, Small, SmallMedium } from '@/components/ui/text'
 import { useDogsFromUserId } from '@/lib/api/dog'
 import { sendFriendRequest } from '@/lib/api/friendRequests'
+import { useUser } from '@/lib/api/user'
 import { user$ } from '@/lib/observables/session-observable'
 import { FontAwesome } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
 import * as Burnt from 'burnt'
 import { useLocalSearchParams } from 'expo-router'
-import { useEffect } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 
 export default function UserScreen() {
   const { id } = useLocalSearchParams()
   const userData = user$.get()
-
+  const { data: user, isLoading } = useUser(id.toString())
   const { data: dogs } = useDogsFromUserId(id.toString())
-  const user = user$.get()
-
-  useEffect(() => {
-    console.log('id', id)
-    console.log('user', user)
-  }, [id, user])
 
   const handleAddFriend = async () => {
     try {
@@ -36,7 +31,7 @@ export default function UserScreen() {
         message: "Votre demande d'ami a été envoyée",
         haptic: 'success',
       })
-    } catch (error) {
+    } catch (error: any) {
       // If error message {message: 'Sender and receiver cannot be the same'}
       if (error.message === 'Sender and receiver cannot be the same') {
         Burnt.toast({
@@ -47,6 +42,14 @@ export default function UserScreen() {
         })
       }
     }
+  }
+
+  if (isLoading || !user) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Small>Chargement...</Small>
+      </View>
+    )
   }
 
   return (
@@ -96,12 +99,12 @@ export default function UserScreen() {
         </View>
         <View style={styles.container}>
           <CardTitle color='#000' style={{ textAlign: 'center' }}>
-            {user?.first_name}, {user?.age} ans
+            {user.first_name}, {user.age} ans
           </CardTitle>
           <SmallMedium color='#000'>
-            {user?.description
-              ? user?.description
-              : i18n.t('global.noDescriptionFor') + ' ' + user?.first_name}
+            {user.description
+              ? user.description
+              : i18n.t('global.noDescriptionFor') + ' ' + user.first_name}
           </SmallMedium>
           <View style={styles.buttonContainer}>
             <View style={{ flex: 1 }}>

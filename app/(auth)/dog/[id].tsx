@@ -4,6 +4,7 @@ import BodyTitle from '@/components/bodyTitle/body-title'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
+import { DogDetailsSkeleton } from '@/components/skeletons/dog-details-skeleton'
 import { StandardButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
 import {
@@ -25,7 +26,6 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import LoaderComponent from '@/components/loader'
 import { Colors } from '@/constants/Colors'
 
 export default function DogDetails() {
@@ -69,7 +69,7 @@ export default function DogDetails() {
   })
 
   if (isLoading || !data) {
-    return <LoaderComponent />
+    return <DogDetailsSkeleton />
   }
 
   return (
@@ -97,16 +97,16 @@ export default function DogDetails() {
                 gap: 8,
               }}
             >
-              <GridItemBackground>
+              <GridItemBackground height={60}>
                 <BodyBold color={Colors.light.secondary}>
                   {data.breed.name}
                 </BodyBold>
               </GridItemBackground>
-              <GridItemBackground>
+              <GridItemBackground height={60}>
                 <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
               </GridItemBackground>
               {data.dominance && (
-                <GridItemBackground>
+                <GridItemBackground height={60}>
                   <BodyBold color={Colors.light.secondary}>
                     {data.dominance}
                   </BodyBold>
@@ -141,7 +141,7 @@ export default function DogDetails() {
                   </GridItem>
                 ))
               ) : (
-                <Body>{i18n.t('global.noBehavior')}</Body>
+                <Body>{i18n.t('dog.noBehavior')}</Body>
               )}
             </Block>
           </View>
@@ -158,9 +158,9 @@ export default function DogDetails() {
             >
               <MasterDogCardComponent
                 masterData={{
-                  name: data.owner.first_name,
-                  age: data.owner.last_name,
-                  image: data.owner.image,
+                  first_name: data.owner.first_name,
+                  last_name: data.owner.last_name,
+                  id: data.owner.id,
                 }}
               />
             </Pressable>

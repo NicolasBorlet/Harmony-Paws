@@ -9,7 +9,10 @@ const GridItem = styled.View`
   border: 1px solid #f49819;
 `
 
-const GridItemBackground = styled.View<{ selected?: boolean }>`
+const GridItemBackground = styled.View<{
+  selected?: boolean
+  height?: number
+}>`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -19,6 +22,7 @@ const GridItemBackground = styled.View<{ selected?: boolean }>`
   padding-vertical: 10px;
   padding-horizontal: 12px;
   border-radius: 10px;
+  height: ${({ height }: { height?: number }) => height || 'auto'};
   background-color: ${({ selected }: { selected?: boolean }) =>
     selected ? '#FDE6D7' : 'rgba(102, 51, 153, 0.1)'};
   ${Platform.select({

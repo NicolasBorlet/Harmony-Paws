@@ -238,11 +238,11 @@ export default function Formation() {
             <BodyTitle title={i18n.t('formation.yourFormations')} />
             <UserFormationListing />
           </View>
-          <Divider />
+          {/* <Divider />
           <View style={{ gap: 16 }}>
             <BodyTitle title={i18n.t('formation.forYou')} />
-            {/* <FormationListing /> */}
-          </View>
+            <FormationListing />
+          </View> */}
           <Divider />
           <View style={{ gap: 16 }}>
             <BodyTitle title={i18n.t('formation.allFormations')} />

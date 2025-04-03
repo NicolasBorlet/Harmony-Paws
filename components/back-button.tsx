@@ -11,6 +11,7 @@ export default function Back({
   backgroundColor,
   color,
   top,
+  icon,
 }: {
   position?: string
   left?: string
@@ -18,6 +19,7 @@ export default function Back({
   backgroundColor?: string
   color?: string
   top?: number
+  icon?: React.ReactNode
 }) {
   const insets = useSafeAreaInsets()
 
@@ -38,7 +40,9 @@ export default function Back({
       }}
       backgroundColor={backgroundColor}
     >
-      <Entypo name='chevron-left' size={18} color={color || 'white'} />
+      {icon || (
+        <Entypo name='chevron-left' size={18} color={color || 'white'} />
+      )}
     </BackButton>
   )
 }
