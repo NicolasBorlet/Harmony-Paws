@@ -3,11 +3,12 @@ import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
+import { Colors } from '@/constants/Colors'
+import * as Burnt from 'burnt'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import {
-  Alert,
   AppState,
   KeyboardAvoidingView,
   Platform,
@@ -54,7 +55,12 @@ export default function Login() {
     try {
       await signIn(email, password)
     } catch (error: any) {
-      Alert.alert(error.message)
+      Burnt.toast({
+        title: i18n.t('global.error'),
+        preset: 'error',
+        message: error.message,
+        haptic: 'error',
+      })
     } finally {
       setLoading(false)
     }
@@ -135,8 +141,10 @@ export default function Login() {
           </View>
           <StandardButton
             onPress={handleSignIn}
-            color='#572B84'
+            color={Colors.purple[500]}
+            pressedColor='#3D1F5C'
             disabled={loading || !email || !password}
+            disabledText={i18n.t('auth.fieldEmpty')}
           >
             <BodyMedium color='#fff'>
               {loading ? i18n.t('auth.signingIn') : i18n.t('auth.signIn')}

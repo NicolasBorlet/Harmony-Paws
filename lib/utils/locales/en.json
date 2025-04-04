@@ -197,5 +197,21 @@
   },
   "height": {
     "heightTracking": "Height tracking"
+  },
+  "filter": {
+    "title": "Filters",
+    "clear": "Clear",
+    "confirm": "Confirm",
+    "sex": "Sex",
+    "male": "Male",
+    "female": "Female",
+    "dominance": "Dominance",
+    "neutral": "Neutral",
+    "dominant": "Dominant",
+    "dominated": "Dominated",
+    "activityType": "Activity type",
+    "forest": "Forest",
+    "city": "City",
+    "beach": "Beach"
   }
 }

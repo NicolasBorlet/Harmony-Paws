@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
+import { rideFilters } from '../observables/filter-observable'
 import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
@@ -30,15 +31,33 @@ export const getPaginatedActivities = async (
 
     logDev(`Fetching activities from ${from} to ${to}`)
 
-    // Only select fields we actually need
-    const { data, error, count } = await supabase
+    // Créer la requête de base
+    let query = supabase
       .from('activities')
-      .select('id, place, date, duration, created_at, updated_at, visibility', {
-        count: 'exact',
-      })
+      .select(
+        'id, place, date, duration, created_at, updated_at, visibility, type',
+        {
+          count: 'exact',
+        },
+      )
+      .eq('visibility', ActivityVisibility.PUBLIC)
+
+    // Appliquer les filtres
+    const filters = rideFilters.get()
+    if (filters.type) {
+      query = query.eq('type', filters.type)
+    }
+    if (filters.date) {
+      query = query.eq('date', filters.date)
+    }
+    if (filters.duration) {
+      query = query.eq('duration', filters.duration)
+    }
+
+    // Ajouter le tri et la pagination
+    const { data, error, count } = await query
       .range(from, to)
       .order('created_at', { ascending: false })
-      .eq('visibility', ActivityVisibility.PUBLIC)
 
     if (error) {
       throw handleSupabaseError(error, 'activities')
@@ -52,7 +71,7 @@ export const getPaginatedActivities = async (
       }
     }
 
-    // Traiter les images individuellement avec Edge Functions
+    // Process activities with images
     const activitiesWithImages = await Promise.all(
       data.map(async activity => ({
         ...activity,
@@ -75,8 +94,15 @@ export const getPaginatedActivities = async (
 }
 
 export const usePaginatedActivities = (pageSize: number = 5) => {
+  const filters = rideFilters.get()
   return useInfiniteQuery({
-    queryKey: ['activities', 'infinite'],
+    queryKey: [
+      'activities',
+      'infinite',
+      filters.type,
+      filters.date,
+      filters.duration,
+    ],
     queryFn: ({ pageParam = 0 }) => getPaginatedActivities(pageParam, pageSize),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined

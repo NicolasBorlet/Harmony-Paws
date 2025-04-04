@@ -1,5 +1,6 @@
 import { Database } from '@/database.types'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { dogFilters } from '../observables/filter-observable'
 import { supabase } from '../supabase'
 import { getImageUrl } from '../utils/get-image-url'
 import {
@@ -65,10 +66,27 @@ export const getPaginatedDogs = async (
     const from = page * pageSize
     const to = from + pageSize - 1
 
-    // Only select required fields
-    const { data, error, count } = await supabase
+    // Créer la requête de base
+    let query = supabase
       .from('dogs')
-      .select('id, name, age, sex, created_at, updated_at', { count: 'exact' })
+      .select('id, name, age, sex, created_at, updated_at, dominance', {
+        count: 'exact',
+      })
+
+    // Appliquer les filtres
+    const filters = dogFilters.get()
+    if (filters.sex) {
+      query = query.eq('sex', filters.sex)
+    }
+    if (filters.dominance) {
+      query = query.eq('dominance', filters.dominance)
+    }
+    if (filters.age) {
+      query = query.eq('age', filters.age)
+    }
+
+    // Ajouter le tri et la pagination
+    const { data, error, count } = await query
       .range(from, to)
       .order('created_at', { ascending: false })
 
@@ -81,11 +99,10 @@ export const getPaginatedDogs = async (
       }
     }
 
-    // Process dogs with images - use Edge Functions for each dog
+    // Process dogs with images
     const dogsWithImages = await Promise.all(
       data.map(async dog => ({
         ...dog,
-        // Utiliser Edge Function pour récupérer l'image
         image: await getImageUrl(dog.id.toString()),
         created_at: formatDate(dog.created_at),
         updated_at: formatDate(dog.updated_at),
@@ -105,8 +122,9 @@ export const getPaginatedDogs = async (
 
 // Hook with consistent options
 export const usePaginatedDogs = (pageSize: number = 5) => {
+  const filters = dogFilters.get()
   return useInfiniteQuery({
-    queryKey: ['dogs', 'infinite'],
+    queryKey: ['dogs', 'infinite', filters.sex, filters.age, filters.dominance],
     queryFn: ({ pageParam = 0 }) => getPaginatedDogs(pageParam, pageSize),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
@@ -135,7 +153,8 @@ export const getDogDetails = async (dogId: string) => {
         owner:owner_id (
           id,
           first_name,
-          last_name
+          last_name,
+          age
         ),
         breed:breed_id (
           name
