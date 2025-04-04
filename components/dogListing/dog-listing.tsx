@@ -1,5 +1,6 @@
 import { usePaginatedDogs } from '@/lib/api/dog'
 import { DogListingInterface } from '@/lib/api/types'
+import { observer } from '@legendapp/state/react'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
 import { useCallback, useMemo } from 'react'
@@ -9,7 +10,7 @@ import LoaderComponent from '../loader'
 import ListingLoader, { ItemType, LoaderType } from '../loader/listing-loader'
 import DogItemListing from './dog-item-listing'
 
-export default function DogListing({ scrollY }: { scrollY: any }) {
+function DogListing({ scrollY }: { scrollY: any }) {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePaginatedDogs(5)
 
@@ -46,7 +47,8 @@ export default function DogListing({ scrollY }: { scrollY: any }) {
     [handleDogPress],
   )
 
-  if (isLoading && !allDogs.length) {
+  // Afficher le loader uniquement lors du chargement initial ou du changement des filtres actuels
+  if (isLoading) {
     return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.DOG} />
   }
 
@@ -69,3 +71,5 @@ export default function DogListing({ scrollY }: { scrollY: any }) {
     />
   )
 }
+
+export default observer(DogListing)

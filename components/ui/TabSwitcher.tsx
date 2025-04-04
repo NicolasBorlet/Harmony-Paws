@@ -1,11 +1,13 @@
 import { i18n } from '@/app/_layout'
+import DogIcon from '@/assets/svg/dog-icon'
+import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated'
 
 type Tab = {
   id: 'dog' | 'ride'
-  icon: keyof typeof Ionicons.glyphMap
+  icon: React.ReactNode
   label: string
 }
 
@@ -21,10 +23,24 @@ export default function TabSwitcher({
   language,
 }: Props) {
   const TABS: Tab[] = [
-    { id: 'dog', icon: 'paw', label: i18n.t('global.dogs') },
+    {
+      id: 'dog',
+      icon: (
+        <DogIcon
+          color={selectedTab === 'dog' ? Colors.white : Colors.orange[500]}
+        />
+      ),
+      label: i18n.t('global.dogs'),
+    },
     {
       id: 'ride',
-      icon: 'car-sport',
+      icon: (
+        <Ionicons
+          name='paw'
+          size={24}
+          color={selectedTab === 'ride' ? Colors.white : Colors.orange[500]}
+        />
+      ),
       label: i18n.t('global.rides'),
     },
   ]
@@ -48,11 +64,7 @@ export default function TabSwitcher({
           style={styles.tab}
           onPress={() => onTabChange(tab.id)}
         >
-          <Ionicons
-            name={tab.icon}
-            size={24}
-            color={selectedTab === tab.id ? '#fff' : '#F7A400'}
-          />
+          {tab.icon}
           <Text
             style={[
               styles.label,

@@ -61,7 +61,8 @@
     "signUp": "S'inscrire",
     "noAccount": "Vous n'avez pas de compte ?",
     "alreadyAccount": "Vous avez déjà un compte ?",
-    "signUpLink": "Créer un compte"
+    "signUpLink": "Créer un compte",
+    "fieldEmpty": "Tous les champs sont obligatoires"
   },
   "home": {
     "welcome": "Salut",
@@ -212,5 +213,21 @@
   },
   "weight": {
     "weightTracking": "Suivi du poids"
+  },
+  "filter": {
+    "title": "Filtres",
+    "clear": "Effacer",
+    "confirm": "Confirmer",
+    "sex": "Sexe",
+    "male": "Mâle",
+    "female": "Femelle",
+    "dominance": "Dominance",
+    "neutral": "Neutre",
+    "dominant": "Dominant",
+    "dominated": "Dominé",
+    "activityType": "Type d'activité",
+    "forest": "Forêt",
+    "city": "Ville",
+    "beach": "Plage"
   }
 }

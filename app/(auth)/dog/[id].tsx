@@ -15,7 +15,10 @@ import {
   ExtraSmallMedium,
 } from '@/components/ui/text'
 import { GridItem, GridItemBackground } from '@/components/ui/view'
+import { Colors } from '@/constants/Colors'
 import { useDogDetails } from '@/lib/api/dog'
+import { user$ } from '@/lib/observables/session-observable'
+import * as Burnt from 'burnt'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
@@ -26,12 +29,11 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors'
-
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
   const { data, isLoading } = useDogDetails(id as string)
 
+  const user = user$.get()
   const insets = useSafeAreaInsets()
 
   const bottomPosition = useSharedValue(-100)
@@ -149,12 +151,25 @@ export default function DogDetails() {
           <View style={styles.infoContainer}>
             <BodyTitle title={i18n.t('dog.myMaster')} />
             <Pressable
-              onPress={() =>
-                router.push({
-                  pathname: '/user/[id]',
-                  params: { id: data.owner.id },
-                })
-              }
+              onPress={() => {
+                console.log('user?.id', user?.id)
+                console.log('data.owner.id', data.owner.id)
+                if (user?.id === data.owner.id) {
+                  Burnt.toast({
+                    title: 'Vous êtes le maître de ce chien',
+                    preset: 'error',
+                    message:
+                      'Vous ne pouvez pas vous ajouter vous-même comme ami',
+                    haptic: 'error',
+                  })
+                  return
+                } else {
+                  router.push({
+                    pathname: '/user/[id]',
+                    params: { id: data.owner.id },
+                  })
+                }
+              }}
             >
               <MasterDogCardComponent
                 masterData={{

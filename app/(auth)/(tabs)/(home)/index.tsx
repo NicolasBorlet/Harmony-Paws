@@ -7,22 +7,23 @@ import { HomeSkeleton } from '@/components/skeletons/home-skeleton'
 import { MapButton } from '@/components/ui/button'
 import TabSwitcher from '@/components/ui/TabSwitcher'
 import { Small } from '@/components/ui/text'
+import { tabState } from '@/lib/observables/tab-observable'
 import { Ionicons } from '@expo/vector-icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { observer } from '@legendapp/state/react'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { View } from 'react-native'
 import { GestureHandlerRootView, Pressable } from 'react-native-gesture-handler'
 import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function HomeScreen() {
+function HomeScreen() {
   const insets = useSafeAreaInsets()
-
-  const [selectedTab, setSelectedTab] = useState<'dog' | 'ride'>('dog')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const scrollY = useSharedValue(0)
+  const currentTab = tabState.get()
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -34,7 +35,7 @@ export default function HomeScreen() {
 
   const onTabChange = useCallback((tab: 'dog' | 'ride') => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    setSelectedTab(tab)
+    tabState.set(tab)
   }, [])
 
   // Simuler un état de chargement pour le test du skeleton
@@ -62,7 +63,7 @@ export default function HomeScreen() {
           }}
         >
           <TabSwitcher
-            selectedTab={selectedTab}
+            selectedTab={currentTab}
             onTabChange={onTabChange}
             language={i18n.locale as 'fr' | 'en'}
           />
@@ -77,7 +78,7 @@ export default function HomeScreen() {
         </View>
       </View>
       <View style={{ flex: 1 }}>
-        {selectedTab === 'dog' ? (
+        {currentTab === 'dog' ? (
           <DogListing scrollY={scrollY} />
         ) : (
           <RideListing scrollY={scrollY} />
@@ -94,3 +95,5 @@ export default function HomeScreen() {
     </GestureHandlerRootView>
   )
 }
+
+export default observer(HomeScreen)

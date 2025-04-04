@@ -14,7 +14,6 @@ import { session$, user$ } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
-import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
@@ -32,18 +31,6 @@ export default function AccountScreen() {
 
   const user = user$.get()
   const { data: dogs } = useDogsFromUserId(user?.id)
-
-  const handleToast = () => {
-    console.log('user', user)
-    console.log('dogs', dogs)
-
-    Burnt.toast({
-      title: 'Burnt not installed.',
-      preset: 'error',
-      message: 'See your downloads.',
-      haptic: 'error',
-    })
-  }
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>

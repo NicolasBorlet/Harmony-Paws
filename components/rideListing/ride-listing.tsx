@@ -1,4 +1,5 @@
 import { usePaginatedActivities } from '@/lib/api/ride'
+import { observer } from '@legendapp/state/react'
 import { FlashList } from '@shopify/flash-list'
 import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
@@ -8,7 +9,7 @@ import ListingLoader, { ItemType, LoaderType } from '../loader/listing-loader'
 import { Body } from '../ui/text'
 import RideItemListing from './ride-item-listing'
 
-export default function RideListing({ scrollY }: { scrollY: any }) {
+function RideListing({ scrollY }: { scrollY: any }) {
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePaginatedActivities(5)
 
@@ -20,7 +21,7 @@ export default function RideListing({ scrollY }: { scrollY: any }) {
     }
   }
 
-  if (isLoading && !allActivities.length) {
+  if (isLoading) {
     return <ListingLoader type={LoaderType.LISTING} itemType={ItemType.RIDE} />
   }
 
@@ -56,3 +57,5 @@ export default function RideListing({ scrollY }: { scrollY: any }) {
     />
   )
 }
+
+export default observer(RideListing)

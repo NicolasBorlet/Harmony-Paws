@@ -29,6 +29,7 @@ interface ButtonProps extends PressableProps {
 interface StandardButtonProps extends ButtonProps, PropsWithChildren {
   onPress?: () => void
   disabledText?: string
+  pressedColor?: string
 }
 
 const StyledButton = styled.Pressable<ButtonProps>`
@@ -81,7 +82,8 @@ const StandardButton: FC<StandardButtonProps> = ({
   onPress,
   outlined,
   disabled,
-  color = '#F49819',
+  color = Colors.orange[500],
+  pressedColor = '#F5B265',
   disabledText = "Cette action n'est pas disponible",
   ...props
 }) => {
@@ -93,7 +95,11 @@ const StandardButton: FC<StandardButtonProps> = ({
       [0, 1],
       [
         outlined ? 'transparent' : disabled ? '#F0B461' : color,
-        outlined ? 'rgba(244, 152, 25, 0.1)' : disabled ? '#F0B461' : '#F5B265',
+        outlined
+          ? 'rgba(244, 152, 25, 0.1)'
+          : disabled
+            ? '#F0B461'
+            : pressedColor,
       ],
     )
 

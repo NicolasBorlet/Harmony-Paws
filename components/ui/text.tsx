@@ -1,23 +1,23 @@
-import { Purple } from '@/constants/Colors'
+import { Colors } from '@/constants/Colors'
 import styled from 'styled-components/native'
 
 const SpecialTitle = styled.Text<{ color?: string }>`
   font-size: 24px;
-  color: ${props => props.color || Purple};
+  color: ${props => props.color || Colors.purple[500]};
   font-family: RoundsBlack;
   text-transform: uppercase;
 `
 
 const SpecialTitle_3 = styled.Text<{ color?: string }>`
   font-size: 22px;
-  color: ${props => props.color || Purple};
+  color: ${props => props.color || Colors.purple[500]};
   font-family: RoundsBlack;
   text-transform: uppercase;
 `
 
 const OnBoardingTitle = styled.Text<{ color?: string }>`
   font-size: 22px;
-  color: ${props => props.color || Purple};
+  color: ${props => props.color || Colors.purple[500]};
   font-family: Montserrat_700Bold;
 `
 
