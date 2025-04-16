@@ -17,9 +17,10 @@ export type Database = {
           duration: string | null
           id: number
           place: string | null
-          type: Database['public']['Enums']['activity_type']
+          status: Database["public"]["Enums"]["activity_status"]
+          type: Database["public"]["Enums"]["activity_type"]
           updated_at: string | null
-          visibility: Database['public']['Enums']['activity_visibility']
+          visibility: Database["public"]["Enums"]["activity_visibility"]
         }
         Insert: {
           created_at?: string | null
@@ -28,9 +29,10 @@ export type Database = {
           duration?: string | null
           id?: number
           place?: string | null
-          type: Database['public']['Enums']['activity_type']
+          status?: Database["public"]["Enums"]["activity_status"]
+          type: Database["public"]["Enums"]["activity_type"]
           updated_at?: string | null
-          visibility: Database['public']['Enums']['activity_visibility']
+          visibility: Database["public"]["Enums"]["activity_visibility"]
         }
         Update: {
           created_at?: string | null
@@ -39,17 +41,18 @@ export type Database = {
           duration?: string | null
           id?: number
           place?: string | null
-          type?: Database['public']['Enums']['activity_type']
+          status?: Database["public"]["Enums"]["activity_status"]
+          type?: Database["public"]["Enums"]["activity_type"]
           updated_at?: string | null
-          visibility?: Database['public']['Enums']['activity_visibility']
+          visibility?: Database["public"]["Enums"]["activity_visibility"]
         }
         Relationships: [
           {
-            foreignKeyName: 'activities_creator_id_users_id_fk'
-            columns: ['creator_id']
+            foreignKeyName: "activities_creator_id_users_id_fk"
+            columns: ["creator_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -60,7 +63,7 @@ export type Database = {
           id: number
           receiver_id: number
           sender_id: number
-          status: Database['public']['Enums']['friend_request_status'] | null
+          status: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at: string | null
         }
         Insert: {
@@ -69,7 +72,7 @@ export type Database = {
           id?: number
           receiver_id: number
           sender_id: number
-          status?: Database['public']['Enums']['friend_request_status'] | null
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at?: string | null
         }
         Update: {
@@ -78,30 +81,30 @@ export type Database = {
           id?: number
           receiver_id?: number
           sender_id?: number
-          status?: Database['public']['Enums']['friend_request_status'] | null
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'activity_invitations_activity_id_fkey'
-            columns: ['activity_id']
+            foreignKeyName: "activity_invitations_activity_id_fkey"
+            columns: ["activity_id"]
             isOneToOne: true
-            referencedRelation: 'activities'
-            referencedColumns: ['id']
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'activity_invitations_receiver_id_fkey'
-            columns: ['receiver_id']
+            foreignKeyName: "activity_invitations_receiver_id_fkey"
+            columns: ["receiver_id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'activity_invitations_sender_id_fkey'
-            columns: ['sender_id']
+            foreignKeyName: "activity_invitations_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: true
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -168,18 +171,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'conversation_participants_conversation_id_fkey'
-            columns: ['conversation_id']
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: 'conversations'
-            referencedColumns: ['id']
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'conversation_participants_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "conversation_participants_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -222,7 +225,7 @@ export type Database = {
       documents: {
         Row: {
           created_at: string
-          document_type: Database['public']['Enums']['document_type']
+          document_type: Database["public"]["Enums"]["document_type"]
           dog_id: number
           file_name: string | null
           id: number
@@ -231,7 +234,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          document_type: Database['public']['Enums']['document_type']
+          document_type: Database["public"]["Enums"]["document_type"]
           dog_id: number
           file_name?: string | null
           id?: number
@@ -240,7 +243,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          document_type?: Database['public']['Enums']['document_type']
+          document_type?: Database["public"]["Enums"]["document_type"]
           dog_id?: number
           file_name?: string | null
           id?: number
@@ -249,11 +252,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'documents_dog_id_fkey'
-            columns: ['dog_id']
+            foreignKeyName: "documents_dog_id_fkey"
+            columns: ["dog_id"]
             isOneToOne: false
-            referencedRelation: 'dogs'
-            referencedColumns: ['id']
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -281,18 +284,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'dog_behaviors_behavior_id_fkey'
-            columns: ['behavior_id']
+            foreignKeyName: "dog_behaviors_behavior_id_fkey"
+            columns: ["behavior_id"]
             isOneToOne: false
-            referencedRelation: 'behavior'
-            referencedColumns: ['id']
+            referencedRelation: "behavior"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'dog_behaviors_dog_id_dogs_id_fk'
-            columns: ['dog_id']
+            foreignKeyName: "dog_behaviors_dog_id_fkey"
+            columns: ["dog_id"]
             isOneToOne: false
-            referencedRelation: 'dogs'
-            referencedColumns: ['id']
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -323,65 +326,65 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'dog_measurements_dog_id_fkey'
-            columns: ['dog_id']
+            foreignKeyName: "dog_measurements_dog_id_fkey"
+            columns: ["dog_id"]
             isOneToOne: false
-            referencedRelation: 'dogs'
-            referencedColumns: ['id']
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
           },
         ]
       }
       dogs: {
         Row: {
-          age: number | null
-          breed_id: number | null
+          age: number
+          breed_id: number
           created_at: string | null
           description: string | null
-          dominance: Database['public']['Enums']['dog_dominance'] | null
+          dominance: Database["public"]["Enums"]["dog_dominance"] | null
           id: number
           name: string
-          owner_id: number | null
-          sex: Database['public']['Enums']['dog_sex'] | null
+          owner_id: number
+          sex: Database["public"]["Enums"]["dog_sex"]
           updated_at: string | null
         }
         Insert: {
-          age?: number | null
-          breed_id?: number | null
+          age: number
+          breed_id: number
           created_at?: string | null
           description?: string | null
-          dominance?: Database['public']['Enums']['dog_dominance'] | null
+          dominance?: Database["public"]["Enums"]["dog_dominance"] | null
           id?: number
           name: string
-          owner_id?: number | null
-          sex?: Database['public']['Enums']['dog_sex'] | null
+          owner_id: number
+          sex: Database["public"]["Enums"]["dog_sex"]
           updated_at?: string | null
         }
         Update: {
-          age?: number | null
-          breed_id?: number | null
+          age?: number
+          breed_id?: number
           created_at?: string | null
           description?: string | null
-          dominance?: Database['public']['Enums']['dog_dominance'] | null
+          dominance?: Database["public"]["Enums"]["dog_dominance"] | null
           id?: number
           name?: string
-          owner_id?: number | null
-          sex?: Database['public']['Enums']['dog_sex'] | null
+          owner_id?: number
+          sex?: Database["public"]["Enums"]["dog_sex"]
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'dogs_breed_id_breeds_id_fk'
-            columns: ['breed_id']
+            foreignKeyName: "dogs_breed_id_breeds_id_fk"
+            columns: ["breed_id"]
             isOneToOne: false
-            referencedRelation: 'breeds'
-            referencedColumns: ['id']
+            referencedRelation: "breeds"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'dogs_owner_id_users_id_fk'
-            columns: ['owner_id']
+            foreignKeyName: "dogs_owner_id_fkey"
+            columns: ["owner_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -436,7 +439,7 @@ export type Database = {
           id: number
           recipient_id: number
           sender_id: number
-          status: Database['public']['Enums']['friend_request_status'] | null
+          status: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at: string | null
         }
         Insert: {
@@ -444,7 +447,7 @@ export type Database = {
           id?: number
           recipient_id: number
           sender_id: number
-          status?: Database['public']['Enums']['friend_request_status'] | null
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at?: string | null
         }
         Update: {
@@ -452,23 +455,23 @@ export type Database = {
           id?: number
           recipient_id?: number
           sender_id?: number
-          status?: Database['public']['Enums']['friend_request_status'] | null
+          status?: Database["public"]["Enums"]["friend_request_status"] | null
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: 'friend_requests_recipient_id_fkey'
-            columns: ['recipient_id']
+            foreignKeyName: "friend_requests_recipient_id_fkey"
+            columns: ["recipient_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'friend_requests_sender_id_fkey'
-            columns: ['sender_id']
+            foreignKeyName: "friend_requests_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -496,11 +499,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'lesson_steps_lesson_id_fkey'
-            columns: ['lesson_id']
+            foreignKeyName: "lesson_steps_lesson_id_fkey"
+            columns: ["lesson_id"]
             isOneToOne: false
-            referencedRelation: 'lessons'
-            referencedColumns: ['id']
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -528,11 +531,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'lessons_module_id_fkey'
-            columns: ['module_id']
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
             isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -581,18 +584,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'messages_conversation_id_fkey'
-            columns: ['conversation_id']
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
             isOneToOne: false
-            referencedRelation: 'conversations'
-            referencedColumns: ['id']
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'messages_sender_id_fkey'
-            columns: ['sender_id']
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -617,18 +620,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'lesson_materials_material_id_fkey'
-            columns: ['material_id']
+            foreignKeyName: "lesson_materials_material_id_fkey"
+            columns: ["material_id"]
             isOneToOne: false
-            referencedRelation: 'materials'
-            referencedColumns: ['id']
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'module_materials_module_id_fkey'
-            columns: ['module_id']
+            foreignKeyName: "module_materials_module_id_fkey"
+            columns: ["module_id"]
             isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -665,11 +668,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'modules_formation_id_fkey'
-            columns: ['formation_id']
+            foreignKeyName: "modules_formation_id_fkey"
+            columns: ["formation_id"]
             isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -703,18 +706,18 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'opinions_formation_id_formations_id_fk'
-            columns: ['formation_id']
+            foreignKeyName: "opinions_formation_id_formations_id_fk"
+            columns: ["formation_id"]
             isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'opinions_user_id_users_id_fk'
-            columns: ['user_id']
+            foreignKeyName: "opinions_user_id_users_id_fk"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -766,11 +769,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'steps_activity_id_activities_id_fk'
-            columns: ['activity_id']
+            foreignKeyName: "steps_activity_id_activities_id_fk"
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: 'activities'
-            referencedColumns: ['id']
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -798,24 +801,24 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_activities_activity_id_activities_id_fk'
-            columns: ['activity_id']
+            foreignKeyName: "user_activities_activity_id_activities_id_fk"
+            columns: ["activity_id"]
             isOneToOne: false
-            referencedRelation: 'activities'
-            referencedColumns: ['id']
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_activities_user_id_users_id_fk'
-            columns: ['user_id']
+            foreignKeyName: "user_activities_user_id_users_id_fk"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
       user_progress: {
         Row: {
-          content_type: Database['public']['Enums']['content_type'] | null
+          content_type: Database["public"]["Enums"]["content_type"] | null
           created_at: string
           formation_id: number | null
           id: number
@@ -825,7 +828,7 @@ export type Database = {
           user_id: number | null
         }
         Insert: {
-          content_type?: Database['public']['Enums']['content_type'] | null
+          content_type?: Database["public"]["Enums"]["content_type"] | null
           created_at?: string
           formation_id?: number | null
           id?: number
@@ -835,7 +838,7 @@ export type Database = {
           user_id?: number | null
         }
         Update: {
-          content_type?: Database['public']['Enums']['content_type'] | null
+          content_type?: Database["public"]["Enums"]["content_type"] | null
           created_at?: string
           formation_id?: number | null
           id?: number
@@ -846,38 +849,38 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_progress_formation_id_fkey'
-            columns: ['formation_id']
+            foreignKeyName: "user_progress_formation_id_fkey"
+            columns: ["formation_id"]
             isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_progress_lesson_id_fkey'
-            columns: ['lesson_id']
+            foreignKeyName: "user_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
             isOneToOne: false
-            referencedRelation: 'lessons'
-            referencedColumns: ['id']
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_progress_module_id_fkey'
-            columns: ['module_id']
+            foreignKeyName: "user_progress_module_id_fkey"
+            columns: ["module_id"]
             isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_progress_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_progress_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
       user_purchases: {
         Row: {
-          content_type: Database['public']['Enums']['content_type'] | null
+          content_type: Database["public"]["Enums"]["content_type"] | null
           created_at: string
           formation_id: number | null
           id: number
@@ -886,7 +889,7 @@ export type Database = {
           user_id: number | null
         }
         Insert: {
-          content_type?: Database['public']['Enums']['content_type'] | null
+          content_type?: Database["public"]["Enums"]["content_type"] | null
           created_at?: string
           formation_id?: number | null
           id?: number
@@ -895,7 +898,7 @@ export type Database = {
           user_id?: number | null
         }
         Update: {
-          content_type?: Database['public']['Enums']['content_type'] | null
+          content_type?: Database["public"]["Enums"]["content_type"] | null
           created_at?: string
           formation_id?: number | null
           id?: number
@@ -905,25 +908,25 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'user_purchases_formation_id_fkey'
-            columns: ['formation_id']
+            foreignKeyName: "user_purchases_formation_id_fkey"
+            columns: ["formation_id"]
             isOneToOne: false
-            referencedRelation: 'formations'
-            referencedColumns: ['id']
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_purchases_module_id_fkey'
-            columns: ['module_id']
+            foreignKeyName: "user_purchases_module_id_fkey"
+            columns: ["module_id"]
             isOneToOne: false
-            referencedRelation: 'modules'
-            referencedColumns: ['id']
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'user_purchases_user_id_fkey'
-            columns: ['user_id']
+            foreignKeyName: "user_purchases_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: 'users'
-            referencedColumns: ['id']
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -972,11 +975,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'users_role_id_roles_id_fk'
-            columns: ['role_id']
+            foreignKeyName: "users_role_id_roles_id_fk"
+            columns: ["role_id"]
             isOneToOne: false
-            referencedRelation: 'roles'
-            referencedColumns: ['id']
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1007,11 +1010,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'vaccinations_dog_id_fkey'
-            columns: ['dog_id']
+            foreignKeyName: "vaccinations_dog_id_fkey"
+            columns: ["dog_id"]
             isOneToOne: false
-            referencedRelation: 'dogs'
-            referencedColumns: ['id']
+            referencedRelation: "dogs"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1023,13 +1026,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      activity_type: 'forest' | 'city' | 'plage'
-      activity_visibility: 'private' | 'public'
-      content_type: 'formation' | 'module' | 'lesson'
-      document_type: 'invoice' | 'prescription'
-      dog_dominance: 'neutral' | 'dominant' | 'dominated'
-      dog_sex: 'male' | 'female'
-      friend_request_status: 'accepted' | 'refused' | 'pending'
+      activity_status: "finished" | "in progress" | "not started"
+      activity_type: "forest" | "city" | "plage"
+      activity_visibility: "private" | "public"
+      content_type: "formation" | "module" | "lesson"
+      document_type: "invoice" | "prescription"
+      dog_dominance: "neutral" | "dominant" | "dominated"
+      dog_sex: "male" | "female"
+      friend_request_status: "accepted" | "refused" | "pending"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1037,27 +1041,29 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, 'public'>]
+type DefaultSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] &
-        PublicSchema['Views'])
-    ? (PublicSchema['Tables'] &
-        PublicSchema['Views'])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -1065,20 +1071,22 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema['Tables']
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -1086,20 +1094,22 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends
-    | keyof PublicSchema['Tables']
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -1107,29 +1117,46 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends
-    | keyof PublicSchema['Enums']
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
-    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
-    ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      activity_status: ["finished", "in progress", "not started"],
+      activity_type: ["forest", "city", "plage"],
+      activity_visibility: ["private", "public"],
+      content_type: ["formation", "module", "lesson"],
+      document_type: ["invoice", "prescription"],
+      dog_dominance: ["neutral", "dominant", "dominated"],
+      dog_sex: ["male", "female"],
+      friend_request_status: ["accepted", "refused", "pending"],
+    },
+  },
+} as const

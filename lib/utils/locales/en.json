@@ -26,7 +26,10 @@
     "disconected": "Disconnect",
     "formations": "Formations",
     "skip": "Skip",
-    "validate": "Validate"
+    "validate": "Validate",
+    "history": "History",
+    "loading": "Loading...",
+    "success": "Success"
   },
   "tabbar": {
     "home": "Home",

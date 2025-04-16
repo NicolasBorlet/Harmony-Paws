@@ -7,6 +7,7 @@ import { HomeSkeleton } from '@/components/skeletons/home-skeleton'
 import { MapButton } from '@/components/ui/button'
 import TabSwitcher from '@/components/ui/TabSwitcher'
 import { Small } from '@/components/ui/text'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
 import { tabState } from '@/lib/observables/tab-observable'
 import { Ionicons } from '@expo/vector-icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -24,13 +25,12 @@ function HomeScreen() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
   const scrollY = useSharedValue(0)
   const currentTab = tabState.get()
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present()
-  }, [])
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index)
   }, [])
 
   const onTabChange = useCallback((tab: 'dog' | 'ride') => {
@@ -47,7 +47,11 @@ function HomeScreen() {
 
   return (
     <GestureHandlerRootView
-      style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}
+      style={{
+        flex: 1,
+        paddingTop: insets.top + (isActivityActive ? 96 : 0),
+        backgroundColor: 'white',
+      }}
     >
       <View>
         <View style={{ paddingHorizontal: 16 }}>
@@ -88,10 +92,7 @@ function HomeScreen() {
         <Small>{i18n.t('global.map')}</Small>
         <Ionicons name='map' size={18} color='white' />
       </MapButton>
-      <FilterComponent
-        bottomSheetModalRef={bottomSheetModalRef}
-        handleSheetChanges={handleSheetChanges}
-      />
+      <FilterComponent bottomSheetModalRef={bottomSheetModalRef} />
     </GestureHandlerRootView>
   )
 }

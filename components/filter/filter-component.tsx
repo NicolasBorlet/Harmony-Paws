@@ -9,7 +9,7 @@ import {
 import { observer } from '@legendapp/state/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { StandardCheckbox } from '../checkbox/standardCheckbox'
 import { StandardButton } from '../ui/button'
@@ -21,7 +21,7 @@ const FilterComponent = observer(
     handleSheetChanges,
   }: {
     bottomSheetModalRef: React.RefObject<BottomSheetModal>
-    handleSheetChanges: (index: number) => void
+    handleSheetChanges?: (index: number) => void
   }) => {
     const insets = useSafeAreaInsets()
 
@@ -159,7 +159,10 @@ const FilterComponent = observer(
         snapPoints={snapPoints}
       >
         <BottomSheetView
-          style={[styles.container, { paddingBottom: insets.bottom }]}
+          style={[
+            styles.container,
+            { paddingBottom: Platform.OS === 'ios' ? insets.bottom : 32 },
+          ]}
         >
           <View style={styles.header}>
             <Body style={styles.title}>{i18n.t('filter.title')}</Body>

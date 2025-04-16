@@ -1,6 +1,7 @@
 import { Database } from '@/database.types'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { dogFilters } from '../observables/filter-observable'
+import { user$ } from '../observables/session-observable'
 import { supabase } from '../supabase'
 import { getImageUrl } from '../utils/get-image-url'
 import {
@@ -61,6 +62,7 @@ export const useDogsFromUserId = (userId: string) => {
 export const getPaginatedDogs = async (
   page: number = 0,
   pageSize: number = 10,
+  excludeUserId?: number,
 ) => {
   try {
     const from = page * pageSize
@@ -72,6 +74,11 @@ export const getPaginatedDogs = async (
       .select('id, name, age, sex, created_at, updated_at, dominance', {
         count: 'exact',
       })
+
+    // Exclure les chiens de l'utilisateur connecté
+    if (excludeUserId) {
+      query = query.neq('owner_id', excludeUserId)
+    }
 
     // Appliquer les filtres
     const filters = dogFilters.get()
@@ -99,7 +106,7 @@ export const getPaginatedDogs = async (
       }
     }
 
-    // Process dogs with images
+    // Process dog data with image URLs
     const dogsWithImages = await Promise.all(
       data.map(async dog => ({
         ...dog,
@@ -123,9 +130,18 @@ export const getPaginatedDogs = async (
 // Hook with consistent options
 export const usePaginatedDogs = (pageSize: number = 5) => {
   const filters = dogFilters.get()
+  const userId = user$.get()?.id
   return useInfiniteQuery({
-    queryKey: ['dogs', 'infinite', filters.sex, filters.age, filters.dominance],
-    queryFn: ({ pageParam = 0 }) => getPaginatedDogs(pageParam, pageSize),
+    queryKey: [
+      'dogs',
+      'infinite',
+      filters.sex,
+      filters.age,
+      filters.dominance,
+      userId,
+    ],
+    queryFn: ({ pageParam = 0 }) =>
+      getPaginatedDogs(pageParam, pageSize, userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length

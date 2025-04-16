@@ -10,6 +10,7 @@ import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
 import { session$, user$ } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
@@ -26,6 +27,8 @@ export const storage = new MMKV()
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets()
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   const scrollY = useSharedValue(0)
 
@@ -33,7 +36,12 @@ export default function AccountScreen() {
   const { data: dogs } = useDogsFromUserId(user?.id)
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.container,
+        { paddingTop: insets.top + (isActivityActive ? 96 : 0) },
+      ]}
+    >
       <View style={{ paddingHorizontal: 16 }}>
         <AccountHeader scrollY={scrollY} />
       </View>

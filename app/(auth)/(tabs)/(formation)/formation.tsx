@@ -4,6 +4,7 @@ import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'
 import UserFormationListing from '@/components/formationListing/user-formation-listing'
 import Divider from '@/components/ui/divider'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
 import { useStripe } from '@stripe/stripe-react-native'
 import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
@@ -43,6 +44,8 @@ export default function Formation() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
   const scrollY = useSharedValue(0)
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   // useEffect(() => {
   //   async function initialize() {
@@ -222,7 +225,7 @@ export default function Formation() {
       style={[
         styles.container,
         {
-          paddingTop: insets.top,
+          paddingTop: insets.top + (isActivityActive ? 96 : 0),
         },
       ]}
     >

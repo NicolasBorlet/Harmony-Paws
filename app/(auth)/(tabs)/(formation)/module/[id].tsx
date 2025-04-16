@@ -18,7 +18,7 @@ import { Entypo, FontAwesome } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { router, useLocalSearchParams } from 'expo-router'
 import React, { useEffect } from 'react'
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Module() {
@@ -38,7 +38,7 @@ export default function Module() {
 
   return (
     <>
-      <Back />
+      <Back top={Platform.OS === 'ios' ? insets.top : 24} />
       <StandardScrollView
         headerImage={data?.image}
         paddingHorizontal={0}

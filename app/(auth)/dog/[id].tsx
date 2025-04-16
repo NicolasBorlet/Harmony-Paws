@@ -76,7 +76,7 @@ export default function DogDetails() {
 
   return (
     <>
-      <Back />
+      <Back top={Platform.OS === 'ios' ? insets.top : 24} />
       <ParallaxScrollView headerImage={data?.image || ''}>
         <View
           style={[
@@ -188,11 +188,13 @@ export default function DogDetails() {
           </View>
         </View>
       </ParallaxScrollView>
-      <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-        <StandardButton onPress={() => router.push('/dog/invitation')}>
-          <BodyMedium color='#fff'>{i18n.t('dog.rideInvitation')}</BodyMedium>
-        </StandardButton>
-      </Animated.View>
+      {data.owner.id !== user?.id && (
+        <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+          <StandardButton onPress={() => router.push('/dog/invitation')}>
+            <BodyMedium color='#fff'>{i18n.t('dog.rideInvitation')}</BodyMedium>
+          </StandardButton>
+        </Animated.View>
+      )}
     </>
   )
 }
