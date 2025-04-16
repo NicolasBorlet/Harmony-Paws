@@ -19,8 +19,8 @@ import { AntDesign } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { ScrollView, View } from 'react-native'
-
+import { Platform, ScrollView, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function FormationDetails() {
   const user = user$.get()
   const { id } = useLocalSearchParams()
@@ -29,6 +29,8 @@ export default function FormationDetails() {
     isLoading,
     error,
   } = useFormationById(Number(id), user.id)
+
+  const insets = useSafeAreaInsets()
 
   const [selectedTab, setSelectedTab] = useState<'about' | 'advice'>('about')
 
@@ -56,7 +58,11 @@ export default function FormationDetails() {
 
   return (
     <>
-      <Back backgroundColor='#fff' color='black' />
+      <Back
+        backgroundColor='#fff'
+        color='black'
+        top={Platform.OS === 'ios' ? insets.top : 24}
+      />
       <ParallaxScrollView
         headerImage={formation.image || ''}
         paddingHorizontal={0}

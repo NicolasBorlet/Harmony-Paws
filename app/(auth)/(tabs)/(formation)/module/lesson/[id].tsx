@@ -53,11 +53,11 @@ export default function Lesson() {
   return (
     <SafeAreaView
       style={{
-        paddingHorizontal: 20,
-        paddingTop: 32,
+        paddingTop: 24,
         gap: 32,
         flex: 1,
         paddingBottom: insets.bottom,
+        backgroundColor: '#fff',
       }}
     >
       <Back position='relative' />

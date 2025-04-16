@@ -72,7 +72,7 @@ export default function RideDetails() {
 
   return (
     <>
-      <Back />
+      <Back top={Platform.OS === 'ios' ? insets.top : 24} />
       <ParallaxScrollView headerImage={activity.image || ''}>
         <View
           style={[

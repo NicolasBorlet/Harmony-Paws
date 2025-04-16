@@ -1,5 +1,7 @@
+import { Database } from '@/database.types'
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { rideFilters } from '../observables/filter-observable'
+import { user$ } from '../observables/session-observable'
 import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
@@ -21,9 +23,13 @@ interface ActivityInterface {
   creator_id?: number | null
 }
 
+type ActivityStatus = Database['public']['Enums']['activity_status']
+type ActivityRow = Database['public']['Tables']['activities']['Row']
+
 export const getPaginatedActivities = async (
   page: number = 0,
   pageSize: number = 10,
+  excludeUserId?: number,
 ) => {
   try {
     const from = page * pageSize
@@ -41,6 +47,11 @@ export const getPaginatedActivities = async (
         },
       )
       .eq('visibility', ActivityVisibility.PUBLIC)
+
+    // Exclure les activités de l'utilisateur connecté
+    if (excludeUserId) {
+      query = query.neq('creator_id', excludeUserId)
+    }
 
     // Appliquer les filtres
     const filters = rideFilters.get()
@@ -95,6 +106,7 @@ export const getPaginatedActivities = async (
 
 export const usePaginatedActivities = (pageSize: number = 5) => {
   const filters = rideFilters.get()
+  const userId = user$.get()?.id
   return useInfiniteQuery({
     queryKey: [
       'activities',
@@ -102,8 +114,10 @@ export const usePaginatedActivities = (pageSize: number = 5) => {
       filters.type,
       filters.date,
       filters.duration,
+      userId,
     ],
-    queryFn: ({ pageParam = 0 }) => getPaginatedActivities(pageParam, pageSize),
+    queryFn: ({ pageParam = 0 }) =>
+      getPaginatedActivities(pageParam, pageSize, userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
@@ -215,4 +229,26 @@ export const useCreateActivity = () => {
     mutationFn: createActivity,
     ...defaultMutationOptions,
   })
+}
+
+export const getInProgressActivity = async (userId: number) => {
+  const { data: userActivities, error: userActivitiesError } = await supabase
+    .from('user_activities')
+    .select('activity_id')
+    .eq('user_id', userId)
+
+  if (userActivitiesError) throw userActivitiesError
+  if (!userActivities?.length) return null
+
+  const activityIds = userActivities.map(ua => ua.activity_id)
+
+  const { data: activities, error: activitiesError } = await supabase
+    .from('activities')
+    .select('*')
+    .in('id', activityIds)
+    .eq('status', 'in progress')
+    .single()
+
+  if (activitiesError) throw activitiesError
+  return activities
 }

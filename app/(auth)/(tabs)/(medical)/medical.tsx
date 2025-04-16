@@ -7,6 +7,7 @@ import { Body, ExtraSmall } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
 import { DogListingInterface } from '@/lib/api/types'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
 import { dogMedical$ } from '@/lib/observables/dog-medical-observable'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
@@ -36,6 +37,8 @@ export default function Medical() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [dogs, setDogs] = useState<DogListingInterface[]>([])
   const flashListRef = useRef<FlashList<DogListingInterface>>(null)
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   const user = user$.get()
   const { data: userDogs, isLoading } = useDogsFromUserId(user?.id)
@@ -76,7 +79,7 @@ export default function Medical() {
       style={[
         styles.container,
         {
-          paddingTop: insets.top,
+          paddingTop: insets.top + (isActivityActive ? 96 : 0),
         },
       ]}
     >

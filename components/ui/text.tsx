@@ -1,8 +1,8 @@
 import { Colors } from '@/constants/Colors'
 import styled from 'styled-components/native'
 
-const SpecialTitle = styled.Text<{ color?: string }>`
-  font-size: 24px;
+const SpecialTitle = styled.Text<{ color?: string; fontSize?: number }>`
+  font-size: ${props => props.fontSize || 24}px;
   color: ${props => props.color || Colors.purple[500]};
   font-family: RoundsBlack;
   text-transform: uppercase;
