@@ -104,15 +104,17 @@ export default function DogDetails() {
   return (
     <View style={StyleSheet.absoluteFill}>
       <Back top={Platform.OS === 'ios' ? insets.top : 24} />
-      <Back
-        icon={
-          <Entypo name='dots-three-vertical' size={16} color={Colors.white} />
-        }
-        onPress={handleContextMenuPress}
-        backgroundColor={Colors.purple[500]}
-        top={Platform.OS === 'ios' ? insets.top : 24}
-        right='16px'
-      />
+      {user?.id === data.owner.id && (
+        <Back
+          icon={
+            <Entypo name='dots-three-vertical' size={16} color={Colors.white} />
+          }
+          onPress={handleContextMenuPress}
+          backgroundColor={Colors.purple[500]}
+          top={Platform.OS === 'ios' ? insets.top : 24}
+          right='16px'
+        />
+      )}
       <ContextMenu
         isVisible={isContextMenuVisible}
         onClose={() => setIsContextMenuVisible(false)}
