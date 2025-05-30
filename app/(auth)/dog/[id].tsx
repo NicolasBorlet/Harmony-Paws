@@ -18,6 +18,7 @@ import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogDetails } from '@/lib/api/dog'
 import { user$ } from '@/lib/observables/session-observable'
+import { Entypo } from '@expo/vector-icons'
 import * as Burnt from 'burnt'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
@@ -77,6 +78,15 @@ export default function DogDetails() {
   return (
     <>
       <Back top={Platform.OS === 'ios' ? insets.top : 24} />
+      <Back
+        icon={
+          <Entypo name='dots-three-vertical' size={16} color={Colors.white} />
+        }
+        onPress={() => router.push(`/dog/${id}/edit`)}
+        backgroundColor={Colors.purple[500]}
+        top={Platform.OS === 'ios' ? insets.top : 24}
+        right='16px'
+      />
       <ParallaxScrollView headerImage={data?.image || ''}>
         <View
           style={[
