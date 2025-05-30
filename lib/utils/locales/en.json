@@ -106,7 +106,11 @@
     "myMaster": "My master",
     "nextRide": "Next ride",
     "noNextRide": "No next ride planned.",
-    "rideInvitation": "Let's ride?"
+    "rideInvitation": "Let's ride?",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirmation": "Delete confirmation",
+    "deleteConfirmationMessage": "Are you sure you want to delete this dog?"
   },
   "dogCreation": {
     "whatIsYourDogName": "What is the name of your dog?",
