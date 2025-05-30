@@ -390,44 +390,32 @@ export type Database = {
       }
       formations: {
         Row: {
-          animator_name: string | null
+          animator_name: string
           created_at: string | null
-          date: string | null
-          description: string | null
-          duration: number | null
+          description: string
           id: number
-          name: string | null
-          participant_limit: number | null
-          place: string | null
-          price: number | null
+          name: string
+          price: number
           stripe_item_id: number | null
           updated_at: string | null
         }
         Insert: {
-          animator_name?: string | null
+          animator_name: string
           created_at?: string | null
-          date?: string | null
-          description?: string | null
-          duration?: number | null
+          description: string
           id?: number
-          name?: string | null
-          participant_limit?: number | null
-          place?: string | null
-          price?: number | null
+          name: string
+          price: number
           stripe_item_id?: number | null
           updated_at?: string | null
         }
         Update: {
-          animator_name?: string | null
+          animator_name?: string
           created_at?: string | null
-          date?: string | null
-          description?: string | null
-          duration?: number | null
+          description?: string
           id?: number
-          name?: string | null
-          participant_limit?: number | null
-          place?: string | null
-          price?: number | null
+          name?: string
+          price?: number
           stripe_item_id?: number | null
           updated_at?: string | null
         }
