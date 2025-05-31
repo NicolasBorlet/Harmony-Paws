@@ -8,6 +8,7 @@ import { DogDetailsSkeleton } from '@/components/skeletons/dog-details-skeleton'
 import { StandardButton } from '@/components/ui/button'
 import { ContextMenu } from '@/components/ui/context-menu'
 import Divider from '@/components/ui/divider'
+import Input from '@/components/ui/input'
 import {
   Body,
   BodyBold,
@@ -37,6 +38,7 @@ export default function DogDetails() {
   const { id } = useLocalSearchParams()
   const { data, isLoading } = useDogDetails(id as string)
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
+  const [isModifying, setIsModifying] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
 
   const user = user$.get()
@@ -80,7 +82,17 @@ export default function DogDetails() {
   const contextMenuItems = [
     {
       label: i18n.t('dog.edit'),
-      onPress: () => router.push(`/dog/${id}/edit`),
+      onPress: () => {
+        if (isModifying) {
+          Burnt.toast({
+            title: i18n.t('dog.alreadyModifying'),
+            preset: 'error',
+            haptic: 'error',
+          })
+        } else {
+          setIsModifying(true)
+        }
+      },
       icon: <Entypo name='edit' size={16} color={Colors.light.text} />,
     },
     {
@@ -132,7 +144,29 @@ export default function DogDetails() {
         >
           <View style={styles.infoContainer}>
             <CardTitle color='#000000'>
-              {data.name}, {data.age} ans
+              {isModifying ? (
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 12,
+                    alignItems: 'center',
+                  }}
+                >
+                  <Block>
+                    <Input placeholder={data.name} />
+                  </Block>
+                  <Block>
+                    <Input
+                      placeholder={data.age.toString() + ' ans'}
+                      keyboardType='numeric'
+                      maxLength={2}
+                    />
+                  </Block>
+                </View>
+              ) : (
+                `${data.name}, ${data.age} ans`
+              )}
             </CardTitle>
           </View>
           <View>
@@ -163,10 +197,14 @@ export default function DogDetails() {
           <Divider />
           <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
-            <Body>
-              {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
-              {data.name}.
-            </Body>
+            {isModifying ? (
+              <Input placeholder={data.description} />
+            ) : (
+              <Body>
+                {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
+                {data.name}.
+              </Body>
+            )}
           </View>
           <Divider />
           <View style={styles.infoContainer}>
@@ -191,45 +229,48 @@ export default function DogDetails() {
               )}
             </Block>
           </View>
-          <Divider />
-          <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('dog.myMaster')} />
-            <Pressable
-              onPress={() => {
-                console.log('user?.id', user?.id)
-                console.log('data.owner.id', data.owner.id)
-                if (user?.id === data.owner.id) {
-                  Burnt.toast({
-                    title: 'Vous êtes le maître de ce chien',
-                    preset: 'error',
-                    message:
-                      'Vous ne pouvez pas vous ajouter vous-même comme ami',
-                    haptic: 'error',
-                  })
-                  return
-                } else {
-                  router.push({
-                    pathname: '/user/[id]',
-                    params: { id: data.owner.id },
-                  })
-                }
-              }}
-            >
-              <MasterDogCardComponent
-                masterData={{
-                  first_name: data.owner.first_name,
-                  last_name: data.owner.last_name,
-                  id: data.owner.id,
-                }}
-              />
-            </Pressable>
-          </View>
-          <Divider />
-          <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('dog.nextRide')} />
-            <Body>{i18n.t('dog.noNextRide')}</Body>
-            {/* <RideItemListing rideCardData={data.nextRide} /> */}
-          </View>
+          {!isModifying && (
+            <>
+              <Divider />
+              <View style={styles.infoContainer}>
+                <BodyTitle title={i18n.t('dog.myMaster')} />
+                <Pressable
+                  onPress={() => {
+                    if (user?.id === data.owner.id) {
+                      Burnt.toast({
+                        title: 'Vous êtes le maître de ce chien',
+                        preset: 'error',
+                        message:
+                          'Vous ne pouvez pas vous ajouter vous-même comme ami',
+                        haptic: 'error',
+                      })
+                      return
+                    } else {
+                      router.push({
+                        pathname: '/user/[id]',
+                        params: { id: data.owner.id },
+                      })
+                    }
+                  }}
+                >
+                  <MasterDogCardComponent
+                    masterData={{
+                      first_name: data.owner.first_name,
+                      last_name: data.owner.last_name,
+                      id: data.owner.id,
+                    }}
+                  />
+                </Pressable>
+              </View>
+              <Divider />
+
+              <View style={styles.infoContainer}>
+                <BodyTitle title={i18n.t('dog.nextRide')} />
+                <Body>{i18n.t('dog.noNextRide')}</Body>
+                {/* <RideItemListing rideCardData={data.nextRide} /> */}
+              </View>
+            </>
+          )}
         </View>
       </ParallaxScrollView>
       {data.owner.id !== user?.id && (

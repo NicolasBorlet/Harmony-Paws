@@ -110,7 +110,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "deleteConfirmation": "Delete confirmation",
-    "deleteConfirmationMessage": "Are you sure you want to delete this dog?"
+    "deleteConfirmationMessage": "Are you sure you want to delete this dog?",
+    "alreadyModifying": "You are already modifying this dog"
   },
   "dogCreation": {
     "whatIsYourDogName": "What is the name of your dog?",
