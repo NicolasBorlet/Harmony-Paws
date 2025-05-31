@@ -92,9 +92,12 @@ export default function AccountScreen() {
             horizontal
             ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
             renderItem={({ item }) => (
-              <View key={item.id}>
+              <Pressable
+                key={item.id}
+                onPress={() => router.push(`/dog/${item.id}`)}
+              >
                 <RoundedImage src={item.image} />
-              </View>
+              </Pressable>
             )}
             ListFooterComponent={() => (
               <Pressable

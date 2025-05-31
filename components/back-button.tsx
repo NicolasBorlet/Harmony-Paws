@@ -7,6 +7,7 @@ import { BackButton } from './ui/button'
 export default function Back({
   position,
   left,
+  right,
   onPress,
   backgroundColor,
   color,
@@ -15,6 +16,7 @@ export default function Back({
 }: {
   position?: string
   left?: string
+  right?: string
   onPress?: () => void
   backgroundColor?: string
   color?: string
@@ -27,7 +29,8 @@ export default function Back({
     <BackButton
       onPress={onPress ? onPress : () => router.back()}
       position={position}
-      left={left}
+      left={left || right ? undefined : '16px'}
+      right={right && left ? undefined : '16px'}
       style={{
         marginTop:
           top !== undefined

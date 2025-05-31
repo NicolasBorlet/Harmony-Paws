@@ -18,6 +18,7 @@ interface ButtonProps extends PressableProps {
   onPress?: () => void
   position?: string
   left?: string
+  right?: string
   outlined?: boolean
   shadow?: boolean
   disabled?: boolean
@@ -44,7 +45,8 @@ const StyledButton = styled.Pressable<ButtonProps>`
 
 const BackButton = styled.Pressable<ButtonProps>`
   position: ${(props: ButtonProps) => props.position || 'absolute'};
-  left: ${(props: ButtonProps) => props.left || '16px'};
+  left: ${(props: ButtonProps) => props.left || 'auto'};
+  right: ${(props: ButtonProps) => props.right || 'auto'};
   background-color: ${(props: ButtonProps) =>
     props.backgroundColor || '#F7A400'};
   border-radius: 1000px;
