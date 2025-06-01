@@ -13,6 +13,7 @@ interface Props {
   showTitle?: boolean
   initialSelectedBehaviors?: number[]
   onBehaviorsChange?: (behaviorIds: number[]) => void
+  isModifying?: boolean
 }
 
 export default function DogBehaviorSection({
@@ -20,6 +21,7 @@ export default function DogBehaviorSection({
   showTitle = true,
   initialSelectedBehaviors = [],
   onBehaviorsChange,
+  isModifying = false,
 }: Props) {
   const [selectedBehaviors, setSelectedBehaviors] = useState<number[]>(
     initialSelectedBehaviors,
@@ -74,7 +76,12 @@ export default function DogBehaviorSection({
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.flatList}
+        contentContainerStyle={[
+          styles.flatList,
+          {
+            marginLeft: isModifying ? 0 : 16,
+          },
+        ]}
       />
     </View>
   )
@@ -88,7 +95,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   flatList: {
-    marginLeft: 16,
     gap: 16,
   },
 })
