@@ -290,6 +290,37 @@ export default function DogDetails() {
           </StandardButton>
         </Animated.View>
       )}
+      {isModifying && (
+        <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+          <StandardButton
+            onPress={() => {
+              Burnt.toast({
+                title: i18n.t('global.cancel'),
+                preset: 'done',
+                haptic: 'success',
+              })
+              setIsModifying(false)
+            }}
+            width='50%'
+            color={Colors.red[500]}
+          >
+            <BodyMedium color='#fff'>{i18n.t('global.cancel')}</BodyMedium>
+          </StandardButton>
+          <StandardButton
+            width='50%'
+            onPress={() => {
+              Burnt.toast({
+                title: i18n.t('global.save'),
+                preset: 'done',
+                haptic: 'success',
+              })
+              setIsModifying(false)
+            }}
+          >
+            <BodyMedium color='#fff'>{i18n.t('global.save')}</BodyMedium>
+          </StandardButton>
+        </Animated.View>
+      )}
     </View>
   )
 }
@@ -335,5 +366,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignSelf: 'center',
     paddingHorizontal: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 12,
   },
 })
