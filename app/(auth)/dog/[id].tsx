@@ -1,6 +1,7 @@
 import React, { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
+import DogBehaviorSection from '@/components/dog/creation/behavior-section'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
@@ -18,13 +19,21 @@ import {
 } from '@/components/ui/text'
 import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
+import { useBehaviors } from '@/lib/api/behavior'
 import { useDogDetails } from '@/lib/api/dog'
 import { user$ } from '@/lib/observables/session-observable'
 import { Entypo } from '@expo/vector-icons'
 import * as Burnt from 'burnt'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { Dimensions, Platform, Pressable, StyleSheet, View } from 'react-native'
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native'
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -37,6 +46,8 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window')
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
   const { data, isLoading } = useDogDetails(id as string)
+  const { data: behaviors } = useBehaviors()
+
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
   const [isModifying, setIsModifying] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
@@ -88,7 +99,6 @@ export default function DogDetails() {
           Burnt.toast({
             title: i18n.t('dog.alreadyModifying'),
             preset: 'error',
-            haptic: 'error',
           })
         } else {
           setIsModifying(true)
@@ -103,7 +113,6 @@ export default function DogDetails() {
           title: i18n.t('dog.deleteConfirmation'),
           preset: 'error',
           message: i18n.t('dog.deleteConfirmationMessage'),
-          haptic: 'error',
         })
       },
       icon: <Entypo name='trash' size={16} color={Colors.light.text} />,
@@ -115,213 +124,240 @@ export default function DogDetails() {
   }
 
   return (
-    <View style={StyleSheet.absoluteFill}>
-      <Back top={Platform.OS === 'ios' ? insets.top : 24} />
-      {user?.id === data.owner.id && (
-        <Back
-          icon={
-            <Entypo name='dots-three-vertical' size={16} color={Colors.white} />
-          }
-          onPress={handleContextMenuPress}
-          backgroundColor={Colors.purple[500]}
-          top={Platform.OS === 'ios' ? insets.top : 24}
-          right='16px'
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View style={StyleSheet.absoluteFill}>
+        <Back top={Platform.OS === 'ios' ? insets.top : 24} />
+        {user?.id === data.owner.id && (
+          <Back
+            icon={
+              <Entypo
+                name='dots-three-vertical'
+                size={16}
+                color={Colors.white}
+              />
+            }
+            onPress={handleContextMenuPress}
+            backgroundColor={Colors.purple[500]}
+            top={Platform.OS === 'ios' ? insets.top : 24}
+            right='16px'
+          />
+        )}
+        <ContextMenu
+          isVisible={isContextMenuVisible}
+          onClose={() => setIsContextMenuVisible(false)}
+          items={contextMenuItems}
+          position={contextMenuPosition}
         />
-      )}
-      <ContextMenu
-        isVisible={isContextMenuVisible}
-        onClose={() => setIsContextMenuVisible(false)}
-        items={contextMenuItems}
-        position={contextMenuPosition}
-      />
-      <ParallaxScrollView headerImage={data?.image || ''}>
-        <View
-          style={[
-            styles.container,
-            {
-              paddingBottom: Platform.OS === 'ios' ? insets.bottom : 72,
-            },
-          ]}
-        >
-          <View style={styles.infoContainer}>
-            <CardTitle color='#000000'>
-              {isModifying ? (
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 12,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Block>
-                    <Input placeholder={data.name} />
-                  </Block>
-                  <Block>
-                    <Input
-                      placeholder={data.age.toString() + ' ans'}
-                      keyboardType='numeric'
-                      maxLength={2}
-                    />
-                  </Block>
-                </View>
-              ) : (
-                `${data.name}, ${data.age} ans`
-              )}
-            </CardTitle>
-          </View>
-          <View>
-            <Block
-              row
-              wrap='nowrap'
-              style={{
-                gap: 8,
-              }}
-            >
-              <GridItemBackground height={60}>
-                <BodyBold color={Colors.light.secondary}>
-                  {data.breed.name}
-                </BodyBold>
-              </GridItemBackground>
-              <GridItemBackground height={60}>
-                <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
-              </GridItemBackground>
-              {data.dominance && (
+        <ParallaxScrollView headerImage={data?.image || ''}>
+          <View
+            style={[
+              styles.container,
+              {
+                paddingBottom: Platform.OS === 'ios' ? insets.bottom : 72,
+              },
+            ]}
+          >
+            <View style={styles.infoContainer}>
+              <CardTitle color='#000000'>
+                {isModifying ? (
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: 12,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Block>
+                      <Input placeholder={data.name} />
+                    </Block>
+                    <Block>
+                      <Input
+                        placeholder={data.age.toString() + ' ans'}
+                        keyboardType='numeric'
+                        maxLength={2}
+                      />
+                    </Block>
+                  </View>
+                ) : (
+                  `${data.name}, ${data.age} ans`
+                )}
+              </CardTitle>
+            </View>
+            <View>
+              <Block
+                row
+                wrap='nowrap'
+                style={{
+                  gap: 8,
+                }}
+              >
                 <GridItemBackground height={60}>
                   <BodyBold color={Colors.light.secondary}>
-                    {data.dominance}
+                    {data.breed.name}
                   </BodyBold>
                 </GridItemBackground>
+                <GridItemBackground height={60}>
+                  <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
+                </GridItemBackground>
+                {data.dominance && (
+                  <GridItemBackground height={60}>
+                    <BodyBold color={Colors.light.secondary}>
+                      {data.dominance}
+                    </BodyBold>
+                  </GridItemBackground>
+                )}
+              </Block>
+            </View>
+            <Divider />
+            <View style={styles.infoContainer}>
+              <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
+              {isModifying ? (
+                <Input
+                  placeholder={data.description}
+                  multiline
+                  onContentSizeChange={(event: any) =>
+                    setInputHeight(event.nativeEvent.contentSize.height)
+                  }
+                  style={{
+                    height: Math.max(10, inputHeight),
+                  }}
+                />
+              ) : (
+                <Body>
+                  {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
+                  {data.name}.
+                </Body>
               )}
-            </Block>
-          </View>
-          <Divider />
-          <View style={styles.infoContainer}>
-            <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
-            {isModifying ? (
-              <Input
-                placeholder={data.description}
-                multiline
-                onContentSizeChange={(event: any) =>
-                  setInputHeight(event.nativeEvent.contentSize.height)
-                }
-                style={{
-                  height: Math.max(10, inputHeight),
-                }}
-              />
-            ) : (
-              <Body>
-                {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
-                {data.name}.
-              </Body>
+            </View>
+            <Divider />
+            <View style={styles.infoContainer}>
+              <BodyTitle title={i18n.t('dog.behavior')} />
+              {isModifying ? (
+                <DogBehaviorSection
+                  behaviors={behaviors}
+                  showTitle={false}
+                  initialSelectedBehaviors={data.behaviors.map(b => b.id)}
+                  onBehaviorsChange={newBehaviors => {
+                    // Here you can handle the behavior changes
+                    console.log('New behaviors:', newBehaviors)
+                  }}
+                />
+              ) : (
+                <Block
+                  flex={0}
+                  row
+                  wrap='wrap'
+                  style={{ gap: 12 }}
+                  justifyContent='space-between'
+                >
+                  {data.behaviors.length > 0 ? (
+                    data.behaviors.map(behavior => (
+                      <GridItem key={behavior.id}>
+                        <ExtraSmallMedium color='#F49819'>
+                          {behavior.name}
+                        </ExtraSmallMedium>
+                      </GridItem>
+                    ))
+                  ) : (
+                    <Body>{i18n.t('dog.noBehavior')}</Body>
+                  )}
+                </Block>
+              )}
+            </View>
+            {!isModifying && (
+              <>
+                <Divider />
+                <View style={styles.infoContainer}>
+                  <BodyTitle title={i18n.t('dog.myMaster')} />
+                  <Pressable
+                    onPress={() => {
+                      if (user?.id === data.owner.id) {
+                        Burnt.toast({
+                          title: 'Vous êtes le maître de ce chien',
+                          preset: 'error',
+                          message:
+                            'Vous ne pouvez pas vous ajouter vous-même comme ami',
+                        })
+                        return
+                      } else {
+                        router.push({
+                          pathname: '/user/[id]',
+                          params: { id: data.owner.id },
+                        })
+                      }
+                    }}
+                  >
+                    <MasterDogCardComponent
+                      masterData={{
+                        first_name: data.owner.first_name,
+                        last_name: data.owner.last_name,
+                        id: data.owner.id,
+                      }}
+                    />
+                  </Pressable>
+                </View>
+                <Divider />
+
+                <View style={styles.infoContainer}>
+                  <BodyTitle title={i18n.t('dog.nextRide')} />
+                  <Body>{i18n.t('dog.noNextRide')}</Body>
+                  {/* <RideItemListing rideCardData={data.nextRide} /> */}
+                </View>
+              </>
             )}
           </View>
-          <Divider />
-          <View style={styles.infoContainer}>
-            <BodyTitle title={i18n.t('dog.behavior')} />
-            <Block
-              flex={0}
-              row
-              wrap='wrap'
-              style={{ gap: 12 }}
-              justifyContent='space-between'
-            >
-              {data.behaviors.length > 0 ? (
-                data.behaviors.map(behavior => (
-                  <GridItem key={behavior.id}>
-                    <ExtraSmallMedium color='#F49819'>
-                      {behavior.name}
-                    </ExtraSmallMedium>
-                  </GridItem>
-                ))
-              ) : (
-                <Body>{i18n.t('dog.noBehavior')}</Body>
-              )}
-            </Block>
-          </View>
-          {!isModifying && (
-            <>
-              <Divider />
-              <View style={styles.infoContainer}>
-                <BodyTitle title={i18n.t('dog.myMaster')} />
-                <Pressable
+        </ParallaxScrollView>
+        {data.owner.id !== user?.id && (
+          <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+            <StandardButton onPress={() => router.push('/dog/invitation')}>
+              <BodyMedium color='#fff'>
+                {i18n.t('dog.rideInvitation')}
+              </BodyMedium>
+            </StandardButton>
+          </Animated.View>
+        )}
+        {isModifying && (
+          <Animated.View style={[styles.buttonContainer, animatedStyles]}>
+            <Block row wrap='nowrap' style={{ gap: 12 }}>
+              <Block>
+                <StandardButton
                   onPress={() => {
-                    if (user?.id === data.owner.id) {
-                      Burnt.toast({
-                        title: 'Vous êtes le maître de ce chien',
-                        preset: 'error',
-                        message:
-                          'Vous ne pouvez pas vous ajouter vous-même comme ami',
-                        haptic: 'error',
-                      })
-                      return
-                    } else {
-                      router.push({
-                        pathname: '/user/[id]',
-                        params: { id: data.owner.id },
-                      })
-                    }
+                    Burnt.toast({
+                      title: i18n.t('global.cancel'),
+                      preset: 'done',
+                    })
+                    setIsModifying(false)
+                  }}
+                  color={Colors.red[500]}
+                  pressedColor={Colors.red[400]}
+                >
+                  <BodyMedium color='#fff'>
+                    {i18n.t('global.cancel')}
+                  </BodyMedium>
+                </StandardButton>
+              </Block>
+              <Block>
+                <StandardButton
+                  onPress={() => {
+                    Burnt.toast({
+                      title: i18n.t('global.save'),
+                      preset: 'done',
+                    })
+                    setIsModifying(false)
                   }}
                 >
-                  <MasterDogCardComponent
-                    masterData={{
-                      first_name: data.owner.first_name,
-                      last_name: data.owner.last_name,
-                      id: data.owner.id,
-                    }}
-                  />
-                </Pressable>
-              </View>
-              <Divider />
-
-              <View style={styles.infoContainer}>
-                <BodyTitle title={i18n.t('dog.nextRide')} />
-                <Body>{i18n.t('dog.noNextRide')}</Body>
-                {/* <RideItemListing rideCardData={data.nextRide} /> */}
-              </View>
-            </>
-          )}
-        </View>
-      </ParallaxScrollView>
-      {data.owner.id !== user?.id && (
-        <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-          <StandardButton onPress={() => router.push('/dog/invitation')}>
-            <BodyMedium color='#fff'>{i18n.t('dog.rideInvitation')}</BodyMedium>
-          </StandardButton>
-        </Animated.View>
-      )}
-      {isModifying && (
-        <Animated.View style={[styles.buttonContainer, animatedStyles]}>
-          <StandardButton
-            onPress={() => {
-              Burnt.toast({
-                title: i18n.t('global.cancel'),
-                preset: 'done',
-                haptic: 'success',
-              })
-              setIsModifying(false)
-            }}
-            width='50%'
-            color={Colors.red[500]}
-          >
-            <BodyMedium color='#fff'>{i18n.t('global.cancel')}</BodyMedium>
-          </StandardButton>
-          <StandardButton
-            width='50%'
-            onPress={() => {
-              Burnt.toast({
-                title: i18n.t('global.save'),
-                preset: 'done',
-                haptic: 'success',
-              })
-              setIsModifying(false)
-            }}
-          >
-            <BodyMedium color='#fff'>{i18n.t('global.save')}</BodyMedium>
-          </StandardButton>
-        </Animated.View>
-      )}
-    </View>
+                  <BodyMedium color='#fff'>{i18n.t('global.save')}</BodyMedium>
+                </StandardButton>
+              </Block>
+            </Block>
+          </Animated.View>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -365,7 +401,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     display: 'flex',
     flexDirection: 'row',
     gap: 12,
