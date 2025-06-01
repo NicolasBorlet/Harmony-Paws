@@ -1,45 +1,58 @@
 import { i18n } from '@/app/_layout'
 import CustomPicker from '@/components/picker'
 import { storage } from '@/lib/utils/storage'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Body } from '../../ui/text'
 
-export default function DominanceSection() {
+interface Props {
+  initialDominance?: string
+  onDominanceChange?: (dominance: string) => void
+  isModifying?: boolean
+}
+
+export default function DominanceSection({
+  initialDominance,
+  onDominanceChange,
+  isModifying = false,
+}: Props) {
   const [isPickerVisible, setIsPickerVisible] = useState(false)
+  const [currentDominance, setCurrentDominance] = useState<string | null>(
+    initialDominance || null,
+  )
+
+  useEffect(() => {
+    setCurrentDominance(initialDominance || null)
+  }, [initialDominance])
 
   const handleDominanceSelect = (selectedValues: any[]) => {
     const dominance = selectedValues[0]
-    const currentDog = JSON.parse(storage.getString('dog') || '{}')
-    storage.set(
-      'dog',
-      JSON.stringify({
-        ...currentDog,
-        dominance,
-      }),
-    )
-  }
+    setCurrentDominance(dominance)
 
-  const getCurrentDominance = () => {
-    try {
+    if (!isModifying) {
       const currentDog = JSON.parse(storage.getString('dog') || '{}')
-      return currentDog.dominance
-    } catch {
-      return null
+      storage.set(
+        'dog',
+        JSON.stringify({
+          ...currentDog,
+          dominance,
+        }),
+      )
     }
-  }
 
-  const currentDominance = getCurrentDominance()
+    onDominanceChange?.(dominance)
+    setIsPickerVisible(false)
+  }
 
   return (
-    <View style={styles.container}>
-      <Body color='black'>{i18n.t('dogCreation.dominance')}</Body>
+    <View style={[styles.container, isModifying && { paddingHorizontal: 0 }]}>
+      <Body color='black'>{i18n.t('dogCreation.dominanceQuestion')}</Body>
       <CustomPicker
         isVisible={isPickerVisible}
         onClose={() => setIsPickerVisible(false)}
         onConfirm={handleDominanceSelect}
         type='custom'
-        initialValue={currentDominance?.label || ''}
+        initialValue={currentDominance}
         confirmText='OK'
         cancelText='Annuler'
         columns={[
@@ -53,7 +66,7 @@ export default function DominanceSection() {
       />
       <Pressable style={styles.input} onPress={() => setIsPickerVisible(true)}>
         <Body color='#696969'>
-          {currentDominance?.label || i18n.t('dogCreation.addDogBreed')}
+          {currentDominance || i18n.t('dogCreation.addDominance')}
         </Body>
       </Pressable>
     </View>

@@ -1,7 +1,12 @@
 import React, { i18n } from '@/app/_layout'
 import Back from '@/components/back-button'
 import BodyTitle from '@/components/bodyTitle/body-title'
+import DogAgeSection from '@/components/dog/creation/age-section'
 import DogBehaviorSection from '@/components/dog/creation/behavior-section'
+import DogBreedSection from '@/components/dog/creation/breed-section'
+import DogNameSection from '@/components/dog/creation/dog-name-section'
+import DominanceSection from '@/components/dog/creation/dominance-section'
+import SexSection from '@/components/dog/creation/sex-section'
 import MasterDogCardComponent from '@/components/dog/master-dog-card'
 import Block from '@/components/grid/Block'
 import ParallaxScrollView from '@/components/parallax-scrollview'
@@ -19,7 +24,9 @@ import {
 } from '@/components/ui/text'
 import { GridItem, GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
+import { Database } from '@/database.types'
 import { useBehaviors } from '@/lib/api/behavior'
+import { useBreeds } from '@/lib/api/breed'
 import { useDogDetails } from '@/lib/api/dog'
 import { user$ } from '@/lib/observables/session-observable'
 import { Entypo } from '@expo/vector-icons'
@@ -43,10 +50,34 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 
+type Breed = Database['public']['Tables']['breeds']['Row']
+type Dog = Database['public']['Tables']['dogs']['Row']
+
+const convertToBreed = (breed: any): Breed | null => {
+  if (!breed) return null
+  return {
+    id: breed.id,
+    name: breed.name,
+    created_at: breed.created_at || null,
+    updated_at: breed.updated_at || null,
+  }
+}
+
+const convertToBreeds = (breeds: any[] | undefined): Breed[] | undefined => {
+  if (!breeds) return undefined
+  return breeds.map(breed => ({
+    id: breed.id,
+    name: breed.name,
+    created_at: breed.created_at || null,
+    updated_at: breed.updated_at || null,
+  }))
+}
+
 export default function DogDetails() {
   const { id } = useLocalSearchParams()
   const { data, isLoading } = useDogDetails(id as string)
   const { data: behaviors } = useBehaviors()
+  const { data: breeds } = useBreeds()
 
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
   const [isModifying, setIsModifying] = useState(false)
@@ -58,6 +89,35 @@ export default function DogDetails() {
 
   const bottomPosition = useSharedValue(-100)
   const opacity = useSharedValue(0)
+
+  const [modifiedData, setModifiedData] = useState<{
+    name: string
+    age: number
+    breed: Breed | null
+    sex: 'male' | 'female'
+    dominance: string | null
+    behaviors: any[]
+  }>({
+    name: '',
+    age: 0,
+    breed: null,
+    sex: 'male',
+    dominance: null,
+    behaviors: [],
+  })
+
+  useEffect(() => {
+    if (data) {
+      setModifiedData({
+        name: data.name,
+        age: data.age,
+        breed: convertToBreed(data.breed),
+        sex: data.sex as 'male' | 'female',
+        dominance: data.dominance,
+        behaviors: data.behaviors,
+      })
+    }
+  }, [data])
 
   useEffect(() => {
     buttonAnimation()
@@ -99,9 +159,20 @@ export default function DogDetails() {
           Burnt.toast({
             title: i18n.t('dog.alreadyModifying'),
             preset: 'error',
+            haptic: 'error',
           })
         } else {
           setIsModifying(true)
+          if (data) {
+            setModifiedData({
+              name: data.name,
+              age: data.age,
+              breed: convertToBreed(data.breed),
+              sex: data.sex as 'male' | 'female',
+              dominance: data.dominance,
+              behaviors: data.behaviors,
+            })
+          }
         }
       },
       icon: <Entypo name='edit' size={16} color={Colors.light.text} />,
@@ -166,21 +237,31 @@ export default function DogDetails() {
                   <View
                     style={{
                       display: 'flex',
-                      flexDirection: 'row',
+                      flexDirection: 'column',
                       gap: 12,
                       alignItems: 'center',
                     }}
                   >
-                    <Block>
-                      <Input placeholder={data.name} />
-                    </Block>
-                    <Block>
-                      <Input
-                        placeholder={data.age.toString() + ' ans'}
-                        keyboardType='numeric'
-                        maxLength={2}
-                      />
-                    </Block>
+                    <DogNameSection
+                      initialName={modifiedData.name}
+                      isModifying={true}
+                      onNameChange={newName => {
+                        setModifiedData(prev => ({
+                          ...prev,
+                          name: newName,
+                        }))
+                      }}
+                    />
+                    <DogAgeSection
+                      initialAge={modifiedData.age}
+                      isModifying={true}
+                      onAgeChange={newAge => {
+                        setModifiedData(prev => ({
+                          ...prev,
+                          age: newAge,
+                        }))
+                      }}
+                    />
                   </View>
                 ) : (
                   `${data.name}, ${data.age} ans`
@@ -188,29 +269,63 @@ export default function DogDetails() {
               </CardTitle>
             </View>
             <View>
-              <Block
-                row
-                wrap='nowrap'
-                style={{
-                  gap: 8,
-                }}
-              >
-                <GridItemBackground height={60}>
-                  <BodyBold color={Colors.light.secondary}>
-                    {data.breed.name}
-                  </BodyBold>
-                </GridItemBackground>
-                <GridItemBackground height={60}>
-                  <BodyBold color={Colors.light.secondary}>{data.sex}</BodyBold>
-                </GridItemBackground>
-                {data.dominance && (
+              {isModifying ? (
+                <Block gap={12}>
+                  <DogBreedSection
+                    breeds={convertToBreeds(breeds)}
+                    initialBreed={modifiedData.breed}
+                    isModifying={true}
+                    onBreedChange={newBreed => {
+                      setModifiedData(prev => ({
+                        ...prev,
+                        breed: newBreed,
+                      }))
+                    }}
+                  />
+                  <SexSection
+                    initialSex={modifiedData.sex}
+                    isModifying={true}
+                    onSexChange={newSex => {
+                      setModifiedData(prev => ({
+                        ...prev,
+                        sex: newSex,
+                      }))
+                    }}
+                  />
+                  {modifiedData.dominance && (
+                    <DominanceSection
+                      initialDominance={modifiedData.dominance}
+                      isModifying={true}
+                      onDominanceChange={newDominance => {
+                        setModifiedData(prev => ({
+                          ...prev,
+                          dominance: newDominance,
+                        }))
+                      }}
+                    />
+                  )}
+                </Block>
+              ) : (
+                <Block row wrap='nowrap' style={{ gap: 12 }}>
                   <GridItemBackground height={60}>
                     <BodyBold color={Colors.light.secondary}>
-                      {data.dominance}
+                      {data.breed?.name}
                     </BodyBold>
                   </GridItemBackground>
-                )}
-              </Block>
+                  <GridItemBackground height={60}>
+                    <BodyBold color={Colors.light.secondary}>
+                      {data.sex}
+                    </BodyBold>
+                  </GridItemBackground>
+                  {data.dominance && (
+                    <GridItemBackground height={60}>
+                      <BodyBold color={Colors.light.secondary}>
+                        {data.dominance}
+                      </BodyBold>
+                    </GridItemBackground>
+                  )}
+                </Block>
+              )}
             </View>
             <Divider />
             <View style={styles.infoContainer}>
@@ -233,39 +348,46 @@ export default function DogDetails() {
                 </Body>
               )}
             </View>
-            <Divider />
             <View style={styles.infoContainer}>
-              <BodyTitle title={i18n.t('dog.behavior')} />
               {isModifying ? (
-                <DogBehaviorSection
-                  behaviors={behaviors}
-                  showTitle={false}
-                  initialSelectedBehaviors={data.behaviors.map(b => b.id)}
-                  onBehaviorsChange={newBehaviors => {
-                    console.log('New behaviors:', newBehaviors)
-                  }}
-                  isModifying
-                />
+                <>
+                  <Body color='black'>
+                    {i18n.t('dogCreation.dogBehaviorQuestion')}
+                  </Body>
+                  <DogBehaviorSection
+                    behaviors={behaviors}
+                    showTitle={false}
+                    initialSelectedBehaviors={data.behaviors.map(b => b.id)}
+                    onBehaviorsChange={newBehaviors => {
+                      console.log('New behaviors:', newBehaviors)
+                    }}
+                    isModifying
+                  />
+                </>
               ) : (
-                <Block
-                  flex={0}
-                  row
-                  wrap='wrap'
-                  style={{ gap: 12 }}
-                  justifyContent='space-between'
-                >
-                  {data.behaviors.length > 0 ? (
-                    data.behaviors.map(behavior => (
-                      <GridItem key={behavior.id}>
-                        <ExtraSmallMedium color='#F49819'>
-                          {behavior.name}
-                        </ExtraSmallMedium>
-                      </GridItem>
-                    ))
-                  ) : (
-                    <Body>{i18n.t('dog.noBehavior')}</Body>
-                  )}
-                </Block>
+                <>
+                  <Divider />
+                  <BodyTitle title={i18n.t('dog.behavior')} />
+                  <Block
+                    flex={0}
+                    row
+                    wrap='wrap'
+                    style={{ gap: 12 }}
+                    justifyContent='space-between'
+                  >
+                    {data.behaviors.length > 0 ? (
+                      data.behaviors.map(behavior => (
+                        <GridItem key={behavior.id}>
+                          <ExtraSmallMedium color='#F49819'>
+                            {behavior.name}
+                          </ExtraSmallMedium>
+                        </GridItem>
+                      ))
+                    ) : (
+                      <Body>{i18n.t('dog.noBehavior')}</Body>
+                    )}
+                  </Block>
+                </>
               )}
             </View>
             {!isModifying && (

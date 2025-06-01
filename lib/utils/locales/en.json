@@ -125,7 +125,9 @@
     "dogAddPhoto": "Add a photo of your dog",
     "addDogAge": "Add your dog age",
     "addDogBreed": "Select the breed",
-    "wouldLikeKnowPet": "We would like to know more about your pet"
+    "wouldLikeKnowPet": "We would like to know more about your pet",
+    "dominanceQuestion": "What is the dominance of your dog?",
+    "addDominance": "Add your dog dominance"
   },
   "ride": {
     "start": "Start",
