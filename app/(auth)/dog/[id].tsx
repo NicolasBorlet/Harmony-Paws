@@ -242,9 +242,9 @@ export default function DogDetails() {
                   showTitle={false}
                   initialSelectedBehaviors={data.behaviors.map(b => b.id)}
                   onBehaviorsChange={newBehaviors => {
-                    // Here you can handle the behavior changes
                     console.log('New behaviors:', newBehaviors)
                   }}
+                  isModifying
                 />
               ) : (
                 <Block
