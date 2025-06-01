@@ -29,8 +29,8 @@ export default function Back({
     <BackButton
       onPress={onPress ? onPress : () => router.back()}
       position={position}
-      left={left || right ? undefined : '16px'}
-      right={right && left ? undefined : '16px'}
+      left={left && !right ? left : !right ? '16px' : undefined}
+      right={right && !left ? right : undefined}
       style={{
         marginTop:
           top !== undefined

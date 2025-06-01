@@ -3,47 +3,58 @@ import CustomPicker from '@/components/picker'
 import { Body } from '@/components/ui/text'
 import { Database } from '@/database.types'
 import { storage } from '@/lib/utils/storage'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
 type Breed = Database['public']['Tables']['breeds']['Row']
 
 interface Props {
   breeds: Breed[] | undefined
+  initialBreed?: Breed | null
+  onBreedChange?: (breed: Breed) => void
+  isModifying?: boolean
 }
 
-export default function DogBreedSection({ breeds }: Props) {
-  const [selectedBreed, setSelectedBreed] = useState<Breed | null>(null)
+export default function DogBreedSection({
+  breeds,
+  initialBreed,
+  onBreedChange,
+  isModifying = false,
+}: Props) {
+  const [selectedBreed, setSelectedBreed] = useState<Breed | null>(
+    initialBreed || null,
+  )
   const [isPickerVisible, setIsPickerVisible] = useState(false)
+
+  useEffect(() => {
+    setSelectedBreed(initialBreed || null)
+  }, [initialBreed])
 
   const handleBreedSelect = useCallback(
     (values: any[]) => {
-      console.log('Selected values:', values)
       const selectedValue = values[0]
-      console.log('Selected value:', selectedValue)
-
       const breed = breeds?.find(b => b.id.toString() === selectedValue)
-      console.log('Found breed:', breed)
 
       if (!breed) return
 
       setSelectedBreed(breed)
-      const existingData = storage.getString('dog')
-      console.log('Existing data:', existingData)
 
-      const dogData = existingData ? JSON.parse(existingData) : {}
-      console.log('Parsed dog data:', dogData)
-
-      const updatedData = {
-        ...dogData,
-        breed_id: breed.id,
+      if (!isModifying) {
+        const existingData = storage.getString('dog')
+        const dogData = existingData ? JSON.parse(existingData) : {}
+        storage.set(
+          'dog',
+          JSON.stringify({
+            ...dogData,
+            breed_id: breed.id,
+          }),
+        )
       }
-      console.log('Updated data:', updatedData)
 
-      storage.set('dog', JSON.stringify(updatedData))
+      onBreedChange?.(breed)
       setIsPickerVisible(false)
     },
-    [breeds],
+    [breeds, isModifying, onBreedChange],
   )
 
   const breedColumns = [
@@ -57,14 +68,14 @@ export default function DogBreedSection({ breeds }: Props) {
   ]
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isModifying && { paddingHorizontal: 0 }]}>
       <Body color='black'>{i18n.t('dogCreation.dogBreedQuestion')}</Body>
       <CustomPicker
         isVisible={isPickerVisible}
         onClose={() => setIsPickerVisible(false)}
         onConfirm={handleBreedSelect}
         type='custom'
-        initialValue={selectedBreed?.id.toString()}
+        initialValue={selectedBreed?.id?.toString() || ''}
         columns={breedColumns}
         confirmText='OK'
         cancelText='Annuler'

@@ -20,6 +20,7 @@ type Props = PropsWithChildren<{
   backgroundContainer?: React.ReactNode
   paddingHorizontal?: number
   title?: string
+  isModifying?: boolean
 }>
 
 export default function ParallaxScrollView({
@@ -29,6 +30,7 @@ export default function ParallaxScrollView({
   backgroundContainer,
   paddingHorizontal = 16,
   title,
+  isModifying = false,
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
@@ -69,7 +71,7 @@ export default function ParallaxScrollView({
           {headerImage ? (
             <>
               <Image
-                style={styles.image}
+                style={[styles.image]}
                 source={headerImage}
                 contentFit='cover'
                 transition={1000}

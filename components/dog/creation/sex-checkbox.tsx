@@ -3,31 +3,41 @@ import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
 import { Purple } from '@/constants/Colors'
 import { storage } from '@/lib/utils/storage'
 import Foundation from '@expo/vector-icons/build/Foundation'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-export default function SexCheckbox() {
-  const [maleChecked, setMaleChecked] = useState(false)
-  const [femaleChecked, setFemaleChecked] = useState(false)
+interface Props {
+  initialSex?: 'male' | 'female'
+  onSexChange?: (sex: 'male' | 'female') => void
+  isModifying?: boolean
+}
+
+export default function SexCheckbox({
+  initialSex,
+  onSexChange,
+  isModifying = false,
+}: Props) {
+  const [maleChecked, setMaleChecked] = useState(initialSex === 'male')
+  const [femaleChecked, setFemaleChecked] = useState(initialSex === 'female')
+
+  useEffect(() => {
+    setMaleChecked(initialSex === 'male')
+    setFemaleChecked(initialSex === 'female')
+  }, [initialSex])
 
   const handleSexCheckbox = useCallback(
     (isMale: boolean) => {
-      const existingData = storage.getString('dog')
-      const dogData = existingData ? JSON.parse(existingData) : {}
-
       if (isMale) {
         setMaleChecked(true)
         setFemaleChecked(false)
-        storage.set(
-          'dog',
-          JSON.stringify({
-            ...dogData,
-            sex: isMale ? 'male' : 'female',
-          }),
-        )
       } else {
         setMaleChecked(false)
         setFemaleChecked(true)
+      }
+
+      if (!isModifying) {
+        const existingData = storage.getString('dog')
+        const dogData = existingData ? JSON.parse(existingData) : {}
         storage.set(
           'dog',
           JSON.stringify({
@@ -36,8 +46,10 @@ export default function SexCheckbox() {
           }),
         )
       }
+
+      onSexChange?.(isMale ? 'male' : 'female')
     },
-    [maleChecked, femaleChecked],
+    [isModifying, onSexChange],
   )
 
   return (

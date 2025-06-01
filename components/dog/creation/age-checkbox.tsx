@@ -1,20 +1,38 @@
 import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
 import { storage } from '@/lib/utils/storage'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 
-export default function AgeCheckbox() {
-  const [selectedAge, setSelectedAge] = useState<number | null>(null)
+interface Props {
+  initialAge?: number
+  onAgeChange?: (age: number) => void
+  isModifying?: boolean
+}
+
+export default function AgeCheckbox({
+  initialAge,
+  onAgeChange,
+  isModifying = false,
+}: Props) {
+  const [selectedAge, setSelectedAge] = useState<number | null>(
+    initialAge || null,
+  )
+
+  useEffect(() => {
+    setSelectedAge(initialAge || null)
+  }, [initialAge])
 
   // Création d'un tableau d'âges de 1 à 15
   const ages = Array.from({ length: 15 }, (_, index) => index + 1)
 
   const handleAgeChange = (age: number) => {
     setSelectedAge(age)
-    const existingData = storage.getString('dog')
-    const dogData = existingData ? JSON.parse(existingData) : {}
-
-    storage.set('dog', JSON.stringify({ ...dogData, age }))
+    if (!isModifying) {
+      const existingData = storage.getString('dog')
+      const dogData = existingData ? JSON.parse(existingData) : {}
+      storage.set('dog', JSON.stringify({ ...dogData, age }))
+    }
+    onAgeChange?.(age)
   }
 
   const renderAgeItem = ({ item }: { item: number }) => (
@@ -38,7 +56,12 @@ export default function AgeCheckbox() {
         renderItem={renderAgeItem}
         keyExtractor={item => item.toString()}
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={[
+          styles.listContainer,
+          {
+            marginLeft: isModifying ? 0 : 16,
+          },
+        ]}
       />
     </View>
   )
@@ -50,6 +73,5 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 14,
-    marginLeft: 16,
   },
 })
