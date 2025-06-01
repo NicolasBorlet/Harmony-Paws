@@ -29,7 +29,9 @@
     "validate": "Validate",
     "history": "History",
     "loading": "Loading...",
-    "success": "Success"
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel"
   },
   "tabbar": {
     "home": "Home",
