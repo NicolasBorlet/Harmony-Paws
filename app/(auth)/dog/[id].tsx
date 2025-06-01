@@ -40,6 +40,7 @@ export default function DogDetails() {
   const [isContextMenuVisible, setIsContextMenuVisible] = useState(false)
   const [isModifying, setIsModifying] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
+  const [inputHeight, setInputHeight] = useState(10)
 
   const user = user$.get()
   const insets = useSafeAreaInsets()
@@ -198,7 +199,16 @@ export default function DogDetails() {
           <View style={styles.infoContainer}>
             <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
             {isModifying ? (
-              <Input placeholder={data.description} />
+              <Input
+                placeholder={data.description}
+                multiline
+                onContentSizeChange={(event: any) =>
+                  setInputHeight(event.nativeEvent.contentSize.height)
+                }
+                style={{
+                  height: Math.max(10, inputHeight),
+                }}
+              />
             ) : (
               <Body>
                 {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
