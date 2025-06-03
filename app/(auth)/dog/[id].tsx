@@ -26,7 +26,8 @@ import { Colors } from '@/constants/Colors'
 import { Database } from '@/database.types'
 import { useBehaviors } from '@/lib/api/behavior'
 import { useBreeds } from '@/lib/api/breed'
-import { useDogDetails } from '@/lib/api/dog'
+import { updateDog, uploadDogImage, useDogDetails } from '@/lib/api/dog'
+import { DogDominance, DogSex } from '@/lib/api/types/enums'
 import { user$ } from '@/lib/observables/session-observable'
 import { Entypo } from '@expo/vector-icons'
 import * as Burnt from 'burnt'
@@ -95,18 +96,20 @@ export default function DogDetails() {
     name: string
     age: number
     breed: Breed | null
-    sex: 'male' | 'female'
-    dominance: string | null
+    sex: DogSex
+    dominance: DogDominance | null
     behaviors: any[]
     image: string | null
+    description: string
   }>({
     name: '',
     age: 0,
     breed: null,
-    sex: 'male',
+    sex: 'male' as DogSex,
     dominance: null,
     behaviors: [],
     image: null,
+    description: '',
   })
 
   useEffect(() => {
@@ -115,10 +118,11 @@ export default function DogDetails() {
         name: data.name,
         age: data.age,
         breed: convertToBreed(data.breed),
-        sex: data.sex as 'male' | 'female',
-        dominance: data.dominance,
+        sex: data.sex as DogSex,
+        dominance: data.dominance as DogDominance | null,
         behaviors: data.behaviors,
         image: data.image,
+        description: data.description || '',
       })
     }
   }, [data])
@@ -187,10 +191,11 @@ export default function DogDetails() {
               name: data.name,
               age: data.age,
               breed: convertToBreed(data.breed),
-              sex: data.sex as 'male' | 'female',
-              dominance: data.dominance,
+              sex: data.sex as DogSex,
+              dominance: data.dominance as DogDominance | null,
               behaviors: data.behaviors,
               image: data.image,
+              description: data.description || '',
             })
           }
         }
@@ -209,6 +214,38 @@ export default function DogDetails() {
       icon: <Entypo name='trash' size={16} color={Colors.light.text} />,
     },
   ]
+
+  const handleSave = async () => {
+    try {
+      await updateDog({
+        id: parseInt(id as string),
+        name: modifiedData.name,
+        age: modifiedData.age,
+        breed_id: modifiedData.breed?.id,
+        sex: modifiedData.sex,
+        dominance: modifiedData.dominance || undefined,
+        description: modifiedData.description,
+      })
+
+      // Si une nouvelle image a été sélectionnée, l'uploader
+      if (modifiedData.image && modifiedData.image !== data?.image) {
+        await uploadDogImage(parseInt(id as string), modifiedData.image)
+      }
+
+      Burnt.toast({
+        title: i18n.t('global.save'),
+        preset: 'done',
+      })
+      setIsModifying(false)
+    } catch (error) {
+      console.error('Error updating dog:', error)
+      Burnt.toast({
+        title: i18n.t('global.error'),
+        preset: 'error',
+        message: i18n.t('global.errorMessage'),
+      })
+    }
+  }
 
   if (isLoading || !data) {
     return <DogDetailsSkeleton />
@@ -312,7 +349,7 @@ export default function DogDetails() {
                     onSexChange={newSex => {
                       setModifiedData(prev => ({
                         ...prev,
-                        sex: newSex,
+                        sex: newSex as DogSex,
                       }))
                     }}
                   />
@@ -323,7 +360,7 @@ export default function DogDetails() {
                       onDominanceChange={newDominance => {
                         setModifiedData(prev => ({
                           ...prev,
-                          dominance: newDominance,
+                          dominance: newDominance as DogDominance,
                         }))
                       }}
                     />
@@ -494,15 +531,7 @@ export default function DogDetails() {
                 </StandardButton>
               </Block>
               <Block>
-                <StandardButton
-                  onPress={() => {
-                    Burnt.toast({
-                      title: i18n.t('global.save'),
-                      preset: 'done',
-                    })
-                    setIsModifying(false)
-                  }}
-                >
+                <StandardButton onPress={handleSave}>
                   <BodyMedium color='#fff'>{i18n.t('global.save')}</BodyMedium>
                 </StandardButton>
               </Block>
