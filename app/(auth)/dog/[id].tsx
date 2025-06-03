@@ -31,6 +31,7 @@ import { useDogDetails } from '@/lib/api/dog'
 import { user$ } from '@/lib/observables/session-observable'
 import { Entypo } from '@expo/vector-icons'
 import * as Burnt from 'burnt'
+import * as ImagePicker from 'expo-image-picker'
 import { router, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import {
@@ -97,6 +98,7 @@ export default function DogDetails() {
     sex: 'male' | 'female'
     dominance: string | null
     behaviors: any[]
+    image: string | null
   }>({
     name: '',
     age: 0,
@@ -104,6 +106,7 @@ export default function DogDetails() {
     sex: 'male',
     dominance: null,
     behaviors: [],
+    image: null,
   })
 
   useEffect(() => {
@@ -115,6 +118,7 @@ export default function DogDetails() {
         sex: data.sex as 'male' | 'female',
         dominance: data.dominance,
         behaviors: data.behaviors,
+        image: data.image,
       })
     }
   }, [data])
@@ -151,6 +155,21 @@ export default function DogDetails() {
     setIsContextMenuVisible(true)
   }
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+    })
+
+    if (!result.canceled) {
+      setModifiedData(prev => ({
+        ...prev,
+        image: result.assets[0].uri,
+      }))
+    }
+  }
+
   const contextMenuItems = [
     {
       label: i18n.t('dog.edit'),
@@ -171,6 +190,7 @@ export default function DogDetails() {
               sex: data.sex as 'male' | 'female',
               dominance: data.dominance,
               behaviors: data.behaviors,
+              image: data.image,
             })
           }
         }
@@ -222,7 +242,11 @@ export default function DogDetails() {
           items={contextMenuItems}
           position={contextMenuPosition}
         />
-        <ParallaxScrollView headerImage={data?.image || ''}>
+        <ParallaxScrollView
+          headerImage={data?.image || ''}
+          isModifying={isModifying}
+          onHeaderImagePress={pickImage}
+        >
           <View
             style={[
               styles.container,
