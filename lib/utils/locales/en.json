@@ -127,7 +127,8 @@
     "addDogBreed": "Select the breed",
     "wouldLikeKnowPet": "We would like to know more about your pet",
     "dominanceQuestion": "What is the dominance of your dog?",
-    "addDominance": "Add your dog dominance"
+    "addDominance": "Add your dog dominance",
+    "description": "Description"
   },
   "ride": {
     "start": "Start",

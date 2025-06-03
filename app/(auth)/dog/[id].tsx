@@ -14,7 +14,6 @@ import { DogDetailsSkeleton } from '@/components/skeletons/dog-details-skeleton'
 import { StandardButton } from '@/components/ui/button'
 import { ContextMenu } from '@/components/ui/context-menu'
 import Divider from '@/components/ui/divider'
-import Input from '@/components/ui/input'
 import {
   Body,
   BodyBold,
@@ -40,6 +39,7 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  TextInput,
   View,
 } from 'react-native'
 import Animated, {
@@ -351,20 +351,27 @@ export default function DogDetails() {
                 </Block>
               )}
             </View>
-            <Divider />
+            {!isModifying && <Divider />}
             <View style={styles.infoContainer}>
-              <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
+              {!isModifying && (
+                <BodyTitle title={`${i18n.t('dog.aboutOf')} ${data.name}`} />
+              )}
               {isModifying ? (
-                <Input
-                  placeholder={data.description}
-                  multiline
-                  onContentSizeChange={(event: any) =>
-                    setInputHeight(event.nativeEvent.contentSize.height)
-                  }
-                  style={{
-                    height: Math.max(10, inputHeight),
-                  }}
-                />
+                <>
+                  <Body color='black'>{i18n.t('dogCreation.description')}</Body>
+                  <TextInput
+                    placeholder={i18n.t('dogCreation.addDescription')}
+                    placeholderTextColor='#696969'
+                    style={styles.input}
+                    value={data.description}
+                    onChangeText={newDescription => {
+                      setModifiedData(prev => ({
+                        ...prev,
+                        description: newDescription,
+                      }))
+                    }}
+                  />
+                </>
               ) : (
                 <Body>
                   {data.description || i18n.t('global.weDontKnowMoreAbout')}{' '}
@@ -551,5 +558,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 12,
+  },
+  input: {
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#F5F5F5',
+    color: '#696969',
+    fontSize: 14,
+    fontWeight: '400',
+    fontFamily: 'Montserrat-Regular',
   },
 })
