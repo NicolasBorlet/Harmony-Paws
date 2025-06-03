@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -7,6 +7,8 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated'
 
+import { Colors } from '@/constants/Colors'
+import { Entypo } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { useBottomTabOverflow } from './ui/TabBarBackground'
 import { NavigationTitleExtraBold } from './ui/text'
@@ -21,6 +23,7 @@ type Props = PropsWithChildren<{
   paddingHorizontal?: number
   title?: string
   isModifying?: boolean
+  onHeaderImagePress?: () => void
 }>
 
 export default function ParallaxScrollView({
@@ -31,6 +34,7 @@ export default function ParallaxScrollView({
   paddingHorizontal = 16,
   title,
   isModifying = false,
+  onHeaderImagePress,
 }: Props) {
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
@@ -69,7 +73,21 @@ export default function ParallaxScrollView({
           style={[styles.header, headerAnimatedStyle, { backgroundColor }]}
         >
           {headerImage ? (
-            <>
+            <Pressable
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '100%',
+                width: '100%',
+              }}
+              onPress={() => {
+                if (isModifying && onHeaderImagePress) {
+                  onHeaderImagePress()
+                }
+              }}
+            >
               <Image
                 style={[styles.image]}
                 source={headerImage}
@@ -78,7 +96,34 @@ export default function ParallaxScrollView({
                 placeholder={{ blurhash }}
               />
               <View style={styles.overlay} />
-            </>
+              {isModifying && (
+                <View
+                  style={[
+                    styles.overlay,
+                    {
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    },
+                  ]}
+                >
+                  <View
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderColor: Colors.purple[500],
+                      borderWidth: 1,
+                      borderRadius: 16,
+                      padding: 12,
+                    }}
+                  >
+                    <Entypo name='edit' size={32} color={Colors.purple[500]} />
+                  </View>
+                </View>
+              )}
+            </Pressable>
           ) : (
             backgroundContainer
           )}
