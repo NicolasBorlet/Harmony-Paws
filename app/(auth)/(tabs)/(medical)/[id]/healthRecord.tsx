@@ -43,6 +43,7 @@ export default function HealthRecord() {
         <HealthRecordHeader
           scrollY={scrollY}
           dogName={healthData?.dog.name || ''}
+          dogId={dogId}
         />
       </View>
       <ScrollView
