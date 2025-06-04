@@ -9,6 +9,9 @@ export default function HealthRecordLayout() {
     >
       <Stack.Screen name='healthRecord' />
       <Stack.Screen name='height' />
+      <Stack.Screen name='weight' />
+      <Stack.Screen name='vaccines' />
+      <Stack.Screen name='callback' />
     </Stack>
   )
 }
