@@ -29,8 +29,8 @@ export default function DateItem({
       style={{
         paddingTop: 16,
         paddingBottom: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.purple[500],
+        borderWidth: 1,
+        borderColor: Colors.purple[500],
         backgroundColor: isSelected ? Colors.purple[500] : Colors.white,
         borderRadius: 12,
         width: 55,

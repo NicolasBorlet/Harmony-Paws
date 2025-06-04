@@ -11,20 +11,21 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const fakeDates = [
-  '2025-03-01',
-  '2025-03-02',
-  '2025-03-03',
-  '2025-03-04',
-  '2025-03-05',
-  '2025-03-06',
-  '2025-03-07',
-  '2025-03-08',
-  '2025-03-09',
-  '2025-03-10',
+  '2025-06-01',
+  '2025-06-02',
+  '2025-06-03',
+  '2025-06-04',
+  '2025-06-05',
+  '2025-06-06',
+  '2025-06-07',
+  '2025-06-08',
+  '2025-06-09',
+  '2025-06-10',
 ]
 
 export default function Callback() {
   const insets = useSafeAreaInsets()
+  const actualDate = new Date().toISOString().split('T')[0]
 
   return (
     <ScrollView
@@ -57,7 +58,7 @@ export default function Callback() {
         renderItem={({ item, index }) => (
           <DateItem
             itemDate={item}
-            date={item}
+            date={actualDate}
             isFirst={index === 0}
             isLast={index === fakeDates.length - 1}
           />
