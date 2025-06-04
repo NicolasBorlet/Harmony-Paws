@@ -1,31 +1,36 @@
 import { Colors } from '@/constants/Colors'
-import Block from '../grid/Block'
+import { memo, useMemo } from 'react'
+import { Pressable } from 'react-native'
 import { Body, SpecialTitle } from '../ui/text'
 
-export default function DateItem({
+function DateItem({
   itemDate,
-  date,
   isFirst,
   isLast,
+  onPress,
+  isSelected,
 }: {
   itemDate: string
-  date: string
   isFirst?: boolean
   isLast?: boolean
+  onPress?: () => void
+  isSelected: boolean
 }) {
-  const isSelected = itemDate === date
-  // Jour de la semaine à partir de itemDate
-  const dayOfWeek = new Date(itemDate)
-    .toLocaleDateString('fr-FR', {
-      weekday: 'long',
-    })
-    .slice(0, 3)
-
-  // Jour du mois à partir de itemDate
-  const dayOfMonth = new Date(itemDate).getDate()
+  const { dayOfWeek, dayOfMonth } = useMemo(() => {
+    const date = new Date(itemDate)
+    return {
+      dayOfWeek: date
+        .toLocaleDateString('fr-FR', {
+          weekday: 'long',
+        })
+        .slice(0, 3),
+      dayOfMonth: date.getDate(),
+    }
+  }, [itemDate])
 
   return (
-    <Block
+    <Pressable
+      onPress={onPress}
       style={{
         paddingTop: 16,
         paddingBottom: 16,
@@ -37,7 +42,6 @@ export default function DateItem({
         marginLeft: isFirst ? 16 : 0,
         marginRight: isLast ? 16 : 0,
       }}
-      gap={12}
     >
       <SpecialTitle
         style={{
@@ -55,6 +59,15 @@ export default function DateItem({
       >
         {dayOfWeek}
       </Body>
-    </Block>
+    </Pressable>
   )
 }
+
+export default memo(DateItem, (prevProps, nextProps) => {
+  return (
+    prevProps.itemDate === nextProps.itemDate &&
+    prevProps.isFirst === nextProps.isFirst &&
+    prevProps.isLast === nextProps.isLast &&
+    prevProps.isSelected === nextProps.isSelected
+  )
+})
