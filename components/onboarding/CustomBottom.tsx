@@ -67,7 +67,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     } else {
       console.log('Notifications permissions denied')
     }
-    router.replace('/(auth)/dog/creation')
+    router.replace('/(auth)/(tabs)/(home)')
   }
 
   return (

@@ -3,6 +3,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { PlatformPressable } from '@react-navigation/elements'
 import { useLinkBuilder, useTheme } from '@react-navigation/native'
+import { router } from 'expo-router'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface TabButtonProps {
@@ -41,7 +42,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
       </View>
 
       <PlatformPressable
-        onPress={() => console.log('Plus button pressed')}
+        onPress={() => router.push('/ride-creation/ride-type')}
         style={[
           {
             backgroundColor: Colors.light.primary,
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
+    width: 75,
   },
   firstTab: {
     paddingLeft: 0,

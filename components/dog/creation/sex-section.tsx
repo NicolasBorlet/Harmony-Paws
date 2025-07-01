@@ -1,13 +1,31 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Body } from '@/components/ui/text'
 import { StyleSheet, View } from 'react-native'
 import SexCheckbox from './sex-checkbox'
 
-export default function SexSection() {
+interface Props {
+  initialSex?: 'male' | 'female'
+  onSexChange?: (sex: 'male' | 'female') => void
+  isModifying?: boolean
+}
+
+export default function SexSection({
+  initialSex,
+  onSexChange,
+  isModifying = false,
+}: Props) {
   return (
-    <View style={styles.container}>
-      <Body color='black'>{i18n.t('yourDogIs')}</Body>
-      <SexCheckbox />
+    <View style={[styles.container, isModifying && { paddingHorizontal: 0 }]}>
+      <View style={{ paddingLeft: isModifying ? 0 : 16 }}>
+        <Body color='black'>{i18n.t('dogCreation.dogSexQuestion')}</Body>
+      </View>
+      <View style={{ paddingHorizontal: isModifying ? 0 : 16 }}>
+        <SexCheckbox
+          initialSex={initialSex}
+          onSexChange={onSexChange}
+          isModifying={isModifying}
+        />
+      </View>
     </View>
   )
 }
@@ -15,6 +33,5 @@ export default function SexSection() {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-    paddingHorizontal: 16,
   },
 })

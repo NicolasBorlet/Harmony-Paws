@@ -47,7 +47,7 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
   const rContainerStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: withTiming(
-        checked ? fadedActiveColor : 'transparent',
+        checked ? fadedActiveColor : '#F1F1F1',
         TimingConfig,
       ),
       borderColor: withTiming(
@@ -94,7 +94,6 @@ export const StandardCheckbox: React.FC<CheckboxProps> = ({
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 12,
-    borderWidth: 1,
     borderColor: '#fff',
     borderRadius: 12,
     gap: 16,
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontFamily: 'Montserrat_400Regular',
+    fontFamily: 'Montserrat_600SemiBold',
     color: '#fff',
   },
 })

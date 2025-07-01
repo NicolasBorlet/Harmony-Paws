@@ -1,0 +1,65 @@
+name: Maestro Tests
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+  workflow_dispatch: # Permet de lancer manuellement l'action depuis l'interface GitHub
+
+jobs:
+  maestro-test:
+    name: Run Maestro Tests
+    runs-on: macos-latest # Utilisation de macOS pour avoir accès aux émulateurs iOS
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Install and start Android Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: pixel
+          script: echo "Android emulator started"
+
+      - name: Build the app
+        run: npm run android
+
+      - name: Run All Maestro Tests
+        run: |
+          chmod +x scripts/run-all-maestro-tests.sh
+          scripts/run-all-maestro-tests.sh
+
+      - name: Archive test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: maestro-test-results
+          path: |
+            ~/.maestro/tests
+            ~/.maestro/reports

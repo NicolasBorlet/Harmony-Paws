@@ -1,0 +1,13 @@
+appId: com.konylepanini.harmony-paws
+---
+- runFlow:
+    file: ../components/login.yaml
+
+# Le reste de vos commandes de test pour compléter une leçon
+- tapOn: "Formation"
+- tapOn: "Obéisance"
+- "scroll"
+- tapOn: "Entrainement Faire le beau"
+- "scroll"
+- tapOn: "Introduction "
+- tapOn: "Étape suivante"

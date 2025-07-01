@@ -1,25 +1,26 @@
 import { createUserInDB, verifyUserInDB } from '@/lib/api/user'
-import { AuthError, Session } from '@supabase/supabase-js'
+import { i18n } from '@/lib/i18n'
+import { Session } from '@supabase/supabase-js'
+import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Alert } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
-import { session$, user$ } from '../lib/observables/session-observable'
-import { supabase } from '../lib/supabase'
+import { session$, user$ } from '@/lib/observables/session-observable'
+import { supabase } from '@/lib/supabase'
 
 // Initialize MMKV
 export const storage = new MMKV()
 
 const AuthContext = React.createContext<{
-  signIn: (email: string, password: string) => Promise<AuthError | null>
-  signUp: (email: string, password: string) => Promise<AuthError | null>
+  signIn: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
   session: Session | null
   isLoading: boolean
 }>({
-  signIn: async () => null,
-  signUp: async () => null,
-  signOut: async () => { },
+  signIn: async () => {},
+  signUp: async () => {},
+  signOut: async () => {},
   session: null,
   isLoading: false,
 })
@@ -43,7 +44,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     console.log('SessionProvider')
     console.log(session)
-    if (session && session.user.email && session.user.id && session.user.last_sign_in_at) {
+    if (
+      session &&
+      session.user.email &&
+      session.user.id &&
+      session.user.last_sign_in_at
+    ) {
       // Update session observable when session changes
       session$.set({
         id: session.user.id,
@@ -70,7 +76,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       if (session) {
         const hasCompletedOnboarding = storage.getBoolean('onBoarding') || false
         if (!hasCompletedOnboarding) {
-          router.replace('/(auth)/onboarding')
+          router.replace('/(auth)/onboarding/ride-onboarding')
         }
       }
       setIsLoading(false)
@@ -107,7 +113,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
       // Verify user exists in DB
       const userData = await verifyUserInDB(data.session.user.id)
-      
+
       // Update user$ observable
       user$.set(userData)
 
@@ -115,7 +121,12 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
       handleOnboarding()
     } catch (error: any) {
-      Alert.alert(error.message)
+      Burnt.toast({
+        title: i18n.t('global.error'),
+        preset: 'error',
+        message: error.message,
+        haptic: 'error',
+      })
       // Make sure session is null if verification fails
       setSession(null)
     }
@@ -123,7 +134,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
 
   const signUp = useCallback(async (email: string, password: string) => {
     try {
-      const { data: { session, user }, error } = await supabase.auth.signUp({
+      const {
+        data: { session, user },
+        error,
+      } = await supabase.auth.signUp({
         email,
         password,
       })
@@ -136,14 +150,24 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (!session) {
-        Alert.alert('Please check your inbox for email verification!')
+        Burnt.toast({
+          title: i18n.t('auth.verifyEmail'),
+          preset: 'done',
+          message: i18n.t('auth.checkInbox'),
+          haptic: 'success',
+        })
       } else {
         // If email verification is not required, we can set the session
         setSession(session)
         handleOnboarding()
       }
     } catch (error: any) {
-      Alert.alert(error.message)
+      Burnt.toast({
+        title: i18n.t('global.error'),
+        preset: 'error',
+        message: error.message,
+        haptic: 'error',
+      })
       setSession(null)
     }
   }, [])
@@ -160,7 +184,5 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     signUp,
   }
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

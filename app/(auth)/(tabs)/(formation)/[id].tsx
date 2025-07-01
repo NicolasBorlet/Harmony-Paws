@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import AdviceListing from '@/components/formation/adviceListing/advice-listing'
 import ModuleListing from '@/components/formation/moduleListing/module-listing'
@@ -19,8 +19,8 @@ import { AntDesign } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { ScrollView, View } from 'react-native'
-
+import { Platform, ScrollView, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function FormationDetails() {
   const user = user$.get()
   const { id } = useLocalSearchParams()
@@ -29,6 +29,8 @@ export default function FormationDetails() {
     isLoading,
     error,
   } = useFormationById(Number(id), user.id)
+
+  const insets = useSafeAreaInsets()
 
   const [selectedTab, setSelectedTab] = useState<'about' | 'advice'>('about')
 
@@ -56,7 +58,11 @@ export default function FormationDetails() {
 
   return (
     <>
-      <Back backgroundColor='#fff' color='black' />
+      <Back
+        backgroundColor='#fff'
+        color='black'
+        top={Platform.OS === 'ios' ? insets.top : 24}
+      />
       <ParallaxScrollView
         headerImage={formation.image || ''}
         paddingHorizontal={0}
@@ -118,7 +124,7 @@ export default function FormationDetails() {
                         }}
                       >
                         <BodyBold color={Colors.light.secondary}>
-                          {i18n.t('completeFormation')}
+                          {i18n.t('formation.completeFormation')}
                         </BodyBold>
                         <View
                           style={{

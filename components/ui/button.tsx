@@ -1,10 +1,10 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Colors } from '@/constants/Colors'
 import * as Burnt from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
-import { FC, PropsWithChildren } from 'react'
-import { Platform, PressableProps } from 'react-native'
+import { FC } from 'react'
+import { Platform, Pressable, PressableProps } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -18,6 +18,7 @@ interface ButtonProps extends PressableProps {
   onPress?: () => void
   position?: string
   left?: string
+  right?: string
   outlined?: boolean
   shadow?: boolean
   disabled?: boolean
@@ -26,9 +27,11 @@ interface ButtonProps extends PressableProps {
   width?: string
 }
 
-interface StandardButtonProps extends ButtonProps, PropsWithChildren {
+interface StandardButtonProps extends ButtonProps {
   onPress?: () => void
   disabledText?: string
+  pressedColor?: string
+  children?: React.ReactNode
 }
 
 const StyledButton = styled.Pressable<ButtonProps>`
@@ -43,7 +46,8 @@ const StyledButton = styled.Pressable<ButtonProps>`
 
 const BackButton = styled.Pressable<ButtonProps>`
   position: ${(props: ButtonProps) => props.position || 'absolute'};
-  left: ${(props: ButtonProps) => props.left || '16px'};
+  left: ${(props: ButtonProps) => props.left || 'auto'};
+  right: ${(props: ButtonProps) => props.right || 'auto'};
   background-color: ${(props: ButtonProps) =>
     props.backgroundColor || '#F7A400'};
   border-radius: 1000px;
@@ -74,14 +78,15 @@ const MapButton = styled.Pressable<ButtonProps>`
   margin-right: auto;
 `
 
-const AnimatedPressable = Animated.createAnimatedComponent(styled.Pressable``)
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 const StandardButton: FC<StandardButtonProps> = ({
   children,
   onPress,
   outlined,
   disabled,
-  color = '#F49819',
+  color = Colors.orange[500],
+  pressedColor = '#F5B265',
   disabledText = "Cette action n'est pas disponible",
   ...props
 }) => {
@@ -93,7 +98,11 @@ const StandardButton: FC<StandardButtonProps> = ({
       [0, 1],
       [
         outlined ? 'transparent' : disabled ? '#F0B461' : color,
-        outlined ? 'rgba(244, 152, 25, 0.1)' : disabled ? '#F0B461' : '#F5B265',
+        outlined
+          ? 'rgba(244, 152, 25, 0.1)'
+          : disabled
+            ? '#F0B461'
+            : pressedColor,
       ],
     )
 
@@ -192,7 +201,7 @@ const AnimatedStandardButton = ({
         animatedStyles,
       ]}
     >
-      <StandardButton onPress={() => router.push(route)}>
+      <StandardButton onPress={() => router.push(route as any)}>
         <BodyMedium color='#fff'>{i18n.t(trad)}</BodyMedium>
       </StandardButton>
     </Animated.View>
@@ -224,9 +233,21 @@ const UnderlinedButton = styled.Pressable<ButtonProps>`
   text-decoration: underline;
 `
 
+const FullRoundedButton = styled.Pressable<ButtonProps>`
+  background-color: ${(props: ButtonProps) =>
+    props.backgroundColor || Colors.orange[500]};
+  border-radius: 1000px;
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
 export {
   AnimatedStandardButton,
   BackButton,
+  FullRoundedButton,
   MapButton,
   SmallButton,
   SmallButtonOutlined,

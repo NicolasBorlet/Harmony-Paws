@@ -10,7 +10,7 @@ import { FlashList } from '@shopify/flash-list'
 import { useMemo } from 'react'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { i18n } from '../_layout'
+import { i18n } from '@/lib/i18n'
 
 export default function Notifications() {
   const insets = useSafeAreaInsets()
@@ -81,15 +81,15 @@ export default function Notifications() {
         >
           <Back position='relative' left='0' />
           <NavigationTitle color='#000'>
-            {i18n.t('notifications')}
+            {i18n.t('notification.notifications')}
           </NavigationTitle>
         </View>
         <Divider />
         <FlashList
           data={[
-            { type: 'header', title: `7 ${i18n.t('lastDays')}` },
+            { type: 'header', title: `7 ${i18n.t('notification.lastDays')}` },
             ...recentNotifications,
-            { type: 'header', title: `30 ${i18n.t('lastDays')}` },
+            { type: 'header', title: `30 ${i18n.t('notification.lastDays')}` },
             ...olderNotifications,
           ]}
           renderItem={({ item }) => {
@@ -110,7 +110,7 @@ export default function Notifications() {
               }}
             >
               <SmallMedium color='#000'>
-                {i18n.t('noNotifications')}
+                {i18n.t('notification.noNotifications')}
               </SmallMedium>
             </View>
           )}

@@ -1,15 +1,22 @@
 import Back from '@/components/back-button'
+import { Colors } from '@/constants/Colors'
+import { Entypo } from '@expo/vector-icons'
 import { StyleSheet, View } from 'react-native'
 import MapView from 'react-native-maps'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Map() {
-  const insets = useSafeAreaInsets()
-
   return (
     <View style={styles.container}>
-      <Back />
-      <MapView style={styles.map} />
+      <Back icon={<Entypo name='cross' size={18} color={Colors.white} />} />
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 48.8566,
+          longitude: 2.3522,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      />
     </View>
   )
 }

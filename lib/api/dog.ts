@@ -1,5 +1,7 @@
 import { Database } from '@/database.types'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { dogFilters } from '../observables/filter-observable'
+import { user$ } from '../observables/session-observable'
 import { supabase } from '../supabase'
 import { getImageUrl } from '../utils/get-image-url'
 import {
@@ -15,6 +17,7 @@ import {
   handleSupabaseError,
   logDev,
 } from './utils'
+import { Vaccination } from './vaccination'
 
 export const getDogsFromUserId = async (userId: string) => {
   logDev('Fetching dogs for userId:', userId)
@@ -23,7 +26,7 @@ export const getDogsFromUserId = async (userId: string) => {
     // Select only needed fields
     const { data, error } = await supabase
       .from('dogs')
-      .select('id, created_at, updated_at')
+      .select('id, created_at, updated_at, name, age, sex')
       .eq('owner_id', userId)
 
     if (error) throw handleSupabaseError(error, 'dogs')
@@ -59,15 +62,38 @@ export const useDogsFromUserId = (userId: string) => {
 export const getPaginatedDogs = async (
   page: number = 0,
   pageSize: number = 10,
+  excludeUserId?: number,
 ) => {
   try {
     const from = page * pageSize
     const to = from + pageSize - 1
 
-    // Only select required fields
-    const { data, error, count } = await supabase
+    // Créer la requête de base
+    let query = supabase
       .from('dogs')
-      .select('id, name, age, sex, created_at, updated_at', { count: 'exact' })
+      .select('id, name, age, sex, created_at, updated_at, dominance', {
+        count: 'exact',
+      })
+
+    // Exclure les chiens de l'utilisateur connecté
+    if (excludeUserId) {
+      query = query.neq('owner_id', excludeUserId)
+    }
+
+    // Appliquer les filtres
+    const filters = dogFilters.get()
+    if (filters.sex) {
+      query = query.eq('sex', filters.sex)
+    }
+    if (filters.dominance) {
+      query = query.eq('dominance', filters.dominance)
+    }
+    if (filters.age) {
+      query = query.eq('age', filters.age)
+    }
+
+    // Ajouter le tri et la pagination
+    const { data, error, count } = await query
       .range(from, to)
       .order('created_at', { ascending: false })
 
@@ -80,11 +106,10 @@ export const getPaginatedDogs = async (
       }
     }
 
-    // Process dogs with images - use Edge Functions for each dog
+    // Process dog data with image URLs
     const dogsWithImages = await Promise.all(
       data.map(async dog => ({
         ...dog,
-        // Utiliser Edge Function pour récupérer l'image
         image: await getImageUrl(dog.id.toString()),
         created_at: formatDate(dog.created_at),
         updated_at: formatDate(dog.updated_at),
@@ -104,9 +129,19 @@ export const getPaginatedDogs = async (
 
 // Hook with consistent options
 export const usePaginatedDogs = (pageSize: number = 5) => {
+  const filters = dogFilters.get()
+  const userId = user$.get()?.id
   return useInfiniteQuery({
-    queryKey: ['dogs', 'infinite'],
-    queryFn: ({ pageParam = 0 }) => getPaginatedDogs(pageParam, pageSize),
+    queryKey: [
+      'dogs',
+      'infinite',
+      filters.sex,
+      filters.age,
+      filters.dominance,
+      userId,
+    ],
+    queryFn: ({ pageParam = 0 }) =>
+      getPaginatedDogs(pageParam, pageSize, userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
@@ -134,7 +169,8 @@ export const getDogDetails = async (dogId: string) => {
         owner:owner_id (
           id,
           first_name,
-          last_name
+          last_name,
+          age
         ),
         breed:breed_id (
           name
@@ -297,4 +333,219 @@ export const uploadDogImage = async (dogId: number, imageUri: string) => {
     logDev('Error in uploadDogImage:', error)
     throw error
   }
+}
+
+type DogMeasurement = Database['public']['Tables']['dog_measurements']['Row']
+
+const getDogMeasurements = async (dogId: string, limit?: number) => {
+  console.log('dogId', dogId)
+  try {
+    let query = supabase
+      .from('dog_measurements')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date', { ascending: false })
+
+    if (limit && limit > 0) {
+      query = query.limit(limit)
+    }
+
+    const { data, error } = await query
+
+    if (error) throw handleSupabaseError(error, 'dog measurements')
+    return data as DogMeasurement[]
+  } catch (error) {
+    logDev('Error in getDogMeasurements:', error)
+    throw error
+  }
+}
+
+export const useDogMeasurements = (dogId: string, limit?: number) => {
+  return useQuery({
+    queryKey: ['dog_measurements', dogId, limit],
+    queryFn: () => getDogMeasurements(dogId, limit),
+    ...defaultQueryOptions,
+  })
+}
+
+type DogHealthData = {
+  dog: {
+    id: number
+    name: string
+    sex: string | null
+    breed: {
+      name: string
+    } | null
+  }
+  measurements: DogMeasurement[]
+  vaccinations: Vaccination[]
+  documents: DogDocument[]
+}
+
+type DogDocument = {
+  name: string
+  created_at: string
+  url: string
+  place: string
+  reason: string
+}
+
+type StorageFile = {
+  name: string
+  created_at: string
+  url: string
+}
+
+type GetDogDocumentsResponse = {
+  files: StorageFile[]
+}
+
+const getDogDocuments = async (dogId: string, limit?: number) => {
+  try {
+    // 1. Récupérer les documents depuis la base de données
+    const { data: dbDocuments, error: dbError } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('created_at', { ascending: false })
+      .lte('created_at', new Date().toISOString())
+
+    if (dbError) throw handleSupabaseError(dbError, 'dog documents')
+
+    // 2. Récupérer les URLs depuis le storage via la fonction Edge
+    const { data: storageData, error: storageError } =
+      await supabase.functions.invoke<GetDogDocumentsResponse>(
+        'get-dog-documents',
+        {
+          body: { dogId },
+        },
+      )
+
+    if (storageError)
+      throw handleSupabaseError(storageError, 'dog documents storage')
+
+    // 3. Combiner les informations
+    let documents = dbDocuments.map(doc => {
+      const storageFile = storageData?.files.find(
+        (f: StorageFile) => f.name === doc.file_name,
+      )
+      return {
+        id: doc.id,
+        name: doc.file_name,
+        type: doc.document_type,
+        place: doc.place,
+        reason: doc.reason,
+        created_at: formatDate(doc.created_at),
+        url: storageFile?.url || '',
+      }
+    })
+
+    // 4. Appliquer la limite si spécifiée
+    if (limit && limit > 0) {
+      documents = documents.slice(0, limit)
+    }
+
+    return documents
+  } catch (error) {
+    logDev('Error in getDogDocuments:', error)
+    throw error
+  }
+}
+
+export const useDogDocuments = (dogId: string, limit?: number) => {
+  return useQuery({
+    queryKey: ['dog_documents', dogId, limit],
+    queryFn: () => getDogDocuments(dogId, limit),
+    ...defaultQueryOptions,
+  })
+}
+
+export const getDogDocument = async (dogId: string, documentId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('id', documentId)
+      .eq('dog_id', dogId)
+      .single()
+
+    if (error) throw handleSupabaseError(error, 'dog document')
+    return data
+  } catch (error) {
+    logDev('Error in getDogDocument:', error)
+    throw error
+  }
+}
+
+export const useDogDocument = (dogId: string, documentId: string) => {
+  return useQuery({
+    queryKey: ['dog_document', dogId, documentId],
+    queryFn: () => getDogDocument(dogId, documentId),
+    ...defaultQueryOptions,
+  })
+}
+
+const getDogHealthData = async (dogId: string) => {
+  try {
+    // Get dog details with breed
+    const { data: dogData, error: dogError } = await supabase
+      .from('dogs')
+      .select(
+        `
+        id,
+        name,
+        sex,
+        breed:breed_id (
+          name
+        )
+      `,
+      )
+      .eq('id', dogId)
+      .single()
+
+    if (dogError) throw handleSupabaseError(dogError, 'dog')
+
+    // Get measurements
+    const { data: measurementsData, error: measurementsError } = await supabase
+      .from('dog_measurements')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date', { ascending: false })
+      .limit(1)
+
+    if (measurementsError)
+      throw handleSupabaseError(measurementsError, 'dog measurements')
+
+    // Get vaccinations
+    const { data: vaccinationsData, error: vaccinationsError } = await supabase
+      .from('vaccinations')
+      .select('*')
+      .eq('dog_id', dogId)
+      .order('date_administered', { ascending: false })
+      .limit(3)
+
+    if (vaccinationsError)
+      throw handleSupabaseError(vaccinationsError, 'dog vaccinations')
+
+    // Get documents
+    const documents = await getDogDocuments(dogId, 3)
+
+    return {
+      dog: dogData,
+      measurements: measurementsData || [],
+      vaccinations: vaccinationsData || [],
+      documents: documents || [],
+    } as unknown as DogHealthData
+  } catch (error) {
+    logDev('Error in getDogHealthData:', error)
+    throw error
+  }
+}
+
+export const useDogHealthData = (dogId: string) => {
+  return useQuery({
+    queryKey: ['dog_health_data', dogId],
+    queryFn: () => getDogHealthData(dogId),
+    ...defaultQueryOptions,
+  })
 }

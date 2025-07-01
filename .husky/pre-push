@@ -1,1 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Vérification des branches
 bash scripts/check-branch.sh
+
+# Exécuter les tests Maestro seulement si SKIP_MAESTRO_TESTS n'est pas défini
+if [ -z "$SKIP_MAESTRO_TESTS" ]; then
+  echo "🎭 Exécution des tests Maestro essentiels..."
+  bash scripts/run-maestro-tests.sh
+else
+  echo "⏩ Tests Maestro ignorés (SKIP_MAESTRO_TESTS est défini)"
+fi
+
+# Note: Pour désactiver temporairement les tests Maestro lors d'un push:
+# SKIP_MAESTRO_TESTS=1 git push

@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import PropositionItemListing from '@/components/messageListing/proposition-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
@@ -102,11 +102,13 @@ export default function NewMessage() {
           }}
         >
           <Back position='relative' left='0' />
-          <NavigationTitle color='#000'>{i18n.t('newMessage')}</NavigationTitle>
+          <NavigationTitle color='#000'>
+            {i18n.t('discussion.newMessage')}
+          </NavigationTitle>
         </View>
         <View style={{ height: 48 }}>
           <TextInput
-            placeholder={i18n.t('search')}
+            placeholder={i18n.t('global.search')}
             style={{
               flex: 1,
               paddingHorizontal: 16,
@@ -131,13 +133,15 @@ export default function NewMessage() {
             icon={<AntDesign name='addusergroup' size={24} color='#F7A400' />}
           />
           <ExtraSmallSemiBold color='#000'>
-            {i18n.t('createGroupDiscussion')}
+            {i18n.t('discussion.createGroupDiscussion')}
           </ExtraSmallSemiBold>
         </View>
         <View
           style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}
         >
-          <SmallSemiBold color='#000'>Sugestion</SmallSemiBold>
+          <SmallSemiBold color='#000'>
+            {i18n.t('discussion.sugest')}
+          </SmallSemiBold>
           <View style={{ height: '100%' }}>
             <FlashList
               data={propositionData}

@@ -1,0 +1,11 @@
+appId: com.konylepanini.harmony-paws
+---
+- runFlow:
+    file: ../components/login.yaml
+
+# Le reste de vos commandes de test pour partager une facture
+- tapOn: "Médical"
+- tapOn: "Choisir"
+- tapOn: " Documents  facture_5345836G.pdf - 07/03/2025"
+- tapOn: "Facture  07/03/2025 󰟙 Clinique Vétérinaire des Collines"
+- tapOn: "Partager"

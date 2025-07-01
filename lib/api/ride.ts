@@ -1,18 +1,35 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { Database } from '@/database.types'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
+import { rideFilters } from '../observables/filter-observable'
+import { user$ } from '../observables/session-observable'
 import { supabase } from '../supabase'
 import { getRideImageUrl } from '../utils/get-image-url'
 import { ActivityVisibility } from './types'
 import { ActivityListingInterface } from './types/interfaces'
 import {
+  defaultMutationOptions,
   defaultQueryOptions,
   formatDate,
   handleSupabaseError,
   logDev,
 } from './utils'
 
+interface ActivityInterface {
+  place: string | null
+  date: string
+  duration: string | null
+  visibility: 'public' | 'private'
+  type: 'forest' | 'city' | 'plage'
+  creator_id?: number | null
+}
+
+type ActivityStatus = Database['public']['Enums']['activity_status']
+type ActivityRow = Database['public']['Tables']['activities']['Row']
+
 export const getPaginatedActivities = async (
   page: number = 0,
   pageSize: number = 10,
+  excludeUserId?: number,
 ) => {
   try {
     const from = page * pageSize
@@ -20,15 +37,38 @@ export const getPaginatedActivities = async (
 
     logDev(`Fetching activities from ${from} to ${to}`)
 
-    // Only select fields we actually need
-    const { data, error, count } = await supabase
+    // Créer la requête de base
+    let query = supabase
       .from('activities')
-      .select('id, place, date, duration, created_at, updated_at, visibility', {
-        count: 'exact',
-      })
+      .select(
+        'id, place, date, duration, created_at, updated_at, visibility, type',
+        {
+          count: 'exact',
+        },
+      )
+      .eq('visibility', ActivityVisibility.PUBLIC)
+
+    // Exclure les activités de l'utilisateur connecté
+    if (excludeUserId) {
+      query = query.neq('creator_id', excludeUserId)
+    }
+
+    // Appliquer les filtres
+    const filters = rideFilters.get()
+    if (filters.type) {
+      query = query.eq('type', filters.type)
+    }
+    if (filters.date) {
+      query = query.eq('date', filters.date)
+    }
+    if (filters.duration) {
+      query = query.eq('duration', filters.duration)
+    }
+
+    // Ajouter le tri et la pagination
+    const { data, error, count } = await query
       .range(from, to)
       .order('created_at', { ascending: false })
-      .eq('visibility', ActivityVisibility.PUBLIC)
 
     if (error) {
       throw handleSupabaseError(error, 'activities')
@@ -42,7 +82,7 @@ export const getPaginatedActivities = async (
       }
     }
 
-    // Traiter les images individuellement avec Edge Functions
+    // Process activities with images
     const activitiesWithImages = await Promise.all(
       data.map(async activity => ({
         ...activity,
@@ -65,9 +105,19 @@ export const getPaginatedActivities = async (
 }
 
 export const usePaginatedActivities = (pageSize: number = 5) => {
+  const filters = rideFilters.get()
+  const userId = user$.get()?.id
   return useInfiniteQuery({
-    queryKey: ['activities', 'infinite'],
-    queryFn: ({ pageParam = 0 }) => getPaginatedActivities(pageParam, pageSize),
+    queryKey: [
+      'activities',
+      'infinite',
+      filters.type,
+      filters.date,
+      filters.duration,
+      userId,
+    ],
+    queryFn: ({ pageParam = 0 }) =>
+      getPaginatedActivities(pageParam, pageSize, userId),
     getNextPageParam: (lastPage, allPages) => {
       if (!lastPage.hasMore) return undefined
       return allPages.length
@@ -75,42 +125,6 @@ export const usePaginatedActivities = (pageSize: number = 5) => {
     initialPageParam: 0,
     ...defaultQueryOptions,
   })
-}
-
-// Définir des types corrects pour les entités
-interface ActivityDetails {
-  id: number
-  place: string
-  date: string
-  duration: string
-  created_at: string
-  updated_at: string
-  visibility: string
-  type: string
-  creator?: {
-    id: number
-    first_name: string
-    last_name: string
-    created_at: string
-    updated_at: string
-  }
-  steps?: Array<{
-    id: number
-    place: string
-    estimated_hour: string
-    created_at: string
-    updated_at: string
-  }>
-  user_activities?: Array<{
-    user: {
-      id: number
-      first_name: string
-      last_name: string
-      place: string
-      created_at: string
-      updated_at: string
-    }
-  }>
 }
 
 export const getActivityById = async (id: number) => {
@@ -202,4 +216,39 @@ export const useActivityById = (id: number) => {
     queryFn: () => getActivityById(id),
     ...defaultQueryOptions,
   })
+}
+
+export const createActivity = async (activity: ActivityInterface) => {
+  const { data, error } = await supabase.from('activities').insert(activity)
+  if (error) throw handleSupabaseError(error, 'activity')
+  return data
+}
+
+export const useCreateActivity = () => {
+  return useMutation({
+    mutationFn: createActivity,
+    ...defaultMutationOptions,
+  })
+}
+
+export const getInProgressActivity = async (userId: number) => {
+  const { data: userActivities, error: userActivitiesError } = await supabase
+    .from('user_activities')
+    .select('activity_id')
+    .eq('user_id', userId)
+
+  if (userActivitiesError) throw userActivitiesError
+  if (!userActivities?.length) return null
+
+  const activityIds = userActivities.map(ua => ua.activity_id)
+
+  const { data: activities, error: activitiesError } = await supabase
+    .from('activities')
+    .select('*')
+    .in('id', activityIds)
+    .eq('status', 'in progress')
+    .single()
+
+  if (activitiesError) throw activitiesError
+  return activities
 }

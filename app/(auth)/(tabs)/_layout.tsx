@@ -1,5 +1,4 @@
-import { i18n } from '@/app/_layout'
-import { useSession } from '@/app/ctx'
+import { i18n } from '@/lib/i18n'
 import Bone from '@/assets/svg/tabbar/bone/bone'
 import BoneFocused from '@/assets/svg/tabbar/bone/bone-focused'
 import Formation from '@/assets/svg/tabbar/formation/formation'
@@ -8,13 +7,10 @@ import Paw from '@/assets/svg/tabbar/paw/paw'
 import PawFocused from '@/assets/svg/tabbar/paw/paw-focused'
 import { TabBar } from '@/components/tabbar/tabbar'
 import { Colors } from '@/constants/Colors'
-import { useUserPicture } from '@/lib/api/user'
-import { user$ } from '@/lib/observables/session-observable'
 import { Feather } from '@expo/vector-icons'
 import * as Haptics from 'expo-haptics'
-import { Image } from 'expo-image'
-import { Redirect, Tabs } from 'expo-router'
-import { GestureResponderEvent, Pressable, Text, View } from 'react-native'
+import { Tabs } from 'expo-router'
+import { GestureResponderEvent, Pressable, View } from 'react-native'
 
 type TabBarIconProps = {
   focused: boolean
@@ -23,16 +19,17 @@ type TabBarIconProps = {
 }
 
 export default function TabLayout() {
-  const { session, isLoading } = useSession()
-  const { data: userPicture } = useUserPicture(user$?.id ?? '')
+  // const { session, isLoading } = useSession()
+  // const user = user$.get()
+  // const { data: userPicture } = useUserPicture(user?.id ?? '')
 
-  if (isLoading) {
-    return <Text>Loading...</Text>
-  }
+  // if (isLoading) {
+  //   return <Text>Loading...</Text>
+  // }
 
-  if (!session) {
-    return <Redirect href='/login' />
-  }
+  // if (!session) {
+  //   return <Redirect href='/login' />
+  // }
 
   const handleTabPress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
@@ -71,7 +68,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(home)'
         options={{
-          title: `${i18n.t('home')}`,
+          title: `${i18n.t('tabbar.home')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <PawFocused /> : <Paw />,
         }}
@@ -79,7 +76,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(formation)'
         options={{
-          title: 'Formation',
+          title: `${i18n.t('tabbar.formation')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <FormationFocused /> : <Formation />,
         }}
@@ -87,7 +84,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(medical)'
         options={{
-          title: 'Medical',
+          title: `${i18n.t('tabbar.medical')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? <BoneFocused /> : <Bone />,
         }}
@@ -95,7 +92,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(account)'
         options={{
-          title: 'Account',
+          title: `${i18n.t('tabbar.profile')}`,
           tabBarIcon: ({ focused }: TabBarIconProps) =>
             focused ? (
               <View
@@ -106,18 +103,18 @@ export default function TabLayout() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: Colors.zinc[400],
-                  width: 21,
-                  height: 21,
+                  width: 24,
+                  height: 24,
                 }}
               >
-                {userPicture ? (
+                {/* {userPicture ? (
                   <Image
-                    source={{ uri: userPicture.url }}
-                    style={{ width: 21, height: 21 }}
+                    source={{ uri: userPicture }}
+                    style={{ width: 24, height: 24, borderRadius: 100 }}
                   />
-                ) : (
-                  <Feather name='user' size={16} color={Colors.light.primary} />
-                )}
+                ) : ( */}
+                <Feather name='user' size={24} color={Colors.light.primary} />
+                {/* )} */}
               </View>
             ) : (
               <View
@@ -128,18 +125,18 @@ export default function TabLayout() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   backgroundColor: Colors.zinc[300],
-                  width: 22,
-                  height: 22,
+                  width: 24,
+                  height: 24,
                 }}
               >
-                {userPicture ? (
+                {/* {userPicture ? (
                   <Image
                     source={{ uri: userPicture.url }}
-                    style={{ width: 21, height: 21 }}
+                    style={{ width: 24, height: 24, borderRadius: 100 }}
                   />
-                ) : (
-                  <Feather name='user' size={16} color={Colors.light.primary} />
-                )}
+                ) : ( */}
+                <Feather name='user' size={16} color={Colors.light.primary} />
+                {/* )} */}
               </View>
             ),
         }}

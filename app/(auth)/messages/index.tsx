@@ -1,8 +1,11 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import OpacityFadeIn from '@/components/animate/opacity-fadeIn'
 import Back from '@/components/back-button'
 import LoaderComponent from '@/components/loader'
-import ListingLoader, { ItemType, LoaderType } from '@/components/loader/listing-loader'
+import ListingLoader, {
+  ItemType,
+  LoaderType,
+} from '@/components/loader/listing-loader'
 import MessageItemListing from '@/components/messageListing/message-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'
 import { ExtraSmall, NavigationTitle, SmallMedium } from '@/components/ui/text'
@@ -21,22 +24,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Messages() {
   const insets = useSafeAreaInsets()
-  const userData = user$.get();
-  const { 
-    data, 
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage 
-  } = useUserConversations(userData.id);
+  const userData = user$.get()
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useUserConversations(userData.id)
 
-  const allConversations = data?.pages.flatMap(page => page.conversations) || [];
+  const allConversations = data?.pages.flatMap(page => page.conversations) || []
 
   const handleLoadMore = () => {
     if (!isLoading && !isFetchingNextPage && hasNextPage) {
-      fetchNextPage();
+      fetchNextPage()
     }
-  };
+  }
 
   const searchHeight = useSharedValue(50)
   const searchOpacity = useSharedValue(1)
@@ -85,7 +83,9 @@ export default function Messages() {
             }}
           >
             <Back position='relative' left='0' />
-            <NavigationTitle color='#000'>{i18n.t('messages')}</NavigationTitle>
+            <NavigationTitle color='#000'>
+              {i18n.t('discussion.messages')}
+            </NavigationTitle>
           </View>
           <RoundedIconLink
             icon={<AntDesign name='plus' size={20} color='white' />}
@@ -95,7 +95,7 @@ export default function Messages() {
         {allConversations && allConversations.length > 0 && (
           <Animated.View style={[animatedStyle]}>
             <TextInput
-              placeholder='Search'
+              placeholder={i18n.t('global.search')}
               style={{
                 flex: 1,
                 paddingHorizontal: 16,
@@ -110,7 +110,10 @@ export default function Messages() {
         )}
       </View>
       {isLoading && !allConversations.length ? (
-        <ListingLoader type={LoaderType.LISTING} itemType={ItemType.CONVERSATION} />
+        <ListingLoader
+          type={LoaderType.LISTING}
+          itemType={ItemType.CONVERSATION}
+        />
       ) : (
         <FlashList
           data={allConversations}
@@ -118,8 +121,8 @@ export default function Messages() {
             <Pressable
               onPress={() => {
                 router.push({
-                  pathname: "/messages/[id]" as const,
-                  params: { id: item.id, title: item.title }
+                  pathname: '/messages/[id]' as const,
+                  params: { id: item.id, title: item.title },
                 })
               }}
             >
@@ -155,9 +158,11 @@ export default function Messages() {
           )}
           ListEmptyComponent={() => (
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <SmallMedium color='#000'>{i18n.t('noMessages')}</SmallMedium>
+              <SmallMedium color='#000'>
+                {i18n.t('discussion.noMessages')}
+              </SmallMedium>
               <ExtraSmall color='#979898'>
-                {i18n.t('sendMessageToStart')}
+                {i18n.t('discussion.sendMessageToStart')}
               </ExtraSmall>
             </View>
           )}
@@ -166,4 +171,3 @@ export default function Messages() {
     </View>
   )
 }
-

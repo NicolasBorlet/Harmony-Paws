@@ -1,35 +1,47 @@
 import { useEffect } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
-  withTiming
+  withTiming,
 } from 'react-native-reanimated'
 
-export const useSkeletonAnimation = () => {
+export const useSkeletonAnimation = (onFadeOut?: () => void) => {
   const opacity = useSharedValue(0.3)
+  const fadeOutOpacity = useSharedValue(1)
 
   useEffect(() => {
     // Démarrer l'animation immédiatement
     opacity.value = withRepeat(
       withSequence(
         withTiming(0.7, { duration: 1000 }),
-        withTiming(0.3, { duration: 1000 })
+        withTiming(0.3, { duration: 1000 }),
       ),
       -1,
-      true
+      true,
     )
   }, [])
 
-  return useAnimatedStyle(() => ({
-    opacity: opacity.value,
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value * fadeOutOpacity.value,
   }))
+
+  const fadeOut = () => {
+    fadeOutOpacity.value = withTiming(0, { duration: 300 }, finished => {
+      if (finished && onFadeOut) {
+        runOnJS(onFadeOut)()
+      }
+    })
+  }
+
+  return { animatedStyle, fadeOut }
 }
 
 export const CardSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.card, animatedStyle]}>
@@ -41,7 +53,7 @@ export const CardSkeleton = () => {
           <View style={styles.headerTextShort} />
         </View>
       </View>
-      
+
       {/* Content */}
       <View style={styles.content}>
         <View style={styles.fullLine} />
@@ -53,7 +65,7 @@ export const CardSkeleton = () => {
 }
 
 export const SimpleCardSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.simpleCard, animatedStyle]}>
@@ -67,13 +79,13 @@ export const SimpleCardSkeleton = () => {
 }
 
 export const RideItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
-    <Animated.View style={[styles.rideCard, animatedStyle]}>  
+    <Animated.View style={[styles.rideCard, animatedStyle]}>
       {/* Title placeholder */}
       <View style={styles.rideTitle} />
-      
+
       {/* Date row */}
       <View style={styles.dateRow}>
         <View style={styles.datePlaceholder} />
@@ -87,10 +99,10 @@ export const RideItemSkeleton = () => {
 }
 
 export const DogItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
-    <Animated.View style={[styles.dogCard, animatedStyle]}>      
+    <Animated.View style={[styles.dogCard, animatedStyle]}>
       {/* Title and gender row */}
       <View style={styles.dogInfoRow}>
         <View style={styles.dogTitle} />
@@ -101,11 +113,13 @@ export const DogItemSkeleton = () => {
 }
 
 export const ChatItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={animatedStyle}>
-      <View style={[styles.content, { flexDirection: 'row', alignItems: 'center' }]}>
+      <View
+        style={[styles.content, { flexDirection: 'row', alignItems: 'center' }]}
+      >
         {/* Avatar */}
         <View style={styles.avatar} />
         {/* Message */}
@@ -119,7 +133,7 @@ export const ChatItemSkeleton = () => {
 }
 
 export const FormationItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.formationItem, animatedStyle]}>
@@ -133,7 +147,7 @@ export const FormationItemSkeleton = () => {
 }
 
 export const ModuleItemSkeleton = () => {
-  const animatedStyle = useSkeletonAnimation()
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
 
   return (
     <Animated.View style={[styles.simpleCard, animatedStyle]}>
@@ -143,6 +157,65 @@ export const ModuleItemSkeleton = () => {
         <View style={styles.mediumLine} />
       </View>
     </Animated.View>
+  )
+}
+
+export const BlockSkeleton = () => {
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
+
+  return <Animated.View style={[styles.block, animatedStyle]} />
+}
+
+export const StepSkeleton = () => {
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
+
+  return <Animated.View style={[styles.step, animatedStyle]} />
+}
+
+export const ContentSkeleton = () => {
+  const { animatedStyle, fadeOut } = useSkeletonAnimation()
+
+  return (
+    <Animated.View
+      style={[
+        styles.content,
+        animatedStyle,
+        {
+          gap: 16,
+        },
+      ]}
+    >
+      <View style={styles.mediumLine} />
+      <View style={{ gap: 4 }}>
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+      </View>
+      <View style={{ gap: 4 }}>
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+      </View>
+      <View style={{ gap: 4 }}>
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+        <View style={styles.longLineThin} />
+      </View>
+    </Animated.View>
+  )
+}
+
+export const LessonSkeleton = () => {
+  return (
+    <View>
+      <BlockSkeleton />
+      <View style={styles.stepContainer}>
+        <StepSkeleton />
+        <StepSkeleton />
+        <StepSkeleton />
+      </View>
+      <ContentSkeleton />
+    </View>
   )
 }
 
@@ -187,6 +260,8 @@ const styles = StyleSheet.create({
   },
   content: {
     gap: 8,
+    padding: 16,
+    backgroundColor: '#e5e7eb',
   },
   fullLine: {
     width: '100%',
@@ -194,8 +269,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#d1d5db',
     borderRadius: 4,
   },
+  longLineThin: {
+    width: '100%',
+    height: 10,
+    backgroundColor: '#d1d5db',
+    borderRadius: 4,
+  },
   longLine: {
-    width: '83%',
+    width: '100%',
     height: 12,
     backgroundColor: '#d1d5db',
     borderRadius: 4,
@@ -313,5 +394,41 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
+  },
+  lesson: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+  },
+  video: {
+    width: '100%',
+    height: 250,
+  },
+  controlsContainer: {
+    padding: 10,
+  },
+  step: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#d1d5db',
+  },
+  stepContainer: {
+    flexDirection: 'row',
+    gap: 5,
+    marginBottom: 16,
+    justifyContent: 'center',
+  },
+  contentContainer: {
+    padding: 16,
+    gap: 16,
+  },
+  block: {
+    backgroundColor: '#e5e7eb',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    height: 250,
   },
 })

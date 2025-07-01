@@ -12,11 +12,11 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  View
+  View,
 } from 'react-native'
 import { supabase } from '../lib/supabase'
-import { i18n } from './_layout'
-import { useSession } from './ctx'
+import { i18n } from '@/lib/i18n'
+import { useSession } from '@/lib/context/session-context'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -48,40 +48,56 @@ export default function Signup() {
   }
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <ParallaxScrollView backgroundColor={Colors.light.secondary}>
         <View style={styles.container}>
-          <SpecialTitle style={{ alignSelf: 'center' }} color={Colors.light.primary}>
-            {i18n.t('signUp')}
+          <SpecialTitle
+            style={{ alignSelf: 'center' }}
+            color={Colors.light.primary}
+          >
+            {i18n.t('auth.signUp')}
           </SpecialTitle>
-          <View style={{
-            gap: 12,
-          }}>
+          <View
+            style={{
+              gap: 12,
+            }}
+          >
             <CustomTextInput
-              placeholder={i18n.t('email')}
-              value={email}
+              placeholder={i18n.t('auth.email')}
               onChangeText={setEmail}
               placeholderTextColor='#696969'
             />
             <CustomTextInput
-              placeholder={i18n.t('password')}
-              value={password}
+              placeholder={i18n.t('auth.password')}
               onChangeText={setPassword}
               placeholderTextColor='#696969'
               secureTextEntry
             />
-            <Pressable onPress={() => { }} style={styles.forgotPassword}>
-              <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
+            <Pressable onPress={() => {}} style={styles.forgotPassword}>
+              <Small color='#000' style={{ textDecorationLine: 'underline' }}>
+                {i18n.t('auth.forgotPassword')}
+              </Small>
             </Pressable>
           </View>
           <StandardButton onPress={handleSignUp}>
-            <BodyMedium color='#fff'>{i18n.t('signUp')}</BodyMedium>
+            <BodyMedium color='#fff'>{i18n.t('auth.signUp')}</BodyMedium>
           </StandardButton>
-          <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('alreadyAccount')} <Link style={{
-            fontFamily: 'Montserrat_800ExtraBold',
-            color: Colors.light.secondary,
-            textDecorationLine: 'underline',
-          }} href='/login'>{i18n.t('signInLink')}</Link></BodyMedium>
+          <BodyMedium style={{ textAlign: 'center' }}>
+            {i18n.t('auth.alreadyAccount')}{' '}
+            <Link
+              style={{
+                fontFamily: 'Montserrat_800ExtraBold',
+                color: Colors.light.secondary,
+                textDecorationLine: 'underline',
+              }}
+              href='/login'
+            >
+              {i18n.t('auth.signInLink')}
+            </Link>
+          </BodyMedium>
         </View>
       </ParallaxScrollView>
     </KeyboardAvoidingView>

@@ -1,9 +1,10 @@
+import { i18n } from '@/lib/i18n'
 import { useUserPaginatedFormations } from '@/lib/api/formation'
 import { user$ } from '@/lib/observables/session-observable'
 import { FlashList } from '@shopify/flash-list'
-import { useEffect } from 'react'
 import { View } from 'react-native'
 import Animated from 'react-native-reanimated'
+import { Body } from '../ui/text'
 import FormationListingItem from './formation-listing-item'
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
@@ -21,9 +22,13 @@ export default function UserFormationListing() {
     }
   }
 
-  useEffect(() => {
-    console.log(allUserFormations)
-  }, [allUserFormations])
+  if (allUserFormations.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Body>{i18n.t('formation.noFormations')}</Body>
+      </View>
+    )
+  }
 
   return (
     <AnimatedFlashList

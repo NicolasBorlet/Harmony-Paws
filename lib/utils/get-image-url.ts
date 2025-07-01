@@ -89,3 +89,22 @@ export const getModuleImageUrl = async (
 
   return url
 }
+
+export const getUserPictureUrl = async (userId: string) => {
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/get-user-picture`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session$.get().access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId }),
+    },
+  )
+
+  const { url, error } = await response.json()
+  if (error) throw new Error(error)
+
+  return url
+}

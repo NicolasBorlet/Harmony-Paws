@@ -1,12 +1,13 @@
-import { FontAwesome } from "@expo/vector-icons";
-import { router } from "expo-router";
-import AnimatedHeader from "../header/animated-header";
-import RoundedIconLink from "../rounded-icon-link";
+import { i18n } from '@/lib/i18n'
+import { FontAwesome } from '@expo/vector-icons'
+import { router } from 'expo-router'
+import AnimatedHeader from '../header/animated-header'
+import RoundedIconLink from '../rounded-icon-link'
 
 export default function AccountHeader({ scrollY }: { scrollY: any }) {
   return (
     <AnimatedHeader
-      scrollY={scrollY} 
+      scrollY={scrollY}
       icons={
         <>
           <RoundedIconLink
@@ -15,7 +16,7 @@ export default function AccountHeader({ scrollY }: { scrollY: any }) {
           />
         </>
       }
-      title='account'
+      title={i18n.t('account.account')}
     />
   )
 }

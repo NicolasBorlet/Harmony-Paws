@@ -89,26 +89,20 @@ export const useUser = (userId: string) => {
 
 export async function getUserPicture(userId: string) {
   try {
-    // Use a presigned URL instead of downloading the entire file
-    const { data: signedUrlData, error: signedUrlError } =
-      await supabase.storage
-        .from('users')
-        .createSignedUrl(`${userId}.jpg`, 3600) // 1 hour expiration
+    // Utiliser la même approche que pour les chiens avec Edge Function
+    const { data, error } = await supabase.functions.invoke('get-user-image', {
+      body: { userId },
+    })
 
-    if (signedUrlError) {
-      // Fall back to direct download if signed URL fails
-      const { data, error } = await supabase.storage
-        .from('users')
-        .download(`${userId}.jpg`)
-
-      if (error) throw handleSupabaseError(error, 'user picture')
-      return data
+    if (error) {
+      logDev('Error getting user picture:', error)
+      return null
     }
 
-    return signedUrlData.signedUrl
+    return data?.url || null
   } catch (error) {
     logDev('Error in getUserPicture:', error)
-    throw error
+    return null
   }
 }
 

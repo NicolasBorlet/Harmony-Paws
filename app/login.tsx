@@ -3,21 +3,22 @@ import ParallaxScrollView from '@/components/parallax-scrollview'
 import { StandardButton } from '@/components/ui/button'
 import { BodyMedium, Small, SpecialTitle } from '@/components/ui/text'
 import { CustomTextInput } from '@/components/ui/text-input'
+import { Colors } from '@/constants/Colors'
+import * as Burnt from 'burnt'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
-  Alert,
   AppState,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   StyleSheet,
-  View
+  View,
 } from 'react-native'
 import { supabase } from '../lib/supabase'
-import { i18n } from './_layout'
-import { useSession } from './ctx'
+import { i18n } from '@/lib/i18n'
+import { useSession } from '@/lib/context/session-context'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive
@@ -37,79 +38,131 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { signIn } = useSession()
 
-  async function handleSignIn() {
+  // Memoize the input handlers
+  const handleEmailChange = useCallback((value: string) => {
+    setEmail(value.trim())
+  }, [])
+
+  const handlePasswordChange = useCallback((value: string) => {
+    setPassword(value)
+  }, [])
+
+  // Memoize the sign in handler
+  const handleSignIn = useCallback(async () => {
+    if (!email || !password) return
+
     setLoading(true)
     try {
       await signIn(email, password)
     } catch (error: any) {
-      Alert.alert(error.message)
+      Burnt.toast({
+        title: i18n.t('global.error'),
+        preset: 'error',
+        message: error.message,
+        haptic: 'error',
+      })
     } finally {
       setLoading(false)
     }
-  }
+  }, [email, password, signIn])
 
-  const backgroundContainer = (
-    <View style={{
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: 12,
-    }}>
-      <View style={{
-        width: 155,
-        height: 155,
-        backgroundColor: '#FDE6D7',
-        borderRadius: 999,
-        overflow: 'hidden',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-      }}>
-        <Image source={require('../assets/images/dog-login.png')} style={{
-          width: 133,
-          height: 141,
-        }} />
+  // Memoize the static background container
+  const backgroundContainer = React.useMemo(
+    () => (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 12,
+        }}
+      >
+        <View
+          style={{
+            width: 155,
+            height: 155,
+            backgroundColor: '#FDE6D7',
+            borderRadius: 999,
+            overflow: 'hidden',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
+          <Image
+            source={require('../assets/images/dog-login.png')}
+            style={{
+              width: 133,
+              height: 141,
+            }}
+          />
+        </View>
+        <LoginHP />
       </View>
-      <LoginHP />
-    </View>
+    ),
+    [],
   )
 
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ParallaxScrollView backgroundColor='#F49819' backgroundContainer={backgroundContainer}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ParallaxScrollView
+        backgroundColor='#F49819'
+        backgroundContainer={backgroundContainer}
+      >
         <View style={styles.container}>
           <SpecialTitle style={{ alignSelf: 'center' }}>
-            {i18n.t('signIn')}
+            {i18n.t('auth.signIn')}
           </SpecialTitle>
-          <View style={{
-            gap: 12,
-          }}>
+          <View style={{ gap: 12 }}>
             <CustomTextInput
-              placeholder={i18n.t('email')}
+              placeholder={i18n.t('auth.email')}
+              onChangeText={handleEmailChange}
               value={email}
-              onChangeText={setEmail}
               autoCapitalize='none'
               placeholderTextColor='#696969'
+              editable={!loading}
             />
             <CustomTextInput
-              placeholder={i18n.t('password')}
+              placeholder={i18n.t('auth.password')}
+              onChangeText={handlePasswordChange}
               value={password}
-              onChangeText={setPassword}
               secureTextEntry
               clearTextOnFocus={false}
               placeholderTextColor='#696969'
+              editable={!loading}
             />
-            <Pressable onPress={() => { }} style={styles.forgotPassword}>
-              <Small color='#000' style={{ textDecorationLine: 'underline' }}>{i18n.t('forgotPassword')}</Small>
+            <Pressable onPress={() => {}} style={styles.forgotPassword}>
+              <Small color='#000' style={{ textDecorationLine: 'underline' }}>
+                {i18n.t('auth.forgotPassword')}
+              </Small>
             </Pressable>
           </View>
-          <StandardButton onPress={handleSignIn} color='#572B84'>
-            <BodyMedium color='#fff'>{i18n.t('signIn')}</BodyMedium>
+          <StandardButton
+            onPress={handleSignIn}
+            color={Colors.purple[500]}
+            pressedColor='#3D1F5C'
+            disabled={loading || !email || !password}
+            disabledText={i18n.t('auth.fieldEmpty')}
+          >
+            <BodyMedium color='#fff'>
+              {loading ? i18n.t('auth.signingIn') : i18n.t('auth.signIn')}
+            </BodyMedium>
           </StandardButton>
-          <BodyMedium style={{ textAlign: 'center' }}>{i18n.t('noAccount')} <Link style={{
-            fontFamily: 'Montserrat_800ExtraBold',
-            color: '#F49819',
-            textDecorationLine: 'underline',
-          }} href='/signup'>{i18n.t('signUpLink')}</Link></BodyMedium>
+          <BodyMedium style={{ textAlign: 'center' }}>
+            {i18n.t('auth.noAccount')}{' '}
+            <Link
+              style={{
+                fontFamily: 'Montserrat_800ExtraBold',
+                color: '#F49819',
+                textDecorationLine: 'underline',
+              }}
+              href='/signup'
+            >
+              {i18n.t('auth.signUpLink')}
+            </Link>
+          </BodyMedium>
         </View>
       </ParallaxScrollView>
     </KeyboardAvoidingView>

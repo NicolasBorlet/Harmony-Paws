@@ -1,15 +1,29 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Body } from '@/components/ui/text'
 import { StyleSheet, View } from 'react-native'
 import AgeCheckbox from './age-checkbox'
 
-export default function DogAgeSection() {
+interface Props {
+  initialAge?: number
+  onAgeChange?: (age: number) => void
+  isModifying?: boolean
+}
+
+export default function DogAgeSection({
+  initialAge,
+  onAgeChange,
+  isModifying = false,
+}: Props) {
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Body color='black'>{i18n.t('dogAge')}</Body>
+    <View style={[styles.container, isModifying && { paddingHorizontal: 0 }]}>
+      <View style={{ paddingLeft: isModifying ? 0 : 16 }}>
+        <Body color='black'>{i18n.t('dogCreation.dogAgeQuestion')}</Body>
       </View>
-      <AgeCheckbox />
+      <AgeCheckbox
+        initialAge={initialAge}
+        onAgeChange={onAgeChange}
+        isModifying={isModifying}
+      />
     </View>
   )
 }
@@ -17,8 +31,5 @@ export default function DogAgeSection() {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-  },
-  titleContainer: {
-    paddingLeft: 16,
   },
 })

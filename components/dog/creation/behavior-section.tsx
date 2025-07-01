@@ -1,8 +1,8 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Body } from '@/components/ui/text'
 import { Database } from '@/database.types'
 import { storage } from '@/lib/utils/storage'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import DogBehaviorCheckbox from './behavior-checkbox'
 
@@ -10,37 +10,59 @@ type Behavior = Database['public']['Tables']['behavior']['Row']
 
 interface Props {
   behaviors: Behavior[] | undefined
+  showTitle?: boolean
+  initialSelectedBehaviors?: number[]
+  onBehaviorsChange?: (behaviorIds: number[]) => void
+  isModifying?: boolean
 }
 
-export default function DogBehaviorSection({ behaviors }: Props) {
-  const [selectedBehaviors, setSelectedBehaviors] = useState<number[]>([])
+export default function DogBehaviorSection({
+  behaviors,
+  showTitle = true,
+  initialSelectedBehaviors = [],
+  onBehaviorsChange,
+  isModifying = false,
+}: Props) {
+  const [selectedBehaviors, setSelectedBehaviors] = useState<number[]>(
+    initialSelectedBehaviors,
+  )
 
-  const handleBehaviorToggle = (behaviorId: number) => {
-    setSelectedBehaviors(prev => {
-      const newSelected = prev.includes(behaviorId)
-        ? prev.filter(id => id !== behaviorId)
-        : [...prev, behaviorId]
+  useEffect(() => {
+    setSelectedBehaviors(initialSelectedBehaviors)
+  }, [initialSelectedBehaviors])
 
-      const existingData = storage.getString('dog')
-      const dogData = existingData ? JSON.parse(existingData) : {}
+  const handleBehaviorToggle = useCallback(
+    (behaviorId: number) => {
+      setSelectedBehaviors(prev => {
+        const newSelected = prev.includes(behaviorId)
+          ? prev.filter(id => id !== behaviorId)
+          : [...prev, behaviorId]
 
-      storage.set(
-        'dog',
-        JSON.stringify({
-          ...dogData,
-          behavior_ids: newSelected,
-        }),
-      )
+        const existingData = storage.getString('dog')
+        const dogData = existingData ? JSON.parse(existingData) : {}
 
-      return newSelected
-    })
-  }
+        storage.set(
+          'dog',
+          JSON.stringify({
+            ...dogData,
+            behavior_ids: newSelected,
+          }),
+        )
+
+        onBehaviorsChange?.(newSelected)
+        return newSelected
+      })
+    },
+    [onBehaviorsChange],
+  )
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Body>{i18n.t('dogBehavior')}</Body>
-      </View>
+      {showTitle && (
+        <View style={styles.titleContainer}>
+          <Body>{i18n.t('dogCreation.dogBehaviorQuestion')}</Body>
+        </View>
+      )}
       <FlatList
         data={behaviors}
         renderItem={({ item }) => (
@@ -54,7 +76,12 @@ export default function DogBehaviorSection({ behaviors }: Props) {
         )}
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.flatList}
+        contentContainerStyle={[
+          styles.flatList,
+          {
+            marginLeft: isModifying ? 0 : 16,
+          },
+        ]}
       />
     </View>
   )
@@ -68,7 +95,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   flatList: {
-    marginLeft: 16,
     gap: 16,
   },
 })

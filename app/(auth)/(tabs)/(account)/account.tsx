@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import AccountHeader from '@/components/account/account-header'
 import AccountHeading from '@/components/account/account-heading'
 import BodyTitle from '@/components/bodyTitle/body-title'
@@ -10,13 +10,13 @@ import { Body, BodyBold, Small } from '@/components/ui/text'
 import { GridItemBackground } from '@/components/ui/view'
 import { Colors } from '@/constants/Colors'
 import { useDogsFromUserId } from '@/lib/api/dog'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
 import { session$, user$ } from '@/lib/observables/session-observable'
 import { supabase } from '@/lib/supabase'
 import { AntDesign } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
-import * as Burnt from 'burnt'
 import { router } from 'expo-router'
-import { Button, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Pressable, ScrollView } from 'react-native-gesture-handler'
 import { MMKV } from 'react-native-mmkv'
 import { useSharedValue } from 'react-native-reanimated'
@@ -27,26 +27,21 @@ export const storage = new MMKV()
 
 export default function AccountScreen() {
   const insets = useSafeAreaInsets()
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   const scrollY = useSharedValue(0)
 
   const user = user$.get()
   const { data: dogs } = useDogsFromUserId(user?.id)
 
-  const handleToast = () => {
-    console.log('user', user)
-    console.log('dogs', dogs)
-
-    Burnt.toast({
-      title: 'Burnt not installed.',
-      preset: 'error',
-      message: 'See your downloads.',
-      haptic: 'error',
-    })
-  }
-
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.container,
+        { paddingTop: insets.top + (isActivityActive ? 96 : 0) },
+      ]}
+    >
       <View style={{ paddingHorizontal: 16 }}>
         <AccountHeader scrollY={scrollY} />
       </View>
@@ -72,14 +67,14 @@ export default function AccountScreen() {
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color={Colors.light.primary}>
-                  {i18n.t('editProfile')}
+                  {i18n.t('account.editProfile')}
                 </Small>
               </StandardButton>
             </View>
             <View style={{ flex: 1 }}>
               <StandardButton outlined>
                 <Small color={Colors.light.primary}>
-                  {i18n.t('shareProfile')}
+                  {i18n.t('account.shareProfile')}
                 </Small>
               </StandardButton>
             </View>
@@ -91,15 +86,18 @@ export default function AccountScreen() {
             gap: 24,
           }}
         >
-          <BodyTitle title={i18n.t('myDogs')} />
+          <BodyTitle title={i18n.t('account.myDogs')} />
           <FlashList
             data={dogs}
             horizontal
             ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
             renderItem={({ item }) => (
-              <View key={item.id}>
+              <Pressable
+                key={item.id}
+                onPress={() => router.push(`/dog/${item.id}`)}
+              >
                 <RoundedImage src={item.image} />
-              </View>
+              </Pressable>
             )}
             ListFooterComponent={() => (
               <Pressable
@@ -133,70 +131,70 @@ export default function AccountScreen() {
           }}
         >
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold color={Colors.light.secondary}>
-                {i18n.t('friends')}
+                {i18n.t('account.friends')}
               </BodyBold>
             </GridItemBackground>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold color={Colors.light.secondary}>
-                {i18n.t('favorites')}
+                {i18n.t('account.favorites')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('createdRides')}
+                {i18n.t('account.createdRides')}
               </BodyBold>
             </GridItemBackground>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('completedFormations')}
-              </BodyBold>
-            </GridItemBackground>
-          </Block>
-          <Block row gap={12}>
-            <GridItemBackground>
-              <BodyBold
-                color={Colors.light.secondary}
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                {i18n.t('completedActivities')}
-              </BodyBold>
-            </GridItemBackground>
-            <GridItemBackground>
-              <BodyBold
-                color={Colors.light.secondary}
-                style={{
-                  textAlign: 'center',
-                }}
-              >
-                {i18n.t('meetings')}
+                {i18n.t('account.completedFormations')}
               </BodyBold>
             </GridItemBackground>
           </Block>
           <Block row gap={12}>
-            <GridItemBackground>
+            <GridItemBackground height={60}>
               <BodyBold
                 color={Colors.light.secondary}
                 style={{
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('myBones')}
+                {i18n.t('account.completedActivities')}
+              </BodyBold>
+            </GridItemBackground>
+            <GridItemBackground height={60}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {i18n.t('account.meetings')}
+              </BodyBold>
+            </GridItemBackground>
+          </Block>
+          <Block row gap={12}>
+            <GridItemBackground height={60}>
+              <BodyBold
+                color={Colors.light.secondary}
+                style={{
+                  textAlign: 'center',
+                }}
+              >
+                {i18n.t('account.myBones')}
               </BodyBold>
             </GridItemBackground>
             <GridItemBackground>
@@ -206,7 +204,7 @@ export default function AccountScreen() {
                   textAlign: 'center',
                 }}
               >
-                {i18n.t('myBones')}
+                {i18n.t('account.myBones')}
               </BodyBold>
             </GridItemBackground>
           </Block>
@@ -225,18 +223,7 @@ export default function AccountScreen() {
           }}
           color='#FF0000'
         >
-          <Body color='white'>{i18n.t('disconected')}</Body>
-        </StandardButton>
-
-        <View style={styles.verticallySpaced}>
-          <Button
-            title='Remove onBoarding'
-            onPress={() => storage.set('onBoarding', false)}
-          />
-        </View>
-
-        <StandardButton onPress={handleToast}>
-          <Body color='white'>Toast</Body>
+          <Body color='white'>{i18n.t('global.disconected')}</Body>
         </StandardButton>
       </ScrollView>
     </View>

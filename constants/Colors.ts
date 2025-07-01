@@ -10,6 +10,10 @@ export const Purple = '#663399'
 
 export const Colors = {
   white: '#FFFFFF',
+  black: '#000000',
+  pink: {
+    500: '#EE74AA',
+  },
   zinc: {
     50: '#FAFAFA',
     100: '#F4F4F5',
@@ -32,6 +36,7 @@ export const Colors = {
     500: '#6B7280',
     600: '#4B5563',
     800: '#696969',
+    900: '#1C1C1C',
   },
   orange: {
     50: '#FFF7E6',
@@ -88,5 +93,28 @@ export const Colors = {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
+  },
+  purple: {
+    100: '#F5F0FF',
+    200: '#E6D9FF',
+    300: '#D8C2FF',
+    400: '#CAB5FF',
+    500: '#663399',
+    600: '#562B80',
+    700: '#462366',
+    800: '#361C4D',
+    900: '#261433',
+  },
+  red: {
+    50: '#FFF1F2',
+    100: '#FFE4E6',
+    200: '#FECDD3',
+    300: '#FDA4AF',
+    400: '#FB7185',
+    500: '#EF4444',
+    600: '#DC2626',
+    700: '#B91C1C',
+    800: '#991B1B',
+    900: '#7F1D1D',
   },
 }

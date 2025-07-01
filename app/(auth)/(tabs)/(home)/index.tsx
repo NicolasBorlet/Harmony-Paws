@@ -1,83 +1,57 @@
-import { i18n } from '@/app/_layout'
 import DogListing from '@/components/dogListing/dog-listing'
 import FilterComponent from '@/components/filter/filter-component'
 import HomeHeader from '@/components/home/home-header'
 import RideListing from '@/components/rideListing/ride-listing'
+import { HomeSkeleton } from '@/components/skeletons/home-skeleton'
 import { MapButton } from '@/components/ui/button'
 import TabSwitcher from '@/components/ui/TabSwitcher'
 import { Small } from '@/components/ui/text'
+import { useActivityStatus } from '@/lib/context/ActivityStatusContext'
+import { i18n } from '@/lib/i18n'
+import { tabState } from '@/lib/observables/tab-observable'
 import { Ionicons } from '@expo/vector-icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { observer } from '@legendapp/state/react'
 import * as Haptics from 'expo-haptics'
-import * as Notifications from 'expo-notifications'
 import { router } from 'expo-router'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { View } from 'react-native'
-import {
-  Gesture,
-  GestureDetector,
-  GestureHandlerRootView,
-  Pressable,
-} from 'react-native-gesture-handler'
-import { runOnJS, useSharedValue } from 'react-native-reanimated'
+import { GestureHandlerRootView, Pressable } from 'react-native-gesture-handler'
+import { useSharedValue } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function HomeScreen() {
+function HomeScreen() {
   const insets = useSafeAreaInsets()
-
-  const [selectedTab, setSelectedTab] = useState<'dog' | 'ride'>('dog')
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
-  const headerHeight = useSharedValue(200)
-  const startY = useSharedValue(0)
   const scrollY = useSharedValue(0)
-
-  // notifications
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState<Notifications.Notification | undefined>(
-    undefined
-  );
-  const notificationListener = useRef<Notifications.EventSubscription>();
-  const responseListener = useRef<Notifications.EventSubscription>();
+  const currentTab = tabState.get()
+  const activityStatus = useActivityStatus()
+  const isActivityActive = activityStatus.get().isActivityActive
 
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present()
   }, [])
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index)
-  }, [])
-
-  const gesture = Gesture.Pan()
-    .onBegin(event => {
-      startY.value = event.absoluteY
-    })
-    .onUpdate(event => {
-      const deltaY = startY.value - event.absoluteY
-      headerHeight.value = Math.max(
-        100, // hauteur minimum
-        Math.min(200, 200 - deltaY), // hauteur maximum
-      )
-    })
-    .onEnd(event => {
-      // Gestion du swipe horizontal existant
-      if (Math.abs(event.translationX) > 50) {
-        runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Light)
-        if (event.translationX > 0) {
-          runOnJS(setSelectedTab)('dog')
-        } else {
-          runOnJS(setSelectedTab)('ride')
-        }
-      }
-    })
 
   const onTabChange = useCallback((tab: 'dog' | 'ride') => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-    setSelectedTab(tab)
+    tabState.set(tab)
   }, [])
+
+  // Simuler un état de chargement pour le test du skeleton
+  const isLoading = false // À remplacer par votre état de chargement réel
+
+  if (isLoading) {
+    return <HomeSkeleton />
+  }
 
   return (
     <GestureHandlerRootView
-      style={{ flex: 1, paddingTop: insets.top, backgroundColor: 'white' }}
+      style={{
+        flex: 1,
+        paddingTop: insets.top + (isActivityActive ? 96 : 0),
+        backgroundColor: 'white',
+      }}
     >
       <View>
         <View style={{ paddingHorizontal: 16 }}>
@@ -93,7 +67,7 @@ export default function HomeScreen() {
           }}
         >
           <TabSwitcher
-            selectedTab={selectedTab}
+            selectedTab={currentTab}
             onTabChange={onTabChange}
             language={i18n.locale as 'fr' | 'en'}
           />
@@ -107,19 +81,20 @@ export default function HomeScreen() {
           </Pressable>
         </View>
       </View>
-      <GestureDetector gesture={gesture}>
-        <View style={{ flex: 1 }}>
-          {selectedTab === 'dog' ? <DogListing scrollY={scrollY}/> : <RideListing scrollY={scrollY} />}
-        </View>
-      </GestureDetector>
+      <View style={{ flex: 1 }}>
+        {currentTab === 'dog' ? (
+          <DogListing scrollY={scrollY} />
+        ) : (
+          <RideListing scrollY={scrollY} />
+        )}
+      </View>
       <MapButton onPress={() => router.push('/map')}>
-        <Small>{i18n.t('map')}</Small>
+        <Small>{i18n.t('global.map')}</Small>
         <Ionicons name='map' size={18} color='white' />
       </MapButton>
-      <FilterComponent
-        bottomSheetModalRef={bottomSheetModalRef}
-        handleSheetChanges={handleSheetChanges}
-      />
+      <FilterComponent bottomSheetModalRef={bottomSheetModalRef} />
     </GestureHandlerRootView>
   )
 }
+
+export default observer(HomeScreen)
