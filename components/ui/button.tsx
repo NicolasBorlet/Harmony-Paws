@@ -1,10 +1,10 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Colors } from '@/constants/Colors'
 import * as Burnt from 'burnt'
 import * as Haptics from 'expo-haptics'
 import { router } from 'expo-router'
-import { FC, PropsWithChildren } from 'react'
-import { Platform, PressableProps } from 'react-native'
+import { FC } from 'react'
+import { Platform, Pressable, PressableProps } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -27,10 +27,11 @@ interface ButtonProps extends PressableProps {
   width?: string
 }
 
-interface StandardButtonProps extends ButtonProps, PropsWithChildren {
+interface StandardButtonProps extends ButtonProps {
   onPress?: () => void
   disabledText?: string
   pressedColor?: string
+  children?: React.ReactNode
 }
 
 const StyledButton = styled.Pressable<ButtonProps>`
@@ -77,7 +78,7 @@ const MapButton = styled.Pressable<ButtonProps>`
   margin-right: auto;
 `
 
-const AnimatedPressable = Animated.createAnimatedComponent(styled.Pressable``)
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 const StandardButton: FC<StandardButtonProps> = ({
   children,
@@ -200,7 +201,7 @@ const AnimatedStandardButton = ({
         animatedStyles,
       ]}
     >
-      <StandardButton onPress={() => router.push(route)}>
+      <StandardButton onPress={() => router.push(route as any)}>
         <BodyMedium color='#fff'>{i18n.t(trad)}</BodyMedium>
       </StandardButton>
     </Animated.View>

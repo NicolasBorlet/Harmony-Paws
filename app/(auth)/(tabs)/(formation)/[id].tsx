@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import AdviceListing from '@/components/formation/adviceListing/advice-listing'
 import ModuleListing from '@/components/formation/moduleListing/module-listing'

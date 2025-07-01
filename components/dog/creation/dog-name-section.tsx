@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Body } from '@/components/ui/text'
 import { storage } from '@/lib/utils/storage'
 import { useEffect, useState } from 'react'

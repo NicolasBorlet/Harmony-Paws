@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Path1 from '@/assets/svg/paw-path/path-1'
 import Path2 from '@/assets/svg/paw-path/path-2'
 import Path3 from '@/assets/svg/paw-path/path-3'

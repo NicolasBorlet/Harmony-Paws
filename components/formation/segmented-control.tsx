@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { useEffect } from 'react'
 import { Pressable, View } from 'react-native'
 import Animated, {

@@ -124,7 +124,7 @@ export const ActivityStatusProvider = ({
       const { data: activities, error: activitiesError } = await supabase
         .from('activities')
         .select('*')
-        .in('id', activityIds)
+        .in('id', activityIds as number[])
         .eq('status', 'in progress')
         .single()
 

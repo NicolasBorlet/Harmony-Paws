@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
 import HealthRecordHeader from '@/components/medical/health-record-header'

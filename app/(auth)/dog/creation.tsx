@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import DogAgeSection from '@/components/dog/creation/age-section'
 import DogBehaviorSection from '@/components/dog/creation/behavior-section'

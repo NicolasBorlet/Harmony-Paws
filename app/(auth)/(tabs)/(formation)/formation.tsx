@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import BodyTitle from '@/components/bodyTitle/body-title'
 import FormationHeader from '@/components/formation/formation-header'
 import FormationListing from '@/components/formationListing/formation-listing'

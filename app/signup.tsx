@@ -15,8 +15,8 @@ import {
   View,
 } from 'react-native'
 import { supabase } from '../lib/supabase'
-import { i18n } from './_layout'
-import { useSession } from './ctx'
+import { i18n } from '@/lib/i18n'
+import { useSession } from '@/lib/context/session-context'
 
 // Tells Supabase Auth to continuously refresh the session automatically if
 // the app is in the foreground. When this is added, you will continue to receive

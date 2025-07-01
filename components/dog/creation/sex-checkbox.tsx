@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { StandardCheckbox } from '@/components/checkbox/standardCheckbox'
 import { Purple } from '@/constants/Colors'
 import { storage } from '@/lib/utils/storage'

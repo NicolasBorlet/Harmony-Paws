@@ -106,7 +106,9 @@
       ],
       "expo-sqlite",
       "expo-localization",
-      "expo-font"
+      "expo-font",
+      "expo-mail-composer",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
