@@ -95,7 +95,10 @@
     "documents": "Documents",
     "vaccines": "Vaccins",
     "weight": "Poids",
-    "height": "Taille"
+    "height": "Taille",
+    "callbacks": {
+      "callbacks": "Rappels"
+    }
   },
   "dog": {
     "breed": "Race",

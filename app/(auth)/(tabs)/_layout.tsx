@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Bone from '@/assets/svg/tabbar/bone/bone'
 import BoneFocused from '@/assets/svg/tabbar/bone/bone-focused'
 import Formation from '@/assets/svg/tabbar/formation/formation'

@@ -1,15 +1,36 @@
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import Block from '@/components/grid/Block'
+import CallbackListingItem from '@/components/medical/callback/callback-listing-item'
 import DateItem from '@/components/medical/date-item'
 import { FullRoundedButton } from '@/components/ui/button'
 import Divider from '@/components/ui/divider'
-import { Body, BodyBold, SpecialTitle } from '@/components/ui/text'
+import { BodyBold, SpecialTitle } from '@/components/ui/text'
 import { Colors } from '@/constants/Colors'
-import { AntDesign, Entypo, Ionicons } from '@expo/vector-icons'
+import { Entypo } from '@expo/vector-icons'
 import { FlashList } from '@shopify/flash-list'
-import { memo, useState } from 'react'
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
+import { memo, useMemo, useState } from 'react'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+
+interface Callback {
+  id: string
+  name: string
+  description: string
+  hour: string
+}
+
+interface DateItem {
+  date: string
+  callbacks: Callback[]
+}
+
+interface DateItemWrapperProps {
+  item: DateItem
+  index: number
+  isSelected: boolean
+  onPress: () => void
+}
 
 const fakeDates = [
   {
@@ -64,6 +85,32 @@ const fakeDates = [
 
 const MemoizedDateItem = memo(DateItem)
 
+const DateItemWrapper = memo(
+  ({ item, index, isSelected, onPress }: DateItemWrapperProps) => {
+    const { dayOfWeek, dayOfMonth } = useMemo(() => {
+      const date = new Date(item.date)
+      return {
+        dayOfWeek: date
+          .toLocaleDateString('fr-FR', {
+            weekday: 'long',
+          })
+          .slice(0, 3),
+        dayOfMonth: date.getDate(),
+      }
+    }, [item.date])
+
+    return (
+      <MemoizedDateItem
+        itemDate={item.date}
+        isFirst={index === 0}
+        isLast={index === fakeDates.length - 1}
+        onPress={onPress}
+        isSelected={isSelected}
+      />
+    )
+  },
+)
+
 export default function Callback() {
   const insets = useSafeAreaInsets()
   const [selectedDate, setSelectedDate] = useState(fakeDates[0].date)
@@ -75,7 +122,9 @@ export default function Callback() {
     >
       <Back position='relative' top={insets.top} left='16' />
       <View style={styles.header}>
-        <BodyBold style={{ textAlign: 'center' }}>Mes rappels</BodyBold>
+        <BodyBold style={{ textAlign: 'center' }}>
+          {i18n.t('medical.callbacks.callbacks')}
+        </BodyBold>
         <Divider spacing={32} />
       </View>
       <Block
@@ -96,19 +145,14 @@ export default function Callback() {
         data={fakeDates}
         showsHorizontalScrollIndicator={false}
         horizontal
-        renderItem={({ item, index }) => {
-          return (
-            <MemoizedDateItem
-              itemDate={item.date}
-              isFirst={index === 0}
-              isLast={index === fakeDates.length - 1}
-              onPress={() => {
-                setSelectedDate(item.date)
-              }}
-              isSelected={selectedDate === item.date}
-            />
-          )
-        }}
+        renderItem={({ item, index }) => (
+          <DateItemWrapper
+            item={item}
+            index={index}
+            isSelected={selectedDate === item.date}
+            onPress={() => setSelectedDate(item.date)}
+          />
+        )}
         style={styles.dateList}
         estimatedItemSize={100}
         ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
@@ -124,40 +168,11 @@ export default function Callback() {
           estimatedItemSize={3}
           renderItem={({ item }) => {
             return (
-              <Block
-                row
-                justify='space-between'
-                alignItems='center'
-                wrap='nowrap'
-                style={{
-                  padding: 16,
-                  backgroundColor: Colors.purple[500],
-                  borderRadius: 12,
-                }}
-              >
-                <Block gap={8}>
-                  <BodyBold color={Colors.white}>{item.name}</BodyBold>
-                  <Block row alignItems='center' gap={8}>
-                    <AntDesign
-                      name='clockcircleo'
-                      size={16}
-                      color={Colors.white}
-                    />
-                    <Body color={Colors.white}>{item.hour}</Body>
-                  </Block>
-                </Block>
-                <Pressable
-                  onPress={() => {
-                    console.log('pressed')
-                  }}
-                >
-                  <Ionicons
-                    name='notifications-outline'
-                    size={24}
-                    color='white'
-                  />
-                </Pressable>
-              </Block>
+              <CallbackListingItem
+                name={item.name}
+                hour={item.hour}
+                date={selectedDate}
+              />
             )
           }}
           ItemSeparatorComponent={() => <View style={{ height: 16 }} />}

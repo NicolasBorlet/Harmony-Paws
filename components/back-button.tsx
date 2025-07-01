@@ -27,6 +27,7 @@ export default function Back({
 
   return (
     <BackButton
+      accessibilityRole='button'
       onPress={onPress ? onPress : () => router.back()}
       position={position}
       left={left && !right ? left : !right ? '16px' : undefined}

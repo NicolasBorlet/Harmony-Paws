@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import ParallaxScrollViewOnboarding from '@/components/scrollview/parallax-scrollview-onboarding'
 import { StandardButton } from '@/components/ui/button'
 import { Body, ParagraphMedium, SpecialTitle } from '@/components/ui/text'

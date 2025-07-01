@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import PropositionItemListing from '@/components/messageListing/proposition-item-listing'
 import RoundedIconLink from '@/components/rounded-icon-link'

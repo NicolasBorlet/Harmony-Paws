@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import DogIcon from '@/assets/svg/dog-icon'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'

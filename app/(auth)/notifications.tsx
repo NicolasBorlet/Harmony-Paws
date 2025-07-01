@@ -10,7 +10,7 @@ import { FlashList } from '@shopify/flash-list'
 import { useMemo } from 'react'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { i18n } from '../_layout'
+import { i18n } from '@/lib/i18n'
 
 export default function Notifications() {
   const insets = useSafeAreaInsets()

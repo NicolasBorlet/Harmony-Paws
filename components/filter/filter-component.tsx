@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { dogFilters, rideFilters } from '@/lib/observables/filter-observable'
 import { tabState } from '@/lib/observables/tab-observable'
 import {

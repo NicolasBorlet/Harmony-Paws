@@ -1,12 +1,12 @@
 import { createUserInDB, verifyUserInDB } from '@/lib/api/user'
+import { i18n } from '@/lib/i18n'
 import { Session } from '@supabase/supabase-js'
 import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { MMKV } from 'react-native-mmkv'
-import { session$, user$ } from '../lib/observables/session-observable'
-import { supabase } from '../lib/supabase'
-import { i18n } from './_layout'
+import { session$, user$ } from '@/lib/observables/session-observable'
+import { supabase } from '@/lib/supabase'
 
 // Initialize MMKV
 export const storage = new MMKV()

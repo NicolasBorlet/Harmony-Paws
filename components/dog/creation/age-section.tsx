@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { Body } from '@/components/ui/text'
 import { StyleSheet, View } from 'react-native'
 import AgeCheckbox from './age-checkbox'

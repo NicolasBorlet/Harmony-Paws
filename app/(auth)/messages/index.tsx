@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import OpacityFadeIn from '@/components/animate/opacity-fadeIn'
 import Back from '@/components/back-button'
 import LoaderComponent from '@/components/loader'

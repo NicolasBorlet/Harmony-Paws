@@ -1,8 +1,8 @@
 import CustomSplashScreen from '@/components/splash-screen'
 import { ActivityStatusProvider } from '@/lib/context/ActivityStatusContext'
-import { NotificationProvider } from '@/lib/context/NotificationContext'
+import { SessionProvider } from '@/lib/context/session-context'
 import { darkTheme, lightTheme } from '@/lib/theme'
-import { translations } from '@/lib/utils/translations'
+// import { translations } from '@/lib/utils/translations'
 import { useMMKVDevTools } from '@dev-plugins/react-native-mmkv'
 import { useReactQueryDevTools } from '@dev-plugins/react-query'
 import {
@@ -18,17 +18,16 @@ import {
   useFonts,
 } from '@expo-google-fonts/montserrat'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { NavigationContainer } from '@react-navigation/native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+// import { NavigationContainer } from '@react-navigation/native'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { getLocales } from 'expo-localization'
+// import { getLocales } from 'expo-localization'
 import { Slot } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
-import { I18n } from 'i18n-js'
+// import { I18n } from 'i18n-js'
 import { useEffect, useState } from 'react'
 import { useColorScheme } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
-import { SessionProvider } from './ctx'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -40,7 +39,7 @@ SplashScreen.preventAutoHideAsync()
 
 // vexo('');
 
-export const i18n = new I18n(translations)
+// export const i18n = new I18n(translations)
 
 export default function RootLayout() {
   useMMKVDevTools()
@@ -65,8 +64,8 @@ export default function RootLayout() {
     Montserrat_900Black,
   })
 
-  i18n.locale = getLocales()[0].languageCode ?? 'en'
-  i18n.enableFallback = true
+  // i18n.locale = getLocales()[0].languageCode ?? 'en'
+  // i18n.enableFallback = true
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -89,19 +88,15 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NotificationProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <NavigationContainer theme={theme}>
-            <SessionProvider>
-              <BottomSheetModalProvider>
-                <ActivityStatusProvider>
-                  <Slot />
-                </ActivityStatusProvider>
-              </BottomSheetModalProvider>
-            </SessionProvider>
-          </NavigationContainer>
-        </GestureHandlerRootView>
-      </NotificationProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SessionProvider>
+          <BottomSheetModalProvider>
+            <ActivityStatusProvider>
+              <Slot />
+            </ActivityStatusProvider>
+          </BottomSheetModalProvider>
+        </SessionProvider>
+      </GestureHandlerRootView>
     </QueryClientProvider>
   )
 }

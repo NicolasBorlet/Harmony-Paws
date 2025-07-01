@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Prescription from '@/assets/svg/documents/prescription'
 import { Colors } from '@/constants/Colors'
 import { MaterialCommunityIcons } from '@expo/vector-icons'

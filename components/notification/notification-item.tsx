@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import { acceptActivityInvitation } from '@/lib/api/activty_invitations'
 import {
   acceptFriendRequest,

@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import CustomPicker from '@/components/picker'
 import { storage } from '@/lib/utils/storage'
 import React, { useEffect, useState } from 'react'

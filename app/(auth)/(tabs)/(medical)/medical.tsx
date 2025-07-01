@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import DogCard from '@/components/medical/dog-card'
 import MedicalHeader from '@/components/medical/medical-header'
 import { MedicalSkeleton } from '@/components/skeletons/medical-skeleton'

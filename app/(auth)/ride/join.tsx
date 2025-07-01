@@ -1,4 +1,4 @@
-import { i18n } from '@/app/_layout'
+import { i18n } from '@/lib/i18n'
 import Back from '@/components/back-button'
 import DogItem from '@/components/invitation/dogItem'
 import { StandardButton, UnderlinedButton } from '@/components/ui/button'
