@@ -5,7 +5,15 @@ import { Colors } from '../../constants/Colors'
 
 // Mock des dépendances
 jest.mock('react-native', () => ({
-  Pressable: ({ children, style, onPress }) => (
+  Pressable: ({
+    children,
+    style,
+    onPress,
+  }: {
+    children: React.ReactNode
+    style: React.CSSProperties
+    onPress: () => void
+  }) => (
     <div accessibilityRole='button' style={style} onPress={onPress}>
       {children}
     </div>
